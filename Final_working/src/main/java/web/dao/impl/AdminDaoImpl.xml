@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="web.dao.face.AdminDao">
+	<select id="viewLoc" parameterType="String" resultType="web.dto.SellerLoc">
+		SELECT DISTINCT station FROM SellerLoc
+		WHERE zone LIKE '%' || #{zone } || '%'
+	</select>
+	
+	<select id="viewDetail" parameterType="String" resultType="web.dto.SellerLoc">
+		SELECT spot, sellerid FROM SellerLoc
+		WHERE station LIKE '%' || #{station } || '%'
+	</select>
+<!-- 	<insert id="buyerJoin" parameterType="web.dto.BuyerInfo"> -->
+<!-- 		INSERT INTO buyerinfo(buyerid, buyerpw, buyerphone, buyeremail, buyername) -->
+<!-- 		VALUES(#{buyerId }, #{buyerPw }, #{buyerPhone }, #{buyerEmail }, #{buyerName } ) -->
+<!-- 	</insert> -->
+</mapper>

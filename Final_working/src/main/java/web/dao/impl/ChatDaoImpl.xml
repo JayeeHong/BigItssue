@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 마이바티스 3 Mapper DOCTYPE -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 매퍼 설정 -->
+<mapper namespace="web.dao.face.ChatDao">
+	
+	<select id="selectCntChatByIds" parameterType="web.dto.Chat" resultType="int">
+		SELECT COUNT(*) FROM chat
+		WHERE 1=1 
+		<if test="buyerId != null and buyerId != ''">
+		 	AND buyerId = #{buyerId}
+		</if>
+		
+		<if test="sellerId != null and sellerId != ''">
+		 	AND sellerId = #{sellerId} 
+		</if>
+		
+		<if test="bigdomId != null and bigdomId != '' ">
+			AND bigdomId = #{bigdomId} 
+		</if>
+	</select>
+	
+	<!-- jdbcType=VARCHAR를 추가해주면 null이면 null이 들어가지고 String타입은 String으로 들어가게 해준다. -->
+	<!-- 결국 null때문에 추가해준것. -->
+	<insert id="insertRoom" parameterType="web.dto.Chat">
+		<selectKey keyProperty="chatRoomNo" 
+			resultType="int" order="BEFORE">
+			SELECT chat_seq.nextval FROM dual		
+		</selectKey>
+		INSERT INTO chat (chatRoomNo, buyerId, sellerId, bigdomId)
+		VALUES ( #{chatRoomNo}, #{buyerId, jdbcType=VARCHAR}, #{sellerId, jdbcType=VARCHAR }, #{bigdomId, jdbcType=VARCHAR })
+	</insert>
+	
+	<select id="selectRoom" parameterType="web.dto.Chat" resultType="int">
+		SELECT chatRoomNo FROM chat
+		WHERE 1=1 
+		<if test="buyerId != null and buyerId != ''">
+		 	AND buyerId = #{buyerId}
+		</if>
+		
+		<if test="sellerId != null and sellerId != ''">
+		 	AND sellerId = #{sellerId} 
+		</if>
+		
+		<if test="bigdomId != null and bigdomId != '' ">
+			AND bigdomId = #{bigdomId} 
+		</if>
+	</select>
+	
+	<select id="selectRooms" parameterType="web.dto.User" resultType="web.dto.Chat">
+		SELECT * FROM chat
+		WHERE 1=1 
+		<if test="sort == '구매자'">
+		 	AND buyerId = #{id}
+		</if>
+		
+		<if test="sort == '판매자'">
+		 	AND sellerId = #{id} 
+		</if>
+		
+		<if test="sort == '빅돔'">
+			AND bigdomId = #{id} 
+		</if>
+	</select>
+	
+	<select id="selectChatRoomIds" parameterType="int" resultType="web.dto.Chat">
+		SELECT * FROM chat
+		WHERE chatRoomNo = #{roomNo}
+	</select>
+	
+	
+	<insert id="insertMessage" parameterType="web.dto.Message">
+		<selectKey keyProperty="chatDate"
+			resultType="java.util.Date" order="BEFORE">
+			SELECT sysdate FROM dual		
+		</selectKey>
+		INSERT INTO message (chatMessageNo, chatContent, chatSender, chatRoomNo, chatDate)
+		VALUES (message_seq.nextval, #{chatContent}, #{chatSender}, #{chatRoomNo}, #{chatDate})
+	</insert>
+	
+	<select id="selectMessage" parameterType="int" resultType="web.dto.Message">
+		SELECT * FROM message
+		WHERE chatRoomNo = #{chatRoomNo}
+		ORDER BY chatMessageNo
+	</select>
+	
+	<select id="selectSubMessage" parameterType="int" resultType="web.dto.Message">
+		SELECT * FROM message
+		WHERE chatMessageNo = (
+    		SELECT max(chatMessageNo)FROM message
+    		WHERE chatRoomNo = #{chatRoomNo}
+		)
+	</select>
+
+</mapper>
