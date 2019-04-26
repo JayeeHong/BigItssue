@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 마이바티스 3 Mapper DOCTYPE -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="web.dao.face.BuyerDao">
+	<select id="usingid" parameterType="web.dto.BuyerInfo" resultType="int">
+		SELECT COUNT(*) from buyerInfo
+		where buyerId=#{buyerId }
+	
+	</select>
+	
+	<insert id="buyerJoin" parameterType="web.dto.BuyerInfo">
+		INSERT INTO buyerinfo(buyerid, buyerpw, buyerphone, buyeremail, buyername, sort)
+		VALUES(#{buyerId }, #{buyerPw }, #{buyerPhone }, #{buyerEmail }, #{buyerName }, '구매자' )
+	</insert>
+
+
+	<select id="buyerLogin" parameterType="web.dto.BuyerInfo" resultType="int">
+		SELECT COUNT(*) from buyerinfo
+		where buyerId = #{buyerId }
+		and	buyerPw = #{buyerPw }
+	</select>
+
+
+	<select id="buyerFindId" parameterType="web.dto.BuyerInfo" resultType="web.dto.BuyerInfo">
+		SELECT * FROM buyerinfo
+		where buyerName = #{buyerName }
+		and buyerEmail = #{buyerEmail }
+	
+	</select>
+
+	<select id="buyerCnt" parameterType="web.dto.BuyerInfo" resultType="int">
+		SELECT COUNT(*) FROM buyerinfo
+		where buyerName = #{buyerName }
+		and buyerEmail = #{buyerEmail }
+	
+	</select>
+
+
+	<select id="buyerFindInfo" parameterType="web.dto.BuyerInfo" resultType="web.dto.BuyerInfo">
+		SELECT * FROM buyerinfo
+		where buyerName = #{buyerName }
+		and buyerEmail = #{buyerEmail }
+		and buyerId = #{buyerId }
+	
+	</select>
+
+
+	<select id="buyerFindCnt" parameterType="web.dto.BuyerInfo" resultType="int">
+		SELECT COUNT(*) FROM buyerinfo
+		where buyerName = #{buyerName }
+		and buyerEmail = #{buyerEmail }
+		and buyerId = #{buyerId }
+	
+	</select>
+
+
+	<update id="pwUpdate" parameterType="web.dto.BuyerInfo">
+		update buyerinfo
+		set buyerPw = #{buyerPw }
+		where buyerName = #{buyerName }
+		and buyerEmail = #{buyerEmail }
+		and buyerId = #{buyerId }
+	
+	</update>
+	
+	
+	<select id="eamilSerch" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM buyerinfo
+		WHERE buyerEmail = #{buyerEmail }
+	</select>
+	
+	<select id="selectCntOfSellerLoc" resultType="int">
+		SELECT COUNT(*) FROM SellerLoc
+	</select>
+	
+	<select id="selectPaginglistOfSellerLoc" parameterType="web.util.SellerLocPaging" resultType="web.dto.SellerLoc">
+		SELECT * FROM(
+			SELECT rownum rnum, b.* FROM(
+					SELECT * FROM SellerLoc ORDER BY locNo desc
+				)B 
+			ORDER BY rnum
+		)R
+		WHERE rnum BETWEEN #{startNo} AND #{endNo}
+	</select>
+	
+	<resultMap type="web.dto.User" id="UserBuyer">
+			<result column="buyerId" property="id" />
+			<result column="buyerPw" property="pw" />
+			<result column="buyerPhone" property="phone" />
+			<result column="buyerEmail" property="email" />
+			<result column="buyerName" property="name" />
+	</resultMap>
+	<select id="selectBuyerInfoByBuyerId" parameterType="web.dto.BuyerInfo" resultMap="UserBuyer">
+		SELECT * FROM buyerInfo
+		WHERE buyerId = #{buyerId}
+	</select>
+	
+</mapper>

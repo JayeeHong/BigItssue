@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 마이바티스 3 Mapper DOCTYPE -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="web.dao.face.SellerDao">
+
+	<select id="selectCntLogin"
+	 parameterType="web.dto.SellerInfo" resultType="int">
+		SELECT COUNT(*) FROM sellerInfo
+		WHERE 1=1
+			AND sellerId=#{sellerId }
+			AND sellerPw=#{sellerPw }
+	</select>
+	
+	<select id="selectSellerInfo"
+	 parameterType="String" resultType="web.dto.SellerInfo">
+		SELECT * FROM sellerInfo
+		WHERE 1=1
+			AND sellerId=#{sellerId }
+	</select>
+	
+	<select id="selectSellerLoc"
+	 parameterType="String" resultType="web.dto.SellerLoc">
+		SELECT * FROM sellerLoc
+		WHERE sellerId=#{sellerId }
+	</select>
+	
+	<select id="selectBookList"
+	 parameterType="String" resultType="web.dto.BookListInfo">
+		SELECT * FROM bookListInfo
+		WHERE sellerId=#{sellerId }
+		ORDER BY magazineNo desc
+	</select>
+	
+	<update id="updateBookList" parameterType="web.dto.BookListInfo">
+		UPDATE bookListInfo
+		SET month=#{month }, circulation=#{circulation }
+		WHERE magazineNo=#{magazineNo }
+	</update>
+	
+	<delete id="deleteMegazine" parameterType="int">
+		DELETE bookListInfo
+		WHERE magazineNo=#{magazineNo }
+	</delete>
+	
+	<insert id="insertMegazine" parameterType="web.dto.BookListInfo">
+		INSERT INTO bookListInfo(magazineNo, month, circulation, sellerId)
+		VALUES(bookListInfo_seq.nextval, #{month }, #{circulation }, #{sellerId })
+	</insert>
+	
+	<update id="updateSellerTime" parameterType="web.dto.SellerLoc">
+		UPDATE sellerLoc
+		SET sellerTimeS=#{sellerTimeS }, sellerTimeE=#{sellerTimeE }
+		WHERE sellerId=#{sellerId }
+	</update>
+	
+	<select id="selectReserve"
+	 parameterType="String" resultType="web.dto.Reservation">
+		SELECT * FROM reservation
+		WHERE sellerId=#{sellerId }
+		ORDER BY reserveNo desc
+	</select>
+	
+	<update id="updateToCancelReserve" parameterType="int">
+		UPDATE reservation
+		SET status='예약취소'
+		WHERE reserveNo=#{reserveNo }
+	</update>
+	
+	<update id="updateToCompleteReserve" parameterType="int">
+		UPDATE reservation
+		SET status='수령'
+		WHERE reserveNo=#{reserveNo }
+	</update>
+	
+	<update id="updatePickupDate" parameterType="web.dto.Reservation">
+		UPDATE reservation
+		SET status='예약취소(시간초과)'
+		WHERE reserveNo=#{reserveNo }
+	</update>
+	
+	<update id="updateStartTime" parameterType="web.dto.SellerLoc">
+		UPDATE sellerLoc
+		SET sellerTimeS=#{sellerTimeS }
+		WHERE sellerId=#{sellerId }
+	</update>
+	
+	<update id="updateEndTime" parameterType="web.dto.SellerLoc">
+		UPDATE sellerLoc
+		SET sellerTimeE=#{sellerTimeE }
+		WHERE sellerId=#{sellerId }
+	</update>
+
+</mapper>
