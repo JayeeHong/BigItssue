@@ -6,13 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -55,7 +51,7 @@ public class ReplyEchoHandler extends TextWebSocketHandler {
 		logger.info("[TEST]userSessions.values():"+userSessions.values());
 		
 		//웹소켓 session과 연동된 httpSession의 chatRoomNo 불러오기
-		int chatRoomNo =  (int)getHttpSession(session).get("chatRoomNo");
+		int chatRoomNo = (int) getHttpSession(session).get("chatRoomNo");
 		logger.info("[TEST]chatRoomNo:"+chatRoomNo);
 		
 		//웹소켓 session, httpSession의 chatRoomNo Map에 추가 
