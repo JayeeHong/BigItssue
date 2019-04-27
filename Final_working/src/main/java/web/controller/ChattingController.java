@@ -38,7 +38,7 @@ public class ChattingController {
 		
 		//로그인한id와 문의하기버튼눌렀을때 상대방id chat에 저장
 		Chat chat = chatService.getChat(user, session);
-		logger.info("");
+
 		//방이 이미 존재하는지 판단
 		boolean createRoomChk =  chatService.createRoomChk(chat);
 		//-1로 방번호 초기화
@@ -208,14 +208,14 @@ public class ChattingController {
 		for(int i=0; i<chatRoomList.size(); i++) {
 			//보조 메시지(가장 마지막의 메시지 하나만 가져와야함)
 			Message subMsg = chatService.selectSubMessage(chatRoomList.get(i).getChatRoomNo());
-			//현재 date받아오기
-			tempTime = subMsg.getChatDate();
-			//date를 이쁜String으로 바꾸기
-			stringTime = time.format(tempTime);		
-			//subMsgList에 stringChatDate설정
-			subMsg.setStringChatDate(stringTime);
 
 			if(subMsg != null) {
+				//현재 date받아오기
+				tempTime = subMsg.getChatDate();
+				//date를 이쁜String으로 바꾸기
+				stringTime = time.format(tempTime);		
+				//subMsgList에 stringChatDate설정
+				subMsg.setStringChatDate(stringTime);
 				subMsgList.add(subMsg);
 			}
 			
