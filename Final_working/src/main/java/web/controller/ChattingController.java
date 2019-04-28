@@ -35,6 +35,7 @@ public class ChattingController {
 		
 		//현재 넘어온 user에는 문의하기 버튼을 클릭했을때,
 		//상대방에 대한 정보가 들어있음.
+
 		
 		//로그인한id와 문의하기버튼눌렀을때 상대방id chat에 저장
 		Chat chat = chatService.getChat(user, session);
