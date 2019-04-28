@@ -37,13 +37,13 @@
 		text-decoration: none;
 		color: #000;
 	}
-	
-	#sellerLogin {
+		
+	#bigdomLogin {
 		float: right;
 		margin-top: 33px;
 		margin-right: 30px;
 	}
-	
+		
 	/* 채팅 css */
 	.container{max-width:1170px; margin:auto;}
 	img{ max-width:100%;}
@@ -191,36 +191,22 @@
 <div class="header" style="height: 100px">
 
 	<div id="logo">
-	<a href="/seller/main">
+	<a href="/bigdom/main">
 		<img src="http://bigissue.kr/wp-content/themes/canvas/images/Bigissue_kr_logo_main.png">
 	</a>
 	</div>
 	
 	<nav id="menu">
-		<div>
-			<ul>
-				<li>
-					<a href="/seller/time">판매 관리</a>
-				</li>
-				<li>
-					<a href="/seller/review/list">빅돔 후기</a>
-				</li>
-				<li>
-					<a href="/seller/bookinglist">예약 내역</a>
-				</li>
-			</ul>
-		</div>
-		
-		<div id="sellerLogin">
-			<c:if test="${not sellerLogin }">
+		<div id="bigdomLogin">
+			<c:if test="${not bigdomLogin }">
 				로그인이 필요합니다
 			</c:if>
-			<c:if test="${sellerLogin }">
-				<c:if test="${sellerInfo.sellerImg eq null }">
+			<c:if test="${bigdomLogin }">
+				<c:if test="${bigdomInfo.bigdomImg eq null }">
 				<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 				</c:if>
-				${sellerId }님, 환영합니다&nbsp;
-				<a href="/seller/logout"><button id="sellerLogout" class="btn btn-sm btn-primary">로그아웃</button></a>
+				${bigdomId }님, 환영합니다&nbsp;
+				<a href="/bigdom/logout"><button id="bigdomLogout" class="btn btn-sm btn-primary">로그아웃</button></a>
 			</c:if>
 		</div>
 	</nav>

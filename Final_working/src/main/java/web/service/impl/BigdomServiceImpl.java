@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import web.dao.face.BigdomDao;
 import web.dto.BigdomInfo;
+import web.dto.User;
 import web.service.face.BigdomService;
 
 @Service
@@ -26,6 +27,11 @@ public class BigdomServiceImpl implements BigdomService {
 	@Override
 	public BigdomInfo getBigdomInfo(String bigdomId) {
 		return bigdomDao.selectBigdomInfo(bigdomId);
+	}
+
+	@Override
+	public User getBigdomInfoUser(BigdomInfo bigdomInfo) {
+		return bigdomDao.selectBigdomInfoUser(bigdomInfo);
 	}
 
 }

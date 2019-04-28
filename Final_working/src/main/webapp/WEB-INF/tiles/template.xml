@@ -47,6 +47,16 @@
 	</definition>
 	
 	
+	<definition name="bigdom" template="/WEB-INF/tiles/layout_bigdom.jsp">
+		<put-attribute name="header" value="/WEB-INF/tiles/layout/header_bigdom.jsp"></put-attribute>
+		<put-attribute name="body" />
+		<put-attribute name="footer" value="/WEB-INF/tiles/layout/footer_bigdom.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="bigdom/*" extends="bigdom">
+		<put-attribute name="body" value="/WEB-INF/views/bigdom/{1}.jsp" />
+	</definition>
+	
 	
 	<definition name="admin" template="/WEB-INF/tiles/layout_admin.jsp">
 		<put-attribute name="header" value="/WEB-INF/tiles/layout/header_admin.jsp"></put-attribute>

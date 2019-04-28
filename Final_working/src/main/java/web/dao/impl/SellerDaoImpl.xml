@@ -93,5 +93,19 @@
 		SET sellerTimeE=#{sellerTimeE }
 		WHERE sellerId=#{sellerId }
 	</update>
+	
+	<resultMap type="web.dto.User" id="UserSeller">
+			<result column="sellerId" property="id" />
+			<result column="sellerPw" property="pw" />
+			<result column="sellerPhone" property="phone" />
+			<result column="sellerEmail" property="email" />
+			<result column="sellerName" property="name" />
+	</resultMap>
+	<select id="selectSellerInfoUser"
+	 parameterType="web.dto.SellerInfo" resultMap="UserSeller">
+		SELECT * FROM sellerInfo
+		WHERE 1=1
+			AND sellerId=#{sellerId }
+	</select>
 
 </mapper>

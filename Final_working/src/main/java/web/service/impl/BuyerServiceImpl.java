@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import web.dao.face.BuyerDao;
+import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.SellerLoc;
 import web.dto.User;
 import web.service.face.BuyerService;
 import web.util.SellerLocPaging;
@@ -165,6 +167,16 @@ public class BuyerServiceImpl implements BuyerService {
 	public User getBuyerInfo(BuyerInfo buyerInfo) {
 		return buyerDao.selectBuyerInfoByBuyerId(buyerInfo);
 		
+	}
+
+	@Override
+	public SellerLoc getSellerLoc(int sellerLoc) {
+		return buyerDao.selectSellerLoc(sellerLoc);
+	}
+
+	@Override
+	public BookListInfo getBookListInfo(int magazineNo) {
+		return buyerDao.selectBookListInfo(magazineNo);
 	}
 
 }

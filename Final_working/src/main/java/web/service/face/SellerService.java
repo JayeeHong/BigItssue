@@ -6,6 +6,7 @@ import web.dto.BookListInfo;
 import web.dto.Reservation;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
+import web.dto.User;
 
 public interface SellerService {
 
@@ -50,5 +51,8 @@ public interface SellerService {
 
 	// view에서 마감버튼 눌렀을 때 마감시간 변경
 	public void setEndTime(SellerLoc sellerLoc);
+	
+	//User으로 정보가 필요해서 추가
+	public User getSellerInfoUser(SellerInfo sellerInfo);
 
 }

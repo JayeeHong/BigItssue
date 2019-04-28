@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.SellerLoc;
 import web.dto.User;
@@ -64,8 +65,23 @@ public class BuyerController {
 	}
 	
 	@RequestMapping(value="/buyer/locview", method=RequestMethod.GET)
-	public void buyerLocView() {
+	public void buyerLocView(int locNo, Model model) {
 		
+		logger.info("locNo:"+locNo);
+		//locNo에 맞는 SellerLoc 조회
+		SellerLoc sellerLoc = buyerService.getSellerLoc(locNo);
+		
+		logger.info("sellerLoc:"+sellerLoc);
+		
+		model.addAttribute("sellerLoc", sellerLoc);
+				
+		//locNo에 맞는 magazineNo으로 북리스트 조회
+		BookListInfo bookListInfo = buyerService.getBookListInfo(sellerLoc.getMagazineNo());
+		
+		logger.info("bookListInfo:"+bookListInfo);
+		
+		model.addAttribute("bookListInfo", bookListInfo);
+			
 	}
 	
 	@RequestMapping(value="/buyer/sellerLocMap", method=RequestMethod.GET)
