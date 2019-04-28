@@ -39,6 +39,7 @@ public class ChattingController {
 		//로그인한id와 문의하기버튼눌렀을때 상대방id chat에 저장
 		Chat chat = chatService.getChat(user, session);
 		
+		
 		//방이 이미 존재하는지 판단
 		boolean createRoomChk =  chatService.createRoomChk(chat);
 		//-1로 방번호 초기화
