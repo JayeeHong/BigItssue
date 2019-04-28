@@ -35,10 +35,10 @@ public class ChattingController {
 		
 		//현재 넘어온 user에는 문의하기 버튼을 클릭했을때,
 		//상대방에 대한 정보가 들어있음.
-		logger.info("ha");
+		
 		//로그인한id와 문의하기버튼눌렀을때 상대방id chat에 저장
 		Chat chat = chatService.getChat(user, session);
-
+		
 		//방이 이미 존재하는지 판단
 		boolean createRoomChk =  chatService.createRoomChk(chat);
 		//-1로 방번호 초기화
@@ -72,9 +72,9 @@ public class ChattingController {
 			if(chatRoomList.get(i).getBuyerId() != null && !chatRoomList.get(i).getBuyerId().equals(LoginInfo.getId())) {
 				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBuyerId());
 			}else if(chatRoomList.get(i).getSellerId() != null && !chatRoomList.get(i).getSellerId().equals(LoginInfo.getId())) {
-				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBuyerId());
+				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getSellerId());
 			}else if(chatRoomList.get(i).getBigdomId() != null && !chatRoomList.get(i).getBigdomId().equals(LoginInfo.getId())) {
-				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBuyerId());
+				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBigdomId());
 			}
 		}
 		
@@ -112,14 +112,16 @@ public class ChattingController {
 		for(int i=0; i<chatRoomList.size(); i++) {
 			//보조 메시지(가장 마지막의 메시지 하나만 가져와야함)
 			Message subMsg = chatService.selectSubMessage(chatRoomList.get(i).getChatRoomNo());
-			//현재 date받아오기
-			tempTime = subMsg.getChatDate();
-			//date를 이쁜String으로 바꾸기
-			stringTime = time.format(tempTime);		
-			//subMsgList에 stringChatDate설정
-			subMsg.setStringChatDate(stringTime);
 
 			if(subMsg != null) {
+				
+				//현재 date받아오기
+				tempTime = subMsg.getChatDate();
+				//date를 이쁜String으로 바꾸기
+				stringTime = time.format(tempTime);		
+				//subMsgList에 stringChatDate설정
+				subMsg.setStringChatDate(stringTime);
+				
 				subMsgList.add(subMsg);
 			}
 			
@@ -138,11 +140,23 @@ public class ChattingController {
 	
 	@RequestMapping(value="chatRoomListAjax", method=RequestMethod.POST)
 	public String chatRoomListAjax(HttpSession session, Model model) {
-		
+		logger.info("/////////////////////////////////////////");
 		User LoginInfo = (User)session.getAttribute("LoginInfo");
-		
+		logger.info("LoginInfo:"+LoginInfo);
 		List<Chat> refreshChatRoomList = chatService.selectRooms(LoginInfo);
-		
+		//채팅내역의 상대방 이름을 띄워 주기 위해서 추가
+		//Chat의 TheOtherParty에
+		//refreshChatRoomList속에 있는 Chat를 하나하나 조사해서 로그인된 아이디와 같지않고 null이 아닌 아이디를 넣어주자.
+		for(int i=0; i<refreshChatRoomList.size(); i++) {
+			if(refreshChatRoomList.get(i).getBuyerId() != null && !refreshChatRoomList.get(i).getBuyerId().equals(LoginInfo.getId())) {
+				refreshChatRoomList.get(i).setTheOtherParty(refreshChatRoomList.get(i).getBuyerId());
+			}else if(refreshChatRoomList.get(i).getSellerId() != null && !refreshChatRoomList.get(i).getSellerId().equals(LoginInfo.getId())) {
+				refreshChatRoomList.get(i).setTheOtherParty(refreshChatRoomList.get(i).getSellerId());
+			}else if(refreshChatRoomList.get(i).getBigdomId() != null && !refreshChatRoomList.get(i).getBigdomId().equals(LoginInfo.getId())) {
+				refreshChatRoomList.get(i).setTheOtherParty(refreshChatRoomList.get(i).getBigdomId());
+			}
+		}
+
 		logger.info("refreshChatRoomList:"+refreshChatRoomList);
 		
 		model.addAttribute("refreshChatRoomList",refreshChatRoomList);
@@ -168,9 +182,9 @@ public class ChattingController {
 			if(chatRoomList.get(i).getBuyerId() != null && !chatRoomList.get(i).getBuyerId().equals(LoginInfo.getId())) {
 				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBuyerId());
 			}else if(chatRoomList.get(i).getSellerId() != null && !chatRoomList.get(i).getSellerId().equals(LoginInfo.getId())) {
-				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBuyerId());
+				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getSellerId());
 			}else if(chatRoomList.get(i).getBigdomId() != null && !chatRoomList.get(i).getBigdomId().equals(LoginInfo.getId())) {
-				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBuyerId());
+				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBigdomId());
 			}
 		}
 		
@@ -210,12 +224,14 @@ public class ChattingController {
 			Message subMsg = chatService.selectSubMessage(chatRoomList.get(i).getChatRoomNo());
 
 			if(subMsg != null) {
+				
 				//현재 date받아오기
 				tempTime = subMsg.getChatDate();
 				//date를 이쁜String으로 바꾸기
 				stringTime = time.format(tempTime);		
 				//subMsgList에 stringChatDate설정
 				subMsg.setStringChatDate(stringTime);
+				
 				subMsgList.add(subMsg);
 			}
 			
