@@ -10,6 +10,7 @@ import web.dto.BookListInfo;
 import web.dto.Reservation;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
+import web.dto.User;
 import web.service.face.SellerService;
 
 @Service
@@ -93,6 +94,11 @@ public class SellerServiceImpl implements SellerService {
 	@Override
 	public void setEndTime(SellerLoc sellerLoc) {
 		sellerDao.updateEndTime(sellerLoc);
+	}
+
+	@Override
+	public User getSellerInfoUser(SellerInfo sellerInfo) {
+		return sellerDao.selectSellerInfoUser(sellerInfo);
 	}
 
 }

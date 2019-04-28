@@ -2,6 +2,13 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<style type="text/css">
+.fr{
+	float:right;
+}
+</style>
+
 <script type="text/javascript">
 $(document).ready(function() {
 	
@@ -33,9 +40,10 @@ function inquire(id,sort){
 	
 }
 </script>
-<h3>구매자 메인</h3>
 
-<table class="table table-hover table-striped table-condensed">
+<div class="wrap container">
+<div style="padding: 10px;">
+<table class="table table-bordered">
 	<thead>
 	<tr>
 	<th style="width: 25%">장소</th>
@@ -49,9 +57,13 @@ function inquire(id,sort){
 	<c:forEach var="item" items="${sellerLocList}" begin="0" end="${sellerLocList.size()}" step="1">
 		<tr>
 		<td>${item.zone }</td>
-		<td>${item.station } ${item.spot }<button class="btn btn-success" onclick="mapView('${item.station }','${item.spot }')">지도보기</button></td>
-		<td>${item.sellerTimeS } ~ ${item.sellerTimeE} <button class="btn btn-info" onclick="booking(${item.locNo})">예약하기</button></td>
-		<td>${item.sellerId }<button class="btn btn-warning" onclick="inquire('${item.sellerId}','판매자')">문의하기</button></td>
+		<td>${item.station } ${item.spot }<button class="btn btn-success btn-sm fr" onclick="mapView('${item.station }','${item.spot }')">지도보기</button></td>
+		<td>${item.sellerTimeS } ~ ${item.sellerTimeE} <button class="btn btn-info btn-sm fr" onclick="booking(${item.locNo})">예약하기</button></td>
+		<td>${item.sellerId }<button class="btn btn-warning btn-sm fr" onclick="inquire('${item.sellerId}','판매자')">문의하기</button></td>
 	</c:forEach>
 	</tbody>
 </table>
+
+<jsp:include page="sellerLocPaging.jsp" />
+</div>
+</div>

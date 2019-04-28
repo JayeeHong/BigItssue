@@ -1,6 +1,7 @@
 package web.service.face;
 
 import web.dto.BigdomInfo;
+import web.dto.User;
 
 public interface BigdomService {
 
@@ -9,5 +10,8 @@ public interface BigdomService {
 
 	// 빅돔 정보 가져오기
 	public BigdomInfo getBigdomInfo(String bigdomId);
+	
+	// 빅돔 정보 User로 가져오기
+	public User getBigdomInfoUser(BigdomInfo bigdomInfo);
 
 }

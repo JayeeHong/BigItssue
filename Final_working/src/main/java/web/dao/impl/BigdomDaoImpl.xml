@@ -21,5 +21,16 @@
 		WHERE 1=1
 			AND bigdomId=#{bigdomId }
 	</select>
+	
+	<resultMap type="web.dto.User" id="UserBigdom">
+			<result column="bigdomId" property="id" />
+			<result column="bigdomPw" property="pw" />
+	</resultMap>
+	<select id="selectBigdomInfoUser"
+	 parameterType="web.dto.SellerInfo" resultMap="UserBigdom">
+		SELECT * FROM bigdomInfo
+		WHERE 1=1
+			AND bigdomId=#{bigdomId }
+	</select>
 
 </mapper>

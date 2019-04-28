@@ -99,4 +99,14 @@
 		WHERE buyerId = #{buyerId}
 	</select>
 	
+	<select id="selectSellerLoc" parameterType="int" resultType="web.dto.SellerLoc">
+		SELECT * FROM sellerLoc
+		WHERE locNo = #{locNo }
+	</select>
+	
+	<select id="selectBookListInfo" parameterType="int" resultType="web.dto.BookListInfo">
+		SELECT * FROM bookListInfo
+		WHERE magazineNo = #{magazineNo }
+	</select>
+	
 </mapper>
