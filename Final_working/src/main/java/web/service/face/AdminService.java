@@ -26,3 +26,4 @@ public interface AdminService {
 
 	public void adminNoticeDelete(Notice notice);
 }
+//

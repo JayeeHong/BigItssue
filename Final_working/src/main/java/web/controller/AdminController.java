@@ -159,7 +159,7 @@ public class AdminController {
 			return "jsonView";
 	}
 	
-	
+	//
 	@RequestMapping(value="/admin/notice/view", method=RequestMethod.GET)
 	public void adminNoticeView(Notice notice, Model model) {
 		

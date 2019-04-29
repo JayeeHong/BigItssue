@@ -48,7 +48,7 @@ public class AdminServiceImpl implements AdminService{
 	public List<SellerLoc> viewDetail(String station) {
 		return adminDao.viewDetail(station);
 	}
-	
+	//
 	@Override
 	public int getNoticeCount() {
 		return adminDao.getNoticeCount();

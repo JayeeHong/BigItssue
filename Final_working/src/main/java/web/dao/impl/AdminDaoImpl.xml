@@ -19,7 +19,7 @@
 		SELECT DISTINCT station FROM SellerLoc
 		WHERE zone LIKE '%' || #{zone } || '%'
 	</select>
-	
+	<!--  -->
 	<select id="viewDetail" parameterType="String" resultType="web.dto.SellerLoc">
 		SELECT spot, sellerid FROM SellerLoc
 		WHERE station LIKE '%' || #{station } || '%'

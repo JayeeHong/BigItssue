@@ -25,5 +25,6 @@ public interface AdminDao {
 	public Notice noticeView(Notice notice);
 
 	public void adminNoticeDelete(Notice notice);
+	//
 	
 }
