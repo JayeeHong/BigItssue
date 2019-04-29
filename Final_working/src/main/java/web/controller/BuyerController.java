@@ -340,12 +340,34 @@ public class BuyerController {
 	}
 	
 	@RequestMapping(value="/buyer/my/confirmpw", method=RequestMethod.POST)
-	public String myPwConfirm(BuyerInfo buyerInfo) { // 마이페이지-정보수정 -> 비밀번호확인
+	public void myPwConfirm(BuyerInfo buyerInfo, HttpSession session, HttpServletResponse res) throws IOException { // 마이페이지-정보수정 -> 비밀번호확인
+		
+		PrintWriter out = null;
+		res.setContentType("text/html; charset=UTF-8");
+		out = res.getWriter();
 		
 //		logger.info(buyerInfo.toString());
 		
+		buyerInfo.setBuyerId((String) session.getAttribute("buyerId"));
 		
+		// 입력한 비밀번호 맞는지 확인
+		if(buyerService.confirmpw(buyerInfo)) { // 비밀번호가 맞을 경우
+//			logger.info("비밀번호 맞음");
+			session.setAttribute("confirmpw", true);
+			
+			out.println("<script>alert('비밀번호를 확인하였습니다.'); location.href='/buyer/my/info'</script>" );
+			out.flush();
+			
+		} else {
+//			logger.info("비밀번호 틀림");
+			session.setAttribute("confirmpw", false);
+			
+			out.println("<script>alert('비밀번호를 다시 확인해주세요.'); location.href='/buyer/my/info'</script>" );
+			out.flush();
+
+			
+		}
 		
-		return "redirect:/buyer/my/info";
+//		return "redirect:/buyer/my/info";
 	}
 }
