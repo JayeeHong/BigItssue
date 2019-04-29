@@ -276,6 +276,7 @@ public class AdminController {
 			logger.info((String)list.get(0).get("SELLERID"));
 //			logger.info(String.valueOf(list));
 			logger.info(""+list);
+			logger.info("TEST");
 			model.addAttribute("detailList", list);
 			model.addAttribute("station", station);
 		}
