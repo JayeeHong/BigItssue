@@ -8,7 +8,17 @@ public class Review { // 후기
 	private String reviewTitle; // 제목
 	private String reviewContent; // 내용
 	private Date reviewDate; // 작성일
+	private int reviewHit; //조회수
 	private String sellerId; // 판매자 아이디(fk)
+	
+	
+	public int getReviewHit() {
+		return reviewHit;
+	}
+	public void setReviewHit(int reviewHit) {
+		this.reviewHit = reviewHit;
+	}
+
 	
 	public int getReviewNo() {
 		return reviewNo;
@@ -44,7 +54,7 @@ public class Review { // 후기
 	@Override
 	public String toString() {
 		return "Review [reviewNo=" + reviewNo + ", reviewTitle=" + reviewTitle + ", reviewContent=" + reviewContent
-				+ ", reviewDate=" + reviewDate + ", sellerId=" + sellerId + "]";
+				+ ", reviewDate=" + reviewDate + ", reviewHit=" + reviewHit + ", sellerId=" + sellerId + "]";
 	}
 	
 }
