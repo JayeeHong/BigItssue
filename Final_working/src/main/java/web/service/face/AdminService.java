@@ -3,7 +3,13 @@ package web.service.face;
 import java.util.HashMap;
 import java.util.List;
 
+
+import web.dto.AdminInfo;
+import web.dto.BigdomInfo;
 import web.dto.Notice;
+import web.dto.SellerBigdomInfo;
+import web.dto.SellerInfo;
+
 import web.dto.SellerLoc;
 import web.util.Paging;
 
@@ -28,5 +34,10 @@ public interface AdminService {
 	public Notice noticeView(Notice notice);
 
 	public void adminNoticeDelete(Notice notice);
+
+	// 관리자 로그인
+	public boolean login(AdminInfo adminInfo);
+
+	// 판매자 정보와 판매자에 따른 빅돔 정보 불러오기
+	public List<SellerBigdomInfo> getSellerBigdomInfo();
 }
-//

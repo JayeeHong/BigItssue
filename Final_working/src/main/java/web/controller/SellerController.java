@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -20,11 +21,13 @@ import web.dto.BookListInfo;
 import web.dto.Chat;
 import web.dto.Message;
 import web.dto.Reservation;
+import web.dto.Review;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.service.face.ChatService;
 import web.service.face.SellerService;
+import web.util.Paging;
 
 @Controller
 public class SellerController {
@@ -220,14 +223,14 @@ public class SellerController {
 		} else {
 			sellerTimeS = startTime1 + startTime2;
 		}
-		logger.info("sellerTimeS:"+sellerTimeS);
+//		logger.info("sellerTimeS:"+sellerTimeS);
 		
 		if(Integer.parseInt(endTime2)>=0 && Integer.parseInt(endTime2)<10) {
 			sellerTimeE = endTime1 + "0" + endTime2;
 		} else {
 			sellerTimeE = endTime1 + endTime2;
 		}
-		logger.info("sellerTimeE:"+sellerTimeE);
+//		logger.info("sellerTimeE:"+sellerTimeE);
 		
 		sellerLoc.setSellerTimeS(sellerTimeS);
 		sellerLoc.setSellerTimeE(sellerTimeE);
@@ -365,6 +368,103 @@ public class SellerController {
 		sellerService.setEndTime(sellerLoc);
 		
 		return "redirect:/seller/time";
+	}
+	
+	
+	
+	@RequestMapping(value="/seller/review/list", method=RequestMethod.GET)
+	public void review(Review review, Model model, HttpServletRequest req) {
+		
+		logger.info("후기 게시판");
+		
+		//현재 페이지 번호 얻기
+		int curPage = sellerService.getCurPage(req);
+		
+		//게시글 수 얻기
+		int totalCount = sellerService.getTotalCount();
+		
+		//페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+		
+		//페이징객체 MODEL로 추가
+		model.addAttribute("paging", paging);
+		
+		//게시글 목록 MODEL로 추가
+		List<Review> reviewList = sellerService.getPagingList(paging);
+		model.addAttribute("reviewList", reviewList);
+		
+	}
+	
+	@RequestMapping(value="/seller/review/write", method=RequestMethod.GET)
+	public String reviewWrite(HttpSession session) {
+		
+		logger.info("후기 글쓰기 페이지");
+		
+//		if(session.getAttribute("sellerLogin") == null ) {
+//			return "redirect:/seller/review/list";
+//		} else {
+			return "seller/review/write";
+//		}
+		
+	}
+	
+	@RequestMapping(value="/seller/review/write", method=RequestMethod.POST)
+	public String reviewWriteProc(Review review, HttpSession session) {
+		
+		review.setSellerId( (String)session.getAttribute("sellerId") );
+		
+		sellerService.write(review);
+		
+		return "redirect:/seller/review/list";
+	}
+	
+	@RequestMapping(value="/seller/review/view", method=RequestMethod.GET)
+	public void reviewView(Review review, Model model, HttpServletRequest req) {
+		
+		logger.info("후기 상세페이지");
+		
+		int reviewno = Integer.parseInt(req.getParameter("reviewno"));
+		review.setReviewNo(reviewno);
+		
+		//게시글 조회 수행
+		Review view = sellerService.view(reviewno);
+		
+		//MODEL 전달
+		model.addAttribute("reviewView", view);
+				
+	}
+	
+	@RequestMapping(value="/seller/review/update", method=RequestMethod.GET)
+	public void reviewUpdate(Review review, Model model, HttpServletRequest req) {
+		
+		logger.info("후기 글 수정페이지");
+		
+		int reviewno = Integer.parseInt(req.getParameter("reviewno"));
+		
+		Review view = sellerService.view(reviewno);
+		
+		model.addAttribute("reviewView", view);
+		
+	}
+	
+	@RequestMapping(value="/seller/review/update", method=RequestMethod.POST)
+	public String reviewUpdateProc(Review review) {
+		
+		sellerService.update(review);
+		
+		return "redirect:/seller/review/view?reviewno=" + review.getReviewNo();
+	}
+	
+	@RequestMapping(value="/seller/review/delete", method=RequestMethod.GET)
+	public String reviewDelete(Review review, HttpServletRequest req) {
+		
+		logger.info("후기 글 삭제");
+		
+		int reviewno = Integer.parseInt(req.getParameter("reviewno"));
+		
+		sellerService.delete(reviewno);
+		
+		return "redirect:/seller/review/list";
 	}
 
 }

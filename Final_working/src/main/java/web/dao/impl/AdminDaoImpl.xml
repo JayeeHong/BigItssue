@@ -6,36 +6,77 @@
   
 <mapper namespace="web.dao.face.AdminDao">
 
-	<select resultType="int" parameterType="hashMap" id="getTotalCount"> SELECT COUNT(*) FROM sellerLoc where ${condition} like '%' || #{searchWord} || '%' order by locno desc </select>
+	<select resultType="int" parameterType="hashMap" id="getTotalCount"> 
+		SELECT COUNT(*) FROM sellerLoc 
+		where ${condition} like '%' || #{searchWord} || '%' order by locno desc 
+	</select>
 
-<select resultType="web.dto.SellerLoc" parameterType="hashMap" id="getPagingList"> SELECT * FROM ( SELECT rownum rnum, B.* FROM ( SELECT * FROM sellerLoc WHERE ${condition} like '%' || #{searchWord} || '%' ORDER BY locno desc ) B ORDER BY rnum ) R WHERE rnum BETWEEN #{p.startNo } AND #{p.endNo } </select>
-
-<delete parameterType="web.dto.SellerLoc" id="adminSellerListDelete"> DELETE sellerLoc where locNo = #{locNo } </delete>
-
-<select resultType="web.dto.SellerLoc" parameterType="web.dto.SellerLoc" id="getSellerInfo"> SELECT * FROM sellerLoc where locNo = #{locNo } </select>
-
+	<select resultType="web.dto.SellerLoc" parameterType="hashMap" id="getPagingList"> 
+		SELECT * FROM ( 
+			SELECT rownum rnum, B.* FROM ( 
+				SELECT * FROM sellerLoc 
+				WHERE ${condition} like '%' || #{searchWord} || '%' 
+				ORDER BY locno desc ) 
+			B ORDER BY rnum ) R 
+		WHERE rnum BETWEEN #{p.startNo } AND #{p.endNo } 
+	</select>
+	
+	<delete parameterType="web.dto.SellerLoc" id="adminSellerListDelete"> 
+		DELETE sellerLoc where locNo = #{locNo } 
+	</delete>
+	
+	<select resultType="web.dto.SellerLoc" parameterType="web.dto.SellerLoc" id="getSellerInfo"> 
+		SELECT * FROM sellerLoc where locNo = #{locNo } 
+	</select>
 
 	<select id="viewLoc" parameterType="String" resultType="web.dto.SellerLoc">
 		SELECT DISTINCT station FROM SellerLoc
 		WHERE zone LIKE '%' || #{zone } || '%'
 	</select>
+
 	<!--  -->
 	<select id="viewDetail" parameterType="String" resultType="hashmap">
 		SELECT * FROM sellerInfo, (select sellerId, spot from SellerLoc WHERE station LIKE '%' || #{station } || '%') S
 		WHERE sellerInfo.sellerId = S.sellerId
+
 	</select>
 <!-- 	<insert id="buyerJoin" parameterType="web.dto.BuyerInfo"> -->
 <!-- 		INSERT INTO buyerinfo(buyerid, buyerpw, buyerphone, buyeremail, buyername) -->
 <!-- 		VALUES(#{buyerId }, #{buyerPw }, #{buyerPhone }, #{buyerEmail }, #{buyerName } ) -->
 <!-- 	</insert> -->
 
-	<select resultType="int" id="getNoticeCount">SELECT COUNT(*) FROM notice </select>
+	<select resultType="int" id="getNoticeCount">
+		SELECT COUNT(*) FROM notice
+	</select>
 
-<select resultType="web.dto.Notice" parameterType="web.util.Paging" id="getNoticeList">SELECT * FROM ( SELECT rownum rnum, B.* FROM( SELECT * FROM Noticeorder by NoticeNo desc ) BORDER BY rnum ) RWHERE rnum BETWEEN #{startNo } AND #{endNo } </select>
+	<select resultType="web.dto.Notice" parameterType="web.util.Paging" id="getNoticeList">
+		SELECT * FROM ( 
+			SELECT rownum rnum, B.* FROM( 
+				SELECT * FROM Noticeorder by NoticeNo desc ) B
+			ORDER BY rnum ) R
+		WHERE rnum BETWEEN #{startNo } AND #{endNo } 
+	</select>
 
-<select resultType="web.dto.Notice" parameterType="web.dto.Notice" id="noticeView">SELECT * FROM Noticewhere noticeNo = #{noticeNo } </select>
+	<select resultType="web.dto.Notice" parameterType="web.dto.Notice" id="noticeView">
+		SELECT * FROM Noticewhere noticeNo = #{noticeNo } 
+	</select>
 
-<delete parameterType="web.dto.Notice" id="adminNoticeDelete">delete noticewhere noticeNo = #{noticeNo } </delete>
-
+	<delete parameterType="web.dto.Notice" id="adminNoticeDelete">
+		delete noticewhere noticeNo = #{noticeNo } 
+	</delete>
+	
+	<select id="selectCntLogin" parameterType="web.dto.AdminInfo" resultType="int">
+		SELECT count(*) FROM adminInfo
+		WHERE 1=1
+			AND adminId=#{adminId } 
+			AND adminPw=#{adminPw }
+	</select>
+	
+	<select id="selectSellerBigdomInfo" resultType="web.dto.SellerBigdomInfo">
+		SELECT si.*, sl.bigdomId
+		FROM sellerInfo si
+		LEFT OUTER JOIN sellerLoc sl
+		ON si.sellerId = sl.sellerId
+	</select>
 
 </mapper>

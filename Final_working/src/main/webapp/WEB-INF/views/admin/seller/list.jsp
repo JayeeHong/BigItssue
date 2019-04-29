@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
 
-</body>
-</html>
+<div class="row row-offcanvas row-offcanvas-right">
+
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
+
+<h3>판매자 판매정보 관리</h3>
+<hr>
+
+</div>

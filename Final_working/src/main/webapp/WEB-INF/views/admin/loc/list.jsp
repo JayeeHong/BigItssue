@@ -10,9 +10,13 @@ $(document).ready(function() {
 });
 </script>
 
+<div class="row row-offcanvas row-offcanvas-right">
 
-<h3>리스트</h3>
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
+
+<h3>판매장소 관리</h3>
 <hr>
+
 <form action="/admin/loc/list" method="get">
 	<input list="zone" name="zone"/>
 		<datalist id="zone">
@@ -54,3 +58,5 @@ $(document).ready(function() {
 </table>
 
 <button id="insertBtn">추가하기</button>
+
+</div>

@@ -41,5 +41,8 @@ public interface BuyerService {
 	public SellerLoc getSellerLoc(int sellerLoc);
 	
 	public BookListInfo getBookListInfo(int magazineNo);
+
+	// 비밀번호 확인
+	public boolean confirmpw(BuyerInfo buyerInfo);
 	
 }
