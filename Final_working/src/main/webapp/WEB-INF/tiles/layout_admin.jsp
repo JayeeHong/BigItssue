@@ -21,15 +21,6 @@
 <style type="text/css">
 	/* 모든 페이지에 적용되는 스타일 */
 	
-	.wrap {
-		width: 1100px;
-		margin: 0 auto;
-		border: 1px solid #ccc;
-	}
-	
-	.header {
-		border: 1px solid red;
-	}
 </style>
 
 <script type="text/javascript">
@@ -41,10 +32,12 @@
 <body>
 
 <!-- HEADER -->
-<tiles:insertAttribute name="header" />
+<div class="container">
+	<tiles:insertAttribute name="header" />
+</div>
 
 <!-- BODY -->
-<div class="wrap">
+<div class="wrap container">
 	<tiles:insertAttribute name="body" />
 </div>
 

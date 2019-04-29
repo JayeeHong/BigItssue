@@ -3,6 +3,7 @@ package web.service.face;
 import java.util.HashMap;
 import java.util.List;
 
+import web.dto.AdminInfo;
 import web.dto.Notice;
 import web.dto.SellerLoc;
 import web.util.Paging;
@@ -28,5 +29,7 @@ public interface AdminService {
 	public Notice noticeView(Notice notice);
 
 	public void adminNoticeDelete(Notice notice);
+
+	// 관리자 로그인
+	public boolean login(AdminInfo adminInfo);
 }
-//

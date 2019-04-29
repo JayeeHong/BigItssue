@@ -17,6 +17,21 @@
 	<interceptors>
 		<interceptor>
 			<!-- 인터셉터 처리되는 URL 매핑 -->
+			<mapping path="/buyer/**" />
+			<!-- 위 url로 요청이 들어오면 seller로 보내겠다 -->
+			<!-- 인터셉터 제외 URL 매핑 -->
+			<exclude-mapping path="/buyer/main" />
+			<exclude-mapping path="/buyer/login" />
+			<exclude-mapping path="/buyer/join" />
+			<exclude-mapping path="/buyer/notice" />
+			<!-- 인터셉터 빈 등록 -->
+			<beans:bean class="web.interceptor.BuyerInterceptor" />
+		</interceptor>
+	</interceptors>
+	
+	<interceptors>
+		<interceptor>
+			<!-- 인터셉터 처리되는 URL 매핑 -->
 			<mapping path="/seller/**" />
 			<!-- 위 url로 요청이 들어오면 seller로 보내겠다 -->
 			<!-- 인터셉터 제외 URL 매핑 -->
@@ -24,6 +39,19 @@
 			<exclude-mapping path="/seller/login" />
 			<!-- 인터셉터 빈 등록 -->
 			<beans:bean class="web.interceptor.SellerInterceptor" />
+		</interceptor>
+	</interceptors>
+	
+	<interceptors>
+		<interceptor>
+			<!-- 인터셉터 처리되는 URL 매핑 -->
+			<mapping path="/admin/**" />
+			<!-- 위 url로 요청이 들어오면 seller로 보내겠다 -->
+			<!-- 인터셉터 제외 URL 매핑 -->
+			<exclude-mapping path="/admin/main" />
+			<exclude-mapping path="/admin/login" />
+			<!-- 인터셉터 빈 등록 -->
+			<beans:bean class="web.interceptor.AdminInterceptor" />
 		</interceptor>
 	</interceptors>
 
