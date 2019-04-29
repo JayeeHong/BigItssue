@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import web.dto.AdminInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
+
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
 import web.util.Paging;
@@ -273,11 +278,20 @@ public class AdminController {
 		
 	}
 	
+
+	
+	//판매지역
 	@RequestMapping(value="/admin/loc/list", method=RequestMethod.GET)
 	public void locList(String zone, Model model) { // 판매장소 관리
 		logger.info("zone : " + zone);
+		
+		//현재 DB에 입력된 판매지역
 		if(zone != null) {
-			List<SellerLoc> list = adminService.viewLoc(zone);
+			//검색어 split
+			String[] zon = zone.split("호선");
+			
+			//zon[0]을 통한 역 조회
+			List<SellerLoc> list = adminService.viewLoc(zon[0]);
 			
 			logger.info(String.valueOf(list));
 			model.addAttribute("locList", list);
@@ -285,14 +299,18 @@ public class AdminController {
 		
 	}
 	
+
+	//판매지역 상세보기
 	@RequestMapping(value="/admin/loc/detail", method=RequestMethod.GET)
 	public void locDetail(String station, Model model) {
 		logger.info("station : "+station);
 		
 		if(station != null) {
-			List<SellerLoc> list = adminService.viewDetail(station);
-			
-			logger.info(String.valueOf(list));
+			List<HashMap> list = adminService.viewDetail(station);
+			logger.info((String)list.get(0).get("SELLERID"));
+//			logger.info(String.valueOf(list));
+			logger.info(""+list);
+			logger.info("TEST");
 			model.addAttribute("detailList", list);
 			model.addAttribute("station", station);
 		}
