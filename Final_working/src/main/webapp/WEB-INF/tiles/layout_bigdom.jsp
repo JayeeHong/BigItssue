@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>BigItssue 빅돔 페이지</title>
 
 <!-- 모든 페이지에 jQuery 2.2.4.min 추가 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
