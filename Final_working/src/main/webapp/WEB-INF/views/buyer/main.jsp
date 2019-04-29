@@ -22,12 +22,10 @@ function booking(locNo){
 	
 }
 //판매처 지도 열기
-function mapView(zone,station,spot){
+function mapView(locNo){
 	
-	console.log("station:"+station);
-	console.log("spot:"+spot);
 	//팝업창 새로 띄우기
-	window.open("/sellerLocMap?zone="+zone+"&station="+station+"&spot="+spot, "판매처지도", "width=400, height=300, left=100, top=50");
+	window.open("/sellerLocMap?locNo="+locNo, "판매처지도", "width=400, height=300, left=100, top=50");
 	
 }
 //채팅창 열기
@@ -57,7 +55,7 @@ function inquire(id,sort){
 	<c:forEach var="item" items="${sellerLocList}" begin="0" end="${sellerLocList.size()}" step="1">
 		<tr>
 		<td>${item.zone }</td>
-		<td>${item.station } ${item.spot }<button class="btn btn-success btn-sm fr" onclick="mapView('${item.zone }','${item.station }','${item.spot }')">지도보기</button></td>
+		<td>${item.station } ${item.spot }<button class="btn btn-success btn-sm fr" onclick="mapView(${item.locNo })">지도보기</button></td>
 		<td>${item.sellerTimeS } ~ ${item.sellerTimeE} <button class="btn btn-info btn-sm fr" onclick="booking(${item.locNo})">예약하기</button></td>
 		<td>${item.sellerId }<button class="btn btn-warning btn-sm fr" onclick="inquire('${item.sellerId}','판매자')">문의하기</button></td>
 	</c:forEach>

@@ -1,8 +1,11 @@
 package web.service.face;
 
+import java.util.HashMap;
 import java.util.List;
 
+import web.dto.Notice;
 import web.dto.SellerLoc;
+import web.util.Paging;
 
 public interface AdminService {
 	
@@ -16,7 +19,7 @@ public interface AdminService {
 
 	public List<SellerLoc> viewLoc(String zone);
 
-	public List<SellerLoc> viewDetail(String station);
+	public List viewDetail(String station);
 	
 	public int getNoticeCount();
 

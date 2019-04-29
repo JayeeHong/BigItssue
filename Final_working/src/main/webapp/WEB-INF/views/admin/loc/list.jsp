@@ -16,11 +16,16 @@ $(document).ready(function() {
 <form action="/admin/loc/list" method="get">
 	<input list="zone" name="zone"/>
 		<datalist id="zone">
-			<option value="1">
-			<option value="2">
-			<option value="3">
-			<option value="4">
-			<option value="5">
+			<option value="1호선">
+			<option value="2호선">
+			<option value="3호선">
+			<option value="4호선">
+			<option value="5호선">
+			<option value="6호선">
+			<option value="7호선">
+			<option value="8호선">
+			<option value="9호선">
+			<option value="부산">
 		</datalist>
 	<button id="selectZone">검색</button>
 </form>

@@ -20,9 +20,9 @@
 		WHERE zone LIKE '%' || #{zone } || '%'
 	</select>
 	<!--  -->
-	<select id="viewDetail" parameterType="String" resultType="web.dto.SellerLoc">
-		SELECT spot, sellerid FROM SellerLoc
-		WHERE station LIKE '%' || #{station } || '%'
+	<select id="viewDetail" parameterType="String" resultType="hashmap">
+		SELECT * FROM sellerInfo, (select sellerId, spot from SellerLoc WHERE station LIKE '%' || #{station } || '%') S
+		WHERE sellerInfo.sellerId = S.sellerId
 	</select>
 <!-- 	<insert id="buyerJoin" parameterType="web.dto.BuyerInfo"> -->
 <!-- 		INSERT INTO buyerinfo(buyerid, buyerpw, buyerphone, buyeremail, buyername) -->
