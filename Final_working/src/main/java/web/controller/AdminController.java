@@ -38,7 +38,7 @@ public class AdminController {
 	public void adminSellseView() {
 
 	}
-	
+	//
 	
 	@RequestMapping(value="/admin/seller/getSellerInfolist", method=RequestMethod.GET)
 	public String getlist(

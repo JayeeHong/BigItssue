@@ -8,7 +8,7 @@ import web.dto.SellerLoc;
 import web.util.Paging;
 
 public interface AdminService {
-	
+	//
 	public int getTotalCount(HashMap doubleString);
 
 	public List<SellerLoc> getPagingList(HashMap map);
