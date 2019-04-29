@@ -5,7 +5,7 @@
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
-<h3>판매자 판매정보 관리</h3>
+<h3>공지사항 게시판 관리</h3>
 <hr>
 
 </div>

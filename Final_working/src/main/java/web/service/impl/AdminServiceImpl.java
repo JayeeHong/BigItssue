@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import web.dao.face.AdminDao;
+import web.dto.AdminInfo;
 import web.dto.Notice;
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
@@ -72,6 +73,17 @@ public class AdminServiceImpl implements AdminService{
 	public void adminNoticeDelete(Notice notice) {
 		adminDao.adminNoticeDelete(notice);
 		
+	}
+
+	@Override
+	public boolean login(AdminInfo adminInfo) {
+		if(adminDao.selectCntLogin(adminInfo) > 0) {
+			return true;
+			
+		} else {
+			return false;
+			
+		}
 	}
 	
 	

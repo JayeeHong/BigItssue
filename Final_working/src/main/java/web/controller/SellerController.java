@@ -223,14 +223,14 @@ public class SellerController {
 		} else {
 			sellerTimeS = startTime1 + startTime2;
 		}
-		logger.info("sellerTimeS:"+sellerTimeS);
+//		logger.info("sellerTimeS:"+sellerTimeS);
 		
 		if(Integer.parseInt(endTime2)>=0 && Integer.parseInt(endTime2)<10) {
 			sellerTimeE = endTime1 + "0" + endTime2;
 		} else {
 			sellerTimeE = endTime1 + endTime2;
 		}
-		logger.info("sellerTimeE:"+sellerTimeE);
+//		logger.info("sellerTimeE:"+sellerTimeE);
 		
 		sellerLoc.setSellerTimeS(sellerTimeS);
 		sellerLoc.setSellerTimeE(sellerTimeE);
