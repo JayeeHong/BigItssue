@@ -7,7 +7,8 @@ $(document).ready(function(){
 	getLocList();
 })
 var curPage = 0;
-
+var condition;
+var searchWord;
 function getCurPage(a){
 	curPage = a
 	getLocList();
@@ -43,8 +44,14 @@ function listDelete(a){
 	
 }
 
+function goBack(){
+	window.location.href="/admin/seller/list"
+}
+
 function searchSeller(){
 	curPage = 0;
+	condition =$("#condition").val()
+	searchWord =$("#searchWord").val()
 	getLocList();
 }
 
@@ -54,8 +61,8 @@ function getLocList(){
 	$.ajax({
 		url:"/admin/seller/getSellerInfolist"
 		,type:"get"
-		,data:{condition : $("#condition").val()
-			,searchWord : $("#searchWord").val()
+		,data:{condition : condition
+			,searchWord : searchWord
 			,curPage : curPage
 		}
 		,dataType: "json"
@@ -193,6 +200,10 @@ function getLocList(){
 	<div class="col-xs-1">
 		<input class="form-inline btn" type="button" onclick="searchSeller()" value="찾기">
 	
+	</div>
+	
+	<div class="container text-right">
+		<input class="btn" type="button" value="처음으로" onclick="goBack()">
 	</div>
 </div>    
 <br>

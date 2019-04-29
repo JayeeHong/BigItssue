@@ -51,8 +51,9 @@ function noticeDelete(a){
     	<div>
     	
     ${notice.noticeContent }
+    <br>
     <c:if test="${notice.noticeImg ne null}">
-    <img src="${notice.noticeImg }">	
+    <img style="width: 40%; height: 40%;" src="/img/${notice.noticeImg }">	
     
     </c:if>
     
@@ -65,10 +66,8 @@ function noticeDelete(a){
 	
 	<div class="container text-center">
 	<input type="button" class="btn btn-info" value="수정" onclick="noticeUpdate(${notice.noticeNo})">
-	<form action="/admin/notice/delete" method="post">
 	<input type="hidden" value="${notice.noticeNo }" name="noticeNo">
-	<input type="submit" class="btn btn-danger" value="삭제" >
-	</form>
+	<input type="button" class="btn btn-danger" value="삭제" onclick="noticeDelete(${notice.noticeNo})">
 	
 	</div>    
     

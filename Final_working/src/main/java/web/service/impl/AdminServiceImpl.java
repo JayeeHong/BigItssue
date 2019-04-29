@@ -65,12 +65,32 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public Notice noticeView(Notice notice) {
 		
+		
+		
 		return adminDao.noticeView(notice);
 	}
 
 	@Override
 	public void adminNoticeDelete(Notice notice) {
 		adminDao.adminNoticeDelete(notice);
+		
+	}
+
+	@Override
+	public void noticeInsert(Notice notice) {
+		adminDao.noticeInsert(notice);
+		
+	}
+
+	@Override
+	public void addHit(Notice notice) {
+		adminDao.addHit(notice);
+		
+	}
+
+	@Override
+	public void noticeUpdate(Notice notice) {
+		adminDao.noticeUpdate(notice);
 		
 	}
 	

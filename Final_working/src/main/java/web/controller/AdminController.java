@@ -128,7 +128,7 @@ public class AdminController {
 	public String adminSellserUpdate() {
 		
 		
-		return "redirect:/admin/seller/view";
+		return "redirect:/admin/seller/list";
 	}
 	
 	
@@ -174,8 +174,9 @@ public class AdminController {
 	public void adminNoticeView(Notice notice, Model model) {
 		
 			
-		Notice no = adminService.noticeView(notice);
+		Notice no = adminService.noticeView(notice);//조회
 		
+		adminService.addHit(notice);//조회수1증가
 		model.addAttribute("notice", no);
 		
 	}
@@ -185,7 +186,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/notice/write", method=RequestMethod.POST)
-	public void noticeWriteInsert(
+	public String noticeWriteInsert(
 			String title,
 			Notice notice,
 			MultipartFile file
@@ -201,17 +202,21 @@ public class AdminController {
 //				upFile.setFile_size(file.getSize());
 //				upFile.setStored_name(stored_name);
 				
-				
+				logger.info(file.toString());
 			
-				
+				System.out.println(file.getOriginalFilename());
 				
 				//파일 저장 경로
-				String path = context.getRealPath("upload");
+				String path = context.getRealPath("resources/image");
 				
 				//저장될 파일
-				File dest = new File(path, notice.getNoticeImg());
+				File dest = new File(path, file.getOriginalFilename());
 				
+				//이미지 이름 설정
+				notice.setNoticeImg(file.getOriginalFilename());
 				
+				System.out.println(notice.toString());
+				System.out.println("저장위치"+path);
 				
 					try {
 						file.transferTo(dest);
@@ -224,13 +229,14 @@ public class AdminController {
 					}
 				
 				
+				adminService.noticeInsert(notice);
+	
+				return "redirect:/admin/notice/list";
 				
-	
-	
 	}
 	
 	
-	@RequestMapping(value="/admin/notice/delete", method=RequestMethod.POST)
+	@RequestMapping(value="/admin/notice/delete", method=RequestMethod.GET)
 	public void adminNoticeDelete(Notice notice, HttpServletResponse res) throws IOException {
 		
 		PrintWriter out = null;
@@ -242,6 +248,62 @@ public class AdminController {
 		out.println("<script>alert('삭제되었습니다.'); location.href='/admin/notice/list'</script>" );
 		out.flush();
 		
+		
+	}
+	
+	
+	@RequestMapping(value="/admin/notice/update", method=RequestMethod.GET)
+	public void noticeUpdateForm(Notice notice, Model model) {
+		
+		Notice no = adminService.noticeView(notice);//조회
+		
+		
+		model.addAttribute("notice", no);
+		
+	}
+
+	@RequestMapping(value="/admin/notice/update", method=RequestMethod.POST)
+	public String noticeUpdate(Notice notice, Model model, MultipartFile file) {
+		
+		
+		logger.info(notice.toString());
+		
+		
+		//이미지를 삭제했을경우
+		if(notice.getNoticeImg()=="") {
+			notice.setNoticeImg(null);
+		}
+		
+		//이미지를 수정했을 경우
+		else if(!file.getOriginalFilename().equals(notice.getNoticeImg())) {
+			
+			notice.setNoticeImg(file.getOriginalFilename());
+		
+		String path = context.getRealPath("resources/image");
+		
+		//저장될 파일
+		File dest = new File(path, file.getOriginalFilename());
+		
+		//이미지 이름 설정
+		notice.setNoticeImg(file.getOriginalFilename());
+		
+		
+			try {
+				file.transferTo(dest);
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		adminService.noticeUpdate(notice);
+
+		
+		return "redirect:/admin/notice/view?noticeNo="+notice.getNoticeNo();
 		
 	}
 	
@@ -271,4 +333,10 @@ public class AdminController {
 			model.addAttribute("station", station);
 		}
 	}
+	
+	@RequestMapping(value="/admin/seller/subway", method=RequestMethod.GET)
+	public void subway() {
+		
+	}
+	
 }

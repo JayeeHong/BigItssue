@@ -117,7 +117,7 @@ function getLocList(){
 					
 					if(p.curPage == p.totalPage){
 // 						html += '<li class="disabled"><span>&gt;</span></li>'
-						html += '<li><a">&gt;</a></li>'
+						html += '<li><a>&gt;</a></li>'
 					}
 					if(p.curPage != p.totalPage){
 // 						html += '<li><a href='+'"/admin/seller/list?curPage='+cpp1+"&condition="+condition+"&seachWord="+searchWord+'">&gt;</a></li>'

@@ -59,8 +59,8 @@ public class BuyerServiceImpl implements BuyerService {
 
 				// 네이버일 경우 smtp.naver.com 을 입력합니다. // Google일 경우 smtp.gmail.com 을 입력합니다. 
 				String host = "smtp.naver.com"; 
-				final String username = "jhb0205_"; //네이버 아이디를 입력해주세요. @naver.com은 입력하지 마시구요. 
-				final String password = "423692jeon^"; //네이버 이메일 비밀번호를 입력해주세요. 
+				final String username = "eungone0205"; //네이버 아이디를 입력해주세요. @naver.com은 입력하지 마시구요. 
+				final String password = "jeon1027"; //네이버 이메일 비밀번호를 입력해주세요. 
 				int port=465; //포트번호 
 				
 				
@@ -88,7 +88,7 @@ public class BuyerServiceImpl implements BuyerService {
 				
 				Message mimeMessage = new MimeMessage(session); //MimeMessage 생성
 				try {
-					mimeMessage.setFrom(new InternetAddress("jhb0205_@naver.com"));
+					mimeMessage.setFrom(new InternetAddress("eungone0205@naver.com"));
 					mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));//수신자셋팅 //.TO 외에 .CC(참조) .BCC(숨은참조) 도 있음 
 					
 					mimeMessage.setSubject(subject); //제목셋팅 

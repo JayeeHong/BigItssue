@@ -31,11 +31,33 @@
 
 	<select resultType="int" id="getNoticeCount">SELECT COUNT(*) FROM notice </select>
 
-<select resultType="web.dto.Notice" parameterType="web.util.Paging" id="getNoticeList">SELECT * FROM ( SELECT rownum rnum, B.* FROM( SELECT * FROM Noticeorder by NoticeNo desc ) BORDER BY rnum ) RWHERE rnum BETWEEN #{startNo } AND #{endNo } </select>
+<select resultType="web.dto.Notice" parameterType="web.util.Paging" id="getNoticeList">SELECT * FROM ( SELECT rownum rnum, B.* FROM( SELECT * FROM Notice order by NoticeNo desc ) B ORDER BY rnum ) R WHERE rnum BETWEEN #{startNo } AND #{endNo } </select>
 
-<select resultType="web.dto.Notice" parameterType="web.dto.Notice" id="noticeView">SELECT * FROM Noticewhere noticeNo = #{noticeNo } </select>
+<select resultType="web.dto.Notice" parameterType="web.dto.Notice" id="noticeView">SELECT * FROM Notice where noticeNo = #{noticeNo } </select>
 
-<delete parameterType="web.dto.Notice" id="adminNoticeDelete">delete noticewhere noticeNo = #{noticeNo } </delete>
+<update id="addHit" parameterType="web.dto.Notice">
+
+UPDATE NOTICE
+SET noticehit = (SELECT noticehit from notice where noticeNo=#{noticeNo }) + 1
+WHERE noticeNo = #{noticeNo }
+</update>
+
+<delete parameterType="web.dto.Notice" id="adminNoticeDelete">delete notice where noticeNo = #{noticeNo } </delete>
+
+<insert id="noticeInsert" parameterType="web.dto.Notice">
+	INSERT INTO NOTICE(noticeNo, noticeTitle, noticecontent, noticeImg)
+	values(seq_notice.nextval, #{noticeTitle }, #{noticeContent }, #{noticeImg })
+</insert>
+
+
+<update id="noticeUpdate" parameterType="web.dto.Notice">
+	UPDATE notice
+	set noticeTitle = #{noticeTitle },
+		noticeContent = #{noticeContent },
+		noticeImg = #{noticeImg }
+	
+
+</update>
 
 
 </mapper>

@@ -3,13 +3,17 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-	html = "dd"
-	$("#noticeContent").html(html);
+	
 
 $("#uploadReviewImg").change(function(){ //이미지를 선택하였을시
 		
 		readImg(this);
 	})
+	
+$("#btnCancel").click(function(){
+	window.location.href="/admin/notice/list"
+})	
+	
 	
 function readImg(input){//미리보기를 한다
 	$("#miriview").show();//숨긴div를 보이게함
@@ -46,7 +50,7 @@ function readImg(input){//미리보기를 한다
 <tr><td colspan="5"><textarea style="width:100%;"rows="20" id="noticeContent" name="noticeContent"></textarea></td></tr>
 </table>
 
-<label>첨부파일 : <input type="file" name="noticeImg" id="uploadReviewImg"/></label>
+<label>첨부파일 : <input type="file" name="file" id="uploadReviewImg"/></label>
 <div>
 <img style="display: none; width:30%; height: 30%;" id="miriview" src="#"/>
 </div>

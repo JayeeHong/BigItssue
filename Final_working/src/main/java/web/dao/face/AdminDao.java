@@ -27,7 +27,13 @@ public interface AdminDao {
 
 	public Notice noticeView(Notice notice);
 
+	public void addHit(Notice notice);
+
 	public void adminNoticeDelete(Notice notice);
-	//
+
+	public void noticeInsert(Notice notice);
+
+	public void noticeUpdate(Notice notice);
+
 	
 }
