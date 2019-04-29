@@ -84,10 +84,32 @@ public class BuyerController {
 			
 	}
 	
-	@RequestMapping(value="/buyer/sellerLocMap", method=RequestMethod.GET)
-	public void buyerSellerLocMap() {
+	@RequestMapping(value="/sellerLocMap", method=RequestMethod.GET)
+	public void buyerSellerLocMap(String zone, String station, String spot, Model model) {
+		logger.info("역 :" +station +" || 출구 : "+ spot);
+	
 		
+		if(zone.contains("/")) {
+			String[] str = zone.split("/");
+			zone = str[0];
+			
+			Map map = new HashMap();
+			map.put("zone", zone);
+			map.put("station", station);
+			map.put("spot", spot);
+			logger.info("맵! : "+map);
+			model.addAttribute("map", map);
+		} else {
+			Map map = new HashMap();
+			map.put("zone", zone);
+			map.put("station", station);
+			map.put("spot", spot);
+			logger.info("맵! : "+map);
+			model.addAttribute("map", map);
+		}
 	}
+
+
 	
 	
 	
