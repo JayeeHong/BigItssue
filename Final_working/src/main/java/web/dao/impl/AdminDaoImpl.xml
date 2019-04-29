@@ -69,6 +69,12 @@
 			AND adminId=#{adminId } 
 			AND adminPw=#{adminPw }
 	</select>
-
+	
+	<select id="selectSellerBigdomInfo" resultType="web.dto.SellerBigdomInfo">
+		SELECT si.*, sl.bigdomId
+		FROM sellerInfo si
+		LEFT OUTER JOIN sellerLoc sl
+		ON si.sellerId = sl.sellerId
+	</select>
 
 </mapper>

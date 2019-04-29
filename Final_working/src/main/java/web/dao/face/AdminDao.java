@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import web.dto.AdminInfo;
+import web.dto.BigdomInfo;
 import web.dto.Notice;
+import web.dto.SellerBigdomInfo;
+import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.util.Paging;
 
@@ -32,5 +35,8 @@ public interface AdminDao {
 
 	// 관리자 아이디, 비밀번호 count(*) 쿼리
 	public int selectCntLogin(AdminInfo adminInfo);
+
+	// 판매자 정보와 판매자에 따른 빅돔 정보 조회 쿼리
+	public List<SellerBigdomInfo> selectSellerBigdomInfo();
 	
 }
