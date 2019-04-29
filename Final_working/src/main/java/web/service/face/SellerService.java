@@ -2,11 +2,15 @@ package web.service.face;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import web.dto.BookListInfo;
 import web.dto.Reservation;
+import web.dto.Review;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.dto.User;
+import web.util.Paging;
 
 public interface SellerService {
 
@@ -54,5 +58,27 @@ public interface SellerService {
 	
 	//User으로 정보가 필요해서 추가
 	public User getSellerInfoUser(SellerInfo sellerInfo);
+	
+	
+	//요청 파라미터에서 curPage 반환
+	public int getCurPage(HttpServletRequest req);
+
+	//총 게시글 수 얻기
+	public int getTotalCount();
+	
+	//페이징 리스트 얻기
+	public List<Review> getPagingList(Paging paging);
+
+	//후기 글쓰기
+	public void write(Review review);
+
+	//후기 글 상세 조회 - 조회수 증가
+	public Review view(int reviewno);
+
+	//후기 글 수정
+	public void update(Review review);
+
+	//후기 글 삭제
+	public void delete(int reviewno);
 
 }

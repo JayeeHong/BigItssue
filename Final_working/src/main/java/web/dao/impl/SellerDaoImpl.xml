@@ -107,5 +107,49 @@
 		WHERE 1=1
 			AND sellerId=#{sellerId }
 	</select>
+	
+	
+	<select id="selectCntReview" resultType="int">
+		SELECT COUNT(*) FROM review	
+	</select>
+	
+	<select id="selectPaginglist" resultType="web.dto.Review" parameterType="web.util.Paging">
+		SELECT * FROM (
+			SELECT rownum rnum, B.* FROM (
+				SELECT * FROM review
+				ORDER BY reviewNo desc
+			) B
+			ORDER BY rnum
+		) R
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+	</select>
+	
+	<insert id="insert" parameterType="web.dto.Review">
+		INSERT INTO review ( reviewNo, reviewTitle, reviewContent, sellerId )
+		VALUES ( Review_seq.nextval, #{reviewTitle }, #{reviewContent }, #{sellerId } )
+	</insert>
+	
+	<update id="updateHit" parameterType="int">
+		UPDATE review
+		SET reviewHit = reviewHit + 1
+		WHERE reviewNo = #{reviewno }
+	</update>
+	
+	<select id="selectReviewByReviewno" resultType="web.dto.Review" parameterType="int">
+		SELECT * FROM review
+		WHERE reviewNo = #{reviewno }
+	</select>
+	
+	<update id="updateReview" parameterType="web.dto.Review">
+		UPDATE review
+		SET reviewTitle = #{reviewTitle },
+			reviewContent = #{reviewContent }
+		WHERE reviewNo = #{reviewNo }
+	</update>
+	
+	<delete id="deleteReview" parameterType="int">
+		DELETE review
+		WHERE reviewNo = #{reviewno }
+	</delete>
 
 </mapper>
