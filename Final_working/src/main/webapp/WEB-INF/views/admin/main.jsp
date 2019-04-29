@@ -8,6 +8,10 @@
 		width: 310px;
 		margin: 0 auto;
 	}
+	
+	.loginOk {
+		margin: 0 auto;
+	}
 
 </style>
 
@@ -112,8 +116,9 @@
 </div>
 
 <c:if test="${adminLogin }">
-
+<div class="row row-offcanvas row-offcanvas-right">
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp"/>
 
-왼쪽의 메뉴를 통해 페이지를 관리하세요
+<h3>왼쪽의 메뉴를 통해 페이지를 관리하세요</h3>
+</div>
 </c:if>
