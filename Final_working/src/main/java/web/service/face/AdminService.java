@@ -34,6 +34,12 @@ public interface AdminService {
 	public Notice noticeView(Notice notice);
 
 	public void adminNoticeDelete(Notice notice);
+  
+  public void noticeInsert(Notice notice);
+
+	public void addHit(Notice notice);
+
+	public void noticeUpdate(Notice notice);
 
 	// 관리자 로그인
 	public boolean login(AdminInfo adminInfo);
@@ -41,3 +47,4 @@ public interface AdminService {
 	// 판매자 정보와 판매자에 따른 빅돔 정보 불러오기
 	public List<SellerBigdomInfo> getSellerBigdomInfo();
 }
+

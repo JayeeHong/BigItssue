@@ -34,6 +34,12 @@ public interface AdminDao {
 	public Notice noticeView(Notice notice);
 
 	public void adminNoticeDelete(Notice notice);
+  
+  public void addHit(Notice notice);
+  
+  public void noticeInsert(Notice notice);
+
+	public void noticeUpdate(Notice notice);
 
 	// 관리자 아이디, 비밀번호 count(*) 쿼리
 	public int selectCntLogin(AdminInfo adminInfo);
@@ -42,3 +48,4 @@ public interface AdminDao {
 	public List<SellerBigdomInfo> selectSellerBigdomInfo();
 	
 }
+

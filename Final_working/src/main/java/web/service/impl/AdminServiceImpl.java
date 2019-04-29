@@ -1,3 +1,4 @@
+
 package web.service.impl;
 
 import java.util.HashMap;
@@ -79,6 +80,24 @@ public class AdminServiceImpl implements AdminService{
 		adminDao.adminNoticeDelete(notice);
 		
 	}
+  
+  @Override
+	public void noticeInsert(Notice notice) {
+		adminDao.noticeInsert(notice);
+		
+	}
+
+	@Override
+	public void addHit(Notice notice) {
+		adminDao.addHit(notice);
+		
+	}
+
+	@Override
+	public void noticeUpdate(Notice notice) {
+		adminDao.noticeUpdate(notice);
+		
+	}
 
 	@Override
 	public boolean login(AdminInfo adminInfo) {
@@ -98,3 +117,4 @@ public class AdminServiceImpl implements AdminService{
 	
 
 }
+

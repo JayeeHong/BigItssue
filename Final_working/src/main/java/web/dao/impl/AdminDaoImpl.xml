@@ -60,10 +60,32 @@
 	<select resultType="web.dto.Notice" parameterType="web.dto.Notice" id="noticeView">
 		SELECT * FROM Noticewhere noticeNo = #{noticeNo } 
 	</select>
+  
+  <update id="addHit" parameterType="web.dto.Notice">
+
+    UPDATE NOTICE
+    SET noticehit = (SELECT noticehit from notice where noticeNo=#{noticeNo }) + 1
+    WHERE noticeNo = #{noticeNo }
+   </update>
+
 
 	<delete parameterType="web.dto.Notice" id="adminNoticeDelete">
 		delete noticewhere noticeNo = #{noticeNo } 
 	</delete>
+  
+  <insert id="noticeInsert" parameterType="web.dto.Notice">
+	INSERT INTO NOTICE(noticeNo, noticeTitle, noticecontent, noticeImg)
+	values(seq_notice.nextval, #{noticeTitle }, #{noticeContent }, #{noticeImg })
+</insert>
+  
+  <update id="noticeUpdate" parameterType="web.dto.Notice">
+	UPDATE notice
+	set noticeTitle = #{noticeTitle },
+		noticeContent = #{noticeContent },
+		noticeImg = #{noticeImg }
+	
+
+</update>
 	
 	<select id="selectCntLogin" parameterType="web.dto.AdminInfo" resultType="int">
 		SELECT count(*) FROM adminInfo
