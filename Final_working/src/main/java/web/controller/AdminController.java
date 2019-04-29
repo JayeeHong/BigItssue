@@ -24,7 +24,7 @@ public class AdminController {
 		//ㄴㄴㄴㄴㄴㄴ
 	}
 	
-	
+	//
 	
 	@RequestMapping(value="/admin/seller/view", method=RequestMethod.GET)
 	public void adminSellseView() {
