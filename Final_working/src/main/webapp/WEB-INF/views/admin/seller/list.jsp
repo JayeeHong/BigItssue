@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script type="text/javascript">
@@ -217,4 +218,15 @@ function getLocList(){
 
 
 
+
+
+
+<div class="row row-offcanvas row-offcanvas-right">
+
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
+
+<h3>판매자 판매정보 관리</h3>
+<hr>
+
+</div>
 

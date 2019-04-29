@@ -59,7 +59,7 @@ $(document).ready(function() {
 <nav class="navbar">
 	<div class="container">
 		<div class="navbar-header">
-			<a href="#" class="standard-logo"><img src="http://bigissue.kr/wp-content/themes/canvas/images/Bigissue_kr_logo_main.png" alt="Bigissue Logo"></a>
+			<a href="/buyer/main" class="standard-logo"><img src="http://bigissue.kr/wp-content/themes/canvas/images/Bigissue_kr_logo_main.png" alt="Bigissue Logo"></a>
 		</div>
 		
 		<div id="topMenu" class="topMenu">

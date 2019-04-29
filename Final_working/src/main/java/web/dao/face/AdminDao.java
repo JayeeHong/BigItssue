@@ -3,12 +3,18 @@ package web.dao.face;
 import java.util.HashMap;
 import java.util.List;
 
+
+import web.dto.AdminInfo;
+import web.dto.BigdomInfo;
 import web.dto.Notice;
+import web.dto.SellerBigdomInfo;
+import web.dto.SellerInfo;
+
 import web.dto.SellerLoc;
 import web.util.Paging;
 
 public interface AdminDao {
-	//
+	
 	public int getTotalCount(HashMap doubleString);
 
 	public List<SellerLoc> getPagingList(HashMap map);
@@ -19,7 +25,7 @@ public interface AdminDao {
 
 	public List<SellerLoc> viewLoc(String zone);
 
-	public List<SellerLoc> viewDetail(String station);
+	public List viewDetail(String station);
 	
 	public int getNoticeCount();
 
@@ -27,13 +33,19 @@ public interface AdminDao {
 
 	public Notice noticeView(Notice notice);
 
-	public void addHit(Notice notice);
-
 	public void adminNoticeDelete(Notice notice);
-
-	public void noticeInsert(Notice notice);
+  
+  public void addHit(Notice notice);
+  
+  public void noticeInsert(Notice notice);
 
 	public void noticeUpdate(Notice notice);
 
+	// 관리자 아이디, 비밀번호 count(*) 쿼리
+	public int selectCntLogin(AdminInfo adminInfo);
+
+	// 판매자 정보와 판매자에 따른 빅돔 정보 조회 쿼리
+	public List<SellerBigdomInfo> selectSellerBigdomInfo();
 	
 }
+

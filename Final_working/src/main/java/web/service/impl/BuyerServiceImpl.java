@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import web.dao.face.BuyerDao;
+import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.SellerLoc;
 import web.dto.User;
 import web.service.face.BuyerService;
 import web.util.SellerLocPaging;
@@ -56,6 +58,7 @@ public class BuyerServiceImpl implements BuyerService {
 
 	@Override
 	public void mailSender(String email, String subject, String body) {
+
 
 				// 네이버일 경우 smtp.naver.com 을 입력합니다. // Google일 경우 smtp.gmail.com 을 입력합니다. 
 				String host = "smtp.naver.com"; 
@@ -105,6 +108,8 @@ public class BuyerServiceImpl implements BuyerService {
 					e.printStackTrace();
 				} //발신자 셋팅 , 보내는 사람의 이메일주소를 한번 더 입력합니다. 
 				//이때는 이메일 풀 주소를 다 작성해주세요. 
+
+	
 		
 		
 	}
@@ -164,6 +169,28 @@ public class BuyerServiceImpl implements BuyerService {
 	@Override
 	public User getBuyerInfo(BuyerInfo buyerInfo) {
 		return buyerDao.selectBuyerInfoByBuyerId(buyerInfo);
+		
+	}
+
+	@Override
+	public SellerLoc getSellerLoc(int sellerLoc) {
+		return buyerDao.selectSellerLoc(sellerLoc);
+	}
+
+	@Override
+	public BookListInfo getBookListInfo(int magazineNo) {
+		return buyerDao.selectBookListInfo(magazineNo);
+	}
+
+	@Override
+	public boolean confirmpw(BuyerInfo buyerInfo) {
+		
+		int login =  buyerDao.selectBuyerIdAndPw(buyerInfo);
+		if(login == 1) {
+			return true;
+		}
+		
+		return false;
 		
 	}
 

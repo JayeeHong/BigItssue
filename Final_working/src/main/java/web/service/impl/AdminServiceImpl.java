@@ -1,3 +1,4 @@
+
 package web.service.impl;
 
 import java.util.HashMap;
@@ -7,7 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import web.dao.face.AdminDao;
+
+import web.dto.AdminInfo;
+import web.dto.BigdomInfo;
 import web.dto.Notice;
+import web.dto.SellerBigdomInfo;
+import web.dto.SellerInfo;
+
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
 import web.util.Paging;
@@ -48,7 +55,7 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public List<SellerLoc> viewDetail(String station) {
+	public List viewDetail(String station) {
 		return adminDao.viewDetail(station);
 	}
 	//
@@ -65,8 +72,6 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public Notice noticeView(Notice notice) {
 		
-		
-		
 		return adminDao.noticeView(notice);
 	}
 
@@ -75,8 +80,8 @@ public class AdminServiceImpl implements AdminService{
 		adminDao.adminNoticeDelete(notice);
 		
 	}
-
-	@Override
+  
+  @Override
 	public void noticeInsert(Notice notice) {
 		adminDao.noticeInsert(notice);
 		
@@ -93,7 +98,23 @@ public class AdminServiceImpl implements AdminService{
 		adminDao.noticeUpdate(notice);
 		
 	}
+
+	@Override
+	public boolean login(AdminInfo adminInfo) {
+		if(adminDao.selectCntLogin(adminInfo) > 0) {
+			return true;
+			
+		} else {
+			return false;
+			
+		}
+	}
+
+	@Override
+	public List<SellerBigdomInfo> getSellerBigdomInfo() {
+		return adminDao.selectSellerBigdomInfo();
+	}
 	
-	//
-	
+
 }
+

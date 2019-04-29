@@ -32,6 +32,8 @@ function bookUpdate(reserveNo) {
 <div style="padding: 10px;">
 
 <h4>예약내역</h4>
+1. 구매자가 예약하고 찾아가지 않은 경우, 상태가 '예약취소(시간초과)' 로 변경됩니다.<br>
+2. 판매자가 구매자의 예약을 변경할 수 있습니다. 변경 후에는 취소할 수 없으므로 유의하시기 바랍니다.<br>
 <div style="text-align: center;">
 
 <table class="table table-bordered table-striped">

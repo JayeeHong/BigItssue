@@ -1,6 +1,7 @@
 package web.dao.face;
 
 import web.dto.BigdomInfo;
+import web.dto.User;
 
 public interface BigdomDao {
 
@@ -9,5 +10,8 @@ public interface BigdomDao {
 
 	// 빅돔 정보 조회
 	public BigdomInfo selectBigdomInfo(String bigdomId);
+	
+	// 빅돔 정보 조회(User반환)
+	public User selectBigdomInfoUser(BigdomInfo bigdomInfo);
 
 }

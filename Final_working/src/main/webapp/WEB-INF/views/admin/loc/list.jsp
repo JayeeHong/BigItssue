@@ -10,17 +10,26 @@ $(document).ready(function() {
 });
 </script>
 
+<div class="row row-offcanvas row-offcanvas-right">
 
-<h3>리스트</h3>
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
+
+<h3>판매장소 관리</h3>
 <hr>
+
 <form action="/admin/loc/list" method="get">
 	<input list="zone" name="zone"/>
 		<datalist id="zone">
-			<option value="1">
-			<option value="2">
-			<option value="3">
-			<option value="4">
-			<option value="5">
+			<option value="1호선">
+			<option value="2호선">
+			<option value="3호선">
+			<option value="4호선">
+			<option value="5호선">
+			<option value="6호선">
+			<option value="7호선">
+			<option value="8호선">
+			<option value="9호선">
+			<option value="부산">
 		</datalist>
 	<button id="selectZone">검색</button>
 </form>
@@ -49,3 +58,5 @@ $(document).ready(function() {
 </table>
 
 <button id="insertBtn">추가하기</button>
+
+</div>

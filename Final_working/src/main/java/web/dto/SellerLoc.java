@@ -16,15 +16,30 @@ public class SellerLoc { // 판매자 판매정보
 	private int magazineNo; // 판매부수번호 (fk)
 	private String sellerId; // 판매자아이디 (fk)
 	private String bigdomId; // 빅돔아이디 (fk)
+	private double lat; //경도
+	private double lng; //위도
 	
 	@Override
 	public String toString() {
 		return "SellerLoc [locNo=" + locNo + ", zone=" + zone + ", station=" + station + ", spot=" + spot
 				+ ", sellerTimeS=" + sellerTimeS + ", startTime1=" + startTime1 + ", startTime2=" + startTime2
 				+ ", sellerTimeE=" + sellerTimeE + ", endTime1=" + endTime1 + ", endTime2=" + endTime2 + ", sellerCard="
-				+ sellerCard + ", magazineNo=" + magazineNo + ", sellerId=" + sellerId + ", bigdomId=" + bigdomId + "]";
+				+ sellerCard + ", magazineNo=" + magazineNo + ", sellerId=" + sellerId + ", bigdomId=" + bigdomId
+				+ ", lat=" + lat + ", lng=" + lng + "]";
 	}
 	
+	public double getLat() {
+		return lat;
+	}
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+	public double getLng() {
+		return lng;
+	}
+	public void setLng(double lng) {
+		this.lng = lng;
+	}
 	public int getLocNo() {
 		return locNo;
 	}

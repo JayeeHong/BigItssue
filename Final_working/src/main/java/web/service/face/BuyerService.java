@@ -2,7 +2,9 @@ package web.service.face;
 
 import java.util.List;
 
+import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.SellerLoc;
 import web.dto.User;
 import web.util.SellerLocPaging;
 
@@ -30,11 +32,17 @@ public interface BuyerService {
 	//buyerId로 Buyer정보 검색(반환User)
 	public User getBuyerInfo(BuyerInfo buyerInfo);
 	
-	//-----SellerLoc-----
 	//판매처 총 게시글 수 얻기
 	public int getTotalCountOfSellerLoc();
 	
 	//판매처 페이징 리스트 얻기
 	public List getPagingListOfSellerLoc(SellerLocPaging paging);
+	
+	public SellerLoc getSellerLoc(int sellerLoc);
+	
+	public BookListInfo getBookListInfo(int magazineNo);
+
+	// 비밀번호 확인
+	public boolean confirmpw(BuyerInfo buyerInfo);
 	
 }

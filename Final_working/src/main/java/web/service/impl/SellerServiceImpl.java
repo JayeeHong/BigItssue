@@ -2,15 +2,20 @@ package web.service.impl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import web.dao.face.SellerDao;
 import web.dto.BookListInfo;
 import web.dto.Reservation;
+import web.dto.Review;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
+import web.dto.User;
 import web.service.face.SellerService;
+import web.util.Paging;
 
 @Service
 public class SellerServiceImpl implements SellerService {
@@ -93,6 +98,63 @@ public class SellerServiceImpl implements SellerService {
 	@Override
 	public void setEndTime(SellerLoc sellerLoc) {
 		sellerDao.updateEndTime(sellerLoc);
+	}
+
+	@Override
+	public User getSellerInfoUser(SellerInfo sellerInfo) {
+		return sellerDao.selectSellerInfoUser(sellerInfo);
+	}
+	
+	
+	@Override
+	public int getCurPage(HttpServletRequest req) {
+		
+		//요청파라미터 curPage 받기
+		String param = req.getParameter("curPage");
+		
+		//null이나 ""이 아니면 int로 리턴
+		if( param != null && !"".equals(param) ) {
+			int curPage = Integer.parseInt(param);
+			return curPage;
+		}
+		
+		//null이나 ""이면 0으로 반환
+		return 0;
+	}
+
+	@Override
+	public int getTotalCount() {
+		return sellerDao.selectCntReview();
+	}
+
+	@Override
+	public List<Review> getPagingList(Paging paging) {
+		return sellerDao.selectPaginglist(paging);
+	}
+
+	@Override
+	public void write(Review review) {
+		sellerDao.insert(review);
+	}
+
+	@Override
+	public Review view(int reviewno) {
+		
+		//조회수 증가
+		sellerDao.updateHit(reviewno);
+		
+		//상세글 반환
+		return sellerDao.selectReviewByReviewno(reviewno);
+	}
+
+	@Override
+	public void update(Review review) {
+		sellerDao.updateReview(review);
+	}
+
+	@Override
+	public void delete(int reviewno) {
+		sellerDao.deleteReview(reviewno);
 	}
 
 }
