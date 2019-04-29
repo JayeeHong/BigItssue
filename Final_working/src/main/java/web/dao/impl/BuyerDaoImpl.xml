@@ -104,9 +104,10 @@
 		WHERE locNo = #{locNo }
 	</select>
 	
-	<select id="selectBookListInfo" parameterType="int" resultType="web.dto.BookListInfo">
+	<select id="selectBookListInfo" parameterType="String" resultType="web.dto.BookListInfo">
 		SELECT * FROM bookListInfo
-		WHERE magazineNo = #{magazineNo }
+		WHERE sellerId = #{sellerId }
+		ORDER BY month
 	</select>
 	
 </mapper>

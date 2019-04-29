@@ -40,6 +40,6 @@ public interface BuyerDao {
 	
 	public SellerLoc selectSellerLoc(int sellerLoc);
 	
-	public BookListInfo selectBookListInfo(int magazineNo);
+	public List<BookListInfo> selectBookListInfo(String sellerId);
 	
 }

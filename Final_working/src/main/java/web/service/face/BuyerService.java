@@ -40,6 +40,6 @@ public interface BuyerService {
 	
 	public SellerLoc getSellerLoc(int sellerLoc);
 	
-	public BookListInfo getBookListInfo(int magazineNo);
+	public List<BookListInfo> getBookListInfo(String sellerId);
 	
 }

@@ -2,10 +2,14 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <style type="text/css">
 .fr{
 	float:right;
+}
+th{
+	text-align:center;
 }
 </style>
 
@@ -27,7 +31,13 @@ function inquire(id,sort){
 
 </script>
 
-<h1>locview페이지</h1>
+<!-- 현재시간 가져오기 -->
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate value="${now}" pattern="HH" var="sysHour" />
+<fmt:formatDate value="${now}" pattern="mm" var="sysMin" />
+<fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
+
+<div style="text-align: center; margin-bottom:50px;">
 <div class="wrap container">
 <div style="padding: 10px;">
 <!-- 판매자,빅돔 테이블 -->
@@ -47,7 +57,7 @@ function inquire(id,sort){
 		<tr>
 		<td>${sellerLoc.zone }</td>
 		<td>${sellerLoc.station } ${sellerLoc.spot }</td>
-		<td>${sellerLoc.sellerTimeS } ~ ${sellerLoc.sellerTimeE}</td>
+		<td>${sellerLoc.sellerTimeS.substring( 0, 2 ) }:${sellerLoc.sellerTimeS.substring( 2, 4 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 2 )}:${sellerLoc.sellerTimeE.substring( 2, 4 )}</td>
 		<td>${sellerLoc.sellerId } (판매자)<button class="btn btn-warning btn-sm fr" onclick="inquire('${sellerLoc.sellerId}','판매자')">문의하기</button></td>
 		</tr>
 		
@@ -55,7 +65,7 @@ function inquire(id,sort){
 		<tr>
 		<td>${sellerLoc.zone }</td>
 		<td>${sellerLoc.station } ${sellerLoc.spot }</td>
-		<td>${sellerLoc.sellerTimeS } ~ ${sellerLoc.sellerTimeE}</td>
+		<td>${sellerLoc.sellerTimeS.substring( 0, 2 ) }:${sellerLoc.sellerTimeS.substring( 2, 4 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 2 )}:${sellerLoc.sellerTimeE.substring( 2, 4 )}</td>
 		<td>${sellerLoc.bigdomId } (빅돔)<button class="btn btn-info btn-sm fr" onclick="inquire('${sellerLoc.bigdomId}','빅돔')">문의하기</button></td>
 		</tr>
 	</tbody>
@@ -65,22 +75,80 @@ function inquire(id,sort){
 <table class="table table-bordered">
 	<thead>
 	<tr>
-	<th style="width: 33%">호수</th>
-	<th style="width: 33%">보유부수</th>
-	<th style="width: 33%">부수선택</th>
+	<th style="width: 25%">호수</th>
+	<th style="width: 25%">보유부수</th>
+	<th style="width: 25%">부수선택</th>
 	</tr>
 	</thead>
 	<tbody>
 	
-		<!-- 판매자 -->
-		<tr>
-		<td>${sellerLoc.zone }</td>
-		<td>${sellerLoc.station } ${sellerLoc.spot }</td>
-		<td>${sellerLoc.sellerTimeS } ~ ${sellerLoc.sellerTimeE}</td>
-		<td>${sellerLoc.sellerId } (판매자)<button class="btn btn-warning btn-sm fr" onclick="inquire('${sellerLoc.sellerId}','판매자')">문의하기</button></td>
-		</tr>
-		
+		<!-- 예약 -->		
+		<form action="/buyer/my/booking" method="POST">
+			<c:forEach var="item" items="${bookListInfo}" begin="0" end="${bookListInfo.size()}" step="1" varStatus="index">
+				<tr>
+				<td>${item.month }</td>
+				<input type="hidden" name="month" value="${item.month}"/>
+				<td>${item.circulation }</td>
+				<td>
+				<c:if test="${item.circulation ge 2}">
+					<select name="selectBookingNum">
+						<c:forEach var="i" begin="0" end="2" step="1">
+							<option value="${i }">${i }</option>
+						</c:forEach>
+					</select>
+				</c:if>
+				<c:if test="${item.circulation lt 2}">
+					<select name="selectBookingNum">
+						<c:forEach var="i" begin="0" end="${item.circulation}" step="1">
+							<option value="${i }">${i }</option>
+						</c:forEach>
+					</select>
+				</c:if>
+				</td>
+				<c:if test="${index.first}">
+					<td rowspan="${bookListInfo.size()}">
+						<br>
+  						<input type="radio" name="AmPm" value="오전">오전
+						<input type="radio" name="AmPm" value="오후">오후<br>
+
+  						<select name="bookingTimeHour">
+							<c:forEach var="i" begin="1" end="24" step="1">
+								<c:if test="${sysHour eq i }">
+								<option value="${sysHour }" selected>${sysHour }</option>
+								</c:if>
+								<c:if test="${sysHour ne i }">
+								<option value="${i }">${i }</option>
+								</c:if>
+							</c:forEach>
+						</select>
+						:
+						<select name="bookingTimeMin">
+							<c:forEach var="i" begin="00" end="59" step="01">
+								<c:if test="${sysMin eq i }">
+								<option value="${sysMin }" selected>${sysMin }</option>
+								</c:if>
+								<c:if test="${sysMin ne i }">
+									<c:if test="${i lt 10 }">
+									<option value="${i }">0${i }</option>
+									</c:if>
+									<c:if test="${i ge 10 }">
+									<option value="${i }">${i }</option>
+									</c:if>
+								</c:if>
+							</c:forEach>
+						</select>
+  						
+						<button class="btn btn-info btn-sm">예약하기</button>
+					</td>
+				</c:if>
+				</tr>
+			</c:forEach>
+			<input type="hidden" name="locNo" value="${sellerLoc.locNo}"/>
+		</form>
+
 	</tbody>
 </table>
+<div style="text-align:right;">*예약할 수 있는 부수의 개수는 최대 2권입니다.</div>
+</div>
 </div>
 </div>

@@ -2,6 +2,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.service.face.BuyerService;
@@ -75,12 +78,13 @@ public class BuyerController {
 		
 		model.addAttribute("sellerLoc", sellerLoc);
 				
-		//locNo에 맞는 magazineNo으로 북리스트 조회
-		BookListInfo bookListInfo = buyerService.getBookListInfo(sellerLoc.getMagazineNo());
+		//sellerId으로 북리스트 조회
+		List<BookListInfo> bookListInfo = buyerService.getBookListInfo(sellerLoc.getSellerId());
 		
 		logger.info("bookListInfo:"+bookListInfo);
 		
 		model.addAttribute("bookListInfo", bookListInfo);
+		
 			
 	}
 	
@@ -324,9 +328,64 @@ public class BuyerController {
 		}	
 	}
 	
-	@RequestMapping(value="/buyer/my/booking", method=RequestMethod.GET)
-	public void myBooking() { // 마이페이지-예약내역
+	@RequestMapping(value="/buyer/my/booking", method=RequestMethod.POST)
+	public String myBooking(
+			Model model,
+			int selectBookingNum[],
+			String bookingTimeHour,
+			String bookingTimeMin,
+			String AmPm,
+			int locNo,
+			String month[],
+			HttpSession session) { // 마이페이지-예약내역
 		
+		Reservation reservationInfo = new Reservation();
+		
+		SellerLoc SellerLocInfo = buyerService.getSellerLoc(locNo);
+		
+		for(int i=0; i<selectBookingNum.length; i++) {
+			logger.info("selectBookingNum["+i+"]:"+selectBookingNum[i]);
+			logger.info("month["+i+"]:"+month[i]);
+			
+			reservationInfo.setSellerId(SellerLocInfo.getSellerId());
+			reservationInfo.setBuyerId(session.getId());
+			reservationInfo.setZone(SellerLocInfo.getZone());
+			reservationInfo.setStation(SellerLocInfo.getStation());
+			reservationInfo.setSpot(SellerLocInfo.getSpot());
+			reservationInfo.setBookMonth(month[i]);
+			reservationInfo.setBookNumber(selectBookingNum[i]);
+			reservationInfo.setStatus("예약");
+			reservationInfo.setTotal(5000*selectBookingNum[i]);
+//			reservationInfo.setBookDate(bookDate);
+		}
+		
+		//예약한 시간(시간:분)형식.
+		String pickupDate = bookingTimeHour+":"+bookingTimeMin;
+		logger.info("pickupDate:"+pickupDate);
+		
+//		java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+//		logger.info("sqlDate:"+sqlDate);
+		Date date = new Date();
+		
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		String to = transFormat.format(date);
+		to = to+" "+pickupDate;
+		logger.info("to:"+to);
+		
+//		SimpleDateFormat dt = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
+//		Date date = new Date();
+//		try {
+//			date = dt.parse(pickupDate);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		} 
+//		logger.info("date:"+date);
+		
+		
+//		buyerService.booking();
+		
+		return "redirect:/buyer/main";
 	}
 	
 	@RequestMapping(value="/buyer/my/chat", method=RequestMethod.GET)
