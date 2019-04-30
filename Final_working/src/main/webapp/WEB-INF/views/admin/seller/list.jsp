@@ -185,7 +185,15 @@ function getLocList(){
 }
 
 </script>    
-    
+
+<div class="row row-offcanvas row-offcanvas-right">
+
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
+
+<div class="col-xs-12 col-sm-9">
+
+<h3>판매자 판매정보 관리</h3>
+<hr> 
     
 <div class="right-block">
 	<div class="col-xs-1">
@@ -203,7 +211,7 @@ function getLocList(){
 	
 	</div>
 	
-	<div class="container text-right">
+	<div class="text-right">
 		<input class="btn" type="button" value="처음으로" onclick="goBack()">
 	</div>
 </div>    
@@ -221,14 +229,7 @@ function getLocList(){
 
 
 
-<div class="row row-offcanvas row-offcanvas-right">
 
-<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
-
-<div class="col-xs-12 col-sm-9">
-
-<h3>판매자 판매정보 관리</h3>
-<hr>
 
 </div>
 
