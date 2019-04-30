@@ -53,6 +53,8 @@ $(document).ready(function() {
 			</tbody>
 		</table>
 	</div>
+	
+	<jsp:include page="paging.jsp" />
 
 	<div id="btnBox">
 		<button id="btnWrite" class="btn">글쓰기</button>

@@ -22,6 +22,7 @@ import web.dto.Chat;
 import web.dto.Message;
 import web.dto.Reservation;
 import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.dto.User;
@@ -375,7 +376,7 @@ public class SellerController {
 	@RequestMapping(value="/seller/review/list", method=RequestMethod.GET)
 	public void review(Review review, Model model, HttpServletRequest req) {
 		
-		logger.info("후기 게시판");
+		logger.info("후기 게시판 리스트");
 		
 		//현재 페이지 번호 얻기
 		int curPage = sellerService.getCurPage(req);
@@ -411,6 +412,8 @@ public class SellerController {
 	@RequestMapping(value="/seller/review/write", method=RequestMethod.POST)
 	public String reviewWriteProc(Review review, HttpSession session) {
 		
+		logger.info("후기 글쓰기");
+		
 		review.setSellerId( (String)session.getAttribute("sellerId") );
 		
 		sellerService.write(review);
@@ -425,12 +428,19 @@ public class SellerController {
 		
 		int reviewno = Integer.parseInt(req.getParameter("reviewno"));
 		review.setReviewNo(reviewno);
+//		logger.info("리뷰::::"+review.toString());
 		
 		//게시글 조회 수행
-		Review view = sellerService.view(reviewno);
+		Review reviewView = sellerService.view(reviewno);
 		
 		//MODEL 전달
-		model.addAttribute("reviewView", view);
+		model.addAttribute("reviewView", reviewView);
+		
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = sellerService.getReplyList(reviewno);
+//		for(ReviewReply r : replyList) System.out.println(r);
+		model.addAttribute("replyList", replyList);
 				
 	}
 	
@@ -465,6 +475,68 @@ public class SellerController {
 		sellerService.delete(reviewno);
 		
 		return "redirect:/seller/review/list";
+	}
+
+	@RequestMapping(value="/seller/review/mylist", method=RequestMethod.GET)
+	public void reviewMyList(Review review, Model model, HttpSession session, HttpServletRequest req) {
+		
+		logger.info("내가 쓴 후기 ");
+		
+		//현재 페이지 번호 얻기
+		int curPage = sellerService.getCurPage(req);
+		
+		//내 후기글 수 얻기
+		review.setSellerId( (String)session.getAttribute("sellerId") );
+		int myTotalCount = sellerService.getMyTotalCount(review);
+		
+		//페이지 객체 생성
+		Paging paging = new Paging(myTotalCount, curPage);
+		paging.setSellerId( (String)session.getAttribute("sellerId") );
+		
+		//페이징객체 MODEL로 추가
+		model.addAttribute("paging", paging);
+		
+		//내 후기글 목록 MODEL로 추가
+		List<Review> reviewMylist = sellerService.getPagingMyList(paging);
+		model.addAttribute("reviewMylist", reviewMylist);
+
+	}
+	
+	@RequestMapping(value="/seller/review/reply/write", method=RequestMethod.POST)
+	public String replyWrite(ReviewReply reviewReply, HttpSession session) {
+		
+		logger.info("댓글 달기");
+		
+		reviewReply.setWriter( (String) session.getAttribute("sellerId") );
+		
+		//댓글 입력
+		sellerService.replyWrite(reviewReply);
+		
+		return "redirect:/seller/review/view?reviewno=" + reviewReply.getReviewNo();
+	}
+	
+	@RequestMapping(value="/seller/review/reply/update", method=RequestMethod.GET)
+	public void replyUpdate(ReviewReply reviewReply, Model model) {
+		
+		logger.info("댓글 수정");
+		
+		sellerService.replyUpdate(reviewReply.getReplyNo());
+		
+	}
+
+	@RequestMapping(value="/seller/review/reply/delete", method=RequestMethod.GET)
+	public String replyDelete(ReviewReply reviewReply, HttpServletRequest req) {
+		
+		logger.info("댓글 삭제");
+		logger.info(reviewReply.toString());
+		
+//		int replyno = Integer.parseInt( req.getParameter("replyNo") );
+//		System.out.println(replyno);
+		
+		sellerService.replyDelete(reviewReply.getReplyNo());
+		
+		return "redirect:/seller/review/view?reviewno=" + reviewReply.getReviewNo();
+		
 	}
 
 }
