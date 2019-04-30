@@ -50,7 +50,8 @@ function getLocList(){
 			
 			
 			var html =""
-				html += '<div>'
+				html ="<div id='tableAndpaging' style='float:left; width:70%;'>"
+				html += '<div class="row row-offcanvas">'
 				html += '<table class="table table-striped">'
 				html += '<tr style="background: gray; text-align: center;">'
 				html += '<td><b>No.</b></td>'
@@ -139,7 +140,7 @@ function getLocList(){
 					
 					html += '</ul>'
 					html += '</div>'
-				
+					html += "</div>"
 			$("#noticeListArea").html(html);
 			
 		}
@@ -175,11 +176,5 @@ function noticeWrite(){
 
 </div>    
 
-
-
-
-</div>
-
-</div>
 
 

@@ -52,13 +52,13 @@
 	<select resultType="web.dto.Notice" parameterType="web.util.Paging" id="getNoticeList">
 		SELECT * FROM ( 
 			SELECT rownum rnum, B.* FROM( 
-				SELECT * FROM Noticeorder by NoticeNo desc ) B
+				SELECT * FROM Notice order by NoticeNo desc ) B
 			ORDER BY rnum ) R
 		WHERE rnum BETWEEN #{startNo } AND #{endNo } 
 	</select>
 
 	<select resultType="web.dto.Notice" parameterType="web.dto.Notice" id="noticeView">
-		SELECT * FROM Noticewhere noticeNo = #{noticeNo } 
+		SELECT * FROM Notice where noticeNo = #{noticeNo } 
 	</select>
   
   <update id="addHit" parameterType="web.dto.Notice">
@@ -70,7 +70,7 @@
 
 
 	<delete parameterType="web.dto.Notice" id="adminNoticeDelete">
-		delete noticewhere noticeNo = #{noticeNo } 
+		delete notice where noticeNo = #{noticeNo } 
 	</delete>
   
   <insert id="noticeInsert" parameterType="web.dto.Notice">

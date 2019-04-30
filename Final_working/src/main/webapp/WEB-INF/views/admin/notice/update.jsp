@@ -13,7 +13,7 @@ $("#uploadReviewImg").change(function(){ //이미지를 선택하였을시
 	})
 	
 $("#btnCancel").click(function(){
-	window.location.href="/admin/notice/view"+${notice.noticeNo }
+	window.location.href="/admin/notice/view?noticeNo="+${notice.noticeNo }
 })
 
 
@@ -43,11 +43,13 @@ function readImg(input){//미리보기를 한다
 
 </script>
 
+<div class="row row-offcanvas row-offcanvas-right" >
 
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
     
     
-<div>
+<div style="float:left; width:70%;">
 <form action="/admin/notice/update" method="post" enctype="multipart/form-data">
 <table class="table table-bordered">
 <tr>
@@ -72,4 +74,5 @@ function readImg(input){//미리보기를 한다
 </form>
 
 </div>   
+</div>
     
