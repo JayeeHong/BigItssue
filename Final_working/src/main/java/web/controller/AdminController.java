@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import web.dto.AdminInfo;
+import web.dto.BigdomInfo;
+import web.dto.BigdomSellerInfo;
+import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerLoc;
@@ -61,19 +64,30 @@ public class AdminController {
 	
 	@RequestMapping(value="/admin/info/seller", method=RequestMethod.GET)
 	public void infoSeller(Model model) { // 계정관리-판매자
-		List<SellerBigdomInfo> bigdomsellerList = adminService.getSellerBigdomInfo();
+		List<SellerBigdomInfo> sellerbigdomList = adminService.getSellerBigdomInfo();
 		
-		model.addAttribute("bigdomsellerList", bigdomsellerList);
+		model.addAttribute("sellerbigdomList", sellerbigdomList);
+	}
+	
+	@RequestMapping(value="/admin/info/seller/update", method=RequestMethod.GET)
+	public void infoSellerUpdate(SellerBigdomInfo sbInfo) { // 계정관리-판매자 수정
+//		logger.info(sbInfo.toString());
+		
+		// sellerid로 정보 업데이트
 	}
 	
 	@RequestMapping(value="/admin/info/buyer", method=RequestMethod.GET)
-	public void infoBuyer() { // 계정관리-구매자
+	public void infoBuyer(Model model) { // 계정관리-구매자
+		List<BuyerInfo> buyerList = adminService.getBuyerInfo();
 		
+		model.addAttribute("buyerList", buyerList);
 	}
 	
 	@RequestMapping(value="/admin/info/bigdom", method=RequestMethod.GET)
-	public void infoBigdom() { // 계정관리-빅돔
+	public void infoBigdom(Model model) { // 계정관리-빅돔
+		List<BigdomSellerInfo> bigdomsellerList = adminService.getBigdomSellerInfo();
 		
+		model.addAttribute("bigdomsellerList", bigdomsellerList);
 	}
 	
 	@RequestMapping(value="/admin/seller/list", method=RequestMethod.GET)

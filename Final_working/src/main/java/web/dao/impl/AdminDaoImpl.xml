@@ -76,5 +76,17 @@
 		LEFT OUTER JOIN sellerLoc sl
 		ON si.sellerId = sl.sellerId
 	</select>
+	
+	<select id="selectBuyerInfo" resultType="web.dto.BuyerInfo">
+		SELECT * FROM buyerInfo
+		ORDER BY buyerId desc
+	</select>
+	
+	<select id="selectBigdomSellerInfo" resultType="web.dto.BigdomSellerInfo">
+		SELECT b.*, sl.sellerId
+		FROM bigdomInfo b
+		LEFT OUTER JOIN sellerLoc sl
+		ON b.bigdomId = sl.bigdomId
+	</select>
 
 </mapper>
