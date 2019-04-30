@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -68,7 +69,7 @@ public class BuyerController {
 	}
 	
 	@RequestMapping(value="/buyer/locview", method=RequestMethod.GET)
-	public void buyerLocView(int locNo, Model model) {
+	public void buyerLocView(int locNo, Model model, HttpSession session) {
 		
 		logger.info("locNo:"+locNo);
 		//locNo에 맞는 SellerLoc 조회
@@ -84,6 +85,22 @@ public class BuyerController {
 		logger.info("bookListInfo:"+bookListInfo);
 		
 		model.addAttribute("bookListInfo", bookListInfo);
+		
+		//buyerId, sellerId얻기
+		Reservation reservationInfo = new Reservation();
+		
+		reservationInfo.setBuyerId((String)session.getAttribute("buyerId"));
+		reservationInfo.setSellerId(sellerLoc.getSellerId());
+		
+		//그냥 날짜 잘 들어갔나 구경
+		List<Reservation> reservationList = buyerService.getResrvaionList(reservationInfo);
+		logger.info("reservationList:"+reservationList);
+		
+		//buyerId,sellerId로 cnt개수 가져오기.
+		int cntReservation = buyerService.getResrvaionCnt(reservationInfo);
+		logger.info("cntReservation:"+cntReservation);
+		
+		model.addAttribute("cntReservation", cntReservation);
 		
 			
 	}
@@ -339,16 +356,29 @@ public class BuyerController {
 			String month[],
 			HttpSession session) { // 마이페이지-예약내역
 		
+		//예약DTO
 		Reservation reservationInfo = new Reservation();
 		
+		//locNo에 대한 SellerLoc정보 조회
 		SellerLoc SellerLocInfo = buyerService.getSellerLoc(locNo);
 		
+		//sellerId으로 북리스트 조회
+//		List<BookListInfo> bookListInfo = buyerService.getBookListInfo(SellerLocInfo.getSellerId());
+		
+		//현재시간
+		Date date = new Date();
+		
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		//예약호수 개수만큼 반복(selectBookingNum는 예약부수정보를 담은 int형 배열)
+		//				(month는 예약호수정보를 담은 String형 배열)
 		for(int i=0; i<selectBookingNum.length; i++) {
-			logger.info("selectBookingNum["+i+"]:"+selectBookingNum[i]);
-			logger.info("month["+i+"]:"+month[i]);
 			
+			//예약부수가 0보다 작다면 아래 코드들 실행못하게 continue
+			if(selectBookingNum[i]<=0)
+				continue;
 			reservationInfo.setSellerId(SellerLocInfo.getSellerId());
-			reservationInfo.setBuyerId(session.getId());
+			reservationInfo.setBuyerId((String)session.getAttribute("buyerId"));
 			reservationInfo.setZone(SellerLocInfo.getZone());
 			reservationInfo.setStation(SellerLocInfo.getStation());
 			reservationInfo.setSpot(SellerLocInfo.getSpot());
@@ -356,35 +386,38 @@ public class BuyerController {
 			reservationInfo.setBookNumber(selectBookingNum[i]);
 			reservationInfo.setStatus("예약");
 			reservationInfo.setTotal(5000*selectBookingNum[i]);
-//			reservationInfo.setBookDate(bookDate);
+			reservationInfo.setBookDate(date);
+			
+//			int hour = 0;
+//			//12시간제 => 24시간제로 바꾸기
+//			if(AmPm.equals("오후")) {
+//				hour = Integer.parseInt(bookingTimeHour)+12;
+//				
+//			}else if(AmPm.equals("오전")) {
+//				hour = Integer.parseInt(bookingTimeHour);
+//			}
+			//현재시간(년,월,일)+예약한시간(시,분)+오전/오후
+//			String bookingTime = ""+hour+":"+bookingTimeMin;
+			String bookingTime = bookingTimeHour+":"+bookingTimeMin+" "+AmPm;
+			//현재시간(년,월,일) Date=>String 타입변환
+			String now = transFormat.format(date);
+			String StringTime = now+" "+bookingTime;
+			logger.info("StringTime:"+StringTime);
+			try {
+				//Reservation DTO에 저장하기 위해 String=>Date로 타입변환
+				Date DateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm a").parse(StringTime);
+				//현재시간을 날짜형식으로 DTO에 저장
+				logger.info("DateTime:"+DateTime);
+				reservationInfo.setPickupDate(DateTime);
+				//예약하기
+				buyerService.booking(reservationInfo);
+							
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			logger.info("reservationInfo:"+reservationInfo);
 		}
-		
-		//예약한 시간(시간:분)형식.
-		String pickupDate = bookingTimeHour+":"+bookingTimeMin;
-		logger.info("pickupDate:"+pickupDate);
-		
-//		java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-//		logger.info("sqlDate:"+sqlDate);
-		Date date = new Date();
-		
-		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-		String to = transFormat.format(date);
-		to = to+" "+pickupDate;
-		logger.info("to:"+to);
-		
-//		SimpleDateFormat dt = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
-//		Date date = new Date();
-//		try {
-//			date = dt.parse(pickupDate);
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		} 
-//		logger.info("date:"+date);
-		
-		
-//		buyerService.booking();
-		
+				
 		return "redirect:/buyer/main";
 	}
 	

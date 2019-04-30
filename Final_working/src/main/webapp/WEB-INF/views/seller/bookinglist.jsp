@@ -52,10 +52,10 @@ function bookUpdate(reserveNo) {
 <c:forEach items="${bookListInfo }" var="b">
 <tr>
 	<td>${b.reserveNo }</td>
-	<td><fmt:formatDate value="${b.bookDate }" pattern="yy-MM-dd(E) hh:mm"/></td>
+	<td><fmt:formatDate value="${b.bookDate }" pattern="yy-MM-dd(E) HH:mm"/></td>
 	<td>${b.bookMonth }(${b.bookNumber }권)</td>
 	<td>${b.buyerId }</td>
-	<td><fmt:formatDate value="${b.pickupDate }" pattern="yy-MM-dd(E) hh:mm"/></td>
+	<td><fmt:formatDate value="${b.pickupDate }" pattern="yy-MM-dd(E) HH:mm"/></td>
 	<td>${b.status }</td>
 	<td>
 	<c:if test="${b.status eq '예약' }">

@@ -33,10 +33,13 @@ function inquire(id,sort){
 
 <!-- 현재시간 가져오기 -->
 <jsp:useBean id="now" class="java.util.Date" />
-<fmt:formatDate value="${now}" pattern="HH" var="sysHour" />
+<fmt:formatDate value="${now}" pattern="hh" var="sysHour" />
 <fmt:formatDate value="${now}" pattern="mm" var="sysMin" />
-<fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
-
+<fmt:formatDate value="${now}" pattern="hhmm" var="sysTime" />
+<fmt:formatDate value="${now}" pattern="a" var="AmPm" />
+${sysHour }<br>
+${sysMin }<br>
+${AmPm }<br>
 <div style="text-align: center; margin-bottom:50px;">
 <div class="wrap container">
 <div style="padding: 10px;">
@@ -105,14 +108,21 @@ function inquire(id,sort){
 					</select>
 				</c:if>
 				</td>
-				<c:if test="${index.first}">
-					<td rowspan="${bookListInfo.size()}">
+				<c:if test="${index.first && cntReservation le 0}">
+					<td rowspan="${bookListInfo.size()}" style="border-bottom:hidden;border-right:hidden;border-top:hidden;">
 						<br>
-  						<input type="radio" name="AmPm" value="오전">오전
-						<input type="radio" name="AmPm" value="오후">오후<br>
+						<c:if test="${AmPm eq '오전'}">
+							<input type="radio" name="AmPm" value="오전" checked="checked">오전
+							<input type="radio" name="AmPm" value="오후">오후<br>
+						</c:if>
+  						<c:if test="${AmPm eq '오후'}">
+  							<input type="radio" name="AmPm" value="오전">오전
+  							<input type="radio" name="AmPm" value="오후" checked="checked">오후<br>
+  						</c:if>
+						
 
   						<select name="bookingTimeHour">
-							<c:forEach var="i" begin="1" end="24" step="1">
+							<c:forEach var="i" begin="1" end="12" step="1">
 								<c:if test="${sysHour eq i }">
 								<option value="${sysHour }" selected>${sysHour }</option>
 								</c:if>
@@ -139,6 +149,11 @@ function inquire(id,sort){
 						</select>
   						
 						<button class="btn btn-info btn-sm">예약하기</button>
+					</td>
+				</c:if>
+				<c:if test="${index.first && cntReservation ge 1}">
+					<td rowspan="${bookListInfo.size()}" style="border-bottom:hidden;border-right:hidden;border-top:hidden;">
+					<button type="button" class="btn btn-danger btn-sm">예약취소하기</button>
 					</td>
 				</c:if>
 				</tr>

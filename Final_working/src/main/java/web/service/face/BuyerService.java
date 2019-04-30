@@ -4,6 +4,7 @@ import java.util.List;
 
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.util.SellerLocPaging;
@@ -42,4 +43,12 @@ public interface BuyerService {
 	
 	public List<BookListInfo> getBookListInfo(String sellerId);
 	
+	//예약하기
+	public void booking(Reservation reservationInfo);
+	
+	
+	//예약 buyerId,sellerId로 검색
+	public List<Reservation> getResrvaionList(Reservation reservationInfo);
+	//예약 buyerId,sellerId로 개수 검색
+	public int getResrvaionCnt(Reservation reservationInfo);
 }

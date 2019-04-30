@@ -9,4 +9,5 @@
 	LoginInfo : ${LoginInfo }<br>
 	sessionID : <%=session.getId() %><br>
 	chatRoomNo : ${chatRoomNo }<br>
+	buyerId: ${buyerId }
 </div>
