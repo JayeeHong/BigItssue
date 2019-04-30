@@ -1,3 +1,4 @@
+
 package web.controller;
 
 import java.io.File;
@@ -5,10 +6,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -24,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import web.dto.AdminInfo;
+import web.dto.BigdomInfo;
+import web.dto.BigdomSellerInfo;
+import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
-import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
 import web.util.Paging;
@@ -66,22 +65,36 @@ public class AdminController {
 	
 	@RequestMapping(value="/admin/info/seller", method=RequestMethod.GET)
 	public void infoSeller(Model model) { // 계정관리-판매자
-		List<SellerBigdomInfo> bigdomsellerList = adminService.getSellerBigdomInfo();
+		List<SellerBigdomInfo> sellerbigdomList = adminService.getSellerBigdomInfo();
+		
+		model.addAttribute("sellerbigdomList", sellerbigdomList);
+	}
+	
+	@RequestMapping(value="/admin/info/seller/update", method=RequestMethod.GET)
+	public void infoSellerUpdate(SellerBigdomInfo sbInfo) { // 계정관리-판매자 수정
+//		logger.info(sbInfo.toString());
+		
+		// sellerid로 정보 업데이트
+	}
+	
+	@RequestMapping(value="/admin/info/buyer", method=RequestMethod.GET)
+	public void infoBuyer(Model model) { // 계정관리-구매자
+		List<BuyerInfo> buyerList = adminService.getBuyerInfo();
+		
+		model.addAttribute("buyerList", buyerList);
+	}
+	
+	@RequestMapping(value="/admin/info/bigdom", method=RequestMethod.GET)
+	public void infoBigdom(Model model) { // 계정관리-빅돔
+		List<BigdomSellerInfo> bigdomsellerList = adminService.getBigdomSellerInfo();
 		
 		model.addAttribute("bigdomsellerList", bigdomsellerList);
 	}
 	
-	@RequestMapping(value="/admin/info/buyer", method=RequestMethod.GET)
-	public void infoBuyer() { // 계정관리-구매자
-		
+	@RequestMapping(value="/admin/seller/list", method=RequestMethod.GET)
+	public void adminSellseView() { // 판매자 판매정보 관리
+
 	}
-	
-	@RequestMapping(value="/admin/info/bigdom", method=RequestMethod.GET)
-	public void infoBigdom() { // 계정관리-빅돔
-		
-	}
-	
-	
 	
 	@RequestMapping(value="/admin/book/list", method=RequestMethod.GET)
 	public void adminBooklist() { // 판매자 빅이슈 관리
@@ -92,13 +105,6 @@ public class AdminController {
 	public void adminChatlist() { // 채팅 내역 관리
 		
 	}
-	
-
-  @RequestMapping(value="/admin/seller/list", method=RequestMethod.GET)
-	public void adminSellseView() {
-
-	}
-	//
 	
 	@RequestMapping(value="/admin/seller/getSellerInfolist", method=RequestMethod.GET)
 	public String getlist(
@@ -154,15 +160,10 @@ public class AdminController {
 		return "jsonView";
 
 		
-		
 	}
-	
 	
 	@RequestMapping(value="/admin/seller/sellerInfoDelete", method=RequestMethod.GET)
 	public String adminSellerListDelete(SellerLoc sellerLoc) {
-		
-		
-		
 		
 		//삭제
 		adminService.adminSellerListDelete(sellerLoc);
@@ -170,9 +171,6 @@ public class AdminController {
 		return "jsonView";
 	}
 	
-	
-	
-
 	@RequestMapping(value="/admin/seller/view", method=RequestMethod.GET)
 	public void adminSellserView(
 			Model model
@@ -185,21 +183,15 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/seller/view", method=RequestMethod.POST)
-	public String adminSellserUpdate(
-			SellerLoc sellerLoc) {
+	public String adminSellserUpdate() {
 		
-		logger.info(sellerLoc.toString());
-		
-		
-		
-		return "redirect:/admin/seller/list";
+		return "redirect:/admin/seller/view";
 	}
 	
 	
 	@RequestMapping(value="/admin/notice/list", method=RequestMethod.GET)
-	public void adminNoticeList(
-			Model model
-			) {
+	public void adminNoticeList( // 공지사항 게시판 관리
+			Model model) {
 //		List<Notice> list = adminService.getNoticeList();
 //		model.addAttribute("notice", list);
 	}
@@ -315,7 +307,6 @@ public class AdminController {
 		
 	}
 	
-	
 	@RequestMapping(value="/admin/notice/update", method=RequestMethod.GET)
 	public void noticeUpdateForm(Notice notice, Model model) {
 		
@@ -370,12 +361,6 @@ public class AdminController {
 		return "redirect:/admin/notice/view?noticeNo="+notice.getNoticeNo();
 		
 	}
-  
-  
-  
-  
-  
-
 	
 	//판매지역
 	@RequestMapping(value="/admin/loc/list", method=RequestMethod.GET)
@@ -392,6 +377,7 @@ public class AdminController {
 			
 			logger.info(String.valueOf(list));
 			model.addAttribute("locList", list);
+			model.addAttribute("zone", zone);
 		}
 		
 	}
@@ -399,16 +385,17 @@ public class AdminController {
 
 	//판매지역 상세보기
 	@RequestMapping(value="/admin/loc/detail", method=RequestMethod.GET)
-	public void locDetail(String station, Model model) {
+	public void locDetail(String zone, String station, Model model) {
 		logger.info("station : "+station);
 		
 		if(station != null) {
 			List<HashMap> list = adminService.viewDetail(station);
 			logger.info((String)list.get(0).get("SELLERID"));
-//			logger.info(String.valueOf(list));
+//				logger.info(String.valueOf(list));
 			logger.info(""+list);
 			logger.info("TEST");
 			model.addAttribute("detailList", list);
+			model.addAttribute("zone", zone);
 			model.addAttribute("station", station);
 		}
 	}
@@ -427,4 +414,20 @@ public class AdminController {
 	public void adminBannerlist() { // 배너관리
 		
 	}
+	
+	
+	//판매장소 추가하기
+	@RequestMapping("/insertList")
+	public void insertList(
+			String zone,
+			String station,
+			String keyword, //검색 이후의 값 전달
+			Model model) {
+		
+		logger.info("TEST :"+ zone+station);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("zone", zone);
+		model.addAttribute("station", station);
+	}
 }
+

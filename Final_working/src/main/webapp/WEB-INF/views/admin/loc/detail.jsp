@@ -6,7 +6,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#btnAdd").click(function() {
-		console.log('체크');
+		$(location).attr("href", "/insertList?zone=${zone }&station=${station }");
 	});
 	
 	$("#btnReturn").click(function() {
@@ -47,9 +47,9 @@ function mapView(locNo){
   <c:if test="${detailList ne null}">
   <c:forEach items="${detailList }" var="list">
   	<tr>
-  	  <td scope="row"></td>
-  	  <td scope="row"></td>
-  	  <td scope="row"></td>
+  	  <td scope="row">${list.get("SPOT") }</td>
+  	  <td scope="row">${list.get("SELLERNAME") }</td>
+  	  <td scope="row">${list.get("SELLERID") }</td>
   	  <td scope="row">이메일</td>
   	  <td scope="row"><button></button></td>
   	</tr>
@@ -64,7 +64,5 @@ function mapView(locNo){
   </tr>
   </tbody>
 </table>
-${detailList }<br>
-${detailList.get(0) }
 <button>수정완료</button>
 <button id="btnReturn">돌아가기</button>

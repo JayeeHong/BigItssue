@@ -187,6 +187,7 @@ function getLocList(){
 }
 
 </script>    
+
     
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 <div class="">
@@ -194,6 +195,7 @@ function getLocList(){
 
 <h3>판매자 판매정보 관리</h3>
 <hr>
+
 <div class="right-block">
 	<div class="col-xs-1">
 		<select class="form-control" style="width: 80px;" name="condition" id="condition" >
@@ -210,7 +212,7 @@ function getLocList(){
 	
 	</div>
 	
-	<div class="container text-right">
+	<div class="text-right">
 		<input class="btn" type="button" value="처음으로" onclick="goBack()">
 		
 		<!-- 스크립트로 html들어가는 영역  -->
@@ -226,9 +228,6 @@ function getLocList(){
 
 
 
-
-
-
-
 </div>
 
+</div>

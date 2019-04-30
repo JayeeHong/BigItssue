@@ -187,7 +187,9 @@ input[type=number]{
 
 </style>    
 
+
 <div class="row row-offcanvas row-offcanvas-right" >
+
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
@@ -280,5 +282,5 @@ input[type=number]{
 	</form>
 	
 	</div>
+
 </div>
-;

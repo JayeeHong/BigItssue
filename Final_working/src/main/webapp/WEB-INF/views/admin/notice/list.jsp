@@ -162,20 +162,19 @@ function noticeWrite(){
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
+<div class="col-xs-12 col-sm-9">
+
 <h3>공지사항 게시판 관리</h3>
 <hr>
-
-
     
-	<div class="container text-right">
-	<input type="button" class="btn btn info" value="글쓰기" onclick="noticeWrite()">
-	    
-		<div class="row row-offcanvas" id="noticeListArea">
-		
-		
-		</div>    
-	</div>    
+<div class="text-right">
+<input type="button" class="btn btn info" value="글쓰기" onclick="noticeWrite()">
+</div>    
+    
+<div id="noticeListArea">
+	
 
-</div>
+</div>    
+
 
 

@@ -1,4 +1,3 @@
-
 package web.service.impl;
 
 import java.util.HashMap;
@@ -8,13 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import web.dao.face.AdminDao;
-
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
+import web.dto.BigdomSellerInfo;
+import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
-import web.dto.SellerInfo;
-
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
 import web.util.Paging;
@@ -81,7 +79,7 @@ public class AdminServiceImpl implements AdminService{
 		
 	}
   
-  @Override
+	@Override
 	public void noticeInsert(Notice notice) {
 		adminDao.noticeInsert(notice);
 		
@@ -114,7 +112,16 @@ public class AdminServiceImpl implements AdminService{
 	public List<SellerBigdomInfo> getSellerBigdomInfo() {
 		return adminDao.selectSellerBigdomInfo();
 	}
-	
 
+	@Override
+	public List<BuyerInfo> getBuyerInfo() {
+		return adminDao.selectBuyerInfo();
+	}
+
+	@Override
+	public List<BigdomSellerInfo> getBigdomSellerInfo() {
+		return adminDao.selectBigdomSellerInfo();
+	}
+	
 }
 
