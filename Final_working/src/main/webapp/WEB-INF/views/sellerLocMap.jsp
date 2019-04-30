@@ -9,7 +9,7 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9ee94ce212eca2864c7acbe36e0325d7&libraries=services,clusterer,drawing"></script>
 </head>
 <body>
-	<div id="map" style="width:450px;height:350px;"></div>
+	<div id="map" style="margin:-12px;width:505px;height:385px;"></div>
 	<script>
 	// 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
 	var infowindow = new daum.maps.InfoWindow({zIndex:1});

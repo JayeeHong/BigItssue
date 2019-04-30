@@ -376,6 +376,7 @@ public class AdminController {
 			
 			logger.info(String.valueOf(list));
 			model.addAttribute("locList", list);
+			model.addAttribute("zone", zone);
 		}
 		
 	}
@@ -383,7 +384,7 @@ public class AdminController {
 
 	//판매지역 상세보기
 	@RequestMapping(value="/admin/loc/detail", method=RequestMethod.GET)
-	public void locDetail(String station, Model model) {
+	public void locDetail(String zone, String station, Model model) {
 		logger.info("station : "+station);
 		
 		if(station != null) {
@@ -393,6 +394,7 @@ public class AdminController {
 			logger.info(""+list);
 			logger.info("TEST");
 			model.addAttribute("detailList", list);
+			model.addAttribute("zone", zone);
 			model.addAttribute("station", station);
 		}
 	}
@@ -410,5 +412,20 @@ public class AdminController {
 	@RequestMapping(value="/admin/banner/list", method=RequestMethod.GET)
 	public void adminBannerlist() { // 배너관리
 		
+	}
+	
+	
+	//판매장소 추가하기
+	@RequestMapping("/insertList")
+	public void insertList(
+			String zone,
+			String station,
+			String keyword, //검색 이후의 값 전달
+			Model model) {
+		
+		logger.info("TEST :"+ zone+station);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("zone", zone);
+		model.addAttribute("station", station);
 	}
 }
