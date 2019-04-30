@@ -154,8 +154,10 @@ public class AdminController {
 		model.addAttribute("paging", p);
 		model.addAttribute("condition", condition);
 		model.addAttribute("searchWord", searchWord);
+		
 		 
 		return "jsonView";
+
 		
 	}
 	
@@ -226,8 +228,10 @@ public class AdminController {
 	@RequestMapping(value="/admin/notice/view", method=RequestMethod.GET)
 	public void adminNoticeView(Notice notice, Model model) {
 		
-		Notice no = adminService.noticeView(notice);
+			
+		Notice no = adminService.noticeView(notice);//조회
 		
+		adminService.addHit(notice);//조회수1증가
 		model.addAttribute("notice", no);
 		
 	}
@@ -237,7 +241,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/notice/write", method=RequestMethod.POST)
-	public void noticeWriteInsert(
+	public String noticeWriteInsert(
 			String title,
 			Notice notice,
 			MultipartFile file
@@ -253,27 +257,41 @@ public class AdminController {
 //				upFile.setFile_size(file.getSize());
 //				upFile.setStored_name(stored_name);
 				
+				logger.info(file.toString());
+			
+				System.out.println(file.getOriginalFilename());
 				
-		//파일 저장 경로
-		String path = context.getRealPath("upload");
-		
-		//저장될 파일
-		File dest = new File(path, notice.getNoticeImg());
-		
-		try {
-			file.transferTo(dest);
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+				//파일 저장 경로
+				String path = context.getRealPath("resources/image");
+				
+				//저장될 파일
+				File dest = new File(path, file.getOriginalFilename());
+				
+				//이미지 이름 설정
+				notice.setNoticeImg(file.getOriginalFilename());
+				
+				System.out.println(notice.toString());
+				System.out.println("저장위치"+path);
+				
+					try {
+						file.transferTo(dest);
+					} catch (IllegalStateException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
+				
+				adminService.noticeInsert(notice);
 	
+				return "redirect:/admin/notice/list";
+				
 	}
 	
 	
-	@RequestMapping(value="/admin/notice/delete", method=RequestMethod.POST)
+	@RequestMapping(value="/admin/notice/delete", method=RequestMethod.GET)
 	public void adminNoticeDelete(Notice notice, HttpServletResponse res) throws IOException {
 		
 		PrintWriter out = null;
@@ -285,13 +303,76 @@ public class AdminController {
 		out.println("<script>alert('삭제되었습니다.'); location.href='/admin/notice/list'</script>" );
 		out.flush();
 		
+		
 	}
 	
+	@RequestMapping(value="/admin/notice/update", method=RequestMethod.GET)
+	public void noticeUpdateForm(Notice notice, Model model) {
+		
+		Notice no = adminService.noticeView(notice);//조회
+		
+		
+		model.addAttribute("notice", no);
+		
+	}
+
+	@RequestMapping(value="/admin/notice/update", method=RequestMethod.POST)
+	public String noticeUpdate(Notice notice, Model model, MultipartFile file) {
+		
+		
+		logger.info(notice.toString());
+		
+		
+		//이미지를 삭제했을경우
+		if(notice.getNoticeImg()=="") {
+			notice.setNoticeImg(null);
+		}
+		
+		//이미지를 수정했을 경우
+		else if(!file.getOriginalFilename().equals(notice.getNoticeImg())) {
+			
+			notice.setNoticeImg(file.getOriginalFilename());
+		
+		String path = context.getRealPath("resources/image");
+		
+		//저장될 파일
+		File dest = new File(path, file.getOriginalFilename());
+		
+		//이미지 이름 설정
+		notice.setNoticeImg(file.getOriginalFilename());
+		
+		
+			try {
+				file.transferTo(dest);
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		adminService.noticeUpdate(notice);
+
+		
+		return "redirect:/admin/notice/view?noticeNo="+notice.getNoticeNo();
+		
+	}
+	
+	//판매지역
 	@RequestMapping(value="/admin/loc/list", method=RequestMethod.GET)
 	public void locList(String zone, Model model) { // 판매장소 관리
 		logger.info("zone : " + zone);
+		
+		//현재 DB에 입력된 판매지역
 		if(zone != null) {
-			List<SellerLoc> list = adminService.viewLoc(zone);
+			//검색어 split
+			String[] zon = zone.split("호선");
+			
+			//zon[0]을 통한 역 조회
+			List<SellerLoc> list = adminService.viewLoc(zon[0]);
 			
 			logger.info(String.valueOf(list));
 			model.addAttribute("locList", list);
@@ -299,14 +380,18 @@ public class AdminController {
 		
 	}
 	
+
+	//판매지역 상세보기
 	@RequestMapping(value="/admin/loc/detail", method=RequestMethod.GET)
 	public void locDetail(String station, Model model) {
 		logger.info("station : "+station);
 		
 		if(station != null) {
-			List<SellerLoc> list = adminService.viewDetail(station);
-			
-			logger.info(String.valueOf(list));
+			List<HashMap> list = adminService.viewDetail(station);
+			logger.info((String)list.get(0).get("SELLERID"));
+//				logger.info(String.valueOf(list));
+			logger.info(""+list);
+			logger.info("TEST");
 			model.addAttribute("detailList", list);
 			model.addAttribute("station", station);
 		}

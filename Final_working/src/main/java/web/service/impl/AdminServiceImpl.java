@@ -53,7 +53,7 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public List<SellerLoc> viewDetail(String station) {
+	public List viewDetail(String station) {
 		return adminDao.viewDetail(station);
 	}
 	//
@@ -76,6 +76,24 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public void adminNoticeDelete(Notice notice) {
 		adminDao.adminNoticeDelete(notice);
+		
+	}
+  
+	@Override
+	public void noticeInsert(Notice notice) {
+		adminDao.noticeInsert(notice);
+		
+	}
+
+	@Override
+	public void addHit(Notice notice) {
+		adminDao.addHit(notice);
+		
+	}
+
+	@Override
+	public void noticeUpdate(Notice notice) {
+		adminDao.noticeUpdate(notice);
 		
 	}
 
@@ -106,3 +124,4 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 }
+
