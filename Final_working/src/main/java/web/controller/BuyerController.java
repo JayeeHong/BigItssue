@@ -80,7 +80,7 @@ public class BuyerController {
 		model.addAttribute("sellerLoc", sellerLoc);
 				
 		//sellerId으로 북리스트 조회
-		List<BookListInfo> bookListInfo = buyerService.getBookListInfo(sellerLoc.getSellerId());
+		List<BookListInfo> bookListInfo = buyerService.getBookListInfoBySellerId(sellerLoc.getSellerId());
 		
 		logger.info("bookListInfo:"+bookListInfo);
 		

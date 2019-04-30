@@ -41,7 +41,7 @@ public interface BuyerService {
 	
 	public SellerLoc getSellerLoc(int sellerLoc);
 	
-	public List<BookListInfo> getBookListInfo(String sellerId);
+	public List<BookListInfo> getBookListInfoBySellerId(String sellerId);
 	
 	//예약하기
 	public void booking(Reservation reservationInfo);

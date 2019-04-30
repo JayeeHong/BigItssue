@@ -41,7 +41,7 @@ public interface BuyerDao {
 	
 	public SellerLoc selectSellerLoc(int sellerLoc);
 	
-	public List<BookListInfo> selectBookListInfo(String sellerId);
+	public List<BookListInfo> selectBookListInfoBySellerId(String sellerId);
 	
 	//예약하기
 	public void insertResrvation(Reservation reservationInfo);
