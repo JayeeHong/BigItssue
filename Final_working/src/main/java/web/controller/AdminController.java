@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import web.dto.AdminInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
-
+import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
 import web.util.Paging;
@@ -81,10 +81,7 @@ public class AdminController {
 		
 	}
 	
-	@RequestMapping(value="/admin/seller/list", method=RequestMethod.GET)
-	public void adminSellseView() { // 판매자 판매정보 관리
-
-	}
+	
 	
 	@RequestMapping(value="/admin/book/list", method=RequestMethod.GET)
 	public void adminBooklist() { // 판매자 빅이슈 관리
@@ -188,7 +185,11 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/seller/view", method=RequestMethod.POST)
-	public String adminSellserUpdate() {
+	public String adminSellserUpdate(
+			SellerLoc sellerLoc) {
+		
+		logger.info(sellerLoc.toString());
+		
 		
 		
 		return "redirect:/admin/seller/list";
