@@ -195,7 +195,7 @@ public class BuyerServiceImpl implements BuyerService {
 		
 	}
   
-  @Override
+	@Override
 	public List<BookListInfo> getBookListInfoBySellerId(String sellerId) {
 		return buyerDao.selectBookListInfoBySellerId(sellerId);
 	}

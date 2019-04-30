@@ -103,7 +103,7 @@
 		WHERE locNo = #{locNo }
 	</select>
 	
-	<select id="getBookListInfoBySellerId" parameterType="String" resultType="web.dto.BookListInfo">
+	<select id="selectBookListInfoBySellerId" parameterType="String" resultType="web.dto.BookListInfo">
 		SELECT * FROM bookListInfo
 		WHERE sellerId = #{sellerId }
 		ORDER BY month
