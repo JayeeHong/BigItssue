@@ -3,13 +3,12 @@ package web.dao.face;
 import java.util.HashMap;
 import java.util.List;
 
-
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
+import web.dto.BigdomSellerInfo;
+import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
-import web.dto.SellerInfo;
-
 import web.dto.SellerLoc;
 import web.util.Paging;
 
@@ -46,6 +45,12 @@ public interface AdminDao {
 
 	// 판매자 정보와 판매자에 따른 빅돔 정보 조회 쿼리
 	public List<SellerBigdomInfo> selectSellerBigdomInfo();
+
+	// 구매자 정보 조회 쿼리
+	public List<BuyerInfo> selectBuyerInfo();
+
+	// 빅돔 정보와 빅돔에 따른 빅돔 정보 조회 쿼리
+	public List<BigdomSellerInfo> selectBigdomSellerInfo();
 	
 }
 

@@ -89,6 +89,11 @@ input[type=number]{
 
 </style>    
 
+<div class="row row-offcanvas row-offcanvas-right">
+
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
+
+<div class="col-xs-12 col-sm-9">
 
 <h4>판매자정보</h4>
 <div class="container-center">
@@ -163,5 +168,9 @@ input[type=number]{
 	</div>
 	
 </form>
+
+</div>
+
+</div>
 
 </div>

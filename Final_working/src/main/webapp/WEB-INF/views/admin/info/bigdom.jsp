@@ -9,8 +9,6 @@
 	}
 	
 	.table {
-		display: list-item;
-		list-style: none;
 		text-align: center;
 	}
 </style>
@@ -18,6 +16,8 @@
 <div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
+
+<div class="col-xs-12 col-sm-9">
 
 <h3>계정관리</h3>
 <hr>
@@ -35,27 +35,31 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<td style="width: 80px">번호</td>
-				<td style="width: 300px">빅돔</td>
-				<td style="width: 310px">아이디</td>
-				<td style="width: 310px">비밀번호</td>
-				<td style="width: 150px">수정|삭제</td>
+				<td style="width: 10%">번호</td>
+				<td style="width: 25%">빅돔 아이디</td>
+				<td style="width: 25%">비밀번호</td>
+				<td style="width: 25%">판매자 아이디</td>
+				<td style="width: 15%">수정|삭제</td>
 			</tr>
 		</thead>
 		
 		<tbody>
+			<c:forEach var="i" begin="0" end="${bigdomsellerList.size()-1 }" step="1">
 			<tr>
-				<td>번호</td>
-				<td>판매자</td>
-				<td>아이디</td>
-				<td>비밀번호</td>
+				<td>${i+1 }</td>
+				<td>${bigdomsellerList[i].bigdomId }</td>
+				<td>${bigdomsellerList[i].bigdomPw }</td>
+				<td>${bigdomsellerList[i].sellerId }</td>
 				<td>
 					<button class="btn btn-xs btn-primary">수정</button>
 					<button class="btn btn-xs btn-danger">삭제</button>
 				</td>
 			</tr>
+			</c:forEach>
 		</tbody>
 	</table>
+
+</div>
 
 </div>
 
