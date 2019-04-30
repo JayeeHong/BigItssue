@@ -4,8 +4,9 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+	//페이지 이동
 	$('#insertBtn').click(function() {
-		console.log('체크');
+		$(location).attr("href", "/insertList?zone=${zone }");
 	});
 });
 </script>
@@ -50,8 +51,8 @@ $(document).ready(function() {
   <c:if test="${locList ne null}">
   <c:forEach items="${locList }" var="list">
   	<tr>
-  	  <td scope="row"><button></button></td>
-  	  <td scope="row"><a href="/admin/loc/detail?station=${list.station }">${list.station }</a></td>
+  	  <td scope="row"><button class="btn btn-sm btn-danger">x</button></td>
+  	  <td scope="row"><a href="/admin/loc/detail?zone=${zone }&station=${list.station }">${list.station }</a></td>
   	</tr>
 	
   </c:forEach>
