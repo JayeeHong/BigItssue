@@ -5,7 +5,11 @@
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
+<div class="col-xs-12 col-sm-9">
+
 <h3>후기게시판 관리</h3>
 <hr>
+
+</div>
 
 </div>

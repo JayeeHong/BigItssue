@@ -33,7 +33,7 @@ function bookUpdate(reserveNo) {
 
 <h4>예약내역</h4>
 1. 구매자가 예약하고 찾아가지 않은 경우, 상태가 '예약취소(시간초과)' 로 변경됩니다.<br>
-2. 판매자가 구매자의 예약을 변경할 수 있습니다. 변경 후에는 취소할 수 없으므로 유의하시기 바랍니다.<br>
+2. 수령, 취소 버튼으로 판매자가 구매자의 예약상태를 변경할 수 있습니다. 변경 후에는 취소할 수 없으므로 유의하시기 바랍니다.<br>
 <div style="text-align: center;">
 
 <table class="table table-bordered table-striped">
@@ -54,10 +54,10 @@ function bookUpdate(reserveNo) {
 <c:forEach items="${bookListInfo }" var="b">
 <tr>
 	<td>${b.reserveNo }</td>
-	<td><fmt:formatDate value="${b.bookDate }" pattern="yy-MM-dd(E) hh:mm"/></td>
+	<td><fmt:formatDate value="${b.bookDate }" pattern="yy-MM-dd(E) HH:mm"/></td>
 	<td>${b.bookMonth }(${b.bookNumber }권)</td>
 	<td>${b.buyerId }</td>
-	<td><fmt:formatDate value="${b.pickupDate }" pattern="yy-MM-dd(E) hh:mm"/></td>
+	<td><fmt:formatDate value="${b.pickupDate }" pattern="yy-MM-dd(E) HH:mm"/></td>
 	<td>${b.status }</td>
 	<td>
 	<c:if test="${b.status eq '예약' }">

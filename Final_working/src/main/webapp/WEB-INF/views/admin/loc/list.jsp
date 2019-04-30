@@ -14,6 +14,8 @@ $(document).ready(function() {
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
+<div class="col-xs-12 col-sm-9">
+
 <h3>판매장소 관리</h3>
 <hr>
 
@@ -53,5 +55,7 @@ $(document).ready(function() {
 </table>
 
 <button id="insertBtn">추가하기</button>
+
+</div>
 
 </div>
