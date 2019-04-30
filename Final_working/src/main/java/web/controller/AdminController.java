@@ -96,13 +96,6 @@ public class AdminController {
 		
 	}
 	
-
-  @RequestMapping(value="/admin/seller/list", method=RequestMethod.GET)
-	public void adminSellseView() {
-
-	}
-	//
-	
 	@RequestMapping(value="/admin/seller/getSellerInfolist", method=RequestMethod.GET)
 	public String getlist(
 			Model model,
