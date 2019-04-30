@@ -41,7 +41,14 @@ public interface BuyerDao {
 	
 	public SellerLoc selectSellerLoc(int sellerLoc);
 	
+
 	public List<BookListInfo> selectBookListInfoBySellerId(String sellerId);
+
+	public BookListInfo selectBookListInfo(int magazineNo);
+
+	// 입력한 pw가 구매자의 id의 pw인지 조회 쿼리
+	public int selectBuyerIdAndPw(BuyerInfo buyerInfo);
+
 	
 	//예약하기
 	public void insertResrvation(Reservation reservationInfo);

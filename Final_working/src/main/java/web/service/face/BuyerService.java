@@ -41,7 +41,14 @@ public interface BuyerService {
 	
 	public SellerLoc getSellerLoc(int sellerLoc);
 	
+
 	public List<BookListInfo> getBookListInfoBySellerId(String sellerId);
+
+	public BookListInfo getBookListInfo(int magazineNo);
+
+	// 비밀번호 확인
+	public boolean confirmpw(BuyerInfo buyerInfo);
+
 	
 	//예약하기
 	public void booking(Reservation reservationInfo);

@@ -39,7 +39,6 @@
 	
 	</select>
 
-
 	<select id="buyerFindInfo" parameterType="web.dto.BuyerInfo" resultType="web.dto.BuyerInfo">
 		SELECT * FROM buyerinfo
 		where buyerName = #{buyerName }
@@ -47,7 +46,6 @@
 		and buyerId = #{buyerId }
 	
 	</select>
-
 
 	<select id="buyerFindCnt" parameterType="web.dto.BuyerInfo" resultType="int">
 		SELECT COUNT(*) FROM buyerinfo
@@ -88,12 +86,13 @@
 	</select>
 	
 	<resultMap type="web.dto.User" id="UserBuyer">
-			<result column="buyerId" property="id" />
-			<result column="buyerPw" property="pw" />
-			<result column="buyerPhone" property="phone" />
-			<result column="buyerEmail" property="email" />
-			<result column="buyerName" property="name" />
+		<result column="buyerId" property="id" />
+		<result column="buyerPw" property="pw" />
+		<result column="buyerPhone" property="phone" />
+		<result column="buyerEmail" property="email" />
+		<result column="buyerName" property="name" />
 	</resultMap>
+	
 	<select id="selectBuyerInfoByBuyerId" parameterType="web.dto.BuyerInfo" resultMap="UserBuyer">
 		SELECT * FROM buyerInfo
 		WHERE buyerId = #{buyerId}
@@ -133,5 +132,10 @@
 		SET circulation=circulation-#{bookNumber}
 		WHERE sellerId=#{sellerId } and month=#{bookMonth }
 	</update>
-	
+
+	<select id="selectBuyerIdAndPw" parameterType="web.dto.BuyerInfo" resultType="int">
+		SELECT count(*) FROM buyerInfo
+		WHERE buyerId=#{buyerId } AND buyerPw=#{buyerPw }
+	</select>
+
 </mapper>
