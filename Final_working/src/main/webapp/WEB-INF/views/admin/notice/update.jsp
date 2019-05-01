@@ -49,7 +49,7 @@ function readImg(input){//미리보기를 한다
 
     
     
-<div style="float:left; width:70%;">
+<div style="position:absolute; left: 220px; top: 230px; width:70%;">
 <form action="/admin/notice/update" method="post" enctype="multipart/form-data">
 <table class="table table-bordered">
 <tr>

@@ -13,6 +13,7 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
+import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
 import web.util.Paging;
@@ -122,6 +123,23 @@ public class AdminServiceImpl implements AdminService{
 	public List<BigdomSellerInfo> getBigdomSellerInfo() {
 		return adminDao.selectBigdomSellerInfo();
 	}
-	
+
+	@Override
+	public void adminSellserUpdate(SellerLoc sellerLoc) {
+		adminDao.adminSellserUpdate(sellerLoc);
+	}
+
+	@Override
+	public String getSellerName(SellerLoc locInfo) {
+		
+		return adminDao.getSellerName(locInfo);
+	}
+
+	@Override
+	public void changeSellerName(HashMap hm) {
+		adminDao.changeSellerName(hm);
+		
+	}
+
 }
 
