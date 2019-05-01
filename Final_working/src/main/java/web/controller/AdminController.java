@@ -393,6 +393,7 @@ public class AdminController {
 			logger.info((String)list.get(0).get("SELLERID"));
 //				logger.info(String.valueOf(list));
 			logger.info(""+list);
+			logger.info(String.valueOf(list.isEmpty()));
 			logger.info("TEST");
 			model.addAttribute("detailList", list);
 			model.addAttribute("zone", zone);
@@ -416,18 +417,49 @@ public class AdminController {
 	}
 	
 	
-	//판매장소 추가하기
-	@RequestMapping("/insertList")
-	public void insertList(
-			String zone,
-			String station,
+	//판매장소 추가할 때 필요한 지도
+	@RequestMapping(value="/insertList", method=RequestMethod.GET)
+	public void showInsertMap(
 			String keyword, //검색 이후의 값 전달
 			Model model) {
 		
-		logger.info("TEST :"+ zone+station);
 		model.addAttribute("keyword", keyword);
-		model.addAttribute("zone", zone);
-		model.addAttribute("station", station);
 	}
+	
+	//판매장소 추가될 Mapping
+	@RequestMapping(value="/insertList", method=RequestMethod.POST)
+	public String insertList(
+			String keyword,
+			String station,
+			String zone,
+			String spot,
+			String lat,
+			String lng,
+			SellerLoc sellerLoc
+			) {
+		logger.info("TEST : "+station+", "+zone+", "+spot+", "+lat+", "+lng);
+		sellerLoc.setStation(station);
+		sellerLoc.setZone(zone);
+		sellerLoc.setSpot(spot);
+		sellerLoc.setLat(Double.valueOf(lat));
+		sellerLoc.setLng(Double.valueOf(lng));
+		logger.info(String.valueOf(sellerLoc));
+		
+		adminService.insertList(sellerLoc);
+		logger.info("[CHK] : 입력 성공");
+		return "redirect:/admin/loc/list";
+	}
+	
+	
+	@RequestMapping("/deleteList")
+	public String deleteList(
+			String station,
+			String spot
+			) {
+		
+		logger.info("TEST : "+station+", "+spot);
+		return "admin/loc/list";
+	}
+	
 }
 

@@ -50,5 +50,8 @@ public interface AdminService {
 
 	// 빅돔 정보와 빅돔에 따른 판매자 정보 불러오기
 	public List<BigdomSellerInfo> getBigdomSellerInfo();
+
+	//판매 장소 추가하기
+	public void insertList(SellerLoc sellerLoc);
 }
 

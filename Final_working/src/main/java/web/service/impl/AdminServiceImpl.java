@@ -122,6 +122,11 @@ public class AdminServiceImpl implements AdminService{
 	public List<BigdomSellerInfo> getBigdomSellerInfo() {
 		return adminDao.selectBigdomSellerInfo();
 	}
+
+	@Override
+	public void insertList(SellerLoc sellerLoc) {
+		adminDao.insertList(sellerLoc);
+	}
 	
 }
 
