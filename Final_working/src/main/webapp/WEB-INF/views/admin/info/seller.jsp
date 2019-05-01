@@ -11,9 +11,19 @@
 	.table {
 		text-align: center;
 	}
+	
+	.table thead {
+		font-weight: bold;
+	}
 </style>
 
 <script type="text/javascript">
+
+$(document).ready(function () {
+	$("#addSeller").click(function() {
+		location.href="/admin/info/seller/add";
+	});
+})
 
 function upSeller(sellerId) {
 	$(location).attr("href", "/admin/info/seller/update?sellerId="+sellerId);
@@ -23,7 +33,7 @@ function delSeller(sellerId) {
 	result = confirm('정말 삭제하시겠습니까?');
 	
 	if(result==true) {
-		$(location).attr("href", "/admin/info/seller/delete?sellerId="+sellerId);
+		$(location).attr("href", "/admin/info/sellerDel?sellerId="+sellerId);
 	} else {
 		return false;
 	}
@@ -47,7 +57,9 @@ function delSeller(sellerId) {
 		<li role="presentation"><a href="/admin/info/bigdom">빅돔</a></li>
 	</ul>
 </div>
-
+<br>
+<button id="addSeller" class="btn btn-default">판매자 추가</button>
+<br>
 <div>
 
 	<table class="table">
@@ -58,7 +70,7 @@ function delSeller(sellerId) {
 				<td style="width: 20%">아이디</td>
 				<td style="width: 20%">비밀번호</td>
 				<td style="width: 15%">연락처</td>
-				<td style="width: 15%">수정|삭제</td>
+				<td style="width: 15%">수정|(비)활성화</td>
 			</tr>
 		</thead>
 		
@@ -72,12 +84,18 @@ function delSeller(sellerId) {
 				<td>${sellerbigdomList[i].sellerPhone }</td>
 				<td style="padding-top: 45px;" rowspan="3">
 					<button class="btn btn-xs btn-primary" onclick="upSeller('${sellerbigdomList[i].sellerId}');">수정</button>
-					<button class="btn btn-xs btn-danger" onclick="delSeller('${sellerbigdomList[i].sellerId}');">삭제</button>
+					
+					<c:if test="${not sellerStatusList[i] }">
+					<button id="${sellerStatusList[i] }" class="btn btn-xs btn-success" onclick="activateSeller('${sbList.sellerId}');">활성화</button>
+					</c:if>
+					<c:if test="${sellerStatusList[i] }">
+					<button id="${sellerStatusList[i] }" class="btn btn-xs btn-danger" onclick="deactivateSeller('${sbList.sellerId}');">비활성화</button>
+					</c:if>
 				</td>
 			</tr>
 			
 			<tr>
-				<td colspan="4">빅돔 아이디</td>
+				<td colspan="4" style="background: #cccccc6e">빅돔 아이디</td>
 			</tr>
 			<tr>
 				<td colspan="4">

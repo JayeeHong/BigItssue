@@ -13,6 +13,7 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
+import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
 import web.util.Paging;
@@ -122,6 +123,74 @@ public class AdminServiceImpl implements AdminService{
 	public List<BigdomSellerInfo> getBigdomSellerInfo() {
 		return adminDao.selectBigdomSellerInfo();
 	}
-	
+
+	@Override
+	public SellerBigdomInfo getSellerBigdomInfo(String sellerId) {
+		return adminDao.selectSBInfo(sellerId);
+	}
+
+	@Override
+	public void sellerUpdate(SellerBigdomInfo sbInfo) {
+		adminDao.updateSellerInfo(sbInfo);
+	}
+
+//	@Override
+//	public void sellerDelete(String sellerId) {
+//		adminDao.deleteSellerInfo(sellerId);
+//	}
+
+	@Override
+	public void setSellerAndBigdomNull(String sellerId) {
+		adminDao.updateSellerAndBigdomNull(sellerId);
+	}
+
+	@Override
+	public boolean getSellerStatus(String sellerId) {
+		if(adminDao.selectSellerStatus(sellerId)>0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean getBigdomStatus(SellerBigdomInfo sbList) {
+		if(adminDao.selectBigdomStatus(sbList)>0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void deactivateBigdom(SellerBigdomInfo sbInfo) {
+		adminDao.updateBigdomDeactivate(sbInfo);
+	}
+
+	@Override
+	public void activateBigdom(SellerBigdomInfo sbInfo) {
+		adminDao.updateBigdomActivate(sbInfo);
+	}
+
+	@Override
+	public String getLastSeller() {
+		return adminDao.selectLastSeller();
+	}
+
+	@Override
+	public void putNewBigdom(BigdomInfo bigdomInfo) {
+		adminDao.insertNewBigdom(bigdomInfo);
+	}
+
+	@Override
+	public void putNewSeller(SellerInfo sellerInfo) {
+		adminDao.insertNewSeller(sellerInfo);
+	}
+
+	@Override
+	public SellerInfo getLastSellerInfo() {
+		return adminDao.selectLastSellerInfo();
+	}
+
 }
 

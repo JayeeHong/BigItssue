@@ -11,7 +11,19 @@
 	.table {
 		text-align: center;
 	}
+	
+	.table thead {
+		font-weight: bold;
+	}
 </style>
+
+<script type="text/javascript">
+
+function upSeller(buyerId) {
+	$(location).attr("href", "/admin/info/buyer/update?buyerId="+buyerId);
+}
+
+</script>
 
 <div class="row row-offcanvas row-offcanvas-right">
 
@@ -55,7 +67,7 @@
 				<td>${buyerList[i].buyerEmail }</td>
 				<td>${buyerList[i].buyerPhone }</td>
 				<td>
-					<button class="btn btn-xs btn-primary">수정</button>
+					<button class="btn btn-xs btn-primary" onclick="upBuyer('${buyerList[i].buyerId}');">수정</button>
 					<button class="btn btn-xs btn-danger">삭제</button>
 				</td>
 			</tr>

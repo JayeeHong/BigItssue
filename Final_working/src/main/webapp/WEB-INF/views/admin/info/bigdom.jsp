@@ -11,6 +11,10 @@
 	.table {
 		text-align: center;
 	}
+	
+	.table thead {
+		font-weight: bold;
+	}
 </style>
 
 <div class="row row-offcanvas row-offcanvas-right">

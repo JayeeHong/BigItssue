@@ -3,6 +3,7 @@ package web.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
+import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
 import web.util.Paging;
@@ -66,14 +68,124 @@ public class AdminController {
 	public void infoSeller(Model model) { // 계정관리-판매자
 		List<SellerBigdomInfo> sellerbigdomList = adminService.getSellerBigdomInfo();
 		
+		// sellerloc에 해당 판매자가 있는지 조회
+		//	-> 비활성화 시킬때 null이 들어감
+		List sellerStatusList = new ArrayList<>();
+		for(int i=0; i<sellerbigdomList.size(); i++) {
+			boolean sellerStatus = adminService.getSellerStatus(sellerbigdomList.get(i).getSellerId());
+//			logger.info("bbbbbb:::::::::"+String.valueOf(sellerStatus));
+			sellerStatusList.add(i, sellerStatus);
+		}
+		
+		model.addAttribute("sellerStatusList", sellerStatusList);
 		model.addAttribute("sellerbigdomList", sellerbigdomList);
 	}
 	
+	@RequestMapping(value="/admin/info/seller/add", method=RequestMethod.GET)
+	public String addSeller(SellerInfo sellerInfo, BigdomInfo bigdomInfo, Model model) { // 계정관리-판매자_추가
+		
+		// sellerinfo의 마지막행 조회
+		String sellerId = adminService.getLastSeller();
+//		logger.info("sellerID:::::::::::"+sellerFromDb);
+		
+		// 마지막행에서 숫자만 가져오기
+		String newNo = "";
+		newNo += sellerId.substring(6);
+		int no = Integer.parseInt(newNo)+1;
+//		logger.info(sellerId);
+		
+		// 가져온 숫자+1 -> 빅돔 아이디로 추가(빅돔아이디:fk-빅돔아이디 추가가 먼저)
+		bigdomInfo.setBigdomId("bigdom"+no);
+		bigdomInfo.setBigdomPw("pw"+no);
+		bigdomInfo.setSort("빅돔");
+		adminService.putNewBigdom(bigdomInfo);
+		
+		// 가져온 숫자+1 -> 판매자 아이디로 추가
+		sellerInfo.setSellerId("seller"+no);
+		sellerInfo.setSellerPw("pw"+no);
+		sellerInfo.setSellerName("판매자"+no);
+		sellerInfo.setSort("판매자");
+		sellerInfo.setBigdomId("bigdom"+no);
+		adminService.putNewSeller(sellerInfo);
+		
+		sellerInfo = adminService.getLastSellerInfo();
+		
+		model.addAttribute("sellerInfo", sellerInfo);
+		
+		return "redirect:/admin/info/seller/update?sellerId="+sellerInfo.getSellerId();
+	}
+	
 	@RequestMapping(value="/admin/info/seller/update", method=RequestMethod.GET)
-	public void infoSellerUpdate(SellerBigdomInfo sbInfo) { // 계정관리-판매자 수정
+	public void infoSellerUpdate(SellerBigdomInfo sbInfo, Model model) { // 계정관리-판매자 수정페이지
 //		logger.info(sbInfo.toString());
 		
-		// sellerid로 정보 업데이트
+		// sellerid로 정보 조회
+		SellerBigdomInfo sbList = adminService.getSellerBigdomInfo(sbInfo.getSellerId());
+//		logger.info(sbList.toString());
+		
+		String sellerPhone = sbList.getSellerPhone();
+		if(sellerPhone != null && !"".equals(sellerPhone)) {
+			sbList.setSellerPhone1(sellerPhone.split("-")[0]);
+			sbList.setSellerPhone2(sellerPhone.split("-")[1]);
+			sbList.setSellerPhone3(sellerPhone.split("-")[2]);
+		}
+		
+		// sellerloc에 해당 판매자가 있는지 조회
+		//	-> 비활성화 시킬때 null이 들어감
+		boolean sellerStatus = adminService.getSellerStatus(sbInfo.getSellerId());
+//		logger.info(String.valueOf(sellerStatus));
+		
+		// sellerloc에 해당판매자의 빅돔이 있는지 조회
+		boolean bigdomStatus = adminService.getBigdomStatus(sbList);
+//		logger.info(String.valueOf(bigdomStatus));
+		
+		model.addAttribute("sbList", sbList);
+		model.addAttribute("sellerStatus", sellerStatus);
+		model.addAttribute("bigdomStatus", bigdomStatus);
+	}
+	
+	@RequestMapping(value="/admin/info/sellerUp", method=RequestMethod.GET)
+	public String infoSellerUp(SellerBigdomInfo sbInfo) { // 계정관리-판매자_정보수정
+		
+		sbInfo.setSellerPhone(sbInfo.getSellerPhone1()+"-"+sbInfo.getSellerPhone2()+"-"+sbInfo.getSellerPhone3());
+//		logger.info("ssssss::::::"+sbInfo.toString());
+		// sellerid로 해당 판매자 정보 업데이트
+		adminService.sellerUpdate(sbInfo);
+		
+		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
+	}
+	
+	@RequestMapping(value="/admin/info/deactivateSeller", method=RequestMethod.GET)
+	public String deactivateSeller(SellerBigdomInfo sbInfo) { // 계정관리-판매자_비활성화
+		
+//		logger.info(sbInfo.toString());
+		// sellerid로 해당 판매자 정보 삭제
+//		adminService.sellerDelete(sbInfo.getSellerId());
+		
+		// sellerloc 테이블에 해당 판매자, 빅돔 null로 설정(비활성화)
+		adminService.setSellerAndBigdomNull(sbInfo.getSellerId());
+		
+		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
+	}
+	
+	@RequestMapping(value="/admin/info/deactivateBigdom", method=RequestMethod.GET)
+	public String deactivateBigdom(SellerBigdomInfo sbInfo) { // 계정관리-판매자_빅돔비활성화
+		
+//		logger.info("빅돔비활성화:::::::::"+sbInfo.toString());
+		// sellerid의 bigdomid null로 설정(비활성화)
+		adminService.deactivateBigdom(sbInfo);
+		
+		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
+	}
+	
+	@RequestMapping(value="/admin/info/activateBigdom", method=RequestMethod.GET)
+	public String activateBigdom(SellerBigdomInfo sbInfo) { // 계정관리-판매자_빅돔비활성화
+		
+//		logger.info("빅돔활성화:::::::::"+sbInfo.toString());
+		// sellerid에 맞는 bigdomid 활성화
+		adminService.activateBigdom(sbInfo);
+		
+		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
 	}
 	
 	@RequestMapping(value="/admin/info/buyer", method=RequestMethod.GET)
@@ -81,6 +193,11 @@ public class AdminController {
 		List<BuyerInfo> buyerList = adminService.getBuyerInfo();
 		
 		model.addAttribute("buyerList", buyerList);
+	}
+	
+	@RequestMapping(value="/admin/info/buyer/update", method=RequestMethod.GET)
+	public void updateBuyer() {
+		
 	}
 	
 	@RequestMapping(value="/admin/info/bigdom", method=RequestMethod.GET)
