@@ -115,8 +115,8 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public List<BuyerInfo> getBuyerInfo() {
-		return adminDao.selectBuyerInfo();
+	public List<BuyerInfo> getBuyerInfoList() {
+		return adminDao.selectBuyerInfoList();
 	}
 
 	@Override
@@ -190,6 +190,21 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public SellerInfo getLastSellerInfo() {
 		return adminDao.selectLastSellerInfo();
+	}
+
+	@Override
+	public BuyerInfo getBuyerInfo(String buyerId) {
+		return adminDao.selectBuyerInfo(buyerId);
+	}
+
+	@Override
+	public void setBuyerInfo(BuyerInfo buyerInfo) {
+		adminDao.updateBuyerInfo(buyerInfo);
+	}
+
+	@Override
+	public void delBuyerInfo(BuyerInfo buyerInfo) {
+		adminDao.deleteBuyerInfo(buyerInfo);
 	}
 
 }

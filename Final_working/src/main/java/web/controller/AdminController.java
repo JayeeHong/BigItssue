@@ -190,14 +190,54 @@ public class AdminController {
 	
 	@RequestMapping(value="/admin/info/buyer", method=RequestMethod.GET)
 	public void infoBuyer(Model model) { // 계정관리-구매자
-		List<BuyerInfo> buyerList = adminService.getBuyerInfo();
+		List<BuyerInfo> buyerList = adminService.getBuyerInfoList();
 		
 		model.addAttribute("buyerList", buyerList);
 	}
 	
 	@RequestMapping(value="/admin/info/buyer/update", method=RequestMethod.GET)
-	public void updateBuyer() {
+	public void updateBuyer(BuyerInfo buyerInfo, Model model) { // 계정관리-구매자_수정페이지
+		buyerInfo = adminService.getBuyerInfo(buyerInfo.getBuyerId());
 		
+//		logger.info("구매자 정보:::::::"+buyerInfo.toString());
+		String buyerPhone = buyerInfo.getBuyerPhone();
+		if(buyerPhone != null && !"".equals(buyerPhone)) {
+			buyerInfo.setBuyerPhone1(buyerPhone.split("-")[0]);
+			buyerInfo.setBuyerPhone2(buyerPhone.split("-")[1]);
+			buyerInfo.setBuyerPhone3(buyerPhone.split("-")[2]);
+		}
+		
+		String buyerEmail = buyerInfo.getBuyerEmail();
+		if(buyerEmail != null && !"".equals(buyerEmail)) {
+			buyerInfo.setBuyerEmail1(buyerEmail.split("@")[0]);
+			buyerInfo.setBuyerEmail2(buyerEmail.split("@")[1]);
+		}
+		
+		model.addAttribute("buyerInfo", buyerInfo);
+	}
+	
+	@RequestMapping(value="/admin/info/buyerUp", method=RequestMethod.GET)
+	public String buyerInfoUpdate(BuyerInfo buyerInfo) { // 계정관리-구매자 정보 수정하기
+		
+		buyerInfo.setBuyerPhone(buyerInfo.getBuyerPhone1()+"-"+buyerInfo.getBuyerPhone2()+"-"+buyerInfo.getBuyerPhone3());
+		buyerInfo.setBuyerEmail(buyerInfo.getBuyerEmail1()+"@"+buyerInfo.getBuyerEmail2());
+//		logger.info("구매자 수정::::::"+buyerInfo.toString());
+		
+		// 수정한 구매자 정보 디비에 저장
+		adminService.setBuyerInfo(buyerInfo);
+		
+		return "redirect:/admin/info/buyer/update?buyerId="+buyerInfo.getBuyerId();
+	}
+	
+	@RequestMapping(value="/admin/info/buyerDel", method=RequestMethod.GET)
+	public String buyerInfoDelete(BuyerInfo buyerInfo) {
+		
+//		logger.info("구매자 삭제:::::::::"+buyerInfo.toString());
+		
+		// 구매자 정보 삭제
+		adminService.delBuyerInfo(buyerInfo);
+		
+		return "redirect:/admin/info/buyer";
 	}
 	
 	@RequestMapping(value="/admin/info/bigdom", method=RequestMethod.GET)

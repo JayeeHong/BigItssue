@@ -19,8 +19,18 @@
 
 <script type="text/javascript">
 
-function upSeller(buyerId) {
+function upBuyer(buyerId) {
 	$(location).attr("href", "/admin/info/buyer/update?buyerId="+buyerId);
+}
+
+function delBuyer(buyerId) {
+	result = confirm('구매자 정보를 삭제하시겠습니까?');
+	
+	if(result==true) {
+		$(location).attr("href", "/admin/info/buyerDel?buyerId="+buyerId);
+	} else {
+		return false;
+	}
 }
 
 </script>
@@ -67,8 +77,8 @@ function upSeller(buyerId) {
 				<td>${buyerList[i].buyerEmail }</td>
 				<td>${buyerList[i].buyerPhone }</td>
 				<td>
-					<button class="btn btn-xs btn-primary" onclick="upBuyer('${buyerList[i].buyerId}');">수정</button>
-					<button class="btn btn-xs btn-danger">삭제</button>
+					<button class="btn btn-xs btn-primary" onclick="upBuyer('${buyerList[i].buyerId }');">수정</button>
+					<button class="btn btn-xs btn-danger" onclick="delBuyer('${buyerList[i].buyerId }')">삭제</button>
 				</td>
 			</tr>
 			</c:forEach>

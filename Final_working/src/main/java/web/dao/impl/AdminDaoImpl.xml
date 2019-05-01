@@ -101,7 +101,7 @@
 		ON si.sellerId = sl.sellerId
 	</select>
 	
-	<select id="selectBuyerInfo" resultType="web.dto.BuyerInfo">
+	<select id="selectBuyerInfoList" resultType="web.dto.BuyerInfo">
 		SELECT * FROM buyerInfo
 		ORDER BY buyerId
 	</select>
@@ -182,5 +182,21 @@
 			SELECT * FROM sellerInfo ORDER BY sellerId desc)
 		WHERE ROWNUM = 1
 	</select>
+	
+	<select id="selectBuyerInfo" parameterType="String" resultType="web.dto.BuyerInfo">
+		SELECT * FROM buyerInfo
+		WHERE buyerId=#{buyerId }
+	</select>
+	
+	<update id="updateBuyerInfo" parameterType="web.dto.BuyerInfo">
+		UPDATE buyerInfo
+		SET buyerName=#{buyerName }, buyerPw=#{buyerPw }, buyerPhone=#{buyerPhone }, buyerEmail=#{buyerEmail }
+		WHERE buyerId=#{buyerId }
+	</update>
+	
+	<delete id="deleteBuyerInfo" parameterType="web.dto.BuyerInfo">
+		DELETE buyerInfo
+		WHERE buyerId=#{buyerId }
+	</delete>
 	
 </mapper>

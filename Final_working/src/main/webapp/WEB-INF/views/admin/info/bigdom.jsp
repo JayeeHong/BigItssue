@@ -43,7 +43,7 @@
 				<td style="width: 25%">빅돔 아이디</td>
 				<td style="width: 25%">비밀번호</td>
 				<td style="width: 25%">판매자 아이디</td>
-				<td style="width: 15%">수정|삭제</td>
+				<td style="width: 15%">수정</td>
 			</tr>
 		</thead>
 		
@@ -56,7 +56,6 @@
 				<td>${bigdomsellerList[i].sellerId }</td>
 				<td>
 					<button class="btn btn-xs btn-primary">수정</button>
-					<button class="btn btn-xs btn-danger">삭제</button>
 				</td>
 			</tr>
 			</c:forEach>

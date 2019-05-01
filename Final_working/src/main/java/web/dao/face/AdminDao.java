@@ -48,7 +48,7 @@ public interface AdminDao {
 	public List<SellerBigdomInfo> selectSellerBigdomInfo();
 
 	// 구매자 정보 조회 쿼리
-	public List<BuyerInfo> selectBuyerInfo();
+	public List<BuyerInfo> selectBuyerInfoList();
 
 	// 빅돔 정보와 빅돔에 따른 빅돔 정보 조회 쿼리
 	public List<BigdomSellerInfo> selectBigdomSellerInfo();
@@ -80,14 +80,23 @@ public interface AdminDao {
 	// 마지막 seller 조회 쿼리
 	public String selectLastSeller();
 
-	// 새로운 bigdom 추가 쿼리(newNo는 seller뒤에 붙을 번호
+	// 새로운 bigdom 추가 쿼리(newNo는 seller뒤에 붙을 번호)
 	public void insertNewBigdom(BigdomInfo bigdomInfo);
 
-	// 새로운 seller 추가 쿼리(newNo는 seller뒤에 붙을 번호
+	// 새로운 seller 추가 쿼리(newNo는 seller뒤에 붙을 번호)
 	public void insertNewSeller(SellerInfo sellerInfo);
 
 	// 마지막에 추가한 seller 조회 쿼리
 	public SellerInfo selectLastSellerInfo();
+
+	// 구매자 정보 조회(수정페이지) 쿼리
+	public BuyerInfo selectBuyerInfo(String buyerId);
+
+	// 구매자 정보 수정 쿼리
+	public void updateBuyerInfo(BuyerInfo buyerInfo);
+
+	// 구매자 정보 삭제 쿼리
+	public void deleteBuyerInfo(BuyerInfo buyerInfo);
 
 }
 

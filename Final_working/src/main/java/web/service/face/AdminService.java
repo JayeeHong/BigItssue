@@ -48,7 +48,7 @@ public interface AdminService {
 	public List<SellerBigdomInfo> getSellerBigdomInfo();
 
 	// 구매자 정보 불러오기
-	public List<BuyerInfo> getBuyerInfo();
+	public List<BuyerInfo> getBuyerInfoList();
 
 	// 빅돔 정보와 빅돔에 따른 판매자 정보 불러오기
 	public List<BigdomSellerInfo> getBigdomSellerInfo();
@@ -88,6 +88,15 @@ public interface AdminService {
 
 	// 마지막에 추가한 판매자 조회(view에서 사용)
 	public SellerInfo getLastSellerInfo();
+
+	// 구매자 계정 조회(수정페이지)
+	public BuyerInfo getBuyerInfo(String buyerId);
+
+	// 구매자 정보 수정
+	public void setBuyerInfo(BuyerInfo buyerInfo);
+
+	// 구매자 정보 삭제
+	public void delBuyerInfo(BuyerInfo buyerInfo);
 
 }
 
