@@ -17,6 +17,14 @@
 	}
 </style>
 
+<script type="text/javascript">
+
+function upBigdom(bigdomId) {
+	$(location).attr("href", "/admin/info/bigdom/update?bigdomId="+bigdomId);
+}
+
+</script>
+
 <div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
@@ -55,7 +63,7 @@
 				<td>${bigdomsellerList[i].bigdomPw }</td>
 				<td>${bigdomsellerList[i].sellerId }</td>
 				<td>
-					<button class="btn btn-xs btn-primary">수정</button>
+					<button class="btn btn-xs btn-primary" onclick="upBigdom('${bigdomsellerList[i].bigdomId }')">수정</button>
 				</td>
 			</tr>
 			</c:forEach>

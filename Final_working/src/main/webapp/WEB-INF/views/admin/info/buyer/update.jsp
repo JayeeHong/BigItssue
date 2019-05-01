@@ -135,7 +135,7 @@ function delBuyer(buyerId) {
 </table>
 
 <div style="text-align: center;">
-<button class="btn btn-default" onclick="toList();">목록</button>
+<button id="" class="btn btn-default" onclick="toList();">목록</button>
 <button class="btn btn-primary" onclick="upBuyer('${buyerInfo.buyerId }');">수정</button>
 <button class="btn btn-danger" onclick="delBuyer('${buyerInfo.buyerId}');">삭제</button>
 </div>

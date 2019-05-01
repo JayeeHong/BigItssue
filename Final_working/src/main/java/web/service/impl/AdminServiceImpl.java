@@ -207,5 +207,15 @@ public class AdminServiceImpl implements AdminService{
 		adminDao.deleteBuyerInfo(buyerInfo);
 	}
 
+	@Override
+	public BigdomSellerInfo getBigdomInfo(BigdomSellerInfo bsl) {
+		return adminDao.selectBigdomInfo(bsl);
+	}
+
+	@Override
+	public void setBigdomInfo(BigdomInfo bigdomInfo) {
+		adminDao.updateBigdomInfo(bigdomInfo);
+	}
+
 }
 

@@ -98,5 +98,11 @@ public interface AdminDao {
 	// 구매자 정보 삭제 쿼리
 	public void deleteBuyerInfo(BuyerInfo buyerInfo);
 
+	// 빅돔 정보 조회 쿼리(수정페이지)
+	public BigdomSellerInfo selectBigdomInfo(BigdomSellerInfo bsl);
+
+	// 빅돔 정보 업데이트 쿼리
+	public void updateBigdomInfo(BigdomInfo bigdomInfo);
+
 }
 

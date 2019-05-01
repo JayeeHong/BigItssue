@@ -199,4 +199,19 @@
 		WHERE buyerId=#{buyerId }
 	</delete>
 	
+	<select id="selectBigdomInfo" parameterType="web.dto.BigdomSellerInfo" resultType="web.dto.BigdomSellerInfo">
+		SELECT b.bigdomId, b.bigdomPw, s.sellerId
+		FROM bigdomInfo b
+		LEFT OUTER JOIN sellerInfo s
+		ON b.bigdomId = s.bigdomId
+		WHERE b.bigdomId = #{bigdomId }
+		ORDER BY b.bigdomid
+	</select>
+	
+	<update id="updateBigdomInfo" parameterType="web.dto.BigdomInfo">
+		UPDATE bigdomInfo
+		SET bigdomPw=#{bigdomPw }
+		WHERE bigdomId=#{bigdomId }
+	</update>
+	
 </mapper>

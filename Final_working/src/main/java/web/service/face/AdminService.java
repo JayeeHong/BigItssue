@@ -98,5 +98,11 @@ public interface AdminService {
 	// 구매자 정보 삭제
 	public void delBuyerInfo(BuyerInfo buyerInfo);
 
+	// 빅돔 정보 조회(수정페이지)
+	public BigdomSellerInfo getBigdomInfo(BigdomSellerInfo bsl);
+
+	// 빅돔 정보 수정
+	public void setBigdomInfo(BigdomInfo bigdomInfo);
+
 }
 

@@ -247,6 +247,24 @@ public class AdminController {
 		model.addAttribute("bigdomsellerList", bigdomsellerList);
 	}
 	
+	@RequestMapping(value="/admin/info/bigdom/update", method=RequestMethod.GET)
+	public void updateBigdom(BigdomSellerInfo bigdomInfo, Model model) {
+		
+//		logger.info(bsl.toString());
+		
+		bigdomInfo = adminService.getBigdomInfo(bigdomInfo);
+		
+		model.addAttribute("bigdomInfo", bigdomInfo);
+	}
+	
+	@RequestMapping(value="/admin/info/bigdomUp", method=RequestMethod.GET)
+	public String bigdomInfoUpdate(BigdomInfo bigdomInfo) {
+		
+		adminService.setBigdomInfo(bigdomInfo);
+		
+		return "redirect:/admin/info/bigdom/update?bigdomId="+bigdomInfo.getBigdomId();
+	}
+	
 	@RequestMapping(value="/admin/seller/list", method=RequestMethod.GET)
 	public void adminSellseView() { // 판매자 판매정보 관리
 
