@@ -11,6 +11,7 @@ import web.dao.face.SellerDao;
 import web.dto.BookListInfo;
 import web.dto.Reservation;
 import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.dto.User;
@@ -141,6 +142,7 @@ public class SellerServiceImpl implements SellerService {
 	public Review view(int reviewno) {
 		
 		//조회수 증가
+		
 		sellerDao.updateHit(reviewno);
 		
 		//상세글 반환
@@ -155,6 +157,36 @@ public class SellerServiceImpl implements SellerService {
 	@Override
 	public void delete(int reviewno) {
 		sellerDao.deleteReview(reviewno);
+	}
+
+	@Override
+	public int getMyTotalCount(Review review) {
+		return sellerDao.selectCntMyReview(review);
+	}
+
+	@Override
+	public List<Review> getPagingMyList(Paging paging) {
+		return sellerDao.selectPagingMylist(paging);
+	}
+
+	@Override
+	public List<ReviewReply> getReplyList(int reviewno) {
+		return sellerDao.selectReplyListByReviewNo(reviewno);
+	}
+
+	@Override
+	public void replyWrite(ReviewReply reviewReply) {
+		sellerDao.insertReply(reviewReply);
+	}
+
+	@Override
+	public void replyDelete(int replyNo) {
+		sellerDao.deleteReply(replyNo);
+	}
+
+	@Override
+	public void replyUpdate(ReviewReply reviewReply) {
+		sellerDao.updateReply(reviewReply);
 	}
 
 }
