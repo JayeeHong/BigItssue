@@ -149,5 +149,13 @@
 		SET status='예약취소(시간초과)'
 		WHERE reserveNo=#{reserveNo }
 	</update>
+	
+	<select id="selectZoneList" resultType="web.dto.SellerLoc">
+		SELECT DISTINCT zone FROM sellerLoc
+	</select>
+	
+	<select id="selectStationList" resultType="web.dto.SellerLoc">
+		SELECT DISTINCT station FROM sellerLoc
+	</select>
 
 </mapper>

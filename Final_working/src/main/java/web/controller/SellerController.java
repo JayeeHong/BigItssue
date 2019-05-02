@@ -64,9 +64,9 @@ public class SellerController {
 			if(chatRoomList.get(i).getBuyerId() != null && !chatRoomList.get(i).getBuyerId().equals(LoginInfo.getId())) {
 				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBuyerId());
 			}else if(chatRoomList.get(i).getSellerId() != null && !chatRoomList.get(i).getSellerId().equals(LoginInfo.getId())) {
-				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBuyerId());
+				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getSellerId());
 			}else if(chatRoomList.get(i).getBigdomId() != null && !chatRoomList.get(i).getBigdomId().equals(LoginInfo.getId())) {
-				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBuyerId());
+				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBigdomId());
 			}
 		}
 		

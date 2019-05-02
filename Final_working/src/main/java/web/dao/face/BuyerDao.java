@@ -65,4 +65,10 @@ public interface BuyerDao {
 	
 	// 수령시간이 지났을 경우 예약취소로 변경 쿼리
 	public void updatePickupDate(Reservation bookList);
+	
+	//중복 뺀 zoneList 얻기
+	public List<SellerLoc> selectZoneList();
+	//중복 뺸 stationList 얻기
+	public List<SellerLoc> selectStationList();
+	
 }
