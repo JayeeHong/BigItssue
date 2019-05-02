@@ -87,6 +87,7 @@
 
 </update>
 	
+	<!-- *********** 계정관리 *********** -->
 	<select id="selectCntLogin" parameterType="web.dto.AdminInfo" resultType="int">
 		SELECT count(*) FROM adminInfo
 		WHERE 1=1
@@ -108,7 +109,7 @@
 		WHERE rnum BETWEEN #{startNo } AND #{endNo }
 	</select>
 	
-	<select id="selectBuyerInfoList" resultType="web.dto.BuyerInfo">
+	<select id="selectBuyerInfoList" parameterType="web.util.Paging" resultType="web.dto.BuyerInfo">
 		SELECT * FROM (
 		    SELECT rownum rnum, B.* FROM (
 		        SELECT * FROM buyerInfo
@@ -119,7 +120,7 @@
 		WHERE rnum BETWEEN #{startNo } AND #{endNo }
 	</select>
 	
-	<select id="selectBigdomSellerInfo" resultType="web.dto.BigdomSellerInfo">
+	<select id="selectBigdomSellerInfo" parameterType="web.util.Paging" resultType="web.dto.BigdomSellerInfo">
 		SELECT * FROM (
 		    SELECT rownum rnum, B.* FROM (
 		        SELECT b.bigdomId, b.bigdomPw, s.sellerId
@@ -232,6 +233,7 @@
 		SET bigdomPw=#{bigdomPw }
 		WHERE bigdomId=#{bigdomId }
 	</update>
+	<!-- ******************************** 계정관리 끝 -->
 	
 	<!-- ****** 계정관리 페이징 ****** -->
 	<select id="selectSellerInfoCnt" resultType="int">
@@ -245,6 +247,74 @@
 	<select id="selectBigdomInfoCnt" resultType="int">
 		SELECT count(*) FROM bigdomInfo
 	</select>
-	<!-- ***************************** 계정관리 페이징 끝 --> 
+	
+	<!-- ***************************** 계정관리 페이징 끝 -->
+	
+	<!-- ********** 판매자 빅이슈 관리 ********** --> 
+	<select id="selectSellerLocInfoCnt" resultType="int">
+		SELECT count(*) FROM sellerloc
+	</select>
+	
+	<select id="selectSellerLocInfoList" parameterType="web.util.Paging" resultType="web.dto.SellerLoc">
+		SELECT * FROM (
+		    SELECT rownum rnum, B.* FROM (
+		        SELECT * FROM sellerloc
+				ORDER BY locNo desc
+		    ) B
+		    ORDER BY rnum
+		) 
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+	</select>
+	
+	<select id="selectSellerLocInfoDeactivateCnt" resultType="int">
+		SELECT count(*) FROM sellerloc
+		WHERE sellerid IS NULL
+	</select>
+	
+	<select id="selectSellerLocInfoDeactivateList" parameterType="web.util.Paging" resultType="web.dto.SellerLoc">
+		SELECT * FROM (
+		    SELECT rownum rnum, B.* FROM (
+		        SELECT * FROM sellerloc
+		        WHERE sellerid IS NULL
+				ORDER BY locNo desc
+		    ) B
+		    ORDER BY rnum
+		) 
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+	</select>
+	
+	<select id="selectSellerLocInfoActivateCnt" resultType="int">
+		SELECT count(*) FROM sellerloc
+		WHERE sellerid IS NOT NULL
+	</select>
+	
+	<select id="selectSellerLocInfoActivateList" parameterType="web.util.Paging" resultType="web.dto.SellerLoc">
+		SELECT * FROM (
+		    SELECT rownum rnum, B.* FROM (
+		        SELECT * FROM sellerloc
+		        WHERE sellerid IS NOT NULL
+				ORDER BY locNo desc
+		    ) B
+		    ORDER BY rnum
+		) 
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+	</select>
+	
+	<select id="selectSellerLocInfo" parameterType="web.dto.SellerLoc" resultType="web.dto.SellerLoc">
+		SELECT * FROM sellerloc
+		WHERE sellerid=#{sellerId }
+	</select>
+	
+	<select id="selectBookListInfoAtBookview" parameterType="String" resultType="web.dto.BookListInfo">
+		SELECT * FROM BookListInfo
+		WHERE sellerid=#{sellerId }
+		ORDER BY month
+	</select>
+	
+	<insert id="insertBookListInfoAtadminBook" parameterType="web.dto.BookListInfo">
+		INSERT INTO bookListInfo(magazineNo, month, circulation, sellerId)
+		VALUES(bookListInfo_seq.nextval, #{month }, #{circulation }, #{sellerId })
+	</insert>
+	<!-- **************************************** -->
 	
 </mapper>

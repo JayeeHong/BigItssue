@@ -6,6 +6,7 @@ import java.util.List;
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
+import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
@@ -114,6 +115,34 @@ public interface AdminDao {
 	// 빅돔 정보 갯수 조회 쿼리
 	public int selectBigdomInfoCnt();
 	// ----------------------------- 계정관리 페이징 끝
+
+	// ------------- 판매자 빅이슈 관리 ----------------
+	// sellerloc 갯수 조회 쿼리
+	public int selectSellerLocInfoCnt();
+
+	// sellerloc 리스트 전체 조회 쿼리
+	public List<SellerLoc> selectSellerLocInfoList(Paging paging);
+
+	// sellerloc 비활성화구역 갯수 조회 쿼리
+	public int selectSellerLocInfoDeactivateCnt();
+
+	// sellerloc 비활성화구역 리스트 조회 쿼리
+	public List<SellerLoc> selectSellerLocInfoDeactivateList(Paging paging);
+
+	// sellerloc 활성화구역 갯수 조회 쿼리
+	public int selectSellerLocInfoActivateCnt();
+
+	// sellerloc 활성화구역 리스트 조회 쿼리
+	public List<SellerLoc> selectSellerLocInfoActivateList(Paging paging);
+
+	// 해당 판매자의 정보 조회 쿼리
+	public SellerLoc selectSellerLocInfo(SellerLoc sellerloc);
+
+	// 해당 판매자의 보유 빅이슈 조회 쿼리
+	public List<BookListInfo> selectBookListInfoAtBookview(String sellerId);
+
+	// 해당 판매자의 보유 빅이슈 정보 삽입 쿼리
+	public void insertBookListInfoAtadminBook(BookListInfo bli);
 
 }
 

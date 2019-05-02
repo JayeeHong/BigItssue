@@ -12,6 +12,7 @@ import web.dao.face.AdminDao;
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
+import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
@@ -111,6 +112,7 @@ public class AdminServiceImpl implements AdminService{
 		}
 	}
 
+	// --------------- 계정관리 ---------------
 	@Override
 	public List<SellerBigdomInfo> getSellerBigdomInfo(Paging paging) {
 		return adminDao.selectSellerBigdomInfo(paging);
@@ -218,6 +220,7 @@ public class AdminServiceImpl implements AdminService{
 	public void setBigdomInfo(BigdomInfo bigdomInfo) {
 		adminDao.updateBigdomInfo(bigdomInfo);
 	}
+	// ------------------------------------ 계정관리 끝
 
 	// ------ 계정관리 페이징 ------
 	@Override
@@ -279,8 +282,98 @@ public class AdminServiceImpl implements AdminService{
 	public int getBigdomInfoTotalCount() {
 		return adminDao.selectBigdomInfoCnt();
 	}
-	
 	// ----------------------------- 계정관리 페이징 끝
+
+	// ------------------ 판매자 빅이슈 관리 ------------------
+	@Override
+	public int getSellerLocInfoCurPage(HttpServletRequest req) {
+		//요청파라미터 curPage 받기
+		String param = req.getParameter("curPage");
+	
+		//null이나 ""이 아니면 int로 리턴
+		if( param != null && !"".equals(param) ) {
+			int curPage = Integer.parseInt(param);
+			return curPage;
+		}
+		
+		//null이나 ""면 0으로 반환하기
+		return 0;
+	}
+
+	@Override
+	public int getSellerLocInfoTotalCount() {
+		return adminDao.selectSellerLocInfoCnt();
+	}
+
+	@Override
+	public List<SellerLoc> getSellerLocList(Paging paging) {
+		return adminDao.selectSellerLocInfoList(paging);
+	}
+
+	@Override
+	public int getSellerLocInfoDeactivateCurPage(HttpServletRequest req) {
+		//요청파라미터 curPage 받기
+		String param = req.getParameter("curPage");
+	
+		//null이나 ""이 아니면 int로 리턴
+		if( param != null && !"".equals(param) ) {
+			int curPage = Integer.parseInt(param);
+			return curPage;
+		}
+		
+		//null이나 ""면 0으로 반환하기
+		return 0;
+	}
+
+	@Override
+	public int getSellerLocInfoDeactivateTotalCount() {
+		return adminDao.selectSellerLocInfoDeactivateCnt();
+	}
+
+	@Override
+	public List<SellerLoc> getSellerLocListDeactivate(Paging paging) {
+		return adminDao.selectSellerLocInfoDeactivateList(paging);
+	}
+
+	@Override
+	public int getSellerLocInfoActivateCurPage(HttpServletRequest req) {
+		//요청파라미터 curPage 받기
+		String param = req.getParameter("curPage");
+	
+		//null이나 ""이 아니면 int로 리턴
+		if( param != null && !"".equals(param) ) {
+			int curPage = Integer.parseInt(param);
+			return curPage;
+		}
+		
+		//null이나 ""면 0으로 반환하기
+		return 0;
+	}
+
+	@Override
+	public int getSellerLocInfoActivateTotalCount() {
+		return adminDao.selectSellerLocInfoActivateCnt();
+	}
+
+	@Override
+	public List<SellerLoc> getSellerLocListActivate(Paging paging) {
+		return adminDao.selectSellerLocInfoActivateList(paging);
+	}
+
+	@Override
+	public SellerLoc getSellerLocInfo(SellerLoc sellerloc) {
+		return adminDao.selectSellerLocInfo(sellerloc);
+	}
+
+	@Override
+	public List<BookListInfo> getBookListInfoAtBookview(String sellerId) {
+		return adminDao.selectBookListInfoAtBookview(sellerId);
+	}
+
+	@Override
+	public void putBookListInfoAtadminBook(BookListInfo bli) {
+		adminDao.insertBookListInfoAtadminBook(bli);
+	}
 
 }
 

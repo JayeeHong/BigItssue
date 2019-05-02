@@ -15,6 +15,14 @@
 	.table thead {
 		font-weight: bold;
 	}
+	
+	.table>tbody>tr>td {
+		vertical-align: middle;
+	}
+	
+	.table>thead>tr>td {
+		vertical-align: middle;
+	}
 </style>
 
 <script type="text/javascript">
@@ -87,17 +95,17 @@ function activateSeller(sellerId) {
 		<c:forEach varStatus="status" var="i" begin="0" end="${sellerbigdomList.size()-1 }" step="1">
 		<tr>
 			<c:if test="${curPage eq 0 }">
-			<td style="padding-top: 48px;" rowspan="3">${(totalCount-status.index)-((1-1)*10) }</td>
+			<td rowspan="3">${(totalCount-status.index)-((1-1)*10) }</td>
 			</c:if>
 			<c:if test="${curPage ne 0 }">
-			<td style="padding-top: 48px;" rowspan="3">${(totalCount-status.index)-((curPage-1)*10) }</td>
+			<td rowspan="3">${(totalCount-status.index)-((curPage-1)*10) }</td>
 			</c:if>
 		
 			<td>${sellerbigdomList[i].sellerName }</td>
 			<td>${sellerbigdomList[i].sellerId }</td>
 			<td>${sellerbigdomList[i].sellerPw }</td>
 			<td>${sellerbigdomList[i].sellerPhone }</td>
-			<td style="padding-top: 45px;" rowspan="3">
+			<td rowspan="3">
 				<button class="btn btn-xs btn-primary" onclick="upSeller('${sellerbigdomList[i].sellerId}');">수정</button>
 				
 				<c:if test="${not sellerStatusList[i] }">

@@ -17,12 +17,21 @@
 		height: 26px;
 	}
 	
+	.table>tbody>tr>td {
+		vertical-align: middle;
+	}
+	
+	.table>thead>tr>td {
+		vertical-align: middle;
+	}
+	
 </style>
 
 <script type="text/javascript">
 
 function toList() {
 	form = document.upForm;
+	form.method="post";
 	form.action="/admin/info/bigdom";
 	form.submit();
 }

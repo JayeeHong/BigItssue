@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
+import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
@@ -46,6 +47,7 @@ public interface AdminService {
 	// 관리자 로그인
 	public boolean login(AdminInfo adminInfo);
 
+	// ------- 계정관리 -------
 	// 판매자 정보와 판매자에 따른 빅돔 정보 불러오기(전체)
 	public List<SellerBigdomInfo> getSellerBigdomInfo(Paging paging);
 
@@ -105,6 +107,7 @@ public interface AdminService {
 
 	// 빅돔 정보 수정
 	public void setBigdomInfo(BigdomInfo bigdomInfo);
+	// -------------------------------- 계정관리 끝
 
 	// ----- 계정관리 페이징 -----
 	// 요청파라미터로 현재페이지 받기-계정관리_판매자
@@ -125,6 +128,43 @@ public interface AdminService {
 	// 해당게시글 수 불러오기-계정관리_빅돔
 	public int getBigdomInfoTotalCount();
 	// --------------------------- 계정관리 페이징 끝
+
+	// ------- 판매자 빅이슈 관리 -------
+	// 요청파라미터로 현재페이지 받기-판매자 빅이슈 관리
+	public int getSellerLocInfoCurPage(HttpServletRequest req);
+
+	// 해당게시글 수 불러오기-판매자 빅이슈 관리
+	public int getSellerLocInfoTotalCount();
+
+	// sellerloc 전체 불러오기
+	public List<SellerLoc> getSellerLocList(Paging paging);
+
+	// 요청파라미터로 현재페이지 받기-판매자 빅이슈 관리_비활성화구역
+	public int getSellerLocInfoDeactivateCurPage(HttpServletRequest req);
+
+	// 해당게시글 수 불러오기-판매자 빅이슈 관리_비활성화구역
+	public int getSellerLocInfoDeactivateTotalCount();
+
+	// sellerloc 비활성화구역(sellerid가 null) 불러오기
+	public List<SellerLoc> getSellerLocListDeactivate(Paging paging);
+
+	// 요청파라미터로 현재페이지 받기-판매자 빅이슈 관리_활성화구역
+	public int getSellerLocInfoActivateCurPage(HttpServletRequest req);
+
+	// 해당게시글 수 불러오기-판매자 빅이슈 관리_활성화구역	
+	public int getSellerLocInfoActivateTotalCount();
+
+	// sellerloc 활성화구역(sellerid가 null이 아님) 불러오기
+	public List<SellerLoc> getSellerLocListActivate(Paging paging);
+
+	// 해당 판매자의 판매자 정보 불러오기
+	public SellerLoc getSellerLocInfo(SellerLoc sellerloc);
+
+	// 해당 판매자의 보유 빅이슈 정보 조회
+	public List<BookListInfo> getBookListInfoAtBookview(String sellerId);
+
+	// 해당 판매자의 보유 빅이슈 정보 추가
+	public void putBookListInfoAtadminBook(BookListInfo bli);
 
 }
 

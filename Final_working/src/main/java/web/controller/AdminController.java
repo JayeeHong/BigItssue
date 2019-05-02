@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
+import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
@@ -65,7 +66,7 @@ public class AdminController {
 		return "redirect:/admin/main";
 	}
 	
-	@RequestMapping(value="/admin/info/seller", method=RequestMethod.GET)
+	@RequestMapping(value="/admin/info/seller")
 	public void infoSeller(
 			Model model, 
 			HttpServletRequest req) { // 계정관리-판매자
@@ -216,7 +217,7 @@ public class AdminController {
 		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
 	}
 	
-	@RequestMapping(value="/admin/info/buyer", method=RequestMethod.GET)
+	@RequestMapping(value="/admin/info/buyer")
 	public void infoBuyer(
 			Model model, 
 			HttpServletRequest req) { // 계정관리-구매자
@@ -294,7 +295,7 @@ public class AdminController {
 		return "redirect:/admin/info/buyer";
 	}
 	
-	@RequestMapping(value="/admin/info/bigdom", method=RequestMethod.GET)
+	@RequestMapping(value="/admin/info/bigdom")
 	public void infoBigdom(
 			Model model, 
 			HttpServletRequest req) { // 계정관리-빅돔
@@ -348,12 +349,136 @@ public class AdminController {
 	
 	@RequestMapping(value="/admin/seller/list", method=RequestMethod.GET)
 	public void adminSellseView() { // 판매자 판매정보 관리
-
+		
 	}
 	
 	@RequestMapping(value="/admin/book/list", method=RequestMethod.GET)
-	public void adminBooklist() { // 판매자 빅이슈 관리
+	public void adminBooklist(
+			Model model, 
+			HttpServletRequest req) { // 판매자 빅이슈 관리
 		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getSellerLocInfoCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getSellerLocInfoTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		List<SellerLoc> sellerlocList = adminService.getSellerLocList(paging);
+
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		// -------------------
+		
+		model.addAttribute("sellerlocList", sellerlocList);
+		
+	}
+	
+	@RequestMapping(value="/admin/book/list/deactivate", method=RequestMethod.GET)
+	public void adminBooklistDeactivate(
+			Model model, 
+			HttpServletRequest req) { // 판매자 빅이슈 관리-비활성화구역
+		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getSellerLocInfoDeactivateCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getSellerLocInfoDeactivateTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		List<SellerLoc> sellerlocListDeactivate = adminService.getSellerLocListDeactivate(paging);
+
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		// -------------------
+		
+		model.addAttribute("sellerlocListDeactivate", sellerlocListDeactivate);
+		
+	}
+	
+	@RequestMapping(value="/admin/book/list/activate", method=RequestMethod.GET)
+	public void adminBooklistActivate(
+			Model model, 
+			HttpServletRequest req) { // 판매자 빅이슈 관리-활성화구역
+		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getSellerLocInfoActivateCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getSellerLocInfoActivateTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+		logger.info(paging.toString());
+		
+		List<SellerLoc> sellerlocListActivate = adminService.getSellerLocListActivate(paging);
+
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		// -------------------
+		
+		model.addAttribute("sellerlocListActivate", sellerlocListActivate);
+		
+	}
+	
+	@RequestMapping(value="/admin/book/view", method=RequestMethod.GET)
+	public void adminBookView(SellerLoc sellerloc, Model model) {
+		
+		// 해당 판매자의 정보 조회
+		sellerloc = adminService.getSellerLocInfo(sellerloc);
+		
+		// 해당 판매자의 보유 빅이슈 정보 조회
+		List<BookListInfo> bookList = adminService.getBookListInfoAtBookview(sellerloc.getSellerId());
+		
+		model.addAttribute("sellerloc", sellerloc);
+		model.addAttribute("bookList", bookList);
+		
+	}
+	
+	@RequestMapping(value="/admin/book/addBook", method=RequestMethod.POST)
+	public String adminBookAdd(BookListInfo bli) {
+		
+//		logger.info("bli:::::::::::::::"+bli);
+		// 빅이슈 정보 넣기
+		adminService.putBookListInfoAtadminBook(bli);
+		
+		return "redirect:/admin/book/view?sellerId="+bli.getSellerId();
 	}
 	
 	@RequestMapping(value="/admin/chat/list", method=RequestMethod.GET)

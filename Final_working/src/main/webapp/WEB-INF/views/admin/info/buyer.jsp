@@ -15,6 +15,14 @@
 	.table thead {
 		font-weight: bold;
 	}
+	
+	.table>tbody>tr>td {
+		vertical-align: middle;
+	}
+	
+	.table>thead>tr>td {
+		vertical-align: middle;
+	}
 </style>
 
 <script type="text/javascript">
