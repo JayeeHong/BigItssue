@@ -27,18 +27,38 @@ $(document).ready(function() {
 
 });
 
+
+function email_change() {
+	if (document.upForm.emailSelect.options[document.upForm.emailSelect.selectedIndex].value == '0') {
+// 		document.upForm.buyerEmail2.disabled = true;
+		document.upForm.buyerEmail2.value = "";
+
+	}
+
+	if (document.upForm.emailSelect.options[document.upForm.emailSelect.selectedIndex].value == '9') {
+// 		document.upForm.buyerEmail2.disabled = false;
+		document.upForm.buyerEmail2.value = "";
+		document.upForm.buyerEmail2.focus();
+
+	} else {
+// 		document.upForm.buyerEmail2.disabled = true;
+		document.upForm.buyerEmail2.value = document.upForm.emailSelect.options[document.upForm.emailSelect.selectedIndex].value;
+
+	}
+}
+
 function toList() {
 	form = document.upForm;
-	form.action="/admin/info/buyer";
+	form.action = "/admin/info/buyer";
 	form.submit();
 }
 
 function upBuyer(buyerId) {
 	result = confirm('구매자 정보를 변경하시겠습니까?');
-	
-	if(result==true) {
+
+	if (result == true) {
 		form = document.upForm;
-		form.action="/admin/info/buyerUp?buyerId="+buyerId;
+		form.action = "/admin/info/buyerUp?buyerId=" + buyerId;
 		form.submit();
 	} else {
 		return false;
@@ -47,17 +67,16 @@ function upBuyer(buyerId) {
 
 function delBuyer(buyerId) {
 	result = confirm('구매자 정보를 삭제하시겠습니까?');
-	
-	if(result==true) {
+
+	if (result == true) {
 		form = document.upForm;
-		form.action="/admin/info/buyerDel?buyerId="+buyerId;
+		form.action = "/admin/info/buyerDel?buyerId=" + buyerId;
 		form.submit();
 	} else {
 		return false;
 	}
-	
-}
 
+}
 </script>
 
 <div class="row row-offcanvas row-offcanvas-right">
@@ -129,6 +148,14 @@ function delBuyer(buyerId) {
 		<input style="width: 80px; text-align: center;" type="text" value="${buyerInfo.buyerEmail1 }" name="buyerEmail1" />
 		&nbsp;@&nbsp;
 		<input style="width: 80px; text-align: center;" type="text" value="${buyerInfo.buyerEmail2 }" name="buyerEmail2" />
+		<select name="emailSelect" onchange="email_change()">
+			<option value="0" >선택하세요</option>
+			<option value="9">직접입력</option>
+			<option value="naver.com">naver.com</option>
+			<option value="daum.net">daum.net</option> 
+			<option value="gmail.com">gmail.com</option> 
+			<option value="nate.com">nate.com</option> 
+		</select>
 	</td>
 </tr>
 
