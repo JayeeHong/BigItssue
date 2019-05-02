@@ -37,9 +37,11 @@ function inquire(id,sort){
 <fmt:formatDate value="${now}" pattern="mm" var="sysMin" />
 <fmt:formatDate value="${now}" pattern="hhmm" var="sysTime" />
 <fmt:formatDate value="${now}" pattern="a" var="AmPm" />
-${sysHour }<br>
-${sysMin }<br>
-${AmPm }<br>
+
+<%-- ${sysHour }<br> --%>
+<%-- ${sysMin }<br> --%>
+<%-- ${AmPm }<br> --%>
+
 <div style="text-align: center; margin-bottom:50px;">
 <div class="wrap container">
 <div style="padding: 10px;">
@@ -60,7 +62,23 @@ ${AmPm }<br>
 		<tr>
 		<td>${sellerLoc.zone }</td>
 		<td>${sellerLoc.station } ${sellerLoc.spot }</td>
-		<td>${sellerLoc.sellerTimeS.substring( 0, 2 ) }:${sellerLoc.sellerTimeS.substring( 2, 4 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 2 )}:${sellerLoc.sellerTimeE.substring( 2, 4 )}</td>
+		<td>
+			<c:if test="${sellerLoc.sellerTimeS.length() eq 4 && sellerLoc.sellerTimeE.length() eq 4}">
+			${sellerLoc.sellerTimeS.substring( 0, 2 ) }:${sellerLoc.sellerTimeS.substring( 2, 4 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 2 )}:${sellerLoc.sellerTimeE.substring( 2, 4 )} 
+			</c:if>
+			
+			<c:if test="${sellerLoc.sellerTimeS.length() eq 3 && sellerLoc.sellerTimeE.length() eq 4}">
+			${sellerLoc.sellerTimeS.substring( 0, 1 ) }:${sellerLoc.sellerTimeS.substring( 1, 3 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 2 )}:${sellerLoc.sellerTimeE.substring( 2, 4 )} 
+			</c:if>
+			
+			<c:if test="${sellerLoc.sellerTimeS.length() eq 4 && sellerLoc.sellerTimeE.length() eq 3}">
+			${sellerLoc.sellerTimeS.substring( 0, 2 ) }:${sellerLoc.sellerTimeS.substring( 2, 4 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 1 )}:${sellerLoc.sellerTimeE.substring( 1, 3 )} 
+			</c:if>
+			
+			<c:if test="${sellerLoc.sellerTimeS.length() eq 3 && sellerLoc.sellerTimeE.length() eq 3}">
+			${sellerLoc.sellerTimeS.substring( 0, 1 ) }:${sellerLoc.sellerTimeS.substring( 1, 3 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 1 )}:${sellerLoc.sellerTimeE.substring( 1, 3 )} 
+			</c:if>	
+		</td>	
 		<td>${sellerLoc.sellerId } (판매자)<button class="btn btn-warning btn-sm fr" onclick="inquire('${sellerLoc.sellerId}','판매자')">문의하기</button></td>
 		</tr>
 		
@@ -68,7 +86,23 @@ ${AmPm }<br>
 		<tr>
 		<td>${sellerLoc.zone }</td>
 		<td>${sellerLoc.station } ${sellerLoc.spot }</td>
-		<td>${sellerLoc.sellerTimeS.substring( 0, 2 ) }:${sellerLoc.sellerTimeS.substring( 2, 4 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 2 )}:${sellerLoc.sellerTimeE.substring( 2, 4 )}</td>
+		<td>
+			<c:if test="${sellerLoc.sellerTimeS.length() eq 4 && sellerLoc.sellerTimeE.length() eq 4}">
+			${sellerLoc.sellerTimeS.substring( 0, 2 ) }:${sellerLoc.sellerTimeS.substring( 2, 4 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 2 )}:${sellerLoc.sellerTimeE.substring( 2, 4 )} 
+			</c:if>
+			
+			<c:if test="${sellerLoc.sellerTimeS.length() eq 3 && sellerLoc.sellerTimeE.length() eq 4}">
+			${sellerLoc.sellerTimeS.substring( 0, 1 ) }:${sellerLoc.sellerTimeS.substring( 1, 3 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 2 )}:${sellerLoc.sellerTimeE.substring( 2, 4 )} 
+			</c:if>
+			
+			<c:if test="${sellerLoc.sellerTimeS.length() eq 4 && sellerLoc.sellerTimeE.length() eq 3}">
+			${sellerLoc.sellerTimeS.substring( 0, 2 ) }:${sellerLoc.sellerTimeS.substring( 2, 4 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 1 )}:${sellerLoc.sellerTimeE.substring( 1, 3 )} 
+			</c:if>
+			
+			<c:if test="${sellerLoc.sellerTimeS.length() eq 3 && sellerLoc.sellerTimeE.length() eq 3}">
+			${sellerLoc.sellerTimeS.substring( 0, 1 ) }:${sellerLoc.sellerTimeS.substring( 1, 3 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 1 )}:${sellerLoc.sellerTimeE.substring( 1, 3 )} 
+			</c:if>	
+		</td>
 		<td>${sellerLoc.bigdomId } (빅돔)<button class="btn btn-info btn-sm fr" onclick="inquire('${sellerLoc.bigdomId}','빅돔')">문의하기</button></td>
 		</tr>
 	</tbody>
@@ -86,7 +120,7 @@ ${AmPm }<br>
 	<tbody>
 	
 		<!-- 예약 -->		
-		<form action="/buyer/my/booking" method="POST">
+		<form action="/buyer/booking" method="POST">
 			<c:forEach var="item" items="${bookListInfo}" begin="0" end="${bookListInfo.size()}" step="1" varStatus="index">
 				<tr>
 				<td>${item.month }</td>
@@ -153,7 +187,7 @@ ${AmPm }<br>
 				</c:if>
 				<c:if test="${index.first && cntReservation ge 1}">
 					<td rowspan="${bookListInfo.size()}" style="border-bottom:hidden;border-right:hidden;border-top:hidden;">
-					<button type="button" class="btn btn-danger btn-sm">예약취소하기</button>
+					<div>*이미 예약을 하셨습니다. 예약취소를  하고싶으면 마이페이지로 가십시오.</div>
 					</td>
 				</c:if>
 				</tr>

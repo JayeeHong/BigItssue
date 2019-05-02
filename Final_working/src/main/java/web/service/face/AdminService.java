@@ -8,6 +8,7 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
+import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.util.Paging;
 
@@ -51,9 +52,21 @@ public interface AdminService {
 	// 빅돔 정보와 빅돔에 따른 판매자 정보 불러오기
 	public List<BigdomSellerInfo> getBigdomSellerInfo();
 
+	
+	//판매자 정보관리 수정
+	public void adminSellserUpdate(SellerLoc sellerLoc);
+
+	public String getSellerName(SellerLoc locInfo);
+
+	public void changeSellerName(HashMap hm);
+
+
+
 	//판매 장소 추가하기
 	public void insertList(SellerLoc sellerLoc);
+  
+  //판매 장소 삭제하기
+  public void deleteList(SellerLoc sellerLoc);
 
-	public void deleteList(SellerLoc sellerLoc);
 }
 

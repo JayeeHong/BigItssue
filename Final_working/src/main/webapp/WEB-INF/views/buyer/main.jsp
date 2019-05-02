@@ -61,7 +61,15 @@ function inquire(id,sort){
 		<td>${item.zone }</td>
 
 		<td>${item.station } ${item.spot }<button class="btn btn-success btn-sm fr" onclick="mapView(${item.locNo })">지도보기</button></td>
-		<td>${item.sellerTimeS.substring( 0, 2 ) }:${item.sellerTimeS.substring( 2, 4 ) } ~ ${item.sellerTimeE.substring( 0, 2 )}:${item.sellerTimeE.substring( 2, 4 )} <button class="btn btn-info btn-sm fr" onclick="booking(${item.locNo})">예약하기</button></td>
+		<c:choose>
+			<c:when test="${item.sellerTimeS ne 0}">
+			<td>${item.sellerTimeS.substring( 0, 2 ) }:${item.sellerTimeS.substring( 2, 4 ) } ~ ${item.sellerTimeE.substring( 0, 2 )}:${item.sellerTimeE.substring( 2, 4 )} <button class="btn btn-info btn-sm fr" onclick="booking(${item.locNo})">예약하기</button></td>
+			</c:when>
+			<c:otherwise>
+			<td><button class="btn btn-info btn-sm fr" onclick="booking(${item.locNo})">예약하기</button></td>
+			</c:otherwise>
+		</c:choose>
+		
 
 		<td>${item.sellerId }<button class="btn btn-warning btn-sm fr" onclick="inquire('${item.sellerId}','판매자')">문의하기</button></td>
 	</c:forEach>
