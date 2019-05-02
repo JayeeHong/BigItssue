@@ -53,5 +53,7 @@ public interface AdminService {
 
 	//판매 장소 추가하기
 	public void insertList(SellerLoc sellerLoc);
+
+	public void deleteList(SellerLoc sellerLoc);
 }
 

@@ -454,10 +454,14 @@ public class AdminController {
 	@RequestMapping("/deleteList")
 	public String deleteList(
 			String station,
-			String spot
+			String spot,
+			SellerLoc sellerLoc
 			) {
+		sellerLoc.setStation(station);
+		sellerLoc.setSpot(spot);
 		
-		logger.info("TEST : "+station+", "+spot);
+		adminService.deleteList(sellerLoc);
+		
 		return "admin/loc/list";
 	}
 	

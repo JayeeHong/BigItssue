@@ -8,6 +8,13 @@ $(document).ready(function() {
 	$('#insertBtn').click(function() {
 		$(location).attr("href", "/insertList?zone=${zone }");
 	});
+	
+	$(".btn-danger").click(function() {
+		var tr = $(this).parent().parent();
+		var td = tr.children();
+
+		$(location).attr("href", "/deleteList?station="+td.eq(1).text());
+	});
 });
 </script>
 

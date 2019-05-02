@@ -52,7 +52,10 @@ public interface AdminDao {
 	// 빅돔 정보와 빅돔에 따른 빅돔 정보 조회 쿼리
 	public List<BigdomSellerInfo> selectBigdomSellerInfo();
 
+	//판매 지역 추가
 	public void insertList(SellerLoc sellerLoc);
-	
+
+	//판매 지역 삭제
+	public void deleteList(SellerLoc sellerLoc);
 }
 
