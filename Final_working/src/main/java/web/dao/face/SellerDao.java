@@ -96,6 +96,6 @@ public interface SellerDao {
 	public void deleteReply(int replyNo);
 
 	//후기 댓글 수정
-	public void updateReply(int replyNo);
+	public void updateReply(ReviewReply reviewReply);
 
 }

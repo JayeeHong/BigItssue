@@ -185,8 +185,8 @@ public class SellerServiceImpl implements SellerService {
 	}
 
 	@Override
-	public void replyUpdate(int replyNo) {
-		sellerDao.updateReply(replyNo);
+	public void replyUpdate(ReviewReply reviewReply) {
+		sellerDao.updateReply(reviewReply);
 	}
 
 }

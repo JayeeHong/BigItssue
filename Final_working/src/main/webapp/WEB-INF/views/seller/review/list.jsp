@@ -44,7 +44,7 @@ $(document).ready(function() {
 				<c:forEach items="${reviewList }" var="r">
 				<tr>
 					<td>${r.reviewNo }</td>
-					<td><a href="/seller/review/view?reviewno=${r.reviewNo }">${r.reviewTitle }</a></td>
+					<td><a href="/seller/review/view?reviewNo=${r.reviewNo }">${r.reviewTitle }<span style="color: red; padding-left: 5px; font-size: small; ">[${r.replyCnt }]</span></a></td>
 					<td>${r.sellerId }</td>
 					<td><fmt:formatDate value="${r.reviewDate }" pattern="yyyy-MM-dd"/></td>
 					<td>${r.reviewHit }</td>

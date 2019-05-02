@@ -10,15 +10,21 @@ public class Review { // 후기
 	private Date reviewDate; // 작성일
 	private int reviewHit; //조회수
 	private String sellerId; // 판매자 아이디(fk)
+	private int replyCnt; // 댓글 수
 	
 	
+	public int getReplyCnt() {
+		return replyCnt;
+	}
+	public void setReplyCnt(int replyCnt) {
+		this.replyCnt = replyCnt;
+	}
 	public int getReviewHit() {
 		return reviewHit;
 	}
 	public void setReviewHit(int reviewHit) {
 		this.reviewHit = reviewHit;
 	}
-
 	
 	public int getReviewNo() {
 		return reviewNo;
@@ -54,7 +60,8 @@ public class Review { // 후기
 	@Override
 	public String toString() {
 		return "Review [reviewNo=" + reviewNo + ", reviewTitle=" + reviewTitle + ", reviewContent=" + reviewContent
-				+ ", reviewDate=" + reviewDate + ", reviewHit=" + reviewHit + ", sellerId=" + sellerId + "]";
+				+ ", reviewDate=" + reviewDate + ", reviewHit=" + reviewHit + ", sellerId=" + sellerId + ", replyCnt="
+				+ replyCnt + "]";
 	}
 	
 }

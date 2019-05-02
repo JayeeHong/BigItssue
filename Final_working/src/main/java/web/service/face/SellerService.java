@@ -98,6 +98,6 @@ public interface SellerService {
 	public void replyDelete(int replyNo);
 
 	//후기 댓글 수정
-	public void replyUpdate(int replyNo);
+	public void replyUpdate(ReviewReply reviewReply);
 
 }

@@ -3,7 +3,9 @@ package web.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -426,7 +428,7 @@ public class SellerController {
 		
 		logger.info("후기 상세페이지");
 		
-		int reviewno = Integer.parseInt(req.getParameter("reviewno"));
+		int reviewno = Integer.parseInt(req.getParameter("reviewNo"));
 		review.setReviewNo(reviewno);
 //		logger.info("리뷰::::"+review.toString());
 		
@@ -437,10 +439,10 @@ public class SellerController {
 		model.addAttribute("reviewView", reviewView);
 		
 		
-		//댓글 리스트 MODEL 추가
-		List<ReviewReply> replyList = sellerService.getReplyList(reviewno);
-//		for(ReviewReply r : replyList) System.out.println(r);
-		model.addAttribute("replyList", replyList);
+//		//댓글 리스트 MODEL 추가
+//		List<ReviewReply> replyList = sellerService.getReplyList(reviewno);
+////		for(ReviewReply r : replyList) System.out.println(r);
+//		model.addAttribute("replyList", replyList);
 				
 	}
 	
@@ -502,41 +504,77 @@ public class SellerController {
 
 	}
 	
-	@RequestMapping(value="/seller/review/reply/write", method=RequestMethod.POST)
-	public String replyWrite(ReviewReply reviewReply, HttpSession session) {
+	@RequestMapping(value="/seller/review/reply/list", method=RequestMethod.GET)
+	public String replyList(int reviewNo, Model model) {
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
+//		for(ReviewReply r : replyList) System.out.println(r);
+		
+//		model.addAllAttributes(replyList);
+		
+		model.addAttribute("replyList", replyList);
+		
+		return "jsonView";
+	}
+		
+	@RequestMapping(value="/seller/review/reply/insert", method=RequestMethod.POST)
+	public String replyWrite(ReviewReply reviewReply, Model model) {
 		
 		logger.info("댓글 달기");
-		
-		reviewReply.setWriter( (String) session.getAttribute("sellerId") );
+		System.out.println(reviewReply.toString());
+		 
+//		reviewReply.setWriter( (String) session.getAttribute("sellerId") );
 		
 		//댓글 입력
 		sellerService.replyWrite(reviewReply);
 		
-		return "redirect:/seller/review/view?reviewno=" + reviewReply.getReviewNo();
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = sellerService.getReplyList(reviewReply.getReviewNo());
+
+		model.addAttribute("replyList", replyList);
+		
+//		return "redirect:/seller/review/view?reviewno=" + reviewReply.getReviewNo();
+		return "jsonView";
 	}
 	
-	@RequestMapping(value="/seller/review/reply/update", method=RequestMethod.GET)
-	public void replyUpdate(ReviewReply reviewReply, Model model) {
+	@RequestMapping(value="/seller/review/reply/delete", method=RequestMethod.POST)
+	public String replyDelete(int replyNo, int reviewNo, Model model) {
+		
+		logger.info("댓글 삭제");
+//		logger.info(reviewReply.toString());
+		
+//		int replyno = Integer.parseInt( req.getParameter("replyNo") );
+//		System.out.println(replyNo);
+//		System.out.println(reviewNo);
+		
+		sellerService.replyDelete(replyNo);
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
+		
+		model.addAttribute("replyList", replyList);
+		
+		return "jsonView";
+	}
+
+	@RequestMapping(value="/seller/review/reply/update", method=RequestMethod.POST)
+	public String replyUpdate(int replyNo, String updateContent, int reviewNo, ReviewReply reviewReply, Model model) {
 		
 		logger.info("댓글 수정");
 		
-		sellerService.replyUpdate(reviewReply.getReplyNo());
+		reviewReply.setReplyNo(replyNo);
+		reviewReply.setReplyContent(updateContent);
+		reviewReply.setReviewNo(reviewNo);
+		
+		sellerService.replyUpdate(reviewReply);
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
+		
+		model.addAttribute("replyList", replyList);
+		
+		return "jsonView";
 		
 	}
-
-	@RequestMapping(value="/seller/review/reply/delete", method=RequestMethod.GET)
-	public String replyDelete(ReviewReply reviewReply, HttpServletRequest req) {
-		
-		logger.info("댓글 삭제");
-		logger.info(reviewReply.toString());
-		
-//		int replyno = Integer.parseInt( req.getParameter("replyNo") );
-//		System.out.println(replyno);
-		
-		sellerService.replyDelete(reviewReply.getReplyNo());
-		
-		return "redirect:/seller/review/view?reviewno=" + reviewReply.getReviewNo();
-		
-	}
-
 }

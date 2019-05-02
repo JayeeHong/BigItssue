@@ -116,7 +116,10 @@
 	<select id="selectPaginglist" resultType="web.dto.Review" parameterType="web.util.Paging">
 		SELECT * FROM (
 			SELECT rownum rnum, B.* FROM (
-				SELECT * FROM review
+				SELECT C.*,
+					(SELECT COUNT(*) FROM ReviewReply
+						WHERE reviewno = C.reviewno) AS replyCnt 
+				FROM review C
 				ORDER BY reviewNo desc
 			) B
 			ORDER BY rnum
@@ -183,10 +186,10 @@
 	
 	<delete id="deleteReply" parameterType="int">
 		DELETE ReviewReply
-		WHERE replyNo = #{replyno }
+		WHERE replyNo = #{replyNo }
 	</delete>
 
-	<update id="updateReply" parameterType="int">
+	<update id="updateReply" parameterType="web.dto.ReviewReply">
 		UPDATE ReviewReply
 		SET replyContent = #{replyContent }
 		WHERE replyNo = #{replyNo }
