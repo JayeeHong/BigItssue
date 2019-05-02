@@ -144,5 +144,18 @@ public interface AdminDao {
 	// 해당 판매자의 보유 빅이슈 정보 삽입 쿼리
 	public void insertBookListInfoAtadminBook(BookListInfo bli);
 
+
+	public void adminSellserUpdate(SellerLoc sellerLoc);
+
+	public String getSellerName(SellerLoc locInfo);
+
+	public void changeSellerName(HashMap hm);
+
+	//판매 지역 추가
+	public void insertList(SellerLoc sellerLoc);
+
+	//판매 지역 삭제
+	public void deleteList(SellerLoc sellerLoc);
+
 }
 

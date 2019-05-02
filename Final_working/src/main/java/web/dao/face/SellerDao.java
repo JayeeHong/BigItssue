@@ -5,6 +5,7 @@ import java.util.List;
 import web.dto.BookListInfo;
 import web.dto.Reservation;
 import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.dto.User;
@@ -78,5 +79,23 @@ public interface SellerDao {
 
 	//후기글 삭제
 	public void deleteReview(int reviewno);
+
+	//내 후기글 수 반환
+	public int selectCntMyReview(Review review);
+
+	//내 후기글 페이징처리 반환
+	public List<Review> selectPagingMylist(Paging paging);
+
+	//후기 댓글 조회
+	public List<ReviewReply> selectReplyListByReviewNo(int reviewno);
+
+	//후기 댓글 삽입
+	public void insertReply(ReviewReply reviewReply);
+
+	//후기 댓글 삭제
+	public void deleteReply(int replyNo);
+
+	//후기 댓글 수정
+	public void updateReply(ReviewReply reviewReply);
 
 }

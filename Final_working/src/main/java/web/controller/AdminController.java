@@ -56,7 +56,7 @@ public class AdminController {
 			
 		}
 		
-		return "redirect:/admin/info/seller";
+		return "redirect:/admin/main";
 	}
 	
 	@RequestMapping(value="/admin/logout", method=RequestMethod.GET)
@@ -65,7 +65,6 @@ public class AdminController {
 		
 		return "redirect:/admin/main";
 	}
-	
 	@RequestMapping(value="/admin/info/seller")
 	public void infoSeller(
 			Model model, 
@@ -349,7 +348,7 @@ public class AdminController {
 	
 	@RequestMapping(value="/admin/seller/list", method=RequestMethod.GET)
 	public void adminSellseView() { // 판매자 판매정보 관리
-		
+
 	}
 	
 	@RequestMapping(value="/admin/book/list", method=RequestMethod.GET)
@@ -557,15 +556,58 @@ public class AdminController {
 			,SellerLoc sellerloc
 			) {
 		
-		SellerLoc info = adminService.getSellerInfo(sellerloc);
+		SellerLoc locInfo = adminService.getSellerInfo(sellerloc);
 		
-		model.addAttribute("sellerInfo", info);
+		String sellerName = adminService.getSellerName(locInfo);
+		
+		model.addAttribute("sellerInfo", locInfo);
+		model.addAttribute("sellerName", sellerName);
 	}
 	
 	@RequestMapping(value="/admin/seller/view", method=RequestMethod.POST)
-	public String adminSellserUpdate() {
+	public String adminSellserUpdate(SellerLoc sellerLoc,
+									String arrZone,
+									String sellerName) {
 		
-		return "redirect:/admin/seller/view";
+		logger.info(sellerLoc.toString());
+		logger.info(arrZone);
+		
+		String[] a = arrZone.split(","); //arrZone의 값을 a라는 배열에 ','로 나누어 저장한다.
+		String zoneString = "";
+		
+		for(String b : a) { //배열 a를 String b로 하나씩 나눈다.
+			String c = b.replace("호선", ""); //나눈 b에 "호선"이라는 단어가 붙는다면 없애고 c라는 변수에담는다.
+			zoneString += c; //c를 zoneString에 담는다.
+			zoneString += "/";//   '/'를 붙인다.
+		}
+		
+//		logger.info(zoneString);//확인용
+		String zone = zoneString.substring(0, zoneString.length()-1);// 맨마지막에 붙는 '/'를 지운다.
+		sellerLoc.setZone(zone);//완성된 zone을 sellerLoc객체에 담는다.
+		
+		String sellerTimeS = sellerLoc.getStartTime1();//sellerTimeS에 값을 저장한다.
+				sellerTimeS += sellerLoc.getStartTime2();	
+		sellerLoc.setSellerTimeS(sellerTimeS);
+				
+		
+		String sellerTimeE = sellerLoc.getEndTime1(); //sellerTimesE에 값을 저장한다.
+				sellerTimeE += sellerLoc.getEndTime2();	
+		sellerLoc.setSellerTimeE(sellerTimeE);
+				
+//		logger.info("완성된 sellerLoc확인용"+sellerLoc.toString());
+		
+		//sellerLoc DB변경
+		adminService.adminSellserUpdate(sellerLoc);
+		
+		HashMap hm = new HashMap<String, SellerLoc>();
+		
+		hm.put("sellerName", sellerName);
+		hm.put("sellerLoc", sellerLoc);
+		
+		//sellerInfo의 sellerName변경
+		adminService.changeSellerName(hm);
+		
+		return "redirect:/admin/seller/view?locNo="+sellerLoc.getLocNo();
 	}
 	
 	
@@ -757,6 +799,7 @@ public class AdminController {
 			
 			logger.info(String.valueOf(list));
 			model.addAttribute("locList", list);
+			model.addAttribute("zone", zone);
 		}
 		
 	}
@@ -764,7 +807,7 @@ public class AdminController {
 
 	//판매지역 상세보기
 	@RequestMapping(value="/admin/loc/detail", method=RequestMethod.GET)
-	public void locDetail(String station, Model model) {
+	public void locDetail(String zone, String station, Model model) {
 		logger.info("station : "+station);
 		
 		if(station != null) {
@@ -772,8 +815,10 @@ public class AdminController {
 			logger.info((String)list.get(0).get("SELLERID"));
 //				logger.info(String.valueOf(list));
 			logger.info(""+list);
+			logger.info(String.valueOf(list.isEmpty()));
 			logger.info("TEST");
 			model.addAttribute("detailList", list);
+			model.addAttribute("zone", zone);
 			model.addAttribute("station", station);
 		}
 	}
@@ -792,4 +837,54 @@ public class AdminController {
 	public void adminBannerlist() { // 배너관리
 		
 	}
+	
+	
+	//판매장소 추가할 때 필요한 지도
+	@RequestMapping(value="/insertList", method=RequestMethod.GET)
+	public void showInsertMap(
+			String keyword, //검색 이후의 값 전달
+			Model model) {
+		
+		model.addAttribute("keyword", keyword);
+	}
+	
+	//판매장소 추가될 Mapping
+	@RequestMapping(value="/insertList", method=RequestMethod.POST)
+	public String insertList(
+			String keyword,
+			String station,
+			String zone,
+			String spot,
+			String lat,
+			String lng,
+			SellerLoc sellerLoc
+			) {
+		logger.info("TEST : "+station+", "+zone+", "+spot+", "+lat+", "+lng);
+		sellerLoc.setStation(station);
+		sellerLoc.setZone(zone);
+		sellerLoc.setSpot(spot);
+		sellerLoc.setLat(Double.valueOf(lat));
+		sellerLoc.setLng(Double.valueOf(lng));
+		logger.info(String.valueOf(sellerLoc));
+		
+		adminService.insertList(sellerLoc);
+		logger.info("[CHK] : 입력 성공");
+		return "redirect:/admin/loc/list";
+	}
+	
+	
+	@RequestMapping("/deleteList")
+	public String deleteList(
+			String station,
+			String spot,
+			SellerLoc sellerLoc
+			) {
+		sellerLoc.setStation(station);
+		sellerLoc.setSpot(spot);
+		
+		adminService.deleteList(sellerLoc);
+		
+		return "admin/loc/list";
+	}
+	
 }

@@ -8,7 +8,13 @@ public class SellerInfo { // 판매자 계정
 	private String sellerName; // 이름
 	private String sellerImg; // 판매자 사진
 	private String sort; // 유저분류
+<<<<<<< HEAD
 	private String bigdomId; // 빅돔아이디
+=======
+	private String bigdomId;//빅돔아이디
+	
+	
+>>>>>>> refs/heads/master
 	
 	@Override
 	public String toString() {
@@ -16,6 +22,7 @@ public class SellerInfo { // 판매자 계정
 				+ ", sellerName=" + sellerName + ", sellerImg=" + sellerImg + ", sort=" + sort + ", bigdomId="
 				+ bigdomId + "]";
 	}
+<<<<<<< HEAD
 	
 	public String getBigdomId() {
 		return bigdomId;
@@ -23,6 +30,17 @@ public class SellerInfo { // 판매자 계정
 	public void setBigdomId(String bigdomId) {
 		this.bigdomId = bigdomId;
 	}
+=======
+
+	public String getBigdomId() {
+		return bigdomId;
+	}
+
+	public void setBigdomId(String bigdomId) {
+		this.bigdomId = bigdomId;
+	}
+
+>>>>>>> refs/heads/master
 	public String getSellerId() {
 		return sellerId;
 	}

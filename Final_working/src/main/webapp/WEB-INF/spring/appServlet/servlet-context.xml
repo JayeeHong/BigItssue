@@ -23,6 +23,10 @@
 			<exclude-mapping path="/buyer/main" />
 			<exclude-mapping path="/buyer/login" />
 			<exclude-mapping path="/buyer/join" />
+			<exclude-mapping path="/buyer/useid" />
+			<exclude-mapping path="/buyer/useeamil" />
+			<exclude-mapping path="/buyer/useeamil" />
+			<exclude-mapping path="/buyer/mailsender" />
 			<exclude-mapping path="/buyer/notice" />
 			<!-- 인터셉터 빈 등록 -->
 			<beans:bean class="web.interceptor.BuyerInterceptor" />
@@ -56,7 +60,7 @@
 	</interceptors>
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
-<!-- 	<resources mapping="/resources/**" location="/resources/" /> -->
+	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/img/**" location="/resources/image/" />
 	
 	<!-- websocket handler -->

@@ -33,8 +33,12 @@ function noticeDelete(a){
 }
 
 </style>
+<div class="row row-offcanvas row-offcanvas-right" >
+
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
+
     
-	<div class="container">
+	<div class="container" style="float:left; width:70%;">
     <table class="table">
     <tr>
     <td class="tdLeft text-center"><br><b>제목</b></td>
@@ -48,26 +52,24 @@ function noticeDelete(a){
     </tr>
 
     </table>
-    	<div>
-    	
-    ${notice.noticeContent }
-    <br>
-    <c:if test="${notice.noticeImg ne null}">
-    <img style="width: 40%; height: 40%;" src="/img/${notice.noticeImg }">	
-    
-    </c:if>
+	    <div>
+	    	
+	    ${notice.noticeContent }
+	    <br>
+	    <c:if test="${notice.noticeImg ne null}">
+	    <img style="width: 40%; height: 40%;" src="/img/${notice.noticeImg }">	
+	    
+	    </c:if>
     
     	</div>
-	<input type="button" class="btn" value="목록" onclick="noticeListGo()">
+		<input type="button" class="btn" value="목록" onclick="noticeListGo()">
+	
+	
+		<div class="container text-center">
+		<input type="button" class="btn btn-info" value="수정" onclick="noticeUpdate(${notice.noticeNo})">
+		<input type="hidden" value="${notice.noticeNo }" name="noticeNo">
+		<input type="button" class="btn btn-danger" value="삭제" onclick="noticeDelete(${notice.noticeNo})">
+		
+		</div>    
 	</div>
-	<div>
-	
-	</div>
-	
-	<div class="container text-center">
-	<input type="button" class="btn btn-info" value="수정" onclick="noticeUpdate(${notice.noticeNo})">
-	<input type="hidden" value="${notice.noticeNo }" name="noticeNo">
-	<input type="button" class="btn btn-danger" value="삭제" onclick="noticeDelete(${notice.noticeNo})">
-	
-	</div>    
-    
+ </div>

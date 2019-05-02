@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import web.dao.face.BuyerDao;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.service.face.BuyerService;
@@ -193,5 +194,51 @@ public class BuyerServiceImpl implements BuyerService {
 		return false;
 		
 	}
+  
+	@Override
+	public List<BookListInfo> getBookListInfoBySellerId(String sellerId) {
+		return buyerDao.selectBookListInfoBySellerId(sellerId);
+	}
+
+	@Override
+	public void booking(Reservation reservationInfo) {
+		 buyerDao.insertResrvation(reservationInfo);
+		 buyerDao.decreaseBookNumber(reservationInfo);
+		
+	}
+
+	@Override
+	public List<Reservation> getResrvaionList(Reservation reservationInfo) {
+		return buyerDao.selectResrvation(reservationInfo);
+	}
+
+	@Override
+	public int getResrvaionCnt(Reservation reservationInfo) {
+		return buyerDao.selectResrvaionCnt(reservationInfo);
+	}
+
+	@Override
+	public List<Reservation> getResrvaionListByBuyerId(String buyerId) {
+		return buyerDao.selectResrvationByBuyerId(buyerId);
+	}
+
+	@Override
+	public void setPickupDate(Reservation bookList) {
+		buyerDao.updatePickupDate(bookList);	
+	}
+
+	@Override
+	public List<SellerLoc> getZoneList() {
+		return buyerDao.selectZoneList();
+	}
+
+	@Override
+	public List<SellerLoc> getStationList() {
+		return buyerDao.selectStationList();
+	}
+  
+  
+  
 
 }
+

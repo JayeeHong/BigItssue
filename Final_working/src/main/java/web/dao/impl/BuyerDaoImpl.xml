@@ -103,14 +103,59 @@
 		WHERE locNo = #{locNo }
 	</select>
 	
-	<select id="selectBookListInfo" parameterType="int" resultType="web.dto.BookListInfo">
+	<select id="selectBookListInfoBySellerId" parameterType="String" resultType="web.dto.BookListInfo">
 		SELECT * FROM bookListInfo
-		WHERE magazineNo = #{magazineNo }
+		WHERE sellerId = #{sellerId }
+		ORDER BY month
 	</select>
 	
+	<!-- 예약하기 -->
+	<insert id="insertResrvation" parameterType="web.dto.Reservation">
+		INSERT INTO Reservation(reserveNo, sellerId, buyerId, zone, station, spot, bookMonth, bookNumber, status, total, pickupDate, bookDate)
+		VALUES(Reservation_seq.nextval, #{sellerId }, #{buyerId }, #{zone }, #{station }, #{spot }, #{bookMonth }, #{bookNumber }, #{status }, #{total }, #{pickupDate },#{bookDate } )
+	</insert>
+	
+	<!-- 예약 buyerId,sellerId로 검색 -->
+	<select id="selectResrvation" parameterType="web.dto.Reservation" resultType="web.dto.Reservation">
+		SELECT * FROM Reservation
+		WHERE buyerId = #{buyerId } AND sellerId = #{sellerId }
+	</select>
+	
+	<!-- 예약 buyerId,sellerId로 cnt개수검색 -->
+	<select id="selectResrvaionCnt" parameterType="web.dto.Reservation" resultType="int">
+		SELECT count(*) FROM Reservation
+		WHERE buyerId = #{buyerId } AND sellerId = #{sellerId }
+	</select>
+	
+	<!-- 예약 buyerId로 검색 -->
+	<select id="selectResrvationByBuyerId" parameterType="String" resultType="web.dto.Reservation">
+		SELECT * FROM Reservation
+		WHERE buyerId = #{buyerId }
+	</select>
+	
+	<update id="decreaseBookNumber" parameterType="web.dto.Reservation">
+		UPDATE BookListInfo
+		SET circulation=circulation-#{bookNumber}
+		WHERE sellerId=#{sellerId } and month=#{bookMonth }
+	</update>
+
 	<select id="selectBuyerIdAndPw" parameterType="web.dto.BuyerInfo" resultType="int">
 		SELECT count(*) FROM buyerInfo
 		WHERE buyerId=#{buyerId } AND buyerPw=#{buyerPw }
 	</select>
 	
+	<update id="updatePickupDate" parameterType="web.dto.Reservation">
+		UPDATE reservation
+		SET status='예약취소(시간초과)'
+		WHERE reserveNo=#{reserveNo }
+	</update>
+	
+	<select id="selectZoneList" resultType="web.dto.SellerLoc">
+		SELECT DISTINCT zone FROM sellerLoc
+	</select>
+	
+	<select id="selectStationList" resultType="web.dto.SellerLoc">
+		SELECT DISTINCT station FROM sellerLoc
+	</select>
+
 </mapper>

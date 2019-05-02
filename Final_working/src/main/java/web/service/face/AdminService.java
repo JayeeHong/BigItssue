@@ -166,5 +166,21 @@ public interface AdminService {
 	// 해당 판매자의 보유 빅이슈 정보 추가
 	public void putBookListInfoAtadminBook(BookListInfo bli);
 
+	
+	//판매자 정보관리 수정
+	public void adminSellserUpdate(SellerLoc sellerLoc);
+
+	public String getSellerName(SellerLoc locInfo);
+
+	public void changeSellerName(HashMap hm);
+
+
+
+	//판매 장소 추가하기
+	public void insertList(SellerLoc sellerLoc);
+  
+  //판매 장소 삭제하기
+  public void deleteList(SellerLoc sellerLoc);
+
 }
 

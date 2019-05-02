@@ -4,6 +4,7 @@ import java.util.List;
 
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.util.SellerLocPaging;
@@ -40,9 +41,36 @@ public interface BuyerService {
 	
 	public SellerLoc getSellerLoc(int sellerLoc);
 	
+
+	public List<BookListInfo> getBookListInfoBySellerId(String sellerId);
+
 	public BookListInfo getBookListInfo(int magazineNo);
 
 	// 비밀번호 확인
 	public boolean confirmpw(BuyerInfo buyerInfo);
+
+	
+	//예약하기
+	public void booking(Reservation reservationInfo);
+	
+	
+	//예약 buyerId,sellerId로 검색
+	public List<Reservation> getResrvaionList(Reservation reservationInfo);
+	//예약 buyerId,sellerId로 개수 검색
+	public int getResrvaionCnt(Reservation reservationInfo);
+	
+	//예약 buerId로 검색
+	public List<Reservation> getResrvaionListByBuyerId(String buyerId);
+	
+	// 현재시간이 디비에 저장된 시간보다 클 때 예약취소로 상태 변경
+	public void setPickupDate(Reservation bookList);
+	
+	//중복뺀 zoneList얻기
+	public List<SellerLoc> getZoneList();
+	
+	//중복뺸 stationList얻기
+	public List<SellerLoc> getStationList();
+	
+	
 	
 }

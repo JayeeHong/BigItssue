@@ -4,8 +4,16 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+	//페이지 이동
 	$('#insertBtn').click(function() {
-		console.log('체크');
+		$(location).attr("href", "/insertList?zone=${zone }");
+	});
+	
+	$(".btn-danger").click(function() {
+		var tr = $(this).parent().parent();
+		var td = tr.children();
+
+		$(location).attr("href", "/deleteList?station="+td.eq(1).text());
 	});
 });
 </script>
@@ -50,8 +58,8 @@ $(document).ready(function() {
   <c:if test="${locList ne null}">
   <c:forEach items="${locList }" var="list">
   	<tr>
-  	  <td scope="row"><button></button></td>
-  	  <td scope="row"><a href="/admin/loc/detail?station=${list.station }">${list.station }</a></td>
+  	  <td scope="row"><button class="btn btn-sm btn-danger">x</button></td>
+  	  <td scope="row"><a href="/admin/loc/detail?zone=${zone }&station=${list.station }">${list.station }</a></td>
   	</tr>
 	
   </c:forEach>

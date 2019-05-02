@@ -5,14 +5,14 @@
 <jsp:include page="header.jsp" />
 
 <body>
-<h1>채팅 ${chatRoomNo }번방</h1>
+<h3 style="text-align:center;">채팅 ${chatRoomNo }번방</h3>
 
 <!-- 채팅방 나가기 -->
-<button id="btnRoomOut" class="btn btn-danger">채팅방 나가기</button>
+<!-- <button id="btnRoomOut" class="btn btn-danger">채팅방 나가기</button> -->
 
 <!-- 부트스트랩 -->
 <div class="container">
-<h3 class=" text-center">Messaging</h3>
+<!-- <h3 class=" text-center">Messaging</h3> -->
 <div class="messaging">
       <div class="inbox_msg">
         <div class="inbox_people">

@@ -375,5 +375,32 @@ public class AdminServiceImpl implements AdminService{
 		adminDao.insertBookListInfoAtadminBook(bli);
 	}
 
+	@Override
+	public void adminSellserUpdate(SellerLoc sellerLoc) {
+		adminDao.adminSellserUpdate(sellerLoc);
+	}
+
+	@Override
+	public String getSellerName(SellerLoc locInfo) {
+		
+		return adminDao.getSellerName(locInfo);
+	}
+
+	@Override
+	public void changeSellerName(HashMap hm) {
+		adminDao.changeSellerName(hm);
+		
+	}
+
+  @Override
+	public void insertList(SellerLoc sellerLoc) {
+		adminDao.insertList(sellerLoc);
+	}
+  
+	@Override
+	public void deleteList(SellerLoc sellerLoc) {
+		adminDao.deleteList(sellerLoc);
+	}
+	
 }
 

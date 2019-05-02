@@ -6,13 +6,19 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#btnAdd").click(function() {
-		console.log('체크');
+		$(location).attr("href", "/insertList?zone=${zone }&station=${station }");
 	});
 	
-	$("#btnReturn").click(function() {
+	$("#returnBtn").click(function() {
 		window.history.back();
 	});
 	
+	$(".btn-danger").click(function() {
+		var tr = $(this).parent().parent();
+		var td = tr.children();
+
+		$(location).attr("href", "/deleteList?station=${station }&spot="+td.eq(0).text());
+	});
 });
 
 //새로운 장소 추가하기
@@ -39,32 +45,23 @@ function mapView(locNo){
     </tr>
   </thead>
   <tbody>
-  <c:if test="${detailList eq null }">
+  <c:if test="${empty detailList }">
   <script type="text/javascript">
   	window.history.back();
   </script>
   </c:if>
-  <c:if test="${detailList ne null}">
+  <c:if test="${!empty detailList}">
   <c:forEach items="${detailList }" var="list">
   	<tr>
-  	  <td scope="row"></td>
-  	  <td scope="row"></td>
-  	  <td scope="row"></td>
+  	  <td scope="row">${list.get("SPOT") }</td>
+  	  <td scope="row">${list.get("SELLERNAME") }</td>
+  	  <td scope="row">${list.get("SELLERID") }</td>
   	  <td scope="row">이메일</td>
-  	  <td scope="row"><button></button></td>
+  	  <td scope="row"><button id="deleteBtn" class="btn btn-sm btn-danger">x</button></td>
   	</tr>
   </c:forEach>
   </c:if>
-  <tr>
-  	<td scope="row"><button id="btnAdd">추가</button></td>
-  	<td scope="row"></td>
-  	<td scope="row"></td>
-  	<td scope="row"></td>
-  	<td scope="row"></td>
-  </tr>
   </tbody>
 </table>
-${detailList }<br>
-${detailList.get(0) }
-<button>수정완료</button>
-<button id="btnReturn">돌아가기</button>
+<button id="btnAdd">추가</button>
+<button id="returnBtn">돌아가기</button>
