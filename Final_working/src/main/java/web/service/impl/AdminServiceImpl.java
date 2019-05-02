@@ -145,7 +145,12 @@ public class AdminServiceImpl implements AdminService{
 	public void insertList(SellerLoc sellerLoc) {
 		adminDao.insertList(sellerLoc);
 	}
+  
+	@Override
+	public void deleteList(SellerLoc sellerLoc) {
+		adminDao.deleteList(sellerLoc);
+	}
 	
-
 }
+
 

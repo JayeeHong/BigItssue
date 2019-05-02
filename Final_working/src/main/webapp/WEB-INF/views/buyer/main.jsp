@@ -26,9 +26,10 @@ function booking(locNo){
 }
 //판매처 지도 열기
 function mapView(locNo){
-	
+	var w = (screen.availWidth)/3;
+	var h = (screen.availHeight)/2.5;
 	//팝업창 새로 띄우기
-	window.open("/sellerLocMap?locNo="+locNo, "판매처지도", "width=400, height=300, left=100, top=50");
+	window.open("/sellerLocMap?locNo="+locNo, "판매처지도", "width="+w+'px'+", height="+h+'px'+", left=100, top=50");
 	
 }
 //채팅창 열기

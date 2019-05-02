@@ -143,4 +143,16 @@
 		INSERT INTO sellerLoc(locNo, zone, station, spot, lat, lng)
 		VALUES(seq_locNo.nextval, #{zone }, #{station }, #{spot }, #{lat }, #{lng })
 	</insert>
+	
+	<delete id="deleteList" parameterType="web.dto.SellerLoc">
+		DELETE FROM sellerLoc
+		<choose>
+			<when test="spot == null || spot == ''">
+				WHERE station = #{station }
+			</when>
+			<otherwise>
+				WHERE station = #{station } AND spot = #{spot }
+			</otherwise> 
+		</choose>
+	</delete>
 </mapper>

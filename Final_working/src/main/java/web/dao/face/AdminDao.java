@@ -60,7 +60,11 @@ public interface AdminDao {
 
 	public void changeSellerName(HashMap hm);
 
+	//판매 지역 추가
 	public void insertList(SellerLoc sellerLoc);
+
+	//판매 지역 삭제
+	public void deleteList(SellerLoc sellerLoc);
 
 }
 
