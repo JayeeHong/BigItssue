@@ -51,6 +51,7 @@ public interface AdminService {
 
 	// 빅돔 정보와 빅돔에 따른 판매자 정보 불러오기
 	public List<BigdomSellerInfo> getBigdomSellerInfo();
+
 	
 	//판매자 정보관리 수정
 	public void adminSellserUpdate(SellerLoc sellerLoc);
@@ -58,6 +59,11 @@ public interface AdminService {
 	public String getSellerName(SellerLoc locInfo);
 
 	public void changeSellerName(HashMap hm);
+
+
+
+	//판매 장소 추가하기
+	public void insertList(SellerLoc sellerLoc);
 
 }
 

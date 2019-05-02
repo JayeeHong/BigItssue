@@ -53,12 +53,12 @@ public interface AdminDao {
 	// 빅돔 정보와 빅돔에 따른 빅돔 정보 조회 쿼리
 	public List<BigdomSellerInfo> selectBigdomSellerInfo();
 
+
 	public void adminSellserUpdate(SellerLoc sellerLoc);
 
 	public String getSellerName(SellerLoc locInfo);
 
 	public void changeSellerName(HashMap hm);
 
-	
 }
 

@@ -141,5 +141,11 @@ public class AdminServiceImpl implements AdminService{
 		
 	}
 
+  @Override
+	public void insertList(SellerLoc sellerLoc) {
+		adminDao.insertList(sellerLoc);
+	}
+	
+
 }
 
