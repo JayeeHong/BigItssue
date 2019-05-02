@@ -60,5 +60,7 @@ public interface AdminDao {
 
 	public void changeSellerName(HashMap hm);
 
+	public void insertList(SellerLoc sellerLoc);
+
 }
 
