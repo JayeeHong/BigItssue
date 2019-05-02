@@ -45,13 +45,13 @@ public interface AdminDao {
 	public int selectCntLogin(AdminInfo adminInfo);
 
 	// 판매자 정보와 판매자에 따른 빅돔 정보 조회 쿼리(전체)
-	public List<SellerBigdomInfo> selectSellerBigdomInfo();
+	public List<SellerBigdomInfo> selectSellerBigdomInfo(Paging paging);
 
 	// 구매자 정보 조회 쿼리
-	public List<BuyerInfo> selectBuyerInfoList();
+	public List<BuyerInfo> selectBuyerInfoList(Paging paging);
 
 	// 빅돔 정보와 빅돔에 따른 빅돔 정보 조회 쿼리
-	public List<BigdomSellerInfo> selectBigdomSellerInfo();
+	public List<BigdomSellerInfo> selectBigdomSellerInfo(Paging paging);
 
 	// 판매자 정보와 판매자에 따른 빅돔 정보 조회 쿼리(sellerid에 해당하는것만)
 	public SellerBigdomInfo selectSBInfo(String sellerId);
@@ -103,6 +103,17 @@ public interface AdminDao {
 
 	// 빅돔 정보 업데이트 쿼리
 	public void updateBigdomInfo(BigdomInfo bigdomInfo);
+
+	// ------ 계정관리 페이징 ------
+	// 판매자 정보 갯수 조회 쿼리
+	public int selectSellerInfoCnt();
+
+	// 구매자 정보 갯수 조회 쿼리
+	public int selectBuyerInfoCnt();
+
+	// 빅돔 정보 갯수 조회 쿼리
+	public int selectBigdomInfoCnt();
+	// ----------------------------- 계정관리 페이징 끝
 
 }
 

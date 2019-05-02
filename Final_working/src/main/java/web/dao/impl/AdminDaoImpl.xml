@@ -94,24 +94,43 @@
 			AND adminPw=#{adminPw }
 	</select>
 	
-	<select id="selectSellerBigdomInfo" resultType="web.dto.SellerBigdomInfo">
-		SELECT si.*, sl.bigdomId
-		FROM sellerInfo si
-		LEFT OUTER JOIN sellerLoc sl
-		ON si.sellerId = sl.sellerId
+	<select id="selectSellerBigdomInfo" parameterType="web.util.Paging" resultType="web.dto.SellerBigdomInfo">
+		SELECT * FROM (
+		    SELECT rownum rnum, B.* FROM (
+		        SELECT si.*, sl.bigdomId as br
+		        FROM sellerInfo si
+		        LEFT OUTER JOIN sellerLoc sl
+		        ON si.sellerId = sl.sellerId
+		        ORDER BY si.sellerid desc
+		    ) B
+		    ORDER BY rnum
+		) 
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
 	</select>
 	
 	<select id="selectBuyerInfoList" resultType="web.dto.BuyerInfo">
-		SELECT * FROM buyerInfo
-		ORDER BY buyerId
+		SELECT * FROM (
+		    SELECT rownum rnum, B.* FROM (
+		        SELECT * FROM buyerInfo
+				ORDER BY buyerId desc
+		    ) B
+		    ORDER BY rnum
+		) 
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
 	</select>
 	
 	<select id="selectBigdomSellerInfo" resultType="web.dto.BigdomSellerInfo">
-		SELECT b.bigdomId, b.bigdomPw, s.sellerId
-		FROM bigdomInfo b
-		LEFT OUTER JOIN sellerInfo s
-		ON b.bigdomId = s.bigdomId
-		ORDER BY b.bigdomid
+		SELECT * FROM (
+		    SELECT rownum rnum, B.* FROM (
+		        SELECT b.bigdomId, b.bigdomPw, s.sellerId
+				FROM bigdomInfo b
+				LEFT OUTER JOIN sellerInfo s
+				ON b.bigdomId = s.bigdomId
+				ORDER BY b.bigdomid desc
+		    ) B
+		    ORDER BY rnum
+		) 
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
 	</select>
 	
 	<select id="selectSBInfo" resultType="web.dto.SellerBigdomInfo" parameterType="String">
@@ -213,5 +232,19 @@
 		SET bigdomPw=#{bigdomPw }
 		WHERE bigdomId=#{bigdomId }
 	</update>
+	
+	<!-- ****** 계정관리 페이징 ****** -->
+	<select id="selectSellerInfoCnt" resultType="int">
+		SELECT count(*) FROM sellerInfo
+	</select>
+	
+	<select id="selectBuyerInfoCnt" resultType="int">
+		SELECT count(*) FROM buyerInfo
+	</select>
+	
+	<select id="selectBigdomInfoCnt" resultType="int">
+		SELECT count(*) FROM bigdomInfo
+	</select>
+	<!-- ***************************** 계정관리 페이징 끝 --> 
 	
 </mapper>

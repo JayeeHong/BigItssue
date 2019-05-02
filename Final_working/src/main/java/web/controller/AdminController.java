@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -54,7 +55,7 @@ public class AdminController {
 			
 		}
 		
-		return "redirect:/admin/main";
+		return "redirect:/admin/info/seller";
 	}
 	
 	@RequestMapping(value="/admin/logout", method=RequestMethod.GET)
@@ -65,8 +66,29 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/info/seller", method=RequestMethod.GET)
-	public void infoSeller(Model model) { // 계정관리-판매자
-		List<SellerBigdomInfo> sellerbigdomList = adminService.getSellerBigdomInfo();
+	public void infoSeller(
+			Model model, 
+			HttpServletRequest req) { // 계정관리-판매자
+		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getSellerInfoCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getSellerInfoTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		List<SellerBigdomInfo> sellerbigdomList = adminService.getSellerBigdomInfo(paging);
 		
 		// sellerloc에 해당 판매자가 있는지 조회
 		//	-> 비활성화 시킬때 null이 들어감
@@ -76,6 +98,12 @@ public class AdminController {
 //			logger.info("bbbbbb:::::::::"+String.valueOf(sellerStatus));
 			sellerStatusList.add(i, sellerStatus);
 		}
+		
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		// -------------------
 		
 		model.addAttribute("sellerStatusList", sellerStatusList);
 		model.addAttribute("sellerbigdomList", sellerbigdomList);
@@ -158,7 +186,7 @@ public class AdminController {
 	@RequestMapping(value="/admin/info/deactivateSeller", method=RequestMethod.GET)
 	public String deactivateSeller(SellerBigdomInfo sbInfo) { // 계정관리-판매자_비활성화
 		
-//		logger.info(sbInfo.toString());
+		logger.info(sbInfo.toString());
 		// sellerid로 해당 판매자 정보 삭제
 //		adminService.sellerDelete(sbInfo.getSellerId());
 		
@@ -189,8 +217,34 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/info/buyer", method=RequestMethod.GET)
-	public void infoBuyer(Model model) { // 계정관리-구매자
-		List<BuyerInfo> buyerList = adminService.getBuyerInfoList();
+	public void infoBuyer(
+			Model model, 
+			HttpServletRequest req) { // 계정관리-구매자
+		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getBuyerInfoCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getBuyerInfoTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		List<BuyerInfo> buyerList = adminService.getBuyerInfoList(paging);
+		
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
 		
 		model.addAttribute("buyerList", buyerList);
 	}
@@ -241,8 +295,35 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/info/bigdom", method=RequestMethod.GET)
-	public void infoBigdom(Model model) { // 계정관리-빅돔
-		List<BigdomSellerInfo> bigdomsellerList = adminService.getBigdomSellerInfo();
+	public void infoBigdom(
+			Model model, 
+			HttpServletRequest req) { // 계정관리-빅돔
+		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getBigdomInfoCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getBigdomInfoTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		List<BigdomSellerInfo> bigdomsellerList = adminService.getBigdomSellerInfo(paging);
+		
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		// -------------------
 		
 		model.addAttribute("bigdomsellerList", bigdomsellerList);
 	}

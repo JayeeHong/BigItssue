@@ -3,6 +3,8 @@ package web.service.face;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
@@ -45,13 +47,13 @@ public interface AdminService {
 	public boolean login(AdminInfo adminInfo);
 
 	// 판매자 정보와 판매자에 따른 빅돔 정보 불러오기(전체)
-	public List<SellerBigdomInfo> getSellerBigdomInfo();
+	public List<SellerBigdomInfo> getSellerBigdomInfo(Paging paging);
 
 	// 구매자 정보 불러오기
-	public List<BuyerInfo> getBuyerInfoList();
+	public List<BuyerInfo> getBuyerInfoList(Paging paging);
 
 	// 빅돔 정보와 빅돔에 따른 판매자 정보 불러오기
-	public List<BigdomSellerInfo> getBigdomSellerInfo();
+	public List<BigdomSellerInfo> getBigdomSellerInfo(Paging paging);
 
 	// 판매자 정보와 판매자에 따른 빅돔 정보 불러오기(sellerid에 해당하는것만)
 	public SellerBigdomInfo getSellerBigdomInfo(String sellerId);
@@ -103,6 +105,26 @@ public interface AdminService {
 
 	// 빅돔 정보 수정
 	public void setBigdomInfo(BigdomInfo bigdomInfo);
+
+	// ----- 계정관리 페이징 -----
+	// 요청파라미터로 현재페이지 받기-계정관리_판매자
+	public int getSellerInfoCurPage(HttpServletRequest req);
+
+	// 해당게시글 수 불러오기-계정관리_판매자
+	public int getSellerInfoTotalCount();
+
+	// 요청파라미터로 현재페이지 받기-계정관리_구매자
+	public int getBuyerInfoCurPage(HttpServletRequest req);
+
+	// 해당게시글 수 불러오기-계정관리_판매자
+	public int getBuyerInfoTotalCount();
+
+	// 요청파라미터로 현재페이지 받기-계정관리_빅돔
+	public int getBigdomInfoCurPage(HttpServletRequest req);
+
+	// 해당게시글 수 불러오기-계정관리_빅돔
+	public int getBigdomInfoTotalCount();
+	// --------------------------- 계정관리 페이징 끝
 
 }
 

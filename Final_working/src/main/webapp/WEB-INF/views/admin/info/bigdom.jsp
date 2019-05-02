@@ -56,9 +56,15 @@ function upBigdom(bigdomId) {
 		</thead>
 		
 		<tbody>
-			<c:forEach var="i" begin="0" end="${bigdomsellerList.size()-1 }" step="1">
+			<c:forEach varStatus="status" var="i" begin="0" end="${bigdomsellerList.size()-1 }" step="1">
 			<tr>
-				<td>${i+1 }</td>
+				<c:if test="${curPage eq 0 }">
+				<td>${(totalCount-status.index)-((1-1)*10) }</td>
+				</c:if>
+				<c:if test="${curPage ne 0 }">
+				<td>${(totalCount-status.index)-((curPage-1)*10) }</td>
+				</c:if>
+				
 				<td>${bigdomsellerList[i].bigdomId }</td>
 				<td>${bigdomsellerList[i].bigdomPw }</td>
 				<td>${bigdomsellerList[i].sellerId }</td>
@@ -69,6 +75,8 @@ function upBigdom(bigdomId) {
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<jsp:include page="/WEB-INF/views/admin/info/bigdom/paging.jsp"/>
 
 </div>
 

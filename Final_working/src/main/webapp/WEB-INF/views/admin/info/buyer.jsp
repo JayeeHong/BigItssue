@@ -68,9 +68,15 @@ function delBuyer(buyerId) {
 		</thead>
 		
 		<tbody>
-			<c:forEach var="i" begin="0" end="${buyerList.size()-1 }" step="1">
+			<c:forEach varStatus="status" var="i" begin="0" end="${buyerList.size()-1 }" step="1">
 			<tr>
-				<td>${i+1 }</td>
+				<c:if test="${curPage eq 0 }">
+				<td>${(totalCount-status.index)-((1-1)*10) }</td>
+				</c:if>
+				<c:if test="${curPage ne 0 }">
+				<td>${(totalCount-status.index)-((curPage-1)*10) }</td>
+				</c:if>
+				
 				<td>${buyerList[i].buyerName }</td>
 				<td>${buyerList[i].buyerId }</td>
 				<td>${buyerList[i].buyerPw }</td>
@@ -84,6 +90,8 @@ function delBuyer(buyerId) {
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<jsp:include page="/WEB-INF/views/admin/info/buyer/paging.jsp"/>
 
 </div>
 
