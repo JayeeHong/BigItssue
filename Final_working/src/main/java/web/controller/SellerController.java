@@ -3,7 +3,9 @@ package web.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,6 +24,7 @@ import web.dto.Chat;
 import web.dto.Message;
 import web.dto.Reservation;
 import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.dto.User;
@@ -375,7 +378,7 @@ public class SellerController {
 	@RequestMapping(value="/seller/review/list", method=RequestMethod.GET)
 	public void review(Review review, Model model, HttpServletRequest req) {
 		
-		logger.info("후기 게시판");
+		logger.info("후기 게시판 리스트");
 		
 		//현재 페이지 번호 얻기
 		int curPage = sellerService.getCurPage(req);
@@ -411,6 +414,8 @@ public class SellerController {
 	@RequestMapping(value="/seller/review/write", method=RequestMethod.POST)
 	public String reviewWriteProc(Review review, HttpSession session) {
 		
+		logger.info("후기 글쓰기");
+		
 		review.setSellerId( (String)session.getAttribute("sellerId") );
 		
 		sellerService.write(review);
@@ -423,14 +428,21 @@ public class SellerController {
 		
 		logger.info("후기 상세페이지");
 		
-		int reviewno = Integer.parseInt(req.getParameter("reviewno"));
+		int reviewno = Integer.parseInt(req.getParameter("reviewNo"));
 		review.setReviewNo(reviewno);
+//		logger.info("리뷰::::"+review.toString());
 		
 		//게시글 조회 수행
-		Review view = sellerService.view(reviewno);
+		Review reviewView = sellerService.view(reviewno);
 		
 		//MODEL 전달
-		model.addAttribute("reviewView", view);
+		model.addAttribute("reviewView", reviewView);
+		
+		
+//		//댓글 리스트 MODEL 추가
+//		List<ReviewReply> replyList = sellerService.getReplyList(reviewno);
+////		for(ReviewReply r : replyList) System.out.println(r);
+//		model.addAttribute("replyList", replyList);
 				
 	}
 	
@@ -467,4 +479,102 @@ public class SellerController {
 		return "redirect:/seller/review/list";
 	}
 
+	@RequestMapping(value="/seller/review/mylist", method=RequestMethod.GET)
+	public void reviewMyList(Review review, Model model, HttpSession session, HttpServletRequest req) {
+		
+		logger.info("내가 쓴 후기 ");
+		
+		//현재 페이지 번호 얻기
+		int curPage = sellerService.getCurPage(req);
+		
+		//내 후기글 수 얻기
+		review.setSellerId( (String)session.getAttribute("sellerId") );
+		int myTotalCount = sellerService.getMyTotalCount(review);
+		
+		//페이지 객체 생성
+		Paging paging = new Paging(myTotalCount, curPage);
+		paging.setSellerId( (String)session.getAttribute("sellerId") );
+		
+		//페이징객체 MODEL로 추가
+		model.addAttribute("paging", paging);
+		
+		//내 후기글 목록 MODEL로 추가
+		List<Review> reviewMylist = sellerService.getPagingMyList(paging);
+		model.addAttribute("reviewMylist", reviewMylist);
+
+	}
+	
+	@RequestMapping(value="/seller/review/reply/list", method=RequestMethod.GET)
+	public String replyList(int reviewNo, Model model) {
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
+//		for(ReviewReply r : replyList) System.out.println(r);
+		
+//		model.addAllAttributes(replyList);
+		
+		model.addAttribute("replyList", replyList);
+		
+		return "jsonView";
+	}
+		
+	@RequestMapping(value="/seller/review/reply/insert", method=RequestMethod.POST)
+	public String replyWrite(ReviewReply reviewReply, Model model) {
+		
+		logger.info("댓글 달기");
+		System.out.println(reviewReply.toString());
+		 
+//		reviewReply.setWriter( (String) session.getAttribute("sellerId") );
+		
+		//댓글 입력
+		sellerService.replyWrite(reviewReply);
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = sellerService.getReplyList(reviewReply.getReviewNo());
+
+		model.addAttribute("replyList", replyList);
+		
+//		return "redirect:/seller/review/view?reviewno=" + reviewReply.getReviewNo();
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/seller/review/reply/delete", method=RequestMethod.POST)
+	public String replyDelete(int replyNo, int reviewNo, Model model) {
+		
+		logger.info("댓글 삭제");
+//		logger.info(reviewReply.toString());
+		
+//		int replyno = Integer.parseInt( req.getParameter("replyNo") );
+//		System.out.println(replyNo);
+//		System.out.println(reviewNo);
+		
+		sellerService.replyDelete(replyNo);
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
+		
+		model.addAttribute("replyList", replyList);
+		
+		return "jsonView";
+	}
+
+	@RequestMapping(value="/seller/review/reply/update", method=RequestMethod.POST)
+	public String replyUpdate(int replyNo, String updateContent, int reviewNo, ReviewReply reviewReply, Model model) {
+		
+		logger.info("댓글 수정");
+		
+		reviewReply.setReplyNo(replyNo);
+		reviewReply.setReplyContent(updateContent);
+		reviewReply.setReviewNo(reviewNo);
+		
+		sellerService.replyUpdate(reviewReply);
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
+		
+		model.addAttribute("replyList", replyList);
+		
+		return "jsonView";
+		
+	}
 }

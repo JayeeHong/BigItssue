@@ -26,6 +26,7 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
+import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
 import web.util.Paging;
@@ -177,15 +178,58 @@ public class AdminController {
 			,SellerLoc sellerloc
 			) {
 		
-		SellerLoc info = adminService.getSellerInfo(sellerloc);
+		SellerLoc locInfo = adminService.getSellerInfo(sellerloc);
 		
-		model.addAttribute("sellerInfo", info);
+		String sellerName = adminService.getSellerName(locInfo);
+		
+		model.addAttribute("sellerInfo", locInfo);
+		model.addAttribute("sellerName", sellerName);
 	}
 	
 	@RequestMapping(value="/admin/seller/view", method=RequestMethod.POST)
-	public String adminSellserUpdate() {
+	public String adminSellserUpdate(SellerLoc sellerLoc,
+									String arrZone,
+									String sellerName) {
 		
-		return "redirect:/admin/seller/view";
+		logger.info(sellerLoc.toString());
+		logger.info(arrZone);
+		
+		String[] a = arrZone.split(","); //arrZone의 값을 a라는 배열에 ','로 나누어 저장한다.
+		String zoneString = "";
+		
+		for(String b : a) { //배열 a를 String b로 하나씩 나눈다.
+			String c = b.replace("호선", ""); //나눈 b에 "호선"이라는 단어가 붙는다면 없애고 c라는 변수에담는다.
+			zoneString += c; //c를 zoneString에 담는다.
+			zoneString += "/";//   '/'를 붙인다.
+		}
+		
+//		logger.info(zoneString);//확인용
+		String zone = zoneString.substring(0, zoneString.length()-1);// 맨마지막에 붙는 '/'를 지운다.
+		sellerLoc.setZone(zone);//완성된 zone을 sellerLoc객체에 담는다.
+		
+		String sellerTimeS = sellerLoc.getStartTime1();//sellerTimeS에 값을 저장한다.
+				sellerTimeS += sellerLoc.getStartTime2();	
+		sellerLoc.setSellerTimeS(sellerTimeS);
+				
+		
+		String sellerTimeE = sellerLoc.getEndTime1(); //sellerTimesE에 값을 저장한다.
+				sellerTimeE += sellerLoc.getEndTime2();	
+		sellerLoc.setSellerTimeE(sellerTimeE);
+				
+//		logger.info("완성된 sellerLoc확인용"+sellerLoc.toString());
+		
+		//sellerLoc DB변경
+		adminService.adminSellserUpdate(sellerLoc);
+		
+		HashMap hm = new HashMap<String, SellerLoc>();
+		
+		hm.put("sellerName", sellerName);
+		hm.put("sellerLoc", sellerLoc);
+		
+		//sellerInfo의 sellerName변경
+		adminService.changeSellerName(hm);
+		
+		return "redirect:/admin/seller/view?locNo="+sellerLoc.getLocNo();
 	}
 	
 	
@@ -454,10 +498,14 @@ public class AdminController {
 	@RequestMapping("/deleteList")
 	public String deleteList(
 			String station,
-			String spot
+			String spot,
+			SellerLoc sellerLoc
 			) {
+		sellerLoc.setStation(station);
+		sellerLoc.setSpot(spot);
 		
-		logger.info("TEST : "+station+", "+spot);
+		adminService.deleteList(sellerLoc);
+		
 		return "admin/loc/list";
 	}
 	

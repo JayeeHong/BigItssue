@@ -17,7 +17,7 @@ $(document).ready(function() {
 		var tr = $(this).parent().parent();
 		var td = tr.children();
 
-		$(location).attr("href", "/deleteList?station=null&spot="+td.eq(0).text());
+		$(location).attr("href", "/deleteList?station=${station }&spot="+td.eq(0).text());
 	});
 });
 

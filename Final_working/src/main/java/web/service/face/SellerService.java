@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import web.dto.BookListInfo;
 import web.dto.Reservation;
 import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.dto.User;
@@ -80,5 +81,23 @@ public interface SellerService {
 
 	//후기 글 삭제
 	public void delete(int reviewno);
+
+	//내 후기글 수 얻기
+	public int getMyTotalCount(Review review);
+
+	//내 후기글 페이징 리스트 얻기
+	public List<Review> getPagingMyList(Paging paging);
+
+	//후기 댓글 리스트 얻기
+	public List<ReviewReply> getReplyList(int reviewno);
+
+	//후기 댓글 쓰기
+	public void replyWrite(ReviewReply reviewReply);
+
+	//후기 댓글 삭제
+	public void replyDelete(int replyNo);
+
+	//후기 댓글 수정
+	public void replyUpdate(ReviewReply reviewReply);
 
 }

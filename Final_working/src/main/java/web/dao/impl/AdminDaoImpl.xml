@@ -83,6 +83,7 @@
 	set noticeTitle = #{noticeTitle },
 		noticeContent = #{noticeContent },
 		noticeImg = #{noticeImg }
+	where noticeNo = #{noticeNo}
 	
 
 </update>
@@ -112,9 +113,46 @@
 		LEFT OUTER JOIN sellerLoc sl
 		ON b.bigdomId = sl.bigdomId
 	</select>
+	
+	<update id="adminSellserUpdate" parameterType="web.dto.SellerLoc">
+		UPDATE sellerLoc
+		SET zone = #{zone },
+			station = #{station },
+			spot = #{spot },
+			sellerTimeS = #{sellerTimeS },
+			sellerTimeE = #{sellerTimeE },
+			sellerCard = #{sellerCard }
+		WHERE locNo = #{locNo }
+	</update>
+	
+	<select id="getSellerName" parameterType="web.dto.SellerLoc" resultType="String">
+		SELECT SELLERNAME FROM SELLERINFO
+		where sellerId = #{sellerId }
+	
+	</select>
+
+	<update id="changeSellerName" parameterType="hashMap">
+		Update SellerInfo
+		set sellerName = #{sellerName }
+		where sellerId = #{sellerLoc.sellerId }
+	
+	</update>
+	
 
 	<insert id="insertList" parameterType="web.dto.SellerLoc">
 		INSERT INTO sellerLoc(locNo, zone, station, spot, lat, lng)
 		VALUES(seq_locNo.nextval, #{zone }, #{station }, #{spot }, #{lat }, #{lng })
 	</insert>
+	
+	<delete id="deleteList" parameterType="web.dto.SellerLoc">
+		DELETE FROM sellerLoc
+		<choose>
+			<when test="spot == null || spot == ''">
+				WHERE station = #{station }
+			</when>
+			<otherwise>
+				WHERE station = #{station } AND spot = #{spot }
+			</otherwise> 
+		</choose>
+	</delete>
 </mapper>

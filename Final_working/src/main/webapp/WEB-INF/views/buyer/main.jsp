@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <style type="text/css">
 .fr{
@@ -27,9 +26,10 @@ function booking(locNo){
 }
 //판매처 지도 열기
 function mapView(locNo){
-	
+	var w = (screen.availWidth)/3;
+	var h = (screen.availHeight)/2.5;
 	//팝업창 새로 띄우기
-	window.open("/sellerLocMap?locNo="+locNo, "판매처지도", "width=400, height=300, left=100, top=50");
+	window.open("/sellerLocMap?locNo="+locNo, "판매처지도", "width="+w+'px'+", height="+h+'px'+", left=100, top=50");
 	
 }
 //채팅창 열기
@@ -43,6 +43,7 @@ function inquire(id,sort){
 	
 }
 </script>
+
 
 <!-- 현재시간 받아오기 -->
 <fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
@@ -86,6 +87,7 @@ function inquire(id,sort){
 		<td>${item.zone }</td>
 
 		<td>${item.station } ${item.spot }<button class="btn btn-success btn-sm fr" onclick="mapView(${item.locNo })">지도보기</button></td>
+
 		<td>
 			<c:if test="${item.sellerTimeS.length() eq 4 && item.sellerTimeE.length() eq 4}">
 			${item.sellerTimeS.substring( 0, 2 ) }:${item.sellerTimeS.substring( 2, 4 ) } ~ ${item.sellerTimeE.substring( 0, 2 )}:${item.sellerTimeE.substring( 2, 4 )} 
@@ -117,8 +119,9 @@ function inquire(id,sort){
 		</c:if>
 		<c:if test="${item.sellerTimeE lt intNow}">
 			<td>${item.sellerId }<button class="btn btn-warning btn-sm fr" disabled>문의하기</button></td>
-		</c:if>
-		
+		</c:if>		
+
+		<td>${item.sellerId }<button class="btn btn-warning btn-sm fr" onclick="inquire('${item.sellerId}','판매자')">문의하기</button></td>
 	</c:forEach>
 	</tbody>
 </table>
