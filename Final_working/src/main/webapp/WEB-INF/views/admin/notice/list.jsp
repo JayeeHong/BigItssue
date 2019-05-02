@@ -50,9 +50,9 @@ function getLocList(){
 			
 			
 			var html =""
-				html ="<div id='tableAndpaging' style='float:left; width:70%;'>"
+				html ="<div id='tableAndpaging' style='position:absolute; left: 230px; top: 220px;'>"
 				html += '<div class="row row-offcanvas">'
-				html += '<table class="table table-striped">'
+				html += '<table class="table table-striped" style="width:800px; table-layout:fixed; left:20%;">'
 				html += '<tr style="background: gray; text-align: center;">'
 				html += '<td><b>No.</b></td>'
 				html += '<td><b>제목</b></td>'
@@ -159,22 +159,25 @@ function noticeWrite(){
 
 
 <div class="row row-offcanvas row-offcanvas-right">
+</div>
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
 <div class="col-xs-12 col-sm-9">
-
+</div>
+<div style="width:800px; position:static;  left:20%;">
 <h3>공지사항 게시판 관리</h3>
 <hr>
+</div>
     
 <div class="text-right">
-<input type="button" class="btn btn info" value="글쓰기" onclick="noticeWrite()">
-</div>    
-    
+<input type="button" class="btn btn info" value="글쓰기" onclick="noticeWrite()" style="maging-right:300px;">
 <div id="noticeListArea">
 	
 
 </div>    
+</div>    
+    
 
 
 

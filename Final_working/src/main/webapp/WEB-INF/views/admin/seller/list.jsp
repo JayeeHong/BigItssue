@@ -84,7 +84,7 @@ function getLocList(){
 			console.log(condition);
 			console.log(searchWord);
 			var html =""
-				html ="<div id='tableAndpaging' style='float:left; width:80%;'>"
+				html ="<div id='tableAndpaging' style='position: fixed; left: 220px; top: 230px; width:80%;'>"
 				html += '<div class="">'
 				html += '<table class="table table-striped">'
 				html += '<tr style="background: gray; text-align: center;">'

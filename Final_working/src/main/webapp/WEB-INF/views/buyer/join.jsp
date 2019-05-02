@@ -242,7 +242,7 @@ function joinConfirm() {
 		</div>
 		<input class="btn" type="button" name="idUse" id="idUse" value="중복확인"> 
 		<input type="hidden" value="" id="idConfirm">
-		<div id="okId"></div>
+		<div class="container text-center" id="okId"></div>
 	</div>
 	
 	<div class="form-group">
@@ -274,7 +274,7 @@ function joinConfirm() {
 			<input class="form-control" type="email" name="buyerEmail" id="buyerEmail">
 		</div>
 		<input class="btn"type="button" value="인증코드발송" id="okemail">
-		<div id="isItEmail"></div>
+		<div id="isItEmail" class="container text-center"></div>
 	</div>
 	
 	<div class="form-group">

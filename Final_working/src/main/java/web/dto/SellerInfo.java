@@ -8,13 +8,25 @@ public class SellerInfo { // 판매자 계정
 	private String sellerName; // 이름
 	private String sellerImg; // 판매자 사진
 	private String sort; // 유저분류
+	private String bigdomId;//빅돔아이디
+	
+	
 	
 	@Override
 	public String toString() {
 		return "SellerInfo [sellerId=" + sellerId + ", sellerPw=" + sellerPw + ", sellerPhone=" + sellerPhone
-				+ ", sellerName=" + sellerName + ", sellerImg=" + sellerImg + ", sort=" + sort + "]";
+				+ ", sellerName=" + sellerName + ", sellerImg=" + sellerImg + ", sort=" + sort + ", bigdomId="
+				+ bigdomId + "]";
 	}
-	
+
+	public String getBigdomId() {
+		return bigdomId;
+	}
+
+	public void setBigdomId(String bigdomId) {
+		this.bigdomId = bigdomId;
+	}
+
 	public String getSellerId() {
 		return sellerId;
 	}

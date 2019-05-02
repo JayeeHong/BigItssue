@@ -37,9 +37,10 @@ function readImg(input){//미리보기를 한다
 
 
 
-    
-    
-<div>
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />    
+<h3>공지사항 글쓰기</h3>
+<hr>    
+<div style="position:absolute; left: 230px; top: 220px; width:70%;">
 <form action="/admin/notice/write" method="post" enctype="multipart/form-data">
 <table class="table table-bordered">
 <tr>
