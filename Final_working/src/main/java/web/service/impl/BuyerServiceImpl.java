@@ -226,6 +226,16 @@ public class BuyerServiceImpl implements BuyerService {
 	public void setPickupDate(Reservation bookList) {
 		buyerDao.updatePickupDate(bookList);	
 	}
+
+	@Override
+	public List<SellerLoc> getZoneList() {
+		return buyerDao.selectZoneList();
+	}
+
+	@Override
+	public List<SellerLoc> getStationList() {
+		return buyerDao.selectStationList();
+	}
   
   
   

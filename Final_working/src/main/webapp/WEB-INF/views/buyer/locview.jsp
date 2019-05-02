@@ -25,7 +25,8 @@ function inquire(id,sort){
 	console.log("id:"+id);
 	console.log("sort:"+sort);
 	//현재창에서 페이지 이동
-	$(location).attr("href", "/createRoom?id="+id+"&sort="+sort);
+// 	$(location).attr("href", "/createRoom?id="+id+"&sort="+sort);
+	window.open("/createRoom?id="+id+"&sort="+sort, "문의하기", "width=800, height=750, left=100, top=50");
 	
 }
 

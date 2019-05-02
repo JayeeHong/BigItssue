@@ -65,4 +65,12 @@ public interface BuyerService {
 	// 현재시간이 디비에 저장된 시간보다 클 때 예약취소로 상태 변경
 	public void setPickupDate(Reservation bookList);
 	
+	//중복뺀 zoneList얻기
+	public List<SellerLoc> getZoneList();
+	
+	//중복뺸 stationList얻기
+	public List<SellerLoc> getStationList();
+	
+	
+	
 }

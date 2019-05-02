@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,10 +26,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.Chat;
+import web.dto.Message;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.service.face.BuyerService;
+import web.service.face.ChatService;
 import web.util.SellerLocPaging;
 
 @Controller
@@ -37,6 +41,7 @@ public class BuyerController {
 	private static final Logger logger = LoggerFactory.getLogger(BuyerController.class);
 	
 	@Autowired BuyerService buyerService;
+	@Autowired ChatService chatService;
 
 	@RequestMapping(value="/buyer/main", method=RequestMethod.GET)
 	public void buyerMain(
@@ -77,6 +82,21 @@ public class BuyerController {
 				
 		model.addAttribute("intNow", intNow);
 		
+		//중복뺸 zoneList얻기
+		List<SellerLoc> zoneList = buyerService.getZoneList();
+		
+		model.addAttribute("zoneList", zoneList);
+		
+		//중복뺀 stationList얻기
+		List<SellerLoc> stationList = buyerService.getStationList();
+		
+		model.addAttribute("stationList", stationList);
+		
+	}
+	@RequestMapping(value="/buyer/main", method=RequestMethod.POST)
+	public void buyerMain(String zoneSelect, String stationSelect) {
+		logger.info("zoneSelect:"+zoneSelect);
+		logger.info("stationSelect:"+stationSelect);
 	}
 	
 	@RequestMapping(value="/buyer/locview", method=RequestMethod.GET)
@@ -476,8 +496,92 @@ public class BuyerController {
 	}
 	
 	@RequestMapping(value="/buyer/my/chat", method=RequestMethod.GET)
-	public void myChat() { // 마이페이지-문의내역
+	public String myChat(
+			@RequestParam(defaultValue="-1") int chatRoomNo, HttpSession session, Model model) { // 마이페이지-문의내역
 		
+		logger.info("chatRoomNo:"+chatRoomNo);
+
+		session.setAttribute("chatRoomNo", chatRoomNo);
+		
+		//-------------------채팅내역 방들(사이드에 보이는 채팅방들)을 보여지기 위한 model설정--------------------
+		User LoginInfo = (User)session.getAttribute("LoginInfo");
+		logger.info("LoginInfo:"+LoginInfo);
+		if(LoginInfo==null) {
+			return "buyer/my/chat";
+		}
+			
+		List<Chat> chatRoomList = chatService.selectRooms(LoginInfo);
+		
+		//채팅내역의 상대방 이름을 띄워 주기 위해서 추가
+		//Chat의 TheOtherParty에
+		//chatRoomList속에 있는 Chat를 하나하나 조사해서 로그인된 아이디와 같지않고 null이 아닌 아이디를 넣어주자.
+		for(int i=0; i<chatRoomList.size(); i++) {
+			if(chatRoomList.get(i).getBuyerId() != null && !chatRoomList.get(i).getBuyerId().equals(LoginInfo.getId())) {
+				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBuyerId());
+			}else if(chatRoomList.get(i).getSellerId() != null && !chatRoomList.get(i).getSellerId().equals(LoginInfo.getId())) {
+				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getSellerId());
+			}else if(chatRoomList.get(i).getBigdomId() != null && !chatRoomList.get(i).getBigdomId().equals(LoginInfo.getId())) {
+				chatRoomList.get(i).setTheOtherParty(chatRoomList.get(i).getBigdomId());
+			}
+		}
+		
+		logger.info("chatRoomList:"+chatRoomList);
+		
+		model.addAttribute("chatRoomList", chatRoomList);
+		//--------------------------------------------------------------------------------
+		
+		//--------------------채팅메시지 -----------------------------------------------------
+		List<Message> primaryMsgList = new ArrayList();
+		List<Message> subMsgList = new ArrayList();
+		//DB에 저장되어 있는 Message불러오기.	
+		
+		//메인 채팅방(가운데에 있는 채팅방)에서의 메시지
+		primaryMsgList = chatService.selectMessage(chatRoomNo);
+		
+		//메인 채팅 리스트 Date이쁘게 바꾸기
+		//Date보기 좋게 변경
+		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+		SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
+		
+		Date tempTime = null;
+		String stringTime = null;
+
+		for(int i=0; i<primaryMsgList.size(); i++) {
+			//현재 date받아오기
+			tempTime = primaryMsgList.get(i).getChatDate();		
+			//date를 이쁜String으로 바꾸기
+			stringTime = time.format(tempTime);		
+			//primaryMsgList에 stringChatDate설정
+			primaryMsgList.get(i).setStringChatDate(stringTime);
+		}
+			
+		//채팅내역 방들(사이드에 보이는 채팅방들)에서의 메시지
+		for(int i=0; i<chatRoomList.size(); i++) {
+			//보조 메시지(가장 마지막의 메시지 하나만 가져와야함)
+			Message subMsg = chatService.selectSubMessage(chatRoomList.get(i).getChatRoomNo());
+
+			if(subMsg != null) {
+				//현재 date받아오기
+				tempTime = subMsg.getChatDate();
+				//date를 이쁜String으로 바꾸기
+				stringTime = time.format(tempTime);		
+				//subMsgList에 stringChatDate설정
+				subMsg.setStringChatDate(stringTime);
+				
+				subMsgList.add(subMsg);
+			}
+			
+		}
+		
+		//주채팅창 message list
+		logger.info("primaryMsgList:"+primaryMsgList);
+		model.addAttribute("primaryMsgList", primaryMsgList);
+		
+		//보조채팅창 message list
+		logger.info("subMsgList:"+subMsgList);
+		model.addAttribute("subMsgList", subMsgList);
+		
+		return "buyer/my/chat";
 	}
 	
 	@RequestMapping(value="/buyer/my/info", method=RequestMethod.GET)

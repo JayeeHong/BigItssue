@@ -57,6 +57,9 @@
 	  border: 1px solid #c4c4c4;
 	  clear: both;
 	  overflow: hidden;
+	  width:700px; 
+ 	  height:632px; 
+ 	  margin:auto; 
 	}
 	.top_spac{ margin: 20px 0 0;}
 	
