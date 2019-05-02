@@ -127,6 +127,12 @@
 		WHERE buyerId = #{buyerId } AND sellerId = #{sellerId }
 	</select>
 	
+	<!-- 예약 buyerId로 검색 -->
+	<select id="selectResrvationByBuyerId" parameterType="String" resultType="web.dto.Reservation">
+		SELECT * FROM Reservation
+		WHERE buyerId = #{buyerId }
+	</select>
+	
 	<update id="decreaseBookNumber" parameterType="web.dto.Reservation">
 		UPDATE BookListInfo
 		SET circulation=circulation-#{bookNumber}
@@ -137,5 +143,11 @@
 		SELECT count(*) FROM buyerInfo
 		WHERE buyerId=#{buyerId } AND buyerPw=#{buyerPw }
 	</select>
+	
+	<update id="updatePickupDate" parameterType="web.dto.Reservation">
+		UPDATE reservation
+		SET status='예약취소(시간초과)'
+		WHERE reserveNo=#{reserveNo }
+	</update>
 
 </mapper>

@@ -66,6 +66,17 @@ public class BuyerController {
 		//페이징 객체 MODEL로 추가
 		model.addAttribute("paging", paging);
 		
+		//현재시간, int형으로 바꿔서 보내주기
+		Date date = new Date();
+		
+		SimpleDateFormat transFormat = new SimpleDateFormat("HHmm");
+				
+		String stringNow = transFormat.format(date);
+		
+		int intNow = Integer.parseInt(stringNow);
+				
+		model.addAttribute("intNow", intNow);
+		
 	}
 	
 	@RequestMapping(value="/buyer/locview", method=RequestMethod.GET)
@@ -101,6 +112,19 @@ public class BuyerController {
 		logger.info("cntReservation:"+cntReservation);
 		
 		model.addAttribute("cntReservation", cntReservation);
+		
+		//현재시간, int형으로 바꿔서 보내주기
+		Date date = new Date();
+		
+		SimpleDateFormat transFormat = new SimpleDateFormat("HHmm");
+				
+		String stringNow = transFormat.format(date);
+		
+		int intNow = Integer.parseInt(stringNow);
+				
+		model.addAttribute("intNow", intNow);
+		
+		logger.info("[TEST]현재시간:"+intNow);
 		
 			
 	}
@@ -350,8 +374,8 @@ public class BuyerController {
 		}	
 	}
 	
-	@RequestMapping(value="/buyer/my/booking", method=RequestMethod.POST)
-	public String myBooking(
+	@RequestMapping(value="/buyer/booking", method=RequestMethod.POST)
+	public String Booking(
 			Model model,
 			int selectBookingNum[],
 			String bookingTimeHour,
@@ -393,16 +417,7 @@ public class BuyerController {
 			reservationInfo.setTotal(5000*selectBookingNum[i]);
 			reservationInfo.setBookDate(date);
 			
-//			int hour = 0;
-//			//12시간제 => 24시간제로 바꾸기
-//			if(AmPm.equals("오후")) {
-//				hour = Integer.parseInt(bookingTimeHour)+12;
-//				
-//			}else if(AmPm.equals("오전")) {
-//				hour = Integer.parseInt(bookingTimeHour);
-//			}
 			//현재시간(년,월,일)+예약한시간(시,분)+오전/오후
-//			String bookingTime = ""+hour+":"+bookingTimeMin;
 			String bookingTime = bookingTimeHour+":"+bookingTimeMin+" "+AmPm;
 			//현재시간(년,월,일) Date=>String 타입변환
 			String now = transFormat.format(date);
@@ -424,6 +439,40 @@ public class BuyerController {
 		}
 				
 		return "redirect:/buyer/main";
+	}
+	
+	@RequestMapping(value="/buyer/my/booking", method=RequestMethod.GET)
+	public void myBooking(HttpSession session, Model model) {
+		// 세션값 가져오기
+		String buyerId = (String) session.getAttribute("buyerId");
+		
+		logger.info("buyerId:"+buyerId);
+				
+		// 구매자의 예약내역 조회(buyerId로 조회)
+		List<Reservation> bookListInfo = buyerService.getResrvaionListByBuyerId(buyerId);
+		
+		logger.info("bookListInfo:"+bookListInfo);
+		
+		// --- 수령시간이 지났을 경우 취소상태로 변경하기 ---
+		// 1. 현재시간과 수령시간 비교		
+		Date now = new Date(); // 현재시간
+		for(int i=0; i<bookListInfo.size(); i++) {
+			if(now.before(bookListInfo.get(i).getPickupDate())) {
+//				logger.info("현재시간이 더 작음");
+
+			} else { 
+//				logger.info("현재시간이 더 큼");	
+				// 3. DB에 저장된 시간이 현재시간보다 클때 취소상태로 변경
+				buyerService.setPickupDate(bookListInfo.get(i));
+			}
+		}
+		
+		// 4. 예약내역 재조회
+		bookListInfo = buyerService.getResrvaionListByBuyerId(buyerId);
+		// ------------------------------------------ 상태변경 끝
+		
+		model.addAttribute("bookListInfo", bookListInfo);
+
 	}
 	
 	@RequestMapping(value="/buyer/my/chat", method=RequestMethod.GET)

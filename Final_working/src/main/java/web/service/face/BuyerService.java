@@ -58,4 +58,11 @@ public interface BuyerService {
 	public List<Reservation> getResrvaionList(Reservation reservationInfo);
 	//예약 buyerId,sellerId로 개수 검색
 	public int getResrvaionCnt(Reservation reservationInfo);
+	
+	//예약 buerId로 검색
+	public List<Reservation> getResrvaionListByBuyerId(String buyerId);
+	
+	// 현재시간이 디비에 저장된 시간보다 클 때 예약취소로 상태 변경
+	public void setPickupDate(Reservation bookList);
+	
 }

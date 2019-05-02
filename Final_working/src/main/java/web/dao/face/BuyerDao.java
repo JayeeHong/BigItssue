@@ -56,6 +56,13 @@ public interface BuyerDao {
 	
 	//예약 buyerId,sellerId로 검색
 	public List<Reservation> selectResrvation(Reservation reservationInfo);
+	
 	//예약 buyerId,sellerId로 개수 검색
 	public int selectResrvaionCnt(Reservation reservationInfo);
+	
+	//예약 buyerId로 검색
+	public List<Reservation> selectResrvationByBuyerId(String buyerId);
+	
+	// 수령시간이 지났을 경우 예약취소로 변경 쿼리
+	public void updatePickupDate(Reservation bookList);
 }

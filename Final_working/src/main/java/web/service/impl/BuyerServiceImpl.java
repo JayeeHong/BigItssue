@@ -216,6 +216,16 @@ public class BuyerServiceImpl implements BuyerService {
 	public int getResrvaionCnt(Reservation reservationInfo) {
 		return buyerDao.selectResrvaionCnt(reservationInfo);
 	}
+
+	@Override
+	public List<Reservation> getResrvaionListByBuyerId(String buyerId) {
+		return buyerDao.selectResrvationByBuyerId(buyerId);
+	}
+
+	@Override
+	public void setPickupDate(Reservation bookList) {
+		buyerDao.updatePickupDate(bookList);	
+	}
   
   
   
