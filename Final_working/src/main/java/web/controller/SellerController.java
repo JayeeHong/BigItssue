@@ -175,15 +175,24 @@ public class SellerController {
 		// 판매시간 조회
 		sellerLoc = sellerService.getSellerLoc(sellerId);
 		
-		logger.info(sellerLoc.toString());
+//		logger.info(sellerLoc.toString());
 		
-		String startTime = sellerLoc.getSellerTimeS();
-		String startTime1 = startTime.substring(0, 2);
-		String startTime2 = startTime.substring(2, 4);
+		String startTime="";
+		String startTime1="";
+		String startTime2="";
+		String endTime="";
+		String endTime1="";
+		String endTime2="";
 		
-		String endTime = sellerLoc.getSellerTimeE();
-		String endTime1 = endTime.substring(0, 2);
-		String endTime2 = endTime.substring(2, 4);
+		if(sellerLoc != null && !"".equals(sellerLoc)) {
+			startTime = sellerLoc.getSellerTimeS();
+			startTime1 = startTime.substring(0, 2);
+			startTime2 = startTime.substring(2, 4);
+			
+			endTime = sellerLoc.getSellerTimeE();
+			endTime1 = endTime.substring(0, 2);
+			endTime2 = endTime.substring(2, 4);
+		}
 		
 //		logger.info(startTime1 + ":" + startTime2);
 		//---------------
@@ -191,14 +200,16 @@ public class SellerController {
 		// 판매부수 조회
 		List<BookListInfo> bookListInfo = sellerService.getBookList(sellerId);
 		
-		logger.info(bookListInfo.toString());
+//		logger.info(bookListInfo.toString());
 		
 		model.addAttribute("startTime1", startTime1);
 		model.addAttribute("startTime2", startTime2);
 		model.addAttribute("endTime1", endTime1);
 		model.addAttribute("endTime2", endTime2);
-		model.addAttribute("sellerTimeS", sellerLoc.getSellerTimeS());
-		model.addAttribute("sellerTimeE", sellerLoc.getSellerTimeE());
+		if(sellerLoc != null && !"".equals(sellerLoc)) {
+			model.addAttribute("sellerTimeS", sellerLoc.getSellerTimeS());
+			model.addAttribute("sellerTimeE", sellerLoc.getSellerTimeE());
+		}
 		
 		model.addAttribute("bookListInfo", bookListInfo);
 		

@@ -11,7 +11,27 @@
 	.table {
 		text-align: center;
 	}
+	
+	.table thead {
+		font-weight: bold;
+	}
+	
+	.table>tbody>tr>td {
+		vertical-align: middle;
+	}
+	
+	.table>thead>tr>td {
+		vertical-align: middle;
+	}
 </style>
+
+<script type="text/javascript">
+
+function upBigdom(bigdomId) {
+	$(location).attr("href", "/admin/info/bigdom/update?bigdomId="+bigdomId);
+}
+
+</script>
 
 <div class="row row-offcanvas row-offcanvas-right">
 
@@ -39,25 +59,32 @@
 				<td style="width: 25%">빅돔 아이디</td>
 				<td style="width: 25%">비밀번호</td>
 				<td style="width: 25%">판매자 아이디</td>
-				<td style="width: 15%">수정|삭제</td>
+				<td style="width: 15%">수정</td>
 			</tr>
 		</thead>
 		
 		<tbody>
-			<c:forEach var="i" begin="0" end="${bigdomsellerList.size()-1 }" step="1">
+			<c:forEach varStatus="status" var="i" begin="0" end="${bigdomsellerList.size()-1 }" step="1">
 			<tr>
-				<td>${i+1 }</td>
+				<c:if test="${curPage eq 0 }">
+				<td>${(totalCount-status.index)-((1-1)*10) }</td>
+				</c:if>
+				<c:if test="${curPage ne 0 }">
+				<td>${(totalCount-status.index)-((curPage-1)*10) }</td>
+				</c:if>
+				
 				<td>${bigdomsellerList[i].bigdomId }</td>
 				<td>${bigdomsellerList[i].bigdomPw }</td>
 				<td>${bigdomsellerList[i].sellerId }</td>
 				<td>
-					<button class="btn btn-xs btn-primary">수정</button>
-					<button class="btn btn-xs btn-danger">삭제</button>
+					<button class="btn btn-xs btn-primary" onclick="upBigdom('${bigdomsellerList[i].bigdomId }')">수정</button>
 				</td>
 			</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<jsp:include page="/WEB-INF/views/admin/info/bigdom/paging.jsp"/>
 
 </div>
 

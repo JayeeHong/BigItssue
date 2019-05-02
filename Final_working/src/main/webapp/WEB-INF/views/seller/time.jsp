@@ -3,6 +3,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<style type="text/css">
+	.table {
+		text-align: center;
+	}
+	
+	.table thead {
+		font-weight: bold;
+		background: #cccccc6e;
+	}
+	
+	.table>tbody>tr>td {
+		vertical-align: middle;
+	}
+	
+	.table>thead>tr>td {
+		vertical-align: middle;
+	}
+</style>
+
 <script type="text/javascript">
 
 function upOpentime(sysHour, sysMin) {
@@ -26,6 +45,11 @@ function mDelete(magazineNo) {
 
 </script>
 
+<c:if test="${sellerTimeS eq null }">
+현재 활성화된 판매자가 아닙니다.
+</c:if>
+
+<c:if test="${sellerTimeS ne null }">
 <div style="padding: 10px;">
 * 판매자가 지정한 시간 외에 오픈/마감 시간을 변경하고 싶다면, 아래 버튼을 누르세요.<br>
 &nbsp;&nbsp;오픈/마감 시간에 따라 버튼이 비활성화됩니다<br>
@@ -39,7 +63,7 @@ function mDelete(magazineNo) {
 <%-- 현재 분 : <c:out value="${sysMin}"/> --%>
 
 <!-- 마감시간 전 -->
-${sysTime }//${sellerTimeE }//${sellerTimeS }
+<%-- ${sysTime }//${sellerTimeE }//${sellerTimeS } --%>
 <c:if test="${sysTime lt sellerTimeE }">
 	<c:if test="${sysTime ge sellerTimeS }">
 		&nbsp;&nbsp;<button id="btnOpen" class="btn btn-default" disabled>오픈</button>
@@ -175,9 +199,9 @@ ${sysTime }//${sellerTimeE }//${sellerTimeS }
 <tr>
 <%-- 	<td>${b.magazineNo }</td> --%>
 	<form action="/seller/mUpdate?magazineNo=${b.magazineNo }" method="post" style="display: inline" >
-	<td><input style="width: 150px; text-align:center;" type="text" name="month" value="${b.month }"/></td>
+	<td><input style="width: 150px; text-align:center;" type="text" name="month" maxlength="3" value="${b.month }"/></td>
 	<td>
-		<input style="width: 30px; text-align:center;" name="circulation" type="text" value="${b.circulation }"/>&nbsp;
+		<input style="width: 30px; text-align:center;" name="circulation" maxlength="3" type="text" value="${b.circulation }"/>&nbsp;
 		<button class="btn btn-xs btn-default">변경</button>
 	</form>
 		<button id="mDelete" class="btn btn-xs btn-danger" onclick="mDelete(${b.magazineNo })">삭제</button>
@@ -199,15 +223,15 @@ ${sysTime }//${sellerTimeE }//${sellerTimeS }
 </thead>
 <tr>
 	<form action="/seller/mPlus" method="post">
-	<td style="width: 50%"><input style="width: 150px; text-align:center;" type="text" name="month"/></td>
+	<td style="width: 50%"><input style="width: 150px; text-align:center;" maxlength="3" type="text" name="month"/></td>
 	<td style="width: 50%">
-		<input style="width: 30px; text-align:center;" name="circulation" type="text"/>&nbsp;
+		<input style="width: 30px; text-align:center;" name="circulation" maxlength="3" type="text"/>&nbsp;
 		<button id="btnPlus" class="btn btn-xs btn-primary">추가</button>		
 	</td>
 	</form>
 </tr>
 </table>
-
+</c:if>
 
 <br>
 </div>

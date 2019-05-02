@@ -11,19 +11,48 @@
 	.table {
 		text-align: center;
 	}
+	
+	.table thead {
+		font-weight: bold;
+	}
+	
+	.table>tbody>tr>td {
+		vertical-align: middle;
+	}
+	
+	.table>thead>tr>td {
+		vertical-align: middle;
+	}
 </style>
 
 <script type="text/javascript">
+
+$(document).ready(function () {
+	$("#addSeller").click(function() {
+		location.href="/admin/info/seller/add";
+	});
+})
 
 function upSeller(sellerId) {
 	$(location).attr("href", "/admin/info/seller/update?sellerId="+sellerId);
 }
 
-function delSeller(sellerId) {
-	result = confirm('정말 삭제하시겠습니까?');
+function deactivateSeller(sellerId) {
+	result = confirm('판매자를 비활성화하시겠습니까?');
 	
 	if(result==true) {
-		$(location).attr("href", "/admin/info/seller/delete?sellerId="+sellerId);
+		$(location).attr("href", "/admin/info/deactivateSeller?sellerId="+sellerId);
+	} else {
+		return false;
+	}
+}
+
+function activateSeller(sellerId) {
+	result = confirm('판매자를 활성화하시겠습니까?'+'\n'
+			+'확인을 클릭하시면 판매장소관리 페이지로 넘어갑니다.');
+	
+	if(result==true) {
+		$(location).attr("href", "/admin/loc/list");
 	} else {
 		return false;
 	}
@@ -47,51 +76,63 @@ function delSeller(sellerId) {
 		<li role="presentation"><a href="/admin/info/bigdom">빅돔</a></li>
 	</ul>
 </div>
-
-<div>
-
-	<table class="table">
-		<thead>
-			<tr>
-				<td style="width: 10%">번호</td>
-				<td style="width: 20%">판매자</td>
-				<td style="width: 20%">아이디</td>
-				<td style="width: 20%">비밀번호</td>
-				<td style="width: 15%">연락처</td>
-				<td style="width: 15%">수정|삭제</td>
-			</tr>
-		</thead>
+<br>
+<button id="addSeller" class="btn btn-default">판매자 추가</button>
+<br>
+<table class="table">
+	<thead>
+		<tr>
+			<td style="width: 10%">번호</td>
+			<td style="width: 20%">판매자</td>
+			<td style="width: 20%">아이디</td>
+			<td style="width: 20%">비밀번호</td>
+			<td style="width: 15%">연락처</td>
+			<td style="width: 15%">수정</td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<c:forEach varStatus="status" var="i" begin="0" end="${sellerbigdomList.size()-1 }" step="1">
+		<tr>
+			<c:if test="${curPage eq 0 }">
+			<td rowspan="3">${(totalCount-status.index)-((1-1)*10) }</td>
+			</c:if>
+			<c:if test="${curPage ne 0 }">
+			<td rowspan="3">${(totalCount-status.index)-((curPage-1)*10) }</td>
+			</c:if>
 		
-		<tbody>
-			<c:forEach var="i" begin="0" end="${sellerbigdomList.size()-1 }" step="1">
-			<tr>
-				<td style="padding-top: 48px;" rowspan="3">${i+1 }</td>
-				<td>${sellerbigdomList[i].sellerName }</td>
-				<td>${sellerbigdomList[i].sellerId }</td>
-				<td>${sellerbigdomList[i].sellerPw }</td>
-				<td>${sellerbigdomList[i].sellerPhone }</td>
-				<td style="padding-top: 45px;" rowspan="3">
-					<button class="btn btn-xs btn-primary" onclick="upSeller('${sellerbigdomList[i].sellerId}');">수정</button>
-					<button class="btn btn-xs btn-danger" onclick="delSeller('${sellerbigdomList[i].sellerId}');">삭제</button>
-				</td>
-			</tr>
-			
-			<tr>
-				<td colspan="4">빅돔 아이디</td>
-			</tr>
-			<tr>
-				<td colspan="4">
-					${sellerbigdomList[i].bigdomId }
-					<c:if test="${sellerbigdomList[i].bigdomId eq null }">
-					빅돔이 없습니다
-					</c:if>
-				</td>
-			</tr>
-			</c:forEach>
-		</tbody>
-	</table>
+			<td>${sellerbigdomList[i].sellerName }</td>
+			<td>${sellerbigdomList[i].sellerId }</td>
+			<td>${sellerbigdomList[i].sellerPw }</td>
+			<td>${sellerbigdomList[i].sellerPhone }</td>
+			<td rowspan="3">
+				<button class="btn btn-xs btn-primary" onclick="upSeller('${sellerbigdomList[i].sellerId}');">수정</button>
+				
+				<c:if test="${not sellerStatusList[i] }">
+				<button id="${sellerStatusList[i] }" class="btn btn-xs btn-success" onclick="activateSeller('${sellerbigdomList[i].sellerId}');">활성화</button>
+				</c:if>
+				<c:if test="${sellerStatusList[i] }">
+				<button id="${sellerStatusList[i] }" class="btn btn-xs btn-danger" onclick="deactivateSeller('${sellerbigdomList[i].sellerId}');">비활성화</button>
+				</c:if>
+			</td>
+		</tr>
+		
+		<tr>
+			<td colspan="4" style="background: #cccccc6e">빅돔 아이디</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				${sellerbigdomList[i].bigdomId }
+				<c:if test="${sellerbigdomList[i].bigdomId eq null }">
+				빅돔이 없습니다
+				</c:if>
+			</td>
+		</tr>
+		</c:forEach>
+	</tbody>
+</table>
 
-</div>
+<jsp:include page="/WEB-INF/views/admin/info/seller/paging.jsp"/>
 
 </div>
 

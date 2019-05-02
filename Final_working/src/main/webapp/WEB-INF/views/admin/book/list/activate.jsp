@@ -63,11 +63,10 @@ function sellerlocActivate() {
 <h3>판매자 빅이슈 관리</h3>
 <hr>
 
-<button class="btn btn-default" style="font-weight: bold;" onclick="sellerlocAll();">전체</button>
-<button class="btn btn-default" onclick="sellerlocActivate();">활성화 위치</button>
+<button class="btn btn-default" onclick="sellerlocAll();">전체</button>
+<button class="btn btn-default" style="font-weight: bold;" onclick="sellerlocActivate();">활성화 위치</button>
 <button class="btn btn-default" onclick="sellerlocDeactivate();">비활성화 위치</button>
-<br><br>
-* 비활성화 상태인 판매처는 빅이슈를 관리할 수 없습니다.
+
 <br><br>
 
 <table class="table table-bordered">
@@ -82,30 +81,23 @@ function sellerlocActivate() {
 </tr>
 </thead>
 
-<c:if test="${sellerlocList.size() eq 0 }">
+<c:if test="${sellerlocListActivate.size() eq 0 }">
 <tbody>
 <tr>
-	<td colspan="5">판매처가 없습니다.</td>
+	<td colspan="5">활성화 중인 판매처가 없습니다.</td>
 </tr>
 </tbody>
 </c:if>
 
-<c:if test="${sellerlocList.size() ne 0 }">
+<c:if test="${sellerlocListActivate.size() ne 0 }">
 <tbody>
-<c:forEach var="i" begin="0" end="${sellerlocList.size()-1 }" step="1">
+<c:forEach var="i" begin="0" end="${sellerlocListActivate.size()-1 }" step="1">
 <tr>
-	<td>${sellerlocList[i].locNo }</td>
-	<td>${sellerlocList[i].zone }</td>
-	
-	<c:if test="${sellerlocList[i].sellerId eq null }">
-	<td>${sellerlocList[i].station }</td>
-	</c:if>
-	<c:if test="${sellerlocList[i].sellerId ne null }">
-	<td><a href="/admin/book/view?sellerId=${sellerlocList[i].sellerId }">${sellerlocList[i].station }</a></td>
-	</c:if>
-	
-	<td>${sellerlocList[i].spot }</td>
-	<td>${sellerlocList[i].sellerId }</td>
+	<td>${sellerlocListActivate[i].locNo }</td>
+	<td>${sellerlocListActivate[i].zone }</td>
+	<td><a href="/admin/book/view?sellerId=${sellerlocList[i].sellerId }">${sellerlocListActivate[i].station }</a></td>
+	<td>${sellerlocListActivate[i].spot }</td>
+	<td>${sellerlocListActivate[i].sellerId }</td>
 </tr>
 </c:forEach>
 </tbody>
@@ -113,7 +105,7 @@ function sellerlocActivate() {
 
 </table>
 
-<jsp:include page="/WEB-INF/views/admin/book/paging.jsp"/>
+<jsp:include page="/WEB-INF/views/admin/book/list/paging_activate.jsp"/>
 
 </div>
 

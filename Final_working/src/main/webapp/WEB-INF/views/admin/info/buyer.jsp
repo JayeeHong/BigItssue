@@ -11,7 +11,37 @@
 	.table {
 		text-align: center;
 	}
+	
+	.table thead {
+		font-weight: bold;
+	}
+	
+	.table>tbody>tr>td {
+		vertical-align: middle;
+	}
+	
+	.table>thead>tr>td {
+		vertical-align: middle;
+	}
 </style>
+
+<script type="text/javascript">
+
+function upBuyer(buyerId) {
+	$(location).attr("href", "/admin/info/buyer/update?buyerId="+buyerId);
+}
+
+function delBuyer(buyerId) {
+	result = confirm('구매자 정보를 삭제하시겠습니까?');
+	
+	if(result==true) {
+		$(location).attr("href", "/admin/info/buyerDel?buyerId="+buyerId);
+	} else {
+		return false;
+	}
+}
+
+</script>
 
 <div class="row row-offcanvas row-offcanvas-right">
 
@@ -46,22 +76,30 @@
 		</thead>
 		
 		<tbody>
-			<c:forEach var="i" begin="0" end="${buyerList.size()-1 }" step="1">
+			<c:forEach varStatus="status" var="i" begin="0" end="${buyerList.size()-1 }" step="1">
 			<tr>
-				<td>${i+1 }</td>
+				<c:if test="${curPage eq 0 }">
+				<td>${(totalCount-status.index)-((1-1)*10) }</td>
+				</c:if>
+				<c:if test="${curPage ne 0 }">
+				<td>${(totalCount-status.index)-((curPage-1)*10) }</td>
+				</c:if>
+				
 				<td>${buyerList[i].buyerName }</td>
 				<td>${buyerList[i].buyerId }</td>
 				<td>${buyerList[i].buyerPw }</td>
 				<td>${buyerList[i].buyerEmail }</td>
 				<td>${buyerList[i].buyerPhone }</td>
 				<td>
-					<button class="btn btn-xs btn-primary">수정</button>
-					<button class="btn btn-xs btn-danger">삭제</button>
+					<button class="btn btn-xs btn-primary" onclick="upBuyer('${buyerList[i].buyerId }');">수정</button>
+					<button class="btn btn-xs btn-danger" onclick="delBuyer('${buyerList[i].buyerId }')">삭제</button>
 				</td>
 			</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<jsp:include page="/WEB-INF/views/admin/info/buyer/paging.jsp"/>
 
 </div>
 

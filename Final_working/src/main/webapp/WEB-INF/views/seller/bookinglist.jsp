@@ -3,6 +3,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<style type="text/css">
+	.table {
+		text-align: center;
+	}
+	
+	.table thead {
+		font-weight: bold;
+		background: #cccccc6e;
+	}
+	
+	.table>tbody>tr>td {
+		vertical-align: middle;
+	}
+	
+	.table>thead>tr>td {
+		vertical-align: middle;
+	}
+</style>
+
 <script type="text/javascript">
 
 function bookCancel(reserveNo) {
@@ -31,7 +50,7 @@ function bookUpdate(reserveNo) {
 
 <div style="padding: 10px;">
 
-<h4>예약내역</h4>
+<h3>예약내역</h3>
 1. 구매자가 예약하고 찾아가지 않은 경우, 상태가 '예약취소(시간초과)' 로 변경됩니다.<br>
 2. 수령, 취소 버튼으로 판매자가 구매자의 예약상태를 변경할 수 있습니다. 변경 후에는 취소할 수 없으므로 유의하시기 바랍니다.<br>
 <div style="text-align: center;">
@@ -51,6 +70,13 @@ function bookUpdate(reserveNo) {
 </thead>
 
 <tbody>
+<c:if test="${bookListInfo.size() eq 0 }">
+<tr>
+	<td colspan="7">예약된 빅이슈가 없습니다.</td>
+</tr>
+</c:if>
+
+<c:if test="${bookListInfo.size() ne 0 }">
 <c:forEach items="${bookListInfo }" var="b">
 <tr>
 	<td>${b.reserveNo }</td>
@@ -67,6 +93,7 @@ function bookUpdate(reserveNo) {
 	</td>
 </tr>
 </c:forEach>
+</c:if>
 </tbody>
 
 </table>

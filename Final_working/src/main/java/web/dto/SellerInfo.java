@@ -11,7 +11,6 @@ public class SellerInfo { // 판매자 계정
 	private String bigdomId;//빅돔아이디
 	
 	
-	
 	@Override
 	public String toString() {
 		return "SellerInfo [sellerId=" + sellerId + ", sellerPw=" + sellerPw + ", sellerPhone=" + sellerPhone
@@ -22,11 +21,9 @@ public class SellerInfo { // 판매자 계정
 	public String getBigdomId() {
 		return bigdomId;
 	}
-
 	public void setBigdomId(String bigdomId) {
 		this.bigdomId = bigdomId;
 	}
-
 	public String getSellerId() {
 		return sellerId;
 	}

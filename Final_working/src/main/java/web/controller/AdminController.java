@@ -1,13 +1,14 @@
-
 package web.controller;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
+import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
@@ -63,33 +65,285 @@ public class AdminController {
 		
 		return "redirect:/admin/main";
 	}
-	
-	@RequestMapping(value="/admin/info/seller", method=RequestMethod.GET)
-	public void infoSeller(Model model) { // 계정관리-판매자
-		List<SellerBigdomInfo> sellerbigdomList = adminService.getSellerBigdomInfo();
+	@RequestMapping(value="/admin/info/seller")
+	public void infoSeller(
+			Model model, 
+			HttpServletRequest req) { // 계정관리-판매자
 		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getSellerInfoCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getSellerInfoTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		List<SellerBigdomInfo> sellerbigdomList = adminService.getSellerBigdomInfo(paging);
+		
+		// sellerloc에 해당 판매자가 있는지 조회
+		//	-> 비활성화 시킬때 null이 들어감
+		List sellerStatusList = new ArrayList<>();
+		for(int i=0; i<sellerbigdomList.size(); i++) {
+			boolean sellerStatus = adminService.getSellerStatus(sellerbigdomList.get(i).getSellerId());
+//			logger.info("bbbbbb:::::::::"+String.valueOf(sellerStatus));
+			sellerStatusList.add(i, sellerStatus);
+		}
+		
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		// -------------------
+		
+		model.addAttribute("sellerStatusList", sellerStatusList);
 		model.addAttribute("sellerbigdomList", sellerbigdomList);
 	}
 	
-	@RequestMapping(value="/admin/info/seller/update", method=RequestMethod.GET)
-	public void infoSellerUpdate(SellerBigdomInfo sbInfo) { // 계정관리-판매자 수정
-//		logger.info(sbInfo.toString());
+	@RequestMapping(value="/admin/info/seller/add", method=RequestMethod.GET)
+	public String addSeller(SellerInfo sellerInfo, BigdomInfo bigdomInfo, Model model) { // 계정관리-판매자_추가
 		
-		// sellerid로 정보 업데이트
+		// sellerinfo의 마지막행 조회
+		String sellerId = adminService.getLastSeller();
+//		logger.info("sellerID:::::::::::"+sellerFromDb);
+		
+		// 마지막행에서 숫자만 가져오기
+		String newNo = "";
+		newNo += sellerId.substring(6);
+		int no = Integer.parseInt(newNo)+1;
+//		logger.info(sellerId);
+		
+		// 가져온 숫자+1 -> 빅돔 아이디로 추가(빅돔아이디:fk-빅돔아이디 추가가 먼저)
+		bigdomInfo.setBigdomId("bigdom"+no);
+		bigdomInfo.setBigdomPw("pw"+no);
+		bigdomInfo.setSort("빅돔");
+		adminService.putNewBigdom(bigdomInfo);
+		
+		// 가져온 숫자+1 -> 판매자 아이디로 추가
+		sellerInfo.setSellerId("seller"+no);
+		sellerInfo.setSellerPw("pw"+no);
+		sellerInfo.setSellerName("판매자"+no);
+		sellerInfo.setSort("판매자");
+		sellerInfo.setBigdomId("bigdom"+no);
+		adminService.putNewSeller(sellerInfo);
+		
+		sellerInfo = adminService.getLastSellerInfo();
+		
+		model.addAttribute("sellerInfo", sellerInfo);
+		
+		return "redirect:/admin/info/seller/update?sellerId="+sellerInfo.getSellerId();
 	}
 	
-	@RequestMapping(value="/admin/info/buyer", method=RequestMethod.GET)
-	public void infoBuyer(Model model) { // 계정관리-구매자
-		List<BuyerInfo> buyerList = adminService.getBuyerInfo();
+	@RequestMapping(value="/admin/info/seller/update", method=RequestMethod.GET)
+	public void infoSellerUpdate(SellerBigdomInfo sbInfo, Model model) { // 계정관리-판매자 수정페이지
+//		logger.info(sbInfo.toString());
+		
+		// sellerid로 정보 조회
+		SellerBigdomInfo sbList = adminService.getSellerBigdomInfo(sbInfo.getSellerId());
+//		logger.info(sbList.toString());
+		
+		String sellerPhone = sbList.getSellerPhone();
+		if(sellerPhone != null && !"".equals(sellerPhone)) {
+			sbList.setSellerPhone1(sellerPhone.split("-")[0]);
+			sbList.setSellerPhone2(sellerPhone.split("-")[1]);
+			sbList.setSellerPhone3(sellerPhone.split("-")[2]);
+		}
+		
+		// sellerloc에 해당 판매자가 있는지 조회
+		//	-> 비활성화 시킬때 null이 들어감
+		boolean sellerStatus = adminService.getSellerStatus(sbInfo.getSellerId());
+//		logger.info(String.valueOf(sellerStatus));
+		
+		// sellerloc에 해당판매자의 빅돔이 있는지 조회
+		boolean bigdomStatus = adminService.getBigdomStatus(sbList);
+//		logger.info(String.valueOf(bigdomStatus));
+		
+		model.addAttribute("sbList", sbList);
+		model.addAttribute("sellerStatus", sellerStatus);
+		model.addAttribute("bigdomStatus", bigdomStatus);
+	}
+	
+	@RequestMapping(value="/admin/info/sellerUp", method=RequestMethod.GET)
+	public String infoSellerUp(SellerBigdomInfo sbInfo) { // 계정관리-판매자_정보수정
+		
+		sbInfo.setSellerPhone(sbInfo.getSellerPhone1()+"-"+sbInfo.getSellerPhone2()+"-"+sbInfo.getSellerPhone3());
+//		logger.info("ssssss::::::"+sbInfo.toString());
+		// sellerid로 해당 판매자 정보 업데이트
+		adminService.sellerUpdate(sbInfo);
+		
+		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
+	}
+	
+	@RequestMapping(value="/admin/info/deactivateSeller", method=RequestMethod.GET)
+	public String deactivateSeller(SellerBigdomInfo sbInfo) { // 계정관리-판매자_비활성화
+		
+		logger.info(sbInfo.toString());
+		// sellerid로 해당 판매자 정보 삭제
+//		adminService.sellerDelete(sbInfo.getSellerId());
+		
+		// sellerloc 테이블에 해당 판매자, 빅돔 null로 설정(비활성화)
+		adminService.setSellerAndBigdomNull(sbInfo.getSellerId());
+		
+		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
+	}
+	
+	@RequestMapping(value="/admin/info/deactivateBigdom", method=RequestMethod.GET)
+	public String deactivateBigdom(SellerBigdomInfo sbInfo) { // 계정관리-판매자_빅돔비활성화
+		
+//		logger.info("빅돔비활성화:::::::::"+sbInfo.toString());
+		// sellerid의 bigdomid null로 설정(비활성화)
+		adminService.deactivateBigdom(sbInfo);
+		
+		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
+	}
+	
+	@RequestMapping(value="/admin/info/activateBigdom", method=RequestMethod.GET)
+	public String activateBigdom(SellerBigdomInfo sbInfo) { // 계정관리-판매자_빅돔비활성화
+		
+//		logger.info("빅돔활성화:::::::::"+sbInfo.toString());
+		// sellerid에 맞는 bigdomid 활성화
+		adminService.activateBigdom(sbInfo);
+		
+		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
+	}
+	
+	@RequestMapping(value="/admin/info/buyer")
+	public void infoBuyer(
+			Model model, 
+			HttpServletRequest req) { // 계정관리-구매자
+		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getBuyerInfoCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getBuyerInfoTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		List<BuyerInfo> buyerList = adminService.getBuyerInfoList(paging);
+		
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
 		
 		model.addAttribute("buyerList", buyerList);
 	}
 	
-	@RequestMapping(value="/admin/info/bigdom", method=RequestMethod.GET)
-	public void infoBigdom(Model model) { // 계정관리-빅돔
-		List<BigdomSellerInfo> bigdomsellerList = adminService.getBigdomSellerInfo();
+	@RequestMapping(value="/admin/info/buyer/update", method=RequestMethod.GET)
+	public void updateBuyer(BuyerInfo buyerInfo, Model model) { // 계정관리-구매자_수정페이지
+		buyerInfo = adminService.getBuyerInfo(buyerInfo.getBuyerId());
+		
+//		logger.info("구매자 정보:::::::"+buyerInfo.toString());
+		String buyerPhone = buyerInfo.getBuyerPhone();
+		if(buyerPhone != null && !"".equals(buyerPhone)) {
+			buyerInfo.setBuyerPhone1(buyerPhone.split("-")[0]);
+			buyerInfo.setBuyerPhone2(buyerPhone.split("-")[1]);
+			buyerInfo.setBuyerPhone3(buyerPhone.split("-")[2]);
+		}
+		
+		String buyerEmail = buyerInfo.getBuyerEmail();
+		if(buyerEmail != null && !"".equals(buyerEmail)) {
+			buyerInfo.setBuyerEmail1(buyerEmail.split("@")[0]);
+			buyerInfo.setBuyerEmail2(buyerEmail.split("@")[1]);
+		}
+		
+		model.addAttribute("buyerInfo", buyerInfo);
+	}
+	
+	@RequestMapping(value="/admin/info/buyerUp", method=RequestMethod.GET)
+	public String buyerInfoUpdate(BuyerInfo buyerInfo) { // 계정관리-구매자 정보 수정하기
+		
+		buyerInfo.setBuyerPhone(buyerInfo.getBuyerPhone1()+"-"+buyerInfo.getBuyerPhone2()+"-"+buyerInfo.getBuyerPhone3());
+		buyerInfo.setBuyerEmail(buyerInfo.getBuyerEmail1()+"@"+buyerInfo.getBuyerEmail2());
+//		logger.info("구매자 수정::::::"+buyerInfo.toString());
+		
+		// 수정한 구매자 정보 디비에 저장
+		adminService.setBuyerInfo(buyerInfo);
+		
+		return "redirect:/admin/info/buyer/update?buyerId="+buyerInfo.getBuyerId();
+	}
+	
+	@RequestMapping(value="/admin/info/buyerDel", method=RequestMethod.GET)
+	public String buyerInfoDelete(BuyerInfo buyerInfo) {
+		
+//		logger.info("구매자 삭제:::::::::"+buyerInfo.toString());
+		
+		// 구매자 정보 삭제
+		adminService.delBuyerInfo(buyerInfo);
+		
+		return "redirect:/admin/info/buyer";
+	}
+	
+	@RequestMapping(value="/admin/info/bigdom")
+	public void infoBigdom(
+			Model model, 
+			HttpServletRequest req) { // 계정관리-빅돔
+		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getBigdomInfoCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getBigdomInfoTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		List<BigdomSellerInfo> bigdomsellerList = adminService.getBigdomSellerInfo(paging);
+		
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		// -------------------
 		
 		model.addAttribute("bigdomsellerList", bigdomsellerList);
+	}
+	
+	@RequestMapping(value="/admin/info/bigdom/update", method=RequestMethod.GET)
+	public void updateBigdom(BigdomSellerInfo bigdomInfo, Model model) {
+		
+//		logger.info(bsl.toString());
+		
+		bigdomInfo = adminService.getBigdomInfo(bigdomInfo);
+		
+		model.addAttribute("bigdomInfo", bigdomInfo);
+	}
+	
+	@RequestMapping(value="/admin/info/bigdomUp", method=RequestMethod.GET)
+	public String bigdomInfoUpdate(BigdomInfo bigdomInfo) {
+		
+		adminService.setBigdomInfo(bigdomInfo);
+		
+		return "redirect:/admin/info/bigdom/update?bigdomId="+bigdomInfo.getBigdomId();
 	}
 	
 	@RequestMapping(value="/admin/seller/list", method=RequestMethod.GET)
@@ -98,8 +352,132 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/book/list", method=RequestMethod.GET)
-	public void adminBooklist() { // 판매자 빅이슈 관리
+	public void adminBooklist(
+			Model model, 
+			HttpServletRequest req) { // 판매자 빅이슈 관리
 		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getSellerLocInfoCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getSellerLocInfoTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		List<SellerLoc> sellerlocList = adminService.getSellerLocList(paging);
+
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		// -------------------
+		
+		model.addAttribute("sellerlocList", sellerlocList);
+		
+	}
+	
+	@RequestMapping(value="/admin/book/list/deactivate", method=RequestMethod.GET)
+	public void adminBooklistDeactivate(
+			Model model, 
+			HttpServletRequest req) { // 판매자 빅이슈 관리-비활성화구역
+		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getSellerLocInfoDeactivateCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getSellerLocInfoDeactivateTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		List<SellerLoc> sellerlocListDeactivate = adminService.getSellerLocListDeactivate(paging);
+
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		// -------------------
+		
+		model.addAttribute("sellerlocListDeactivate", sellerlocListDeactivate);
+		
+	}
+	
+	@RequestMapping(value="/admin/book/list/activate", method=RequestMethod.GET)
+	public void adminBooklistActivate(
+			Model model, 
+			HttpServletRequest req) { // 판매자 빅이슈 관리-활성화구역
+		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getSellerLocInfoActivateCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getSellerLocInfoActivateTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+		logger.info(paging.toString());
+		
+		List<SellerLoc> sellerlocListActivate = adminService.getSellerLocListActivate(paging);
+
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		// -------------------
+		
+		model.addAttribute("sellerlocListActivate", sellerlocListActivate);
+		
+	}
+	
+	@RequestMapping(value="/admin/book/view", method=RequestMethod.GET)
+	public void adminBookView(SellerLoc sellerloc, Model model) {
+		
+		// 해당 판매자의 정보 조회
+		sellerloc = adminService.getSellerLocInfo(sellerloc);
+		
+		// 해당 판매자의 보유 빅이슈 정보 조회
+		List<BookListInfo> bookList = adminService.getBookListInfoAtBookview(sellerloc.getSellerId());
+		
+		model.addAttribute("sellerloc", sellerloc);
+		model.addAttribute("bookList", bookList);
+		
+	}
+	
+	@RequestMapping(value="/admin/book/addBook", method=RequestMethod.POST)
+	public String adminBookAdd(BookListInfo bli) {
+		
+//		logger.info("bli:::::::::::::::"+bli);
+		// 빅이슈 정보 넣기
+		adminService.putBookListInfoAtadminBook(bli);
+		
+		return "redirect:/admin/book/view?sellerId="+bli.getSellerId();
 	}
 	
 	@RequestMapping(value="/admin/chat/list", method=RequestMethod.GET)
@@ -510,4 +888,3 @@ public class AdminController {
 	}
 	
 }
-
