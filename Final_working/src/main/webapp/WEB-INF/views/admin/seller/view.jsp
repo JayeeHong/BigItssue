@@ -21,6 +21,19 @@ $(document).ready(function(){
 	
 	var spothtml;
 	
+	//시작시
+	if(zone=='부산'){
+		$('input:radio[name="bigArea"][value="부산"]').prop('checked', true);
+		$("#divSearch").hide()
+	}else{
+		$('input:radio[name="bigArea"][value="서울"]').prop('checked', true);
+		$("#divSearch").show()
+	}
+	
+	
+	
+	
+	
 	var zoneSub = zone.split('/')
 	var getCheck= RegExp(/^[0-9]$/);
 	
@@ -33,50 +46,7 @@ $(document).ready(function(){
 	}
 // 	arr.push(zone);//DB값을 배열에 담는다.
 	
-	
-	
 	add()//버튼 생성펑션을 실행한다.
-	
-	if(zone=='부산'){
-	$('input:radio[name="bigArea"][value="부산"]').prop('checked', true);
-	
-	spothtml = "";	
-	spothtml += '<select class="form-control" name="zone" onchange="changeSpotSelect(this.options[this.selectedIndex].value)">';
-	spothtml += '<option value="부산">부산</option>';
-	spothtml += '</select>';
-	
-	spothtml += '&nbsp; <input class="btn" type="button" value="추가" onclick="addZone()" > &nbsp;'
-	spothtml += '<input  class="btn text-right" type="button" value="모두삭제" onclick="arrAllDelete()">'
-	$("#stationInfo").html(spothtml)
-	value='부산'//초기값세팅
-	$("#arrZone").val(arr)//submit을 위해 zone데이터를 value로 저장함
-		
-	}else{
-		$('input:radio[name="bigArea"][value="서울"]').prop('checked', true);	
-	
-		spothtml = "";	
-		spothtml += '<select class="form-control" name="zone" onchange="changeSpotSelect(this.options[this.selectedIndex].value)">';
-		spothtml += '<option value="1호선">1호선</option>';
-		spothtml += '<option value="2호선">2호선</option>';
-		spothtml += '<option value="3호선">3호선</option>';
-		spothtml += '<option value="4호선">4호선</option>';
-		spothtml += '<option value="5호선">5호선</option>';
-		spothtml += '<option value="6호선">6호선</option>';
-		spothtml += '<option value="7호선">7호선</option>';
-		spothtml += '<option value="8호선">8호선</option>';
-		spothtml += '<option value="9호선">9호선</option>';
-		spothtml += '<option value="경의">경의중앙선</option>';
-		spothtml += '<option value="분당">분당선</option>';
-		spothtml += '<option value="신분당">신분당선</option>';
-		spothtml += '<option value="공항">공항철도</option>';
-		spothtml += '</select>';
-		
-		spothtml += '&nbsp; <input class="btn" type="button" value="추가" onclick="addZone()" > &nbsp;'
-		spothtml += '<input  class="btn text-right" type="button" value="모두삭제" onclick="arrAllDelete()">'
-		$("#stationInfo").html(spothtml)
-		value='1호선'//초기값세팅
-		$("#arrZone").val(arr)//submit을 위해 zone데이터를 value로 저장함
-	}
 	
 	if(sellerCard =='카드 가능'){
 		$('input:radio[name="sellerCard"][value="카드 가능"]').prop('checked', true);
@@ -87,54 +57,9 @@ $(document).ready(function(){
 	
 	$("#locNo").val(locNo)
 	
-	
 	$("#station").val(station)
 	$("#spot").val(spot)
 
-	$('input[name="bigArea"]').change(function(){
-		if(this.value == '서울'){
-		arrAllDelete()//변경시 모든값을 삭제하는 펑션실행.
-		
-		spothtml = "";	
-		spothtml += '<select class="form-control" name="zone" onchange="changeSpotSelect(this.options[this.selectedIndex].value)">';
-		spothtml += '<option value="1호선">1호선</option>';
-		spothtml += '<option value="2호선">2호선</option>';
-		spothtml += '<option value="3호선">3호선</option>';
-		spothtml += '<option value="4호선">4호선</option>';
-		spothtml += '<option value="5호선">5호선</option>';
-		spothtml += '<option value="6호선">6호선</option>';
-		spothtml += '<option value="7호선">7호선</option>';
-		spothtml += '<option value="8호선">8호선</option>';
-		spothtml += '<option value="9호선">9호선</option>';
-		spothtml += '<option value="경의">경의중앙선</option>';
-		spothtml += '<option value="분당">분당선</option>';
-		spothtml += '<option value="신분당">신분당선</option>';
-		spothtml += '<option value="공항">공항철도</option>';
-		spothtml += '</select>';
-		spothtml += '&nbsp; <input class="btn" type="button" value="추가" onclick="addZone()" > &nbsp;'
-		spothtml += '<input  class="btn text-right" type="button" value="모두삭제" onclick="arrAllDelete()">'
-		value = '1호선' //초기값세팅
-			
-		}else{
-			arrAllDelete()//변경시 모든값을 삭제하는 펑션실행.
-			
-			spothtml = "";	
-			spothtml += '<select class="form-control" name="zone" onchange="changeSpotSelect(this.options[this.selectedIndex].value)">';
-			spothtml += '<option value="부산">부산</option>';
-			spothtml += '&nbsp; <input class="btn" type="button" value="추가" onclick="addZone()" > &nbsp;'
-			spothtml += '<input  class="btn text-right" type="button" value="모두삭제" onclick="arrAllDelete()">'
-	
-			spothtml += '</select>';
-			value='부산'//초기값세팅
-				
-		}
-	$("#stationInfo").html(spothtml)
-	})
-		
-	
-	
-	
-	
 	$("#startTime1").val(sellerTimeS1);
 	$("#startTime2").val(sellerTimeS2);
 	
@@ -142,9 +67,22 @@ $(document).ready(function(){
 	$("#endTime2").val(sellerTimeE2);
 	
 	
-	
-	
-	
+
+	$('input[name="bigArea"]').change(function(){
+		if(this.value == '서울'){
+			$("#divSearch").show()
+			$("#station").val()
+			arr.splice(0)
+			add()
+		}else{
+			$("#divSearch").hide()
+			$("#station").val()
+			arr.splice(0)
+			value='부산'
+			arr.push(value)
+			add()
+		}
+	})
 	
 
 })
@@ -187,6 +125,41 @@ function arrAllDelete(){
 	add()//삭제후 버튼생성펑션을 실행한다.
 }
 
+
+function subwayList(){
+	arr.splice(0)
+	$.ajax({
+		url : "/admin/seller/searchzone"
+		,type : "post"
+		,data : {searchWord : $("#searchWord").val()}
+		,dataType : "json"
+		,success : function(res){
+			
+			console.log(Object.keys(res.zoneList).length)
+			
+			var a = Object.keys(res.zoneList)
+			
+			$("#station").val($("#searchWord").val());
+			
+			var list = res.zoneList
+			var getCheck= RegExp(/^[0-9]$/);
+			
+			$.each(list, function(index, val){
+				console.log(val)
+				if(getCheck.test(val)){
+				arr.push(val+'호선')
+				}else{
+					arr.push(val)
+				}
+			})
+			
+			add();
+		}
+		, error : function(e){
+			console.log(e)
+		}
+	})
+}
 
 </script>
     
@@ -237,6 +210,9 @@ input[type=number]{
 		<tr>
 			<td class="tdLeft">호선</td>
 			<td class="tdRight">
+			<div id="divSearch">
+			<input type="search" name="searchWord" id="searchWord"><input type="button" onclick="subwayList()" value="찾기">
+			</div>
 			<div id="stationInfo"><!-- selet타입의 호선선택이 들어오는 영역 -->
 			
 			</div>
