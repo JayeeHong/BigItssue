@@ -403,6 +403,7 @@ public class AdminServiceImpl implements AdminService{
 
 	public List<MainBanner> getBanner() {
 		return adminDao.selectBanner();
+	}
 
 	public List<String> userIdList(String abc) {
 		return adminDao.userIdList(abc);
