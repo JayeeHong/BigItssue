@@ -39,9 +39,14 @@ function inquire(id,sort){
 	console.log("sort:"+sort);
 	//현재창에서 페이지 이동
 // 	$(location).attr("href", "/createRoom?id="+id+"&sort="+sort);
-	window.open("/createRoom?id="+id+"&sort="+sort, "문의하기", "width=800, height=750, left=100, top=50");
+	if(${buyerLogin eq true}){
+		window.open("/createRoom?id="+id+"&sort="+sort, "문의하기", "width=800, height=750, left=100, top=50");
+	}else{
+		$(location).attr("href", "/buyer/login");
+	}
 	
 }
+
 </script>
 
 
@@ -54,14 +59,26 @@ function inquire(id,sort){
 	<select name="zoneSelect">
 		<option value="">지역을 선택하세요</option>
 		<c:forEach var="item" items="${zoneList}" begin="0" end="${zoneList.size()}" step="1">
-			<option value="${item.zone }">${item.zone }</option>
+			<!-- 한번 검색한 것은 새로고침해도 유지되도록 -->
+			<c:if test="${paging.zone eq item.zone }">
+				<option value="${item.zone }" selected>${item.zone }</option>
+			</c:if>
+			<c:if test="${paging.zone ne item.zone }">
+				<option value="${item.zone }">${item.zone }</option>
+			</c:if>
 		</c:forEach>
 	</select>
 	
 	<select name="stationSelect">
 		<option value="">판매위치</option>
 		<c:forEach var="item" items="${stationList}" begin="0" end="${stationList.size()}" step="1">
-			<option value="${item.station }">${item.station }</option>
+			<!-- 한번 검색한 것은 새로고침해도 유지되도록 -->
+			<c:if test="${paging.station eq item.station }">
+				<option value="${item.station }" selected>${item.station }</option>
+			</c:if>
+			<c:if test="${paging.station ne item.station }">
+				<option value="${item.station }">${item.station }</option>
+			</c:if>
 		</c:forEach>
 	</select>
 	<button style="margin-bottom:6px;" class="btn btn-primary btn-sm">검색</button>
@@ -121,7 +138,6 @@ function inquire(id,sort){
 			<td>${item.sellerId }<button class="btn btn-warning btn-sm fr" disabled>문의하기</button></td>
 		</c:if>		
 
-		<td>${item.sellerId }<button class="btn btn-warning btn-sm fr" onclick="inquire('${item.sellerId}','판매자')">문의하기</button></td>
 	</c:forEach>
 	</tbody>
 </table>

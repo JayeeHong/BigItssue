@@ -1,12 +1,14 @@
 package web.service.face;
 
 import java.util.List;
+import java.util.Map;
 
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
+import web.util.MyBookingPaging;
 import web.util.SellerLocPaging;
 
 public interface BuyerService {
@@ -70,6 +72,18 @@ public interface BuyerService {
 	
 	//중복뺸 stationList얻기
 	public List<SellerLoc> getStationList();
+	
+	//zone,station으로 sellerLoc 개수새기
+	public int getTotalCountOfSellerLocByZoneAndStation(Map<String, Object> map);
+	
+	//zone,station으로 sellerLoc 조회
+	public List<SellerLoc> getPagingListOfSellerLocByZoneAndStation(SellerLocPaging paging);
+	
+	//나의 예약내역의 총count구하기
+	public int getTotalCountOfMyBooking(String buyerId);
+	
+	//나의 예약페이징리스트 조회
+	public List<Reservation> getPagingListOfMyReservation(MyBookingPaging paging);
 	
 	
 	

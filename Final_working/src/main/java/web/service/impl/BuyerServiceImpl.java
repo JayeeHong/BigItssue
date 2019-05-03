@@ -1,6 +1,7 @@
 package web.service.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -21,6 +22,7 @@ import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.service.face.BuyerService;
+import web.util.MyBookingPaging;
 import web.util.SellerLocPaging;
 
 @Service
@@ -235,6 +237,26 @@ public class BuyerServiceImpl implements BuyerService {
 	@Override
 	public List<SellerLoc> getStationList() {
 		return buyerDao.selectStationList();
+	}
+
+	@Override
+	public int getTotalCountOfSellerLocByZoneAndStation(Map<String, Object> map) {
+		return buyerDao.selectTotalCountOfSellerLocByZoneAndStation(map);
+	}
+
+	@Override
+	public List<SellerLoc> getPagingListOfSellerLocByZoneAndStation(SellerLocPaging paging) {
+		return buyerDao.selectPagingListOfSellerLocByZoneAndStation(paging);
+	}
+
+	@Override
+	public int getTotalCountOfMyBooking(String buyerId) {
+		return buyerDao.selectTotalCountOfMyBooking(buyerId);
+	}
+
+	@Override
+	public List<Reservation> getPagingListOfMyReservation(MyBookingPaging paging) {
+		return buyerDao.selectPagingListOfMyReservation(paging);
 	}
   
   

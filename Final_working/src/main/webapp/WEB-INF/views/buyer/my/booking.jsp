@@ -19,11 +19,12 @@
 	<td>상태</td>
 	<td>예약부수</td>
 	<td>결제예정금액</td>
+	<td>예약취소</td>
 </tr>
 </thead>
 
 <tbody>
-<c:forEach items="${bookListInfo }" var="b">
+<c:forEach items="${reservationList }" var="b">
 <tr>
 	<td><fmt:formatDate value="${b.pickupDate }" pattern="yy-MM-dd(E)"/></td>
 	<td>${b.spot }</td>
@@ -31,11 +32,17 @@
 	<td>${b.status }</td>
 	<td>${b.bookNumber }</td>
 	<td><fmt:formatNumber value="${b.total}" pattern="#,###,###"/>[원]</td>
+	<td>
+	<c:if test="${b.status eq '예약' }">
+		<button class="btn btn-danger btn-sm">예약취소</button>
+	</c:if>
+	</td>
 </tr>
 </c:forEach>
 </tbody>
 
 </table>
+<jsp:include page="bookingPaging.jsp" />
 
 </div>
 
