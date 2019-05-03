@@ -85,6 +85,20 @@ $(document).ready(function(){
 	})
 	
 
+	
+	$("#sellerId").click(function(){
+		var openWin;
+		var url= "/admin/seller/select";    //팝업창 페이지 URL
+		var winWidth = 450;
+	   	var winHeight = 400;
+
+	    var popupOption= "width="+winWidth+", height="+winHeight;    //팝업창 옵션(optoin)
+		openWin = window.open(url,"사용자선택",popupOption);
+	    
+	})
+	
+	
+	
 })
 
 
@@ -160,6 +174,8 @@ function subwayList(){
 		}
 	})
 }
+
+
 
 </script>
     
@@ -263,9 +279,9 @@ input[type=number]{
 		</tr>
 		
 		<tr>
-			<td class="tdLeft">판매자</td>
+			<td class="tdLeft">판매자ID</td>
 			<td class="tdRight">
-			<input class="form-control" type="text" id="sellerName" name="sellerName" value="${sellerName }" >
+			<input class="form-control" type="text" id="sellerId" name="sellerId" value="${sellerInfo.sellerId }" >
 			</td>
 		</tr>
 		
@@ -279,8 +295,8 @@ input[type=number]{
 		<a href="/admin/seller/list"><button class="btn btn-danger" type="button">취소</button></a>
 		</div>
 		
-		<input type="hidden" id="arrZone" name="arrZone"> <!-- 배열로 만들어진 zone을 보내기 위한 input type히든 -->
-		<input type="hidden" id="sellerId" name="sellerId" value="${sellerInfo.sellerId }">
+		<input type="hidden" id="arrZone" name="arrZone"> <!-- 배열로 만들어진 zone을 보내기 위한 input type히든 건들지마시오 -->
+<%-- 		<input type="hidden" id="sellerId" name="sellerId" value="${sellerInfo.sellerId }"> --%>
 	</form>
 	
 	</div>

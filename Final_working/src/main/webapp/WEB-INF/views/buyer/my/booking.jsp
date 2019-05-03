@@ -3,6 +3,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<script type="text/javascript">
+//예약페이지 열기
+function bookingCancel(magazineNo){
+	
+	console.log("magazineNo:"+magazineNo);
+	//현재창에서 페이지 이동
+	$(location).attr("href", "/buyer/bookingCancel?magazineNo="+magazineNo);
+}
+
+</script>
 <div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_buyer.jsp" />
@@ -34,7 +44,7 @@
 	<td><fmt:formatNumber value="${b.total}" pattern="#,###,###"/>[원]</td>
 	<td>
 	<c:if test="${b.status eq '예약' }">
-		<button class="btn btn-danger btn-sm">예약취소</button>
+		<button class="btn btn-danger btn-sm" onclick="bookingCancel(${b.magazineNo})">예약취소</button>
 	</c:if>
 	</td>
 </tr>

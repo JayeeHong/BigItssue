@@ -258,6 +258,21 @@ public class BuyerServiceImpl implements BuyerService {
 	public List<Reservation> getPagingListOfMyReservation(MyBookingPaging paging) {
 		return buyerDao.selectPagingListOfMyReservation(paging);
 	}
+
+	@Override
+	public void setStatusOfReservation(int magazineNo) {
+		buyerDao.updateStatusOfReservation(magazineNo);
+	}
+
+	@Override
+	public Reservation getReservaionByMagazineNo(int magazineNo) {
+		return buyerDao.selectReservationByMagazineNo(magazineNo);
+	}
+
+	@Override
+	public void increaseCirculation(Reservation reservationInfo) {
+		buyerDao.increaseCirculation(reservationInfo);	
+	}
   
   
   

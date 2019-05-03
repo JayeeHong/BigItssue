@@ -499,10 +499,11 @@ public class AdminController {
 		
 		if(searchWord ==null) {
 			searchWord = "";
+			condition = null;
 		}
-		if(condition == null) {
-			condition = "zone";
-		}
+//		if(condition == null) {
+//			condition = "zone";
+//		}
 		
 		//현재 페이지 번호 얻기
 		int curPage = 0; 
@@ -558,11 +559,13 @@ public class AdminController {
 			) {
 		
 		SellerLoc locInfo = adminService.getSellerInfo(sellerloc);
-		
+		model.addAttribute("sellerInfo", locInfo);
+
+		if(locInfo.getSellerId() != null) {
 		String sellerName = adminService.getSellerName(locInfo);
 		
-		model.addAttribute("sellerInfo", locInfo);
 		model.addAttribute("sellerName", sellerName);
+		}
 	}
 	
 	@RequestMapping(value="/admin/seller/view", method=RequestMethod.POST)
@@ -600,13 +603,6 @@ public class AdminController {
 		//sellerLoc DB변경
 		adminService.adminSellserUpdate(sellerLoc);
 		
-		HashMap hm = new HashMap<String, SellerLoc>();
-		
-		hm.put("sellerName", sellerName);
-		hm.put("sellerLoc", sellerLoc);
-		
-		//sellerInfo의 sellerName변경
-		adminService.changeSellerName(hm);
 		
 		return "redirect:/admin/seller/view?locNo="+sellerLoc.getLocNo();
 	}
@@ -894,5 +890,28 @@ public class AdminController {
 		
 		return "admin/loc/list";
 	}
+
+
+	
+	
+	@RequestMapping(value="/admin/seller/select", method=RequestMethod.GET)
+	public void selectUserForm(Model model) {
+		
+		List<String> idOfinfo = adminService.userIdList("sellerInfo"); 
+		List<String> idOfLocList = adminService.userIdList("sellerLoc");
+		
+		for(String i : idOfLocList) {
+			idOfinfo.remove(i);
+		}
+		List<SellerInfo> infoList = adminService.nullUserInfo(idOfinfo);
+		
+		
+		System.out.println(infoList);
+		model.addAttribute("sellerInfo", infoList);
+		
+		
+	}
+	
+	
 
 }

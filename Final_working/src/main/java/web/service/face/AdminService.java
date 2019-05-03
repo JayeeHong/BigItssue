@@ -173,9 +173,6 @@ public interface AdminService {
 
 	public String getSellerName(SellerLoc locInfo);
 
-	public void changeSellerName(HashMap hm);
-
-
 
 	//판매 장소 추가하기
 	public void insertList(SellerLoc sellerLoc);
@@ -186,6 +183,10 @@ public interface AdminService {
 	
 	//배너 리스트 얻기
 	public List<MainBanner> getBanner();
+
+  public List<String> userIdList(String abc);
+
+  public List<SellerInfo> nullUserInfo(List<String> idOfinfo);
 
 }
 

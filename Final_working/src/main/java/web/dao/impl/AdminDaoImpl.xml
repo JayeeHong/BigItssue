@@ -8,17 +8,32 @@
 
 	<select resultType="int" parameterType="hashMap" id="getTotalCount"> 
 		SELECT COUNT(*) FROM sellerLoc 
-		where ${condition} like '%' || #{searchWord} || '%' order by locno desc 
+		<choose>
+			<when test="condition != null">
+			where ${condition} like '%' || #{searchWord} || '%' order by locno desc 
+			</when>
+			<otherwise>
+			order by locno desc
+			</otherwise>
+		</choose>
 	</select>
 
 	<select resultType="web.dto.SellerLoc" parameterType="hashMap" id="getPagingList"> 
-		SELECT * FROM ( 
+		SELECT c.*, s.sellername from (SELECT * FROM ( 
 			SELECT rownum rnum, B.* FROM ( 
 				SELECT * FROM sellerLoc 
-				WHERE ${condition} like '%' || #{searchWord} || '%' 
-				ORDER BY locno desc ) 
+				<choose>
+				<when test="condition != null">
+				WHERE ${condition} like '%' || #{searchWord} || '%' ORDER BY locno desc
+				</when>
+				<otherwise>
+				order by locno desc
+				</otherwise> 
+				</choose>
+				) 
 			B ORDER BY rnum ) R 
-		WHERE rnum BETWEEN #{p.startNo } AND #{p.endNo } 
+		WHERE rnum BETWEEN #{p.startNo } AND #{p.endNo } ) c
+		left join sellerinfo s on c.sellerid = s.sellerid
 	</select>
 	
 	<delete parameterType="web.dto.SellerLoc" id="adminSellerListDelete"> 
@@ -325,7 +340,8 @@
 			spot = #{spot },
 			sellerTimeS = #{sellerTimeS },
 			sellerTimeE = #{sellerTimeE },
-			sellerCard = #{sellerCard }
+			sellerCard = #{sellerCard },
+			sellerId = #{sellerId }
 		WHERE locNo = #{locNo }
 	</update>
 	
@@ -335,12 +351,7 @@
 	
 	</select>
 
-	<update id="changeSellerName" parameterType="hashMap">
-		Update SellerInfo
-		set sellerName = #{sellerName }
-		where sellerId = #{sellerLoc.sellerId }
-	
-	</update>
+
 	
 
 	<insert id="insertList" parameterType="web.dto.SellerLoc">
@@ -360,6 +371,7 @@
 		</choose>
 	</delete>
 	
+
 	
 	<select id="selectBanner" resultType="web.dto.MainBanner">
 		SELECT * FROM MainBanner
@@ -371,6 +383,18 @@
 	
 	
 	
+
+	<select id="userIdList" parameterType="String" resultType="String">
+		SELECT sellerId FROM ${value }
+	
+	</select>
+	
+	<select id="nullUserInfo" parameterType="String" resultType="web.dto.SellerInfo">
+		SELECT * FROM sellerInfo
+		where sellerId = #{value }
+	
+	</select>
+
 	
 	
 </mapper>
