@@ -23,8 +23,8 @@
 		where buyerId = #{buyerId }
 		and	buyerPw = #{buyerPw }
 	</select>
-
-
+	
+	
 	<select id="buyerFindId" parameterType="web.dto.BuyerInfo" resultType="web.dto.BuyerInfo">
 		SELECT * FROM buyerinfo
 		where buyerName = #{buyerName }
@@ -73,12 +73,27 @@
 	
 	<select id="selectCntOfSellerLoc" resultType="int">
 		SELECT COUNT(*) FROM SellerLoc
+		WHERE 1=1
+		<if test="zoneSelect != null and zoneSelect != ''">
+			AND zone=#{zoneSelect}
+		</if>
+		<if test="stationSelect != null and stationSelect != ''">
+			AND station=#{stationSelect}
+		</if>
 	</select>
 	
 	<select id="selectPaginglistOfSellerLoc" parameterType="web.util.SellerLocPaging" resultType="web.dto.SellerLoc">
 		SELECT * FROM(
 			SELECT rownum rnum, b.* FROM(
-					SELECT * FROM SellerLoc ORDER BY locNo desc
+					SELECT * FROM SellerLoc
+					WHERE 1=1
+					<if test="zone != null and zone != ''">
+						AND zone=#{zone}
+					</if>
+					<if test="station != null and station != ''">
+						AND station=#{station}
+					</if>
+					ORDER BY locNo desc
 				)B 
 			ORDER BY rnum
 		)R
@@ -124,7 +139,7 @@
 	<!-- 예약 buyerId,sellerId로 cnt개수검색 -->
 	<select id="selectResrvaionCnt" parameterType="web.dto.Reservation" resultType="int">
 		SELECT count(*) FROM Reservation
-		WHERE buyerId = #{buyerId } AND sellerId = #{sellerId }
+		WHERE buyerId = #{buyerId } AND sellerId = #{sellerId } AND status='예약'
 	</select>
 	
 	<!-- 예약 buyerId로 검색 -->
@@ -158,4 +173,50 @@
 		SELECT DISTINCT station FROM sellerLoc
 	</select>
 
+	<select id="selectTotalCountOfSellerLocByZoneAndStation" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM sellerLoc
+		WHERE 1=1
+		<if test="zoneSelect != null and zoneSelect != ''">
+			AND zone=#{zoneSelect}
+		</if>
+		<if test="stationSelect != null and stationSelect != ''">
+			AND station=#{stationSelect}
+		</if>
+	</select>
+	
+	<select id="selectPagingListOfSellerLocByZoneAndStation" parameterType="web.util.SellerLocPaging" resultType="web.dto.SellerLoc">
+		SELECT * FROM(
+			SELECT rownum rnum, b.* FROM(
+					SELECT * FROM SellerLoc
+					WHERE 1=1
+					<if test="zone != null and zone != ''">
+						AND zone=#{zone}
+					</if>
+					<if test="station != null and station != ''">
+						AND station=#{station}
+					</if>
+					ORDER BY locNo desc
+				)B 
+			ORDER BY rnum
+		)R
+		WHERE rnum BETWEEN #{startNo} AND #{endNo}
+	</select>
+	
+	<select id="selectTotalCountOfMyBooking" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM reservation
+		WHERE buyerId = #{buyerId}
+	</select>
+	
+	<select id="selectPagingListOfMyReservation" parameterType="web.util.MyBookingPaging" resultType="web.dto.Reservation">
+		SELECT * FROM(
+			SELECT rownum rnum, b.* FROM(
+					SELECT * FROM reservation
+					WHERE buyerId = #{buyerId}
+					ORDER BY reserveNo desc
+				)B 
+			ORDER BY rnum
+		)R
+		WHERE rnum BETWEEN #{startNo} AND #{endNo}
+	</select>
+	
 </mapper>

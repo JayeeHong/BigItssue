@@ -1,12 +1,14 @@
 package web.dao.face;
 
 import java.util.List;
+import java.util.Map;
 
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
+import web.util.MyBookingPaging;
 import web.util.SellerLocPaging;
 
 public interface BuyerDao {
@@ -68,7 +70,19 @@ public interface BuyerDao {
 	
 	//중복 뺀 zoneList 얻기
 	public List<SellerLoc> selectZoneList();
+	
 	//중복 뺸 stationList 얻기
 	public List<SellerLoc> selectStationList();
 	
+	//zone,station으로 sellerLoc 개수새기
+	public int selectTotalCountOfSellerLocByZoneAndStation(Map<String, Object> map);
+	
+	//zone,station으로 sellerLoc 조회
+	public List<SellerLoc> selectPagingListOfSellerLocByZoneAndStation(SellerLocPaging paging);
+	
+	//나의 예약내역의 총count구하기
+	public int selectTotalCountOfMyBooking(String buyerId);
+	
+	//나의 예약페이징리스트 조회
+	public List<Reservation> selectPagingListOfMyReservation(MyBookingPaging paging);
 }
