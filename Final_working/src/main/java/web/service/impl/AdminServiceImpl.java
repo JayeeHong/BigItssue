@@ -14,6 +14,7 @@ import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.MainBanner;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -400,6 +401,11 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public void deleteList(SellerLoc sellerLoc) {
 		adminDao.deleteList(sellerLoc);
+	}
+
+	@Override
+	public List<MainBanner> getBanner() {
+		return adminDao.selectBanner();
 	}
 	
 }

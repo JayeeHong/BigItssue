@@ -26,6 +26,7 @@ import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.MainBanner;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -833,8 +834,15 @@ public class AdminController {
 		
 	}
 	
+	
+	//메인배너관리
 	@RequestMapping(value="/admin/banner/list", method=RequestMethod.GET)
-	public void adminBannerlist() { // 배너관리
+	public void adminBannerList(MainBanner mainBanner, Model model) {
+		
+		logger.info("배너관리");
+		
+		List<MainBanner> bannerList = adminService.getBanner();
+		model.addAttribute("bannerList", bannerList);
 		
 	}
 	
@@ -886,5 +894,5 @@ public class AdminController {
 		
 		return "admin/loc/list";
 	}
-	
+
 }
