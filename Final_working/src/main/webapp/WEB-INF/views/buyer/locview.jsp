@@ -126,6 +126,7 @@ function inquire(id,sort){
 				<tr>
 				<td>${item.month }</td>
 				<input type="hidden" name="month" value="${item.month}"/>
+				<input type="hidden" name="magazineNo" value="${item.magazineNo}"/>
 				<td>${item.circulation }</td>
 				<td>
 				<c:if test="${item.circulation ge 2}">

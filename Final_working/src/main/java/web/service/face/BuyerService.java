@@ -85,6 +85,15 @@ public interface BuyerService {
 	//나의 예약페이징리스트 조회
 	public List<Reservation> getPagingListOfMyReservation(MyBookingPaging paging);
 	
+	//reservation예약테이블 status "예약"=>"취소"로 변경하기
+	public void setStatusOfReservation(int magazineNo);
+	
+	//magazineNo으로 Reservation 조회
+	public Reservation getReservaionByMagazineNo(int magazineNo);
+	
+	//bookListInfo 빅이슈테이블 circulation(보유부수) 예약취소한 수 만큼 증가시키기
+	public void increaseCirculation(Reservation reservationInfo);
+	
 	
 	
 }
