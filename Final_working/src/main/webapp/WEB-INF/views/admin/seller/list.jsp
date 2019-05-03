@@ -100,12 +100,38 @@ function getLocList(){
 				$.each(list, function(index, value){
 					html +='<tr style="text-align: center;">'
 					html += '<td>'+value.locNo+'</td>'
+					
+					if(value.zone ==null){
+					html += '<td></td>'	
+					}else{
 					html += '<td>'+value.zone+'</td>'
+					}
+					
+					if(value.station == null){
+					html += '<td></td>'		
+					}else{
 					html += '<td>'+value.station+'</td>'
+					}
+					
+					if(value.spot == null){
+					html += '<td></td>'	
+					}else{
 					html += '<td>'+value.spot+'</td>'
+					}
+					
 					html += '<td>'+value.sellerCard+'</td>'
+					
+					if(value.sellerTimeS == 0 || value.sellerTimeE == 0){
+					html += '<td></td>'	
+					}else{
 					html += '<td>'+value.sellerTimeS+'~'+value.sellerTimeE+'</td>'
-					html += '<td>'+value.sellerId+'</td>'
+					}
+
+					if(value.sellerId == null){
+					html += '<td>'+'연결된 계정이 없습니다'+'</td>'
+					}else{
+					html += '<td>'+value.sellerName+'</td>'
+					}
 					html += '<td><input class="btn btn-primary" type="button" value="수정" onclick="detailView('+value.locNo+')">'
 					html += '<input class="btn btn-danger" type="button" value="삭제" onclick="listDelete('+value.locNo+')"> </td>'
 					html +='</tr>'

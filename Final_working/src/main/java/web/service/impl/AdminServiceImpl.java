@@ -1,5 +1,6 @@
 package web.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -386,11 +387,6 @@ public class AdminServiceImpl implements AdminService{
 		return adminDao.getSellerName(locInfo);
 	}
 
-	@Override
-	public void changeSellerName(HashMap hm) {
-		adminDao.changeSellerName(hm);
-		
-	}
 
   @Override
 	public void insertList(SellerLoc sellerLoc) {
@@ -400,6 +396,22 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public void deleteList(SellerLoc sellerLoc) {
 		adminDao.deleteList(sellerLoc);
+	}
+
+	@Override
+	public List<String> userIdList(String abc) {
+		return adminDao.userIdList(abc);
+	}
+
+	@Override
+	public List<SellerInfo> nullUserInfo(List<String> idOfinfo) {
+		
+		List<SellerInfo> list = new ArrayList<SellerInfo>();
+				
+			for(String i : idOfinfo) {
+				list.addAll((adminDao.nullUserInfo(i)));
+			}
+		return list;
 	}
 	
 }
