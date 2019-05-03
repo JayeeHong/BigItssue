@@ -25,7 +25,8 @@
 			<exclude-mapping path="/buyer/join" />
 			<exclude-mapping path="/buyer/useid" />
 			<exclude-mapping path="/buyer/useeamil" />
-			<exclude-mapping path="/buyer/useeamil" />
+			<exclude-mapping path="/buyer/findid" />
+			<exclude-mapping path="/buyer/findpw" />
 			<exclude-mapping path="/buyer/mailsender" />
 			<exclude-mapping path="/buyer/notice" />
 			<!-- 인터셉터 빈 등록 -->
