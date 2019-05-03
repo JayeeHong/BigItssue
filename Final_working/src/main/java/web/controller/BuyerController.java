@@ -470,6 +470,7 @@ public class BuyerController {
 			String AmPm,
 			int locNo,
 			String month[],
+			int magazineNo[],
 			HttpSession session) { // 마이페이지-예약내역
 		
 		//예약DTO
@@ -490,6 +491,7 @@ public class BuyerController {
 		//				(month는 예약호수정보를 담은 String형 배열)
 		for(int i=0; i<selectBookingNum.length; i++) {
 			
+			
 			//예약부수가 0보다 작다면 아래 코드들 실행못하게 continue
 			if(selectBookingNum[i]<=0)
 				continue;
@@ -503,6 +505,7 @@ public class BuyerController {
 			reservationInfo.setStatus("예약");
 			reservationInfo.setTotal(5000*selectBookingNum[i]);
 			reservationInfo.setBookDate(date);
+			reservationInfo.setMagazineNo(magazineNo[i]);
 			
 			//현재시간(년,월,일)+예약한시간(시,분)+오전/오후
 			String bookingTime = bookingTimeHour+":"+bookingTimeMin+" "+AmPm;
@@ -703,5 +706,24 @@ public class BuyerController {
 		}
 		
 //		return "redirect:/buyer/my/info";
+	}
+	
+	@RequestMapping(value="/buyer/bookingCancel", method=RequestMethod.GET)
+	public String buyerBookingCancel(int magazineNo, Model model) { 
+		
+		logger.info("magazineNo:"+magazineNo);
+			
+		//magazineNo으로 reservation테이블 조회
+		Reservation reservationInfo = buyerService.getReservaionByMagazineNo(magazineNo);
+		
+		logger.info("reservationInfo:"+reservationInfo);
+		
+		//bookListInfo 빅이슈테이블 circulation(보유부수) 예약취소한 수 만큼 증가시키기
+		buyerService.increaseCirculation(reservationInfo);
+		
+		//reservation 예약테이블 status "예약"=>"취소"로 변경하기
+		buyerService.setStatusOfReservation(magazineNo);
+		
+		return "redirect:/buyer/my/booking";
 	}
 }
