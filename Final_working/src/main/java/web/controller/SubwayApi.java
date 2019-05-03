@@ -54,9 +54,10 @@ public class SubwayApi {
 		
 		
 		String text = URLEncoder.encode(searchWord, "UTF-8");
-		String url = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getKwrdFndSubwaySttnList?serviceKey=FTsFabal6deoKxbke9kWGIb3kvMUFuKfJViCmlpItTmYPEDx1WeRTBx49otZympexcYXYzHV7c6obfhhawzocg%3D%3D&subwayStationName="+text;
+		String url = "http://openapi.tago.go.kr/openapi/service/SubwayInfoService/getKwrdFndSubwaySttnList?serviceKey=FTsFabal6deoKxbke9kWGIb3kvMUFuKfJViCmlpItTmYPEDx1WeRTBx49otZympexcYXYzHV7c6obfhhawzocg%3D%3D&table&numOfRows=9999&subwayStationName="+text;
 		
-		Node seoul = null;
+		Node routeName = null;
+		Node stationName = null;
 		
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -98,12 +99,23 @@ public class SubwayApi {
 		
 		Map map = new HashMap();
 		String subwayLine;
+		
+		
 		for(int i=0; i<Integer.parseInt(cnt.getTextContent()); i++) {
 			item = (Element) doc.getElementsByTagName("item").item(i);
-			seoul = item.getElementsByTagName("subwayRouteName").item(0);
-			System.out.println("호선 : "+seoul.getChildNodes().item(0).getNodeValue());
-			subwayLine = seoul.getChildNodes().item(0).getNodeValue().replace("서울 ", "").replace("호선", "").replace("중앙선", "").replace("선", "").replace("철도", "").replace("라인", "");
+			routeName = item.getElementsByTagName("subwayRouteName").item(0);
+			
+			stationName = item.getElementsByTagName("subwayStationName").item(0);
+			
+				
+			
+//			System.out.println("호선 : "+routeName.getChildNodes().item(0).getNodeValue());
+//			System.out.println("역이름 : "+stationName.getChildNodes().item(0).getNodeValue());
+			if(stationName.getChildNodes().item(0).getNodeValue().equals(searchWord)) {
+				
+			subwayLine = routeName.getChildNodes().item(0).getNodeValue().replace("서울", "").replace(" ", "").replace("호선", "").replace("중앙선", "").replace("선", "").replace("철도", "").replace("라인", "");
 			map.put(i, subwayLine);
+			}
 		}
 		
 		

@@ -50,9 +50,9 @@ function getLocList(){
 			
 			
 			var html =""
-				html ="<div id='tableAndpaging' style='position:absolute; left: 230px; top: 220px;'>"
-				html += '<div class="row row-offcanvas">'
-				html += '<table class="table table-striped" style="width:800px; table-layout:fixed; left:20%;">'
+				html ='<div id="tableAndpaging" style="height:400px;">'
+				html += '<div class="row row-offcanvas" style="height:400px;">'
+				html += '<table class="table table-striped" style="table-layout:fixed; left: 220px; top: 230px; width:80%;">'
 				html += '<tr style="background: gray; text-align: center;">'
 				html += '<td><b>No.</b></td>'
 				html += '<td><b>제목</b></td>'
