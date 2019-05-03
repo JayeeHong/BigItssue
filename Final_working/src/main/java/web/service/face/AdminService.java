@@ -10,6 +10,7 @@ import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.MainBanner;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -176,8 +177,12 @@ public interface AdminService {
 	//판매 장소 추가하기
 	public void insertList(SellerLoc sellerLoc);
   
-  //판매 장소 삭제하기
-  public void deleteList(SellerLoc sellerLoc);
+	//판매 장소 삭제하기
+	public void deleteList(SellerLoc sellerLoc);
+
+	
+	//배너 리스트 얻기
+	public List<MainBanner> getBanner();
 
   public List<String> userIdList(String abc);
 

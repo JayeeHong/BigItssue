@@ -6,24 +6,53 @@
 
 <style type="text/css">
 
-.menu {
-	padding: 25px;
-	font-size: medium;
-	font-weight: bold;
+#logo {
+	float: left;
+	margin-left: 10px;
 }
+
 /* img { padding-right: 35px; } */
 /* img가 겹쳐서 하나뿐인 log이미지를 변경했습니다. */
-#logo {padding-right: 35px;}
+#logoImg {
+	padding-right: 25px;
+}
 
-a { color: black; }
-/* .top-menu { */
-/* 	color: red; */
-/* 	background-color: inherit; */
-/* } */
+#topMenu {
+/* 	padding: 25px; */
+/* 	font-size: medium; */
+	font-weight: bold;
+}
+
+#topMenu {
+	font-weight: bold;
+}
+
+#topMenu ul {
+	list-style: none;
+	margin: 0 auto;
+	text-algin: center;
+}
+
+#topMenu ul li {
+	position: relative;
+	float: left;
+	height: 100px;
+	padding-left: 80px;
+	padding-right: 10px;
+		padding-top: 38px;
+	font-size: 17px;
+}
+
+#topMenu ul li a {
+	text-decoration: none;
+	color: #000;
+}
 
 #btnBox {
-	text-align: right;
-	padding-top: 40px;
+/* 	text-align: right; */
+/* 	padding-top: 40px; */
+	float: right;
+	margin-top: 30px;
 }
 
 /* 채팅css */
@@ -205,34 +234,34 @@ $(document).ready(function() {
 
 
 <div class="header">
-
-<nav class="navbar">
 	<div class="container">
-		<div class="navbar-header">
-			<a href="/buyer/main" class="standard-logo"><img id="logo" src="http://bigissue.kr/wp-content/themes/canvas/images/Bigissue_kr_logo_main.png" alt="Bigissue Logo"></a>
+		<div id="logo">
+			<a href="/buyer/main">
+				<img id="logoImg" src="http://bigissue.kr/wp-content/themes/canvas/images/Bigissue_kr_logo_main.png" alt="Bigissue Logo">
+			</a>
 		</div>
 		
-		<div id="topMenu" class="topMenu">
-			<ul class="nav navbar-nav">
-				<li class="menu"><a href="/buyer/main">판매처 보기</a></li>
-				<li class="menu"><a href="/buyer/notice">공지사항</a></li>
+		<div id="topMenu">
+			<ul>
+				<li><a href="/buyer/main">판매처 보기</a></li>
+				<li><a href="/buyer/notice">공지사항</a></li>
 			</ul>			
 			
 			<div id="btnBox">
-			<!-- 로그인 상태 session이 판매자,구매자,관리자 나뉘어져 있어서 login=>buyerLogin으로 변경 -->
-			<c:if test="${not buyerLogin }">
-				<button id="btnLogin" class="btn">로그인</button>
-				<button id="btnJoin" class="btn">회원가입</button>
-			</c:if>
-
-			<c:if test="${buyerLogin }">
-				<!-- 로그인 상태 session이 판매자,구매자,관리자 나뉘어져 있어서 ${id}=>${buyerId }으로 변경 -->
-				${buyerId }님
-				<button id="btnLogout" class="btn" onclick="location.href='/buyer/logout'">로그아웃</button>
-				<button id="btnMypage" class="btn">마이페이지</button>
-			</c:if>
+				<!-- 로그인 상태 session이 판매자,구매자,관리자 나뉘어져 있어서 login=>buyerLogin으로 변경 -->
+				<c:if test="${not buyerLogin }">
+					<button id="btnLogin" class="btn">로그인</button>
+					<button id="btnJoin" class="btn">회원가입</button>
+				</c:if>
+	
+				<c:if test="${buyerLogin }">
+					<!-- 로그인 상태 session이 판매자,구매자,관리자 나뉘어져 있어서 ${id}=>${buyerId }으로 변경 -->
+					${buyerId }님
+					<button id="btnLogout" class="btn" onclick="location.href='/buyer/logout'">로그아웃</button>
+					<button id="btnMypage" class="btn">마이페이지</button>
+				</c:if>
 			</div>
 		</div>
 	</div>
-</nav>
+	
 </div>

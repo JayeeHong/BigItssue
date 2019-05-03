@@ -371,6 +371,19 @@
 		</choose>
 	</delete>
 	
+
+	
+	<select id="selectBanner" resultType="web.dto.MainBanner">
+		SELECT * FROM MainBanner
+		ORDER BY bannerNo
+	</select>
+	
+	
+	
+	
+	
+	
+
 	<select id="userIdList" parameterType="String" resultType="String">
 		SELECT sellerId FROM ${value }
 	
@@ -381,6 +394,7 @@
 		where sellerId = #{value }
 	
 	</select>
+
 	
 	
 </mapper>
