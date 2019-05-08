@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import web.dao.face.BuyerDao;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.MainBanner;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
@@ -272,6 +273,11 @@ public class BuyerServiceImpl implements BuyerService {
 	@Override
 	public void increaseCirculation(Reservation reservationInfo) {
 		buyerDao.increaseCirculation(reservationInfo);	
+	}
+
+	@Override
+	public List<MainBanner> getBannerList() {
+		return buyerDao.selectBanner();
 	}
   
   

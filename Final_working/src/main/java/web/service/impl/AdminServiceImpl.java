@@ -403,6 +403,7 @@ public class AdminServiceImpl implements AdminService{
 
 	public List<MainBanner> getBanner() {
 		return adminDao.selectBanner();
+	}
 
 	public List<String> userIdList(String abc) {
 		return adminDao.userIdList(abc);
@@ -418,6 +419,11 @@ public class AdminServiceImpl implements AdminService{
 			}
 		return list;
 
+	}
+
+	@Override
+	public void writeBanner(MainBanner mainBanner) {
+		adminDao.insertBanner(mainBanner);
 	}
 	
 }
