@@ -1,6 +1,5 @@
 package web.controller;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import web.dto.Chat;
 import web.dto.Message;
+import web.dto.MessageChk;
 import web.dto.User;
 import web.service.face.ChatService;
 
@@ -51,6 +51,8 @@ public class ChattingController {
 			logger.info("[방만들기]");
 			chatRoomNo = chatService.createRoom(chat);
 			logger.info("chatRoomNo:"+chatRoomNo);
+			//방만들때 messageChk DB에 id와 날짜1111/11/11을 넣어주자. 
+			chatService.createMessageChk(chat);
 			
 			
 		}else {
@@ -137,6 +139,37 @@ public class ChattingController {
 		logger.info("subMsgList:"+subMsgList);
 		model.addAttribute("subMsgList", subMsgList);
 		
+		//----- 안읽은 메시지표시 -----
+		//방에 들어가면 현재id,방no,들어간date를 MessageChk에 넣어주자. - 나중에 안읽은 메시지 표시하기 위해서
+		//dto는 MessageChk사용.
+		MessageChk messageChk = new MessageChk();
+		Date sysdate = new Date();//현재 방에 들어온 시간
+		messageChk = chatService.setDtoMessageChk(LoginInfo.getId(),chatRoomNo,sysdate);
+		logger.info("messageChk확인:"+messageChk);
+		
+		//MessageChk테이블에 이미 id가 들어가 있는지 없는지 확인
+		boolean existenceStatusOfChatId = chatService.getExistenceStatusOfChatId(messageChk);
+		
+		if(existenceStatusOfChatId) {//Id없으면
+			logger.info("MessageChk에 이미 Id가 존재하지 않음");
+			chatService.insertMessageChk(messageChk);
+		}else {//Id있으면
+			logger.info("MessageChk에 이미 Id가 존재함");
+			chatService.updateMessageChk(messageChk);
+		}
+		
+		//로그인한 id를 포함하는 방에서 내가 방에 접속한 시간보다 작은 메시지 개수 세기 (List리턴)
+		List<MessageChk> finalDateListById = chatService.getFinalDateListById(LoginInfo.getId());
+		logger.info("finalDateListById:"+finalDateListById);
+		//finalDateListById크기만큼 반복해서 읽지 않은 메시직 개수 가져오기
+		List<MessageChk> messageChkResult = new ArrayList<>();
+		for(int i=0; i<finalDateListById.size(); i++) {
+			MessageChk tempMessageChk = chatService.getMessageNoReadNum(finalDateListById.get(i));
+			messageChkResult.add(tempMessageChk);
+		}
+		logger.info("messageChkResult:"+messageChkResult);
+		model.addAttribute("messageChkResult", messageChkResult);
+		
 		return "/chat/chat";
 	}
 	
@@ -146,6 +179,9 @@ public class ChattingController {
 		User LoginInfo = (User)session.getAttribute("LoginInfo");
 		logger.info("LoginInfo:"+LoginInfo);
 		List<Chat> refreshChatRoomList = chatService.selectRooms(LoginInfo);
+		
+		int chatRoomNo = (int)session.getAttribute("chatRoomNo");
+		
 		//채팅내역의 상대방 이름을 띄워 주기 위해서 추가
 		//Chat의 TheOtherParty에
 		//refreshChatRoomList속에 있는 Chat를 하나하나 조사해서 로그인된 아이디와 같지않고 null이 아닌 아이디를 넣어주자.
@@ -162,6 +198,38 @@ public class ChattingController {
 		logger.info("refreshChatRoomList:"+refreshChatRoomList);
 		
 		model.addAttribute("refreshChatRoomList",refreshChatRoomList);
+		
+		//----- 안읽은 메시지표시 -----
+		//방에 들어가면 현재id,방no,들어간date를 MessageChk에 넣어주자. - 나중에 안읽은 메시지 표시하기 위해서
+		//dto는 MessageChk사용.
+		
+		MessageChk messageChk = new MessageChk();
+		Date sysdate = new Date();//현재 방에 들어온 시간
+		messageChk = chatService.setDtoMessageChk(LoginInfo.getId(),chatRoomNo,sysdate);
+		logger.info("messageChk확인:"+messageChk);
+		
+		//MessageChk테이블에 이미 id가 들어가 있는지 없는지 확인
+		boolean existenceStatusOfChatId = chatService.getExistenceStatusOfChatId(messageChk);
+		
+		if(existenceStatusOfChatId) {//Id없으면
+			logger.info("MessageChk에 이미 Id가 존재하지 않음");
+			chatService.insertMessageChk(messageChk);
+		}else {//Id있으면
+			logger.info("MessageChk에 이미 Id가 존재함");
+			chatService.updateMessageChk(messageChk);
+		}
+		
+		//로그인한 id를 포함하는 방에서 내가 방에 접속한 시간보다 작은 메시지 개수 세기 (List리턴)
+		List<MessageChk> finalDateListById = chatService.getFinalDateListById(LoginInfo.getId());
+		logger.info("finalDateListById:"+finalDateListById);
+		//finalDateListById크기만큼 반복해서 읽지 않은 메시직 개수 가져오기
+		List<MessageChk> messageChkResult = new ArrayList<>();
+		for(int i=0; i<finalDateListById.size(); i++) {
+			MessageChk tempMessageChk = chatService.getMessageNoReadNum(finalDateListById.get(i));
+			messageChkResult.add(tempMessageChk);
+		}
+		logger.info("messageChkResult:"+messageChkResult);
+		model.addAttribute("messageChkResult", messageChkResult);
 		
 		return "jsonView";
 	}
@@ -246,6 +314,39 @@ public class ChattingController {
 		//보조채팅창 message list
 		logger.info("subMsgList:"+subMsgList);
 		model.addAttribute("subMsgList", subMsgList);
+		
+		//----- 안읽은 메시지표시 -----
+		//방에 들어가면 현재id,방no,들어간date를 MessageChk에 넣어주자. - 나중에 안읽은 메시지 표시하기 위해서
+		//dto는 MessageChk사용.
+		MessageChk messageChk = new MessageChk();
+		Date sysdate = new Date();//현재 방에 들어온 시간
+		messageChk = chatService.setDtoMessageChk(LoginInfo.getId(),chatRoomNo,sysdate);
+		logger.info("messageChk확인:"+messageChk);
+		
+		//MessageChk테이블에 이미 id가 들어가 있는지 없는지 확인
+		boolean existenceStatusOfChatId = chatService.getExistenceStatusOfChatId(messageChk);
+		
+		if(existenceStatusOfChatId) {//Id없으면
+			logger.info("MessageChk에 이미 Id가 존재하지 않음");
+			chatService.insertMessageChk(messageChk);
+		}else {//Id있으면
+			logger.info("MessageChk에 이미 Id가 존재함");
+			chatService.updateMessageChk(messageChk);
+		}
+		
+		//로그인한 id를 포함하는 방에서 내가 방에 접속한 시간보다 작은 메시지 개수 세기 (List리턴)
+		List<MessageChk> finalDateListById = chatService.getFinalDateListById(LoginInfo.getId());
+		logger.info("finalDateListById:"+finalDateListById);
+		//finalDateListById크기만큼 반복해서 읽지 않은 메시직 개수 가져오기
+		List<MessageChk> messageChkResult = new ArrayList<>();
+		for(int i=0; i<finalDateListById.size(); i++) {
+			MessageChk tempMessageChk = chatService.getMessageNoReadNum(finalDateListById.get(i));
+			messageChkResult.add(tempMessageChk);
+		}
+		logger.info("messageChkResult:"+messageChkResult);
+		model.addAttribute("messageChkResult", messageChkResult);
+		
+		
 		
 		return "/chat/chat";
 	}
