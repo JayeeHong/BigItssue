@@ -842,6 +842,26 @@ public class AdminController {
 		
 	}
 	
+	@RequestMapping(value="/admin/banner/write", method=RequestMethod.GET)
+	public String bannerWrite() {
+		return "admin/banner/write";
+	}
+	
+	@RequestMapping(value="/admin/banner/write", method=RequestMethod.POST)
+	public String bannerWriteProc(MainBanner mainBanner) {
+		
+		adminService.writeBanner(mainBanner);
+		
+		return "redirect:/admin/banner/list";
+	}
+	
+	@RequestMapping(value="/admin/banner/delete", method=RequestMethod.GET)
+	public void bannerDelete(MainBanner mainBanner, HttpServletRequest req) {
+		
+		int bannerNo = Integer.parseInt(req.getParameter("bannerNo"));
+//		adminService.deleteBanner(bannerNo);
+	}
+	
 	
 	//판매장소 추가할 때 필요한 지도
 	@RequestMapping(value="/insertList", method=RequestMethod.GET)

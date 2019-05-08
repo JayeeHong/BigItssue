@@ -35,32 +35,35 @@ $(document).ready(function() {
 
 <h3>배너관리</h3>
 <hr>
+	<div class="bannerList">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>배너 번호</th>
+					<th>배너 이미지</th>
+					<th>수정 / 삭제 </th>
+					<!-- 수정말고 삭제만 가능하게. 순서바꾸기되게끔 -->
+				</tr>
+			</thead>
+			
+			<tbody>
+			<c:forEach items="${bannerList}" var="b">
+				<tr>
+					<td>${b.bannerNo }</td>
+					<td>${b.bannerImg }</td>
+					<td>
+						<button id="btnUpdate" class="btn">수정</button>
+						<button id="btnDelete" class="btn">삭제</button>
+					</td>
+				</tr>
+			</c:forEach>
+			</tbody>
+		</table>
+	</div>
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th>배너 번호</th>
-				<th>배너 이미지</th>
-				<th>수정 / 삭제</th>
-			</tr>
-		</thead>
-		
-		<tbody>
-		<c:forEach items="${bannerList}" var="b">
-			<tr>
-				<td>${b.bannerNo }</td>
-				<td>${b.bannerImg }</td>
-				<td>
-					<button id="btnUpdate">수정</button>
-					<button id="btnDelete">삭제</button>
-				</td>
-			</tr>
-		</c:forEach>
-		</tbody>
-	</table>
-
-
-
+	<div class="addBanner">
+		<button id="btnWrite" class="btn">배너추가</button>
+	</div>
 
 
 

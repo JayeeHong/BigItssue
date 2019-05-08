@@ -420,6 +420,11 @@ public class AdminServiceImpl implements AdminService{
 		return list;
 
 	}
+
+	@Override
+	public void writeBanner(MainBanner mainBanner) {
+		adminDao.insertBanner(mainBanner);
+	}
 	
 }
 

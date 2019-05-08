@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.Chat;
+import web.dto.MainBanner;
 import web.dto.Message;
 import web.dto.MessageChk;
 import web.dto.Reservation;
@@ -102,6 +103,12 @@ public class BuyerController {
 		
 		model.addAttribute("stationList", stationList);
 		
+		//------------------------------------------------------
+		//메인 배너
+		// 배너목록 MODEL로 추가
+		List<MainBanner> mainBannerList = buyerService.getBannerList();
+		model.addAttribute("mainBannerList", mainBannerList);
+				
 	}
 	@RequestMapping(value="/buyer/main", method=RequestMethod.POST)
 	public void buyerMainPost(

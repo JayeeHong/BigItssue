@@ -445,7 +445,7 @@ public class SellerController {
 	}
 	
 	@RequestMapping(value="/seller/review/write", method=RequestMethod.GET)
-	public String reviewWrite(HttpSession session) {
+	public String reviewWrite() {
 		
 		logger.info("후기 글쓰기 페이지");
 		
