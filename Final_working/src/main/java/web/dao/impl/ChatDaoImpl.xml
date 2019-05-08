@@ -95,5 +95,36 @@
     		WHERE chatRoomNo = #{chatRoomNo}
 		)
 	</select>
+	
+	<insert id="insertMessageChk" parameterType="web.dto.MessageChk">
+		INSERT INTO MessageChk (chatMessageChkNo, chatId, chatRoomNo, chatFinalDate)
+		VALUES (MessageChk_seq.nextval, #{chatId}, #{chatRoomNo}, #{chatFinalDate})
+	</insert>
 
+	<select id="selectCntByChatId" parameterType="web.dto.MessageChk" resultType="int">
+		SELECT count(*) FROM MessageChk
+		WHERE chatId = #{chatId} AND chatRoomNo = #{chatRoomNo}
+	</select>
+	
+	<update id="updateMessageChk" parameterType="web.dto.MessageChk">
+		UPDATE MessageChk
+		SET chatFinalDate=#{chatFinalDate }
+		WHERE chatId=#{chatId } AND chatRoomNo = #{chatRoomNo}
+	</update>
+	
+	<select id="selectFinalDateListById" parameterType="String" resultType="web.dto.MessageChk">
+		SELECT * FROM MessageChk
+		WHERE chatId = #{chatId}
+	</select>
+	
+	<select id="selectMessageNoReadNum" parameterType="web.dto.MessageChk" resultType="web.dto.MessageChk">
+		SELECT chatRoomNo,COUNT(*) MessageNoReadNum FROM MESSAGE
+		WHERE chatDate <![CDATA[ > ]]> #{chatFinalDate} AND chatRoomNo=#{chatRoomNo}
+		GROUP BY chatRoomNo
+	</select>
+	
+	<insert id="createMessageChk" parameterType="web.dto.MessageChk">
+		INSERT INTO MessageChk (chatMessageChkNo, chatId, chatRoomNo, chatFinalDate)
+		VALUES (MessageChk_seq.nextval, #{chatId}, #{chatRoomNo}, #{chatFinalDate, jdbcType=DATE})
+	</insert>
 </mapper>
