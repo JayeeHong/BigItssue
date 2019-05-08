@@ -10,6 +10,7 @@ import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.ChatReport;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -44,6 +45,19 @@ public interface AdminService {
 
 	public void noticeUpdate(Notice notice);
 
+	// 판매자 정보관리 수정
+	public void adminSellserUpdate(SellerLoc sellerLoc);
+
+	public String getSellerName(SellerLoc locInfo);
+
+	public void changeSellerName(HashMap hm);
+
+	// 판매 장소 추가하기
+	public void insertList(SellerLoc sellerLoc);
+
+	// 판매 장소 삭제하기
+	public void deleteList(SellerLoc sellerLoc);
+
 	// 관리자 로그인
 	public boolean login(AdminInfo adminInfo);
 
@@ -59,6 +73,9 @@ public interface AdminService {
 
 	// 판매자 정보와 판매자에 따른 빅돔 정보 불러오기(sellerid에 해당하는것만)
 	public SellerBigdomInfo getSellerBigdomInfo(String sellerId);
+
+	// 판매자 계정관리에서 이미지 업로드
+	public void sellerImgupAtadmin(SellerInfo sellerinfo);
 
 	// 판매자 정보 업데이트
 	public void sellerUpdate(SellerBigdomInfo sbInfo);
@@ -166,21 +183,26 @@ public interface AdminService {
 	// 해당 판매자의 보유 빅이슈 정보 추가
 	public void putBookListInfoAtadminBook(BookListInfo bli);
 
-	
-	//판매자 정보관리 수정
-	public void adminSellserUpdate(SellerLoc sellerLoc);
+	// 해당 판매자의 보유 빅이슈 수정
+	public void adminBookViewUpdate(BookListInfo booklistInfo);
 
-	public String getSellerName(SellerLoc locInfo);
+	// 해당 판매자의 보유 빅이슈 삭제
+	public void adminBookViewDelete(BookListInfo booklistInfo);
 
-	public void changeSellerName(HashMap hm);
+	// 신고내역 전체 불러오기
+	public List<ChatReport> getChatReportList();
 
+	// 요청파라미터로 현재페이지 받기-신고내역 리스트
+	public int getReportInfoCurPage(HttpServletRequest req);
 
+	// 해당게시글 수 불러오기-신고내역 리스트
+	public int getReportInfoTotalCount();
 
-	//판매 장소 추가하기
-	public void insertList(SellerLoc sellerLoc);
-  
-  //판매 장소 삭제하기
-  public void deleteList(SellerLoc sellerLoc);
+	// reportNo로 해당하는 신고내역 조회
+	public ChatReport getReportByReportNo(int reportNo);
+
+	// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회
+	public List<ChatReport> getReportByChatReport(ChatReport reportByReportNo);
 
 }
 

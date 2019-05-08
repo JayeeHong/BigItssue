@@ -136,16 +136,22 @@
 	</select>
 	
 	<select id="selectSBInfo" resultType="web.dto.SellerBigdomInfo" parameterType="String">
-		SELECT si.*, sl.bigdomId
+		SELECT si.*, sl.bigdomId, sl.sellerCard
 		FROM sellerInfo si
 		LEFT OUTER JOIN sellerLoc sl
 		ON si.sellerId = sl.sellerId
 		WHERE si.sellerId=#{_parameter }
 	</select>
 	
+	<update id="updateSellerImgupAtadmin" parameterType="web.dto.SellerInfo">
+		UPDATE sellerInfo
+		SET sellerImg=#{selelrImg }
+		WHERE sellerId=#{sellerId }
+	</update>
+	
 	<update id="updateSellerInfo" parameterType="web.dto.SellerBigdomInfo">
 		UPDATE sellerInfo
-		SET sellerName=#{sellerName }, sellerPw=#{sellerPw }, sellerPhone=#{sellerPhone }
+		SET sellerName=#{sellerName }, sellerPw=#{sellerPw }, sellerPhone=#{sellerPhone }, sellerImg=#{sellerImg }
 		WHERE sellerId=#{sellerId }
 	</update>
 	
@@ -312,10 +318,32 @@
 		ORDER BY month
 	</select>
 	
+	<select id="selectCntBookListInfoBySelleridAndMonth" parameterType="web.dto.BookListInfo" resultType="int">
+		SELECT count(*) FROM bookListInfo
+		WHERE sellerId=#{sellerId } AND month=#{month }
+	</select>
+	
+	<update id="insertBookListInfoByMagazineno" parameterType="web.dto.BookListInfo">
+		UPDATE booklistinfo
+		SET circulation=circulation+#{circulation }
+		WHERE sellerId=#{sellerId } AND month=#{month }
+	</update>
+	
 	<insert id="insertBookListInfoAtadminBook" parameterType="web.dto.BookListInfo">
 		INSERT INTO bookListInfo(magazineNo, month, circulation, sellerId)
 		VALUES(bookListInfo_seq.nextval, #{month }, #{circulation }, #{sellerId })
 	</insert>
+	
+	<update id="updateAdminBookView" parameterType="web.dto.BookListInfo">
+		UPDATE booklistinfo
+		SET month=#{month }, circulation=#{circulation }
+		WHERE magazineNo=#{magazineNo }
+	</update>
+	
+	<delete id="deleteAdminBookView" parameterType="web.dto.BookListInfo">
+		DELETE booklistinfo
+		WHERE magazineNo=#{magazineNo }
+	</delete>
 	<!-- **************************************** -->
 	
 	<update id="adminSellserUpdate" parameterType="web.dto.SellerLoc">
@@ -359,4 +387,26 @@
 			</otherwise> 
 		</choose>
 	</delete>
+	
+	<select id="selectChatReportList" resultType="web.dto.ChatReport">
+		SELECT * FROM chatReport
+		WHERE chkNo=1
+	</select>
+	
+	<select id="selectReportListCnt" resultType="int">
+		SELECT count(*) FROM chatReport
+		WHERE chkNo=1
+	</select>
+	
+	<select id="selectReportByReportNo" resultType="web.dto.ChatReport" parameterType="int">
+		SELECT * FROM chatReport
+		WHERE reportNo=#{reportNo }
+	</select>
+	
+	<select id="selectReportByChatReport" resultType="web.dto.ChatReport" parameterType="web.dto.ChatReport">
+		SELECT * FROM chatReport
+		WHERE chatRoomNo=#{chatRoomNo } 
+			AND chatDate>=TO_DATE(#{chatDate }, 'YYYYMMDD')
+			AND chatDate&lt;TO_DATE(#{chatDate }, 'YYYYMMDD')
+	</select>
 </mapper>

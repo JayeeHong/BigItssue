@@ -43,6 +43,20 @@ function mDelete(magazineNo) {
 	}
 }
 
+function cardUpdate(sellerId) {
+	result = confirm('카드 결제여부를 변경하시겠습니까?');
+	
+	//console.log(result);
+	if(result==true) {
+		form = document.cardForm;
+		form.method="post";
+		form.action="/seller/time/cardUpdate?sellerId="+sellerId;
+		form.submit;
+	} else {
+		return false;
+	}
+}
+
 </script>
 
 <c:if test="${sellerTimeS eq null }">
@@ -59,6 +73,9 @@ function mDelete(magazineNo) {
 <fmt:formatDate value="${now}" pattern="HH" var="sysHour" />
 <fmt:formatDate value="${now}" pattern="mm" var="sysMin" />
 <fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
+<fmt:formatDate value="${now}" pattern="yyyy" var="sysYear" />
+<fmt:formatDate value="${now}" pattern="M" var="sysMonth" />
+<fmt:formatDate value="${now}" pattern="yyyy-M" var="sysDate" />
 <%-- 현재 시 : <c:out value="${sysHour}"/> --%>
 <%-- 현재 분 : <c:out value="${sysMin}"/> --%>
 
@@ -199,7 +216,8 @@ function mDelete(magazineNo) {
 <tr>
 <%-- 	<td>${b.magazineNo }</td> --%>
 	<form action="/seller/mUpdate?magazineNo=${b.magazineNo }" method="post" style="display: inline" >
-	<td><input style="width: 150px; text-align:center;" type="text" name="month" maxlength="3" value="${b.month }"/></td>
+	<input type="hidden" name="month" value="${b.month }" />
+	<td>${b.month }</td>
 	<td>
 		<input style="width: 30px; text-align:center;" name="circulation" maxlength="3" type="text" value="${b.circulation }"/>&nbsp;
 		<button class="btn btn-xs btn-default">변경</button>
@@ -213,8 +231,33 @@ function mDelete(magazineNo) {
 
 </table>
 
+<form name="cardForm">
 <table class="table table-bordered">
-<caption>판매할 빅이슈를 추가하고 싶다면, 아래 표 작성 후 '추가' 버튼을 누르세요</caption>
+<tr>
+	<td style="width: 50%; font-weight: bold; background: #cccccc6e;">카드 결제여부</td>
+	<td style="width: 50%;">
+		<label for="r1" style="font-weight: normal">
+		<input id="r1" type="radio" name="sellerCard" 
+			value="카드 가능" <c:if test="${sellerLoc.sellerCard eq '카드 가능' }">checked</c:if>>&nbsp;가능
+		
+		</label>
+		&nbsp;
+		<label for="r2" style="font-weight: normal">
+		<input id="r2" type="radio" name="sellerCard" 
+			value="카드 불가능" <c:if test="${sellerLoc.sellerCard eq '카드 불가능' }">checked</c:if>>&nbsp;불가능
+		</label>
+		&nbsp;
+		<button class="btn btn-xs btn-default" onclick="cardUpdate('${sellerLoc.sellerId }')">변경</button>
+	</td>
+</tr>
+</table>
+</form>
+
+<table class="table table-bordered">
+<caption>
+	판매할 빅이슈를 추가하고 싶다면, 아래 표 작성 후 '추가' 버튼을 누르세요.<br>
+	최근 3개월 간 발간된 빅이슈만 추가 가능합니다. 만약 이미 보유한 호수인 경우 부수만 추가됩니다.
+</caption>
 <thead>
 <tr>
 	<td>판매할 호수</td>
@@ -223,7 +266,13 @@ function mDelete(magazineNo) {
 </thead>
 <tr>
 	<form action="/seller/mPlus" method="post">
-	<td style="width: 50%"><input style="width: 150px; text-align:center;" maxlength="3" type="text" name="month"/></td>
+	<td style="width: 50%">
+		<select style="height: 26px;" name="month">
+			<option value="${sysYear }-${sysMonth-2 }">${sysYear }-${sysMonth-2 }</option>
+			<option value="${sysYear }-${sysMonth-1 }">${sysYear }-${sysMonth-1 }</option>
+			<option value="${sysDate }" selected>${sysDate }</option>
+		</select>
+<!-- 		<input style="width: 150px; text-align:center;" maxlength="3" type="text" name="month"/></td> -->
 	<td style="width: 50%">
 		<input style="width: 30px; text-align:center;" name="circulation" maxlength="3" type="text"/>&nbsp;
 		<button id="btnPlus" class="btn btn-xs btn-primary">추가</button>		

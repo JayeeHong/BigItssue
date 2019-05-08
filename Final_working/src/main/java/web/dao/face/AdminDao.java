@@ -8,6 +8,7 @@ import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.ChatReport;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -45,6 +46,18 @@ public interface AdminDao {
 	// 관리자 아이디, 비밀번호 count(*) 쿼리
 	public int selectCntLogin(AdminInfo adminInfo);
 
+	public void adminSellserUpdate(SellerLoc sellerLoc);
+
+	public String getSellerName(SellerLoc locInfo);
+
+	public void changeSellerName(HashMap hm);
+
+	//판매 지역 추가
+	public void insertList(SellerLoc sellerLoc);
+
+	//판매 지역 삭제
+	public void deleteList(SellerLoc sellerLoc);
+
 	// 판매자 정보와 판매자에 따른 빅돔 정보 조회 쿼리(전체)
 	public List<SellerBigdomInfo> selectSellerBigdomInfo(Paging paging);
 
@@ -56,6 +69,9 @@ public interface AdminDao {
 
 	// 판매자 정보와 판매자에 따른 빅돔 정보 조회 쿼리(sellerid에 해당하는것만)
 	public SellerBigdomInfo selectSBInfo(String sellerId);
+
+	// 판매자 계정관리에서 이미지 업로드
+	public void updateSellerImgupAtadmin(SellerInfo sellerinfo);
 
 	// 판매자 정보 업데이트 쿼리
 	public void updateSellerInfo(SellerBigdomInfo sbInfo);
@@ -141,21 +157,34 @@ public interface AdminDao {
 	// 해당 판매자의 보유 빅이슈 조회 쿼리
 	public List<BookListInfo> selectBookListInfoAtBookview(String sellerId);
 
+	// ----------------- 판매자 빅이슈 관리에서 빅이슈 추가할때 -------------------
+	// 해당 판매자가 보유한 빅이슈인지 count(*) 조회 쿼리
+	public int selectCntBookListInfoBySelleridAndMonth(BookListInfo bli);
+	// 해당 판매자가 보유한 빅이슈라면 circulation만 update 쿼리
+	public void insertBookListInfoByMagazineno(BookListInfo bli);
 	// 해당 판매자의 보유 빅이슈 정보 삽입 쿼리
 	public void insertBookListInfoAtadminBook(BookListInfo bli);
+	// ------------------------------------------------------------
+	
+	// 해당 판매자의 보유 빅이슈 추가 쿼리
+	public void updateAdminBookView(BookListInfo booklistInfo);
+
+	// 해당 판매자의 보유 빅이슈 삭제 쿼리
+	public void deleteAdminBookView(BookListInfo booklistInfo);
+
+	// 신고내역 전체 조회 쿼리
+	public List<ChatReport> selectChatReportList();
+
+	// 신고내역 갯수 조회 쿼리
+	public int selectReportListCnt();
+
+	// reportNo로 해당하는 신고내역 조회 쿼리
+	public ChatReport selectReportByReportNo(int reportNo);
+
+	// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회 쿼리
+	public List<ChatReport> selectReportByChatReport(ChatReport reportByReportNo);
 
 
-	public void adminSellserUpdate(SellerLoc sellerLoc);
-
-	public String getSellerName(SellerLoc locInfo);
-
-	public void changeSellerName(HashMap hm);
-
-	//판매 지역 추가
-	public void insertList(SellerLoc sellerLoc);
-
-	//판매 지역 삭제
-	public void deleteList(SellerLoc sellerLoc);
 
 }
 
