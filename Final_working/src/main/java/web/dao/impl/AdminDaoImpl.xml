@@ -391,6 +391,7 @@
 	<select id="selectChatReportList" resultType="web.dto.ChatReport">
 		SELECT * FROM chatReport
 		WHERE chkNo=1
+		ORDER BY reportNo desc
 	</select>
 	
 	<select id="selectReportListCnt" resultType="int">
@@ -406,7 +407,7 @@
 	<select id="selectReportByChatReport" resultType="web.dto.ChatReport" parameterType="web.dto.ChatReport">
 		SELECT * FROM chatReport
 		WHERE chatRoomNo=#{chatRoomNo } 
-			AND chatDate>=TO_DATE(#{chatDate }, 'YYYYMMDD')
-			AND chatDate&lt;TO_DATE(#{chatDate }, 'YYYYMMDD')
+			AND to_char(chatDate, 'yy/mm/dd')=to_char(#{chatDate },'yy/mm/dd')
+		ORDER BY reportNo
 	</select>
 </mapper>

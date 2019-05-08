@@ -956,7 +956,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/report/view", method=RequestMethod.GET)
-	public void adminReportView(int reportNo) {
+	public void adminReportView(int reportNo, Model model) {
 		
 //		logger.info(":::신고내역 상세 ::::"+reportNo);
 		
@@ -966,8 +966,10 @@ public class AdminController {
 		
 		// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회
 		List<ChatReport> chatReport = adminService.getReportByChatReport(reportByReportNo);
-		logger.info(":::::해당 신고내역 전체조회:::::"+chatReport.toString());
+//		logger.info(":::::해당 신고내역 전체조회:::::"+chatReport.toString());
 		
+		model.addAttribute("reportByReportNo", reportByReportNo);
+		model.addAttribute("chatReport", chatReport);
 	}
 	
 	@RequestMapping(value="/admin/banner/list", method=RequestMethod.GET)
