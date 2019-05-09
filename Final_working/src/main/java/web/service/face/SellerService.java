@@ -99,5 +99,4 @@ public interface SellerService {
 
 	//후기 댓글 수정
 	public void replyUpdate(ReviewReply reviewReply);
-
 }

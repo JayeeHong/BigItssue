@@ -188,5 +188,4 @@ public class SellerServiceImpl implements SellerService {
 	public void replyUpdate(ReviewReply reviewReply) {
 		sellerDao.updateReply(reviewReply);
 	}
-
 }

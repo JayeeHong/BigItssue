@@ -27,6 +27,7 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.MainBanner;
+import web.dto.Message;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -482,8 +483,16 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/chat/list", method=RequestMethod.GET)
-	public void adminChatlist() { // 채팅 내역 관리
+	public void adminChatlist(
+			Message message,
+			Model model) { // 채팅 내역 관리
+		List<Message> list = adminService.getChatRoomNo();
+		logger.info("Test : " + list.toString());
+		logger.info("Test2 : "+list.size());
+		int cnt = list.size();
 		
+			
+		model.addAttribute("message", list);
 	}
 	
 	@RequestMapping(value="/admin/seller/getSellerInfolist", method=RequestMethod.GET)
@@ -913,5 +922,20 @@ public class AdminController {
 	}
 	
 	
+	
+	@RequestMapping("revSpot")
+	public void revisionSpot(
+			SellerLoc sellerLoc,
+			String station,
+			String spot,
+			Model model) {
+		
+		sellerLoc.setStation(station);
+		sellerLoc.setSpot(spot);
+		
+		SellerLoc selLoc = adminService.getSellerInfo(sellerLoc);
+		logger.info("TEST : "+String.valueOf(selLoc));
+		model.addAttribute("sellerLoc", selLoc);
+	}
 
 }
