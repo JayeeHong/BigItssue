@@ -33,7 +33,12 @@ function inquire(id,sort){
 	}else{
 		$(location).attr("href", "/buyer/login");
 	}
-	}</script>
+}
+</script>
+
+<!-- 웹소켓 열기. 다른페이지에서도 새로운 메시지 확인하기위해서. -->
+
+
 <!-- 현재시간 받아오기 -->
 <fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
 

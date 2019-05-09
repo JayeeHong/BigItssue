@@ -31,8 +31,8 @@
 			resultType="int" order="BEFORE">
 			SELECT chat_seq.nextval FROM dual		
 		</selectKey>
-		INSERT INTO chat (chatRoomNo, buyerId, sellerId, bigdomId)
-		VALUES ( #{chatRoomNo}, #{buyerId, jdbcType=VARCHAR}, #{sellerId, jdbcType=VARCHAR }, #{bigdomId, jdbcType=VARCHAR })
+		INSERT INTO chat (chatRoomNo, buyerId, sellerId, bigdomId, chatFinalDate )
+		VALUES ( #{chatRoomNo}, #{buyerId, jdbcType=VARCHAR}, #{sellerId, jdbcType=VARCHAR }, #{bigdomId, jdbcType=VARCHAR },sysdate)
 	</insert>
 	
 	<select id="selectRoom" parameterType="web.dto.Chat" resultType="int">
@@ -65,6 +65,7 @@
 		<if test="sort == '빅돔'">
 			AND bigdomId = #{id} 
 		</if>
+		ORDER BY chatFinalDate desc
 	</select>
 	
 	<select id="selectChatRoomIds" parameterType="int" resultType="web.dto.Chat">
@@ -127,4 +128,10 @@
 		INSERT INTO MessageChk (chatMessageChkNo, chatId, chatRoomNo, chatFinalDate)
 		VALUES (MessageChk_seq.nextval, #{chatId}, #{chatRoomNo}, #{chatFinalDate, jdbcType=DATE})
 	</insert>
+	
+	<update id="updateChatFinalDate" parameterType="web.dto.Message">
+		UPDATE chat
+		SET chatFinalDate=#{chatDate }
+		WHERE chatRoomNo=#{chatRoomNo }
+	</update>
 </mapper>
