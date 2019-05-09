@@ -9,6 +9,7 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.MainBanner;
+import web.dto.Message;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -172,6 +173,9 @@ public interface AdminDao {
 	public List<String> userIdList(String abc);
 
 	public List<SellerInfo> nullUserInfo(String i);
+
+	
+	public List<Message> getChatRoomNo();
 
 
 

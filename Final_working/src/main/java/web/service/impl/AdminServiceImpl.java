@@ -16,6 +16,7 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.MainBanner;
+import web.dto.Message;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -425,6 +426,11 @@ public class AdminServiceImpl implements AdminService{
 	public void writeBanner(MainBanner mainBanner) {
 		adminDao.insertBanner(mainBanner);
 	}
+  
+  @Override
+  public List<Message> getChatRoomNo() {
+		return adminDao.getChatRoomNo();
+  }
 	
 }
 

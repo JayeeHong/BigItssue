@@ -226,7 +226,7 @@ public class BuyerController {
 			
 	}
 	
-	@RequestMapping(value="/sellerLocMap", method=RequestMethod.GET)
+	@RequestMapping("/sellerLocMap")
 	public void buyerSellerLocMap(int locNo, Model model) {
 	
 		SellerLoc sellerLoc = buyerService.getSellerLoc(locNo);

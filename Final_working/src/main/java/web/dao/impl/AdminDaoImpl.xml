@@ -41,7 +41,15 @@
 	</delete>
 	
 	<select resultType="web.dto.SellerLoc" parameterType="web.dto.SellerLoc" id="getSellerInfo"> 
-		SELECT * FROM sellerLoc where locNo = #{locNo } 
+		SELECT * FROM sellerLoc
+		<choose>
+			<when test="locNo != 0">
+			WHERE locNo = #{locNo } 
+			</when>
+			<otherwise>
+			WHERE station = #{station } AND spot = #{spot }
+			</otherwise>
+		</choose>
 	</select>
 
 	<select id="viewLoc" parameterType="String" resultType="web.dto.SellerLoc">
@@ -341,7 +349,9 @@
 			sellerTimeS = #{sellerTimeS },
 			sellerTimeE = #{sellerTimeE },
 			sellerCard = #{sellerCard },
-			sellerId = #{sellerId }
+			sellerId = #{sellerId },
+			lat = #{lat },
+			lng = #{lng }
 		WHERE locNo = #{locNo }
 	</update>
 	
@@ -402,4 +412,13 @@
 
 	
 	
+	<select id="getChatRoomNo" resultType="web.dto.Message">
+		SELECT DISTINCT a.chatRoomNo, a.BigdomId, a.BuyerId, a.SellerId FROM (
+			SELECT chat.chatRoomNo, chat.BigdomId, chat.BuyerId, chat.SellerId, message.ChatDate
+			FROM chat, message
+			WHERE message.chatRoomNo = chat.chatRoomNo
+			ORDER BY chat.chatRoomNo
+		) a
+		ORDER BY chatRoomNo;
+	</select>
 </mapper>
