@@ -255,6 +255,7 @@ public class BuyerServiceImpl implements BuyerService {
 	@Override
 	public void setBuyerEmail(BuyerInfo buyerInfo) {
 		buyerDao.updateBuyerEmail(buyerInfo);
+	}
 
   @Override
 	public int getTotalCountOfSellerLocByZoneAndStation(Map<String, Object> map) {
