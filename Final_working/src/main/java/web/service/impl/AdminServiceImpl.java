@@ -1,13 +1,19 @@
 package web.service.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import web.dao.face.AdminDao;
 import web.dto.AdminInfo;
@@ -405,6 +411,20 @@ public class AdminServiceImpl implements AdminService{
 		return adminDao.selectBanner();
 	}
 
+	@Override
+	public void addBanner(MainBanner mainBanner) {
+		
+		adminDao.insertBanner(mainBanner);
+	}
+	
+	@Override
+	public void deleteBanner(int bannerNo) {
+		adminDao.deleteBanner(bannerNo);
+	}
+	
+	
+	
+	
 	public List<String> userIdList(String abc) {
 		return adminDao.userIdList(abc);
 	}
@@ -421,10 +441,6 @@ public class AdminServiceImpl implements AdminService{
 
 	}
 
-	@Override
-	public void writeBanner(MainBanner mainBanner) {
-		adminDao.insertBanner(mainBanner);
-	}
 	
 }
 

@@ -164,7 +164,9 @@ public interface AdminDao {
 	
 	//배너 insert
 	public void insertBanner(MainBanner mainBanner);
-	
+
+	//배너 delete
+	public void deleteBanner(int bannerNo);
 	
 	
 	
@@ -172,6 +174,7 @@ public interface AdminDao {
 	public List<String> userIdList(String abc);
 
 	public List<SellerInfo> nullUserInfo(String i);
+
 
 
 

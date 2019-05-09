@@ -6,22 +6,46 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#btnWrite").click(function() {
-		location.href = "/admin/banner/write";
-	});
-	
-	$("#btnUpdate").click(function() {
-		
-	});
-	
-	$("#btnDelete").click(function() {
-		
+	$("#addBanner").click(function() {
+// 		location.href = "/admin/banner/add";
+		window.open("/addBanner","dd", "width=500,height=500");
 	});
 });
+
+/* 체크박스 전체 선택, 해제 */
+function checkAll() {
+	if( $("#checkAll").is(':checked') ) {
+		$("input[name=checkRow]").prop("checked", true);
+	} else {
+		$("input[name=checkRow]").prop("checked", false);
+	}
+}
+
+/* 체크박스 삭제 */
+function checkDelete() {
+	var checkRow = "";
+	$("input[name='checkRow']:checked").each(function() {
+		checkRow = checkRow + $(this).val() + ",";
+	});
+	checkRow = checkRow.substring(0, checkRow.lastIndexOf(",")); //맨끝 콤마 지우기
+	
+	if(checkRow == '') {
+		alert("삭제할 배너를 선택하세요");
+		return false;
+	}
+	console.log("### checkRow => {}" + checkRow);
+	
+	if(confirm("삭제?")) {
+		//삭제 후 다시 불러올 리스트 url
+		location.href = "/admin/banner/delete?checkRow="+checkRow;
+	}
+}
 </script>
 
 
+<style type="text/css">
 
+</style>
 
 
 
@@ -35,38 +59,32 @@ $(document).ready(function() {
 
 <h3>배너관리</h3>
 <hr>
-	<div class="bannerList">
+
+	<div id="bannerList">
 		<table class="table">
 			<thead>
 				<tr>
-					<th>배너 번호</th>
-					<th>배너 이미지</th>
-					<th>수정 / 삭제 </th>
-					<!-- 수정말고 삭제만 가능하게. 순서바꾸기되게끔 -->
+					<th style="width: 20%"><input type="checkbox" name="checkAll" id="checkAll" onclick="checkAll();" /></th>
+					<th style="width: 60%">배너 이미지</th>
 				</tr>
 			</thead>
 			
 			<tbody>
 			<c:forEach items="${bannerList}" var="b">
 				<tr>
-					<td>${b.bannerNo }</td>
-					<td>${b.bannerImg }</td>
-					<td>
-						<button id="btnUpdate" class="btn">수정</button>
-						<button id="btnDelete" class="btn">삭제</button>
-					</td>
+					<td><input type="checkbox" name="checkRow" value="${b.bannerNo}" /></td>
+					<td><img src="/upload/${b.bannerImg }" width="300px" height="150px"></td>
 				</tr>
 			</c:forEach>
 			</tbody>
-		</table>
-	</div>
-
-	<div class="addBanner">
-		<button id="btnWrite" class="btn">배너추가</button>
+		</table>	
 	</div>
 
 
-
+	<div id="btnBox">
+		<input class="btn btn-danger btn-sm" type="button" id="checkDelete" onclick="checkDelete();" value="선택 삭제" />
+		<button class="btn btn-primary btn-sm" id="addBanner">배너추가</button>
+	</div>
 
 
 </div>

@@ -445,14 +445,14 @@ public class SellerController {
 	}
 	
 	@RequestMapping(value="/seller/review/write", method=RequestMethod.GET)
-	public String reviewWrite() {
+	public void reviewWrite() {
 		
 		logger.info("후기 글쓰기 페이지");
 		
 //		if(session.getAttribute("sellerLogin") == null ) {
 //			return "redirect:/seller/review/list";
 //		} else {
-			return "seller/review/write";
+//			return "seller/review/write";
 //		}
 		
 	}

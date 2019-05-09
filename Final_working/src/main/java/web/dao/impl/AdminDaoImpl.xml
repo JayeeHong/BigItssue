@@ -383,9 +383,10 @@
 		VALUES (MainBanner_seq.nextval, #{bannerImg })	
 	</insert>
 	
-	
-	
-	
+	<delete id="deleteBanner" parameterType="web.dto.MainBanner">
+		DELETE MainBanner
+		WHERE bannerNo = #{bannerNo }
+	</delete>
 	
 	
 
