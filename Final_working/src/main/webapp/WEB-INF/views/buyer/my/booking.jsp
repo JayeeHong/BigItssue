@@ -13,6 +13,8 @@ function bookingCancel(magazineNo){
 }
 
 </script>
+
+<div class="container">
 <div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_buyer.jsp" />
@@ -55,5 +57,5 @@ function bookingCancel(magazineNo){
 <jsp:include page="bookingPaging.jsp" />
 
 </div>
-
+</div>
 </div>
