@@ -468,7 +468,7 @@
 			WHERE message.chatRoomNo = chat.chatRoomNo
 			ORDER BY chat.chatRoomNo
 		) a
-		ORDER BY chatRoomNo;
+		ORDER BY chatRoomNo
 	</select>
 
 </mapper>
