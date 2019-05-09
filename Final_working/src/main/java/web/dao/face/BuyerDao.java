@@ -70,5 +70,15 @@ public interface BuyerDao {
 	public List<SellerLoc> selectZoneList();
 	//중복 뺸 stationList 얻기
 	public List<SellerLoc> selectStationList();
+
+	
+	// /buyer/my/info에서 회원정보 조회 쿼리
+	public BuyerInfo selectBuyerInfoAtBuyermyinfo(BuyerInfo buyerInfo);
+
+	// /buyer/my/info에서 회원 전화번호 업데이트 쿼리
+	public void updateBuyerPhone(BuyerInfo buyerInfo);
+
+	// /buyer/my/info에서 회원 이메일 업데이트 쿼리
+	public void updateBuyerEmail(BuyerInfo buyerInfo);
 	
 }

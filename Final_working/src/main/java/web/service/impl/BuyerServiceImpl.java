@@ -236,6 +236,21 @@ public class BuyerServiceImpl implements BuyerService {
 	public List<SellerLoc> getStationList() {
 		return buyerDao.selectStationList();
 	}
+
+	@Override
+	public BuyerInfo getBuyerInfoAtBuyermyinfo(BuyerInfo buyerInfo) {
+		return buyerDao.selectBuyerInfoAtBuyermyinfo(buyerInfo);
+	}
+
+	@Override
+	public void setBuyerPhone(BuyerInfo buyerInfo) {
+		buyerDao.updateBuyerPhone(buyerInfo);
+	}
+
+	@Override
+	public void setBuyerEmail(BuyerInfo buyerInfo) {
+		buyerDao.updateBuyerEmail(buyerInfo);
+	}
   
   
   

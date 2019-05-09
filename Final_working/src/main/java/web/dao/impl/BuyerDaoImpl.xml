@@ -157,5 +157,22 @@
 	<select id="selectStationList" resultType="web.dto.SellerLoc">
 		SELECT DISTINCT station FROM sellerLoc
 	</select>
+	
+	<select id="selectBuyerInfoAtBuyermyinfo" parameterType="web.dto.BuyerInfo" resultType="web.dto.BuyerInfo">
+		SELECT * FROM buyerInfo
+		WHERE buyerId = #{buyerId}
+	</select>
+	
+	<update id="updateBuyerPhone" parameterType="web.dto.BuyerInfo">
+		UPDATE buyerInfo
+		SET buyerPhone=#{buyerPhone }
+		WHERE buyerId=#{buyerId }
+	</update>
+	
+	<update id="updateBuyerEmail" parameterType="web.dto.BuyerInfo">
+		UPDATE buyerInfo
+		SET buyerEmail=#{buyerEmail }
+		WHERE buyerId=#{buyerId }
+	</update>
 
 </mapper>
