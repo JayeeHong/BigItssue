@@ -6,6 +6,7 @@ import java.util.Map;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.Notice;
+import web.dto.MainBanner;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
@@ -97,4 +98,15 @@ public interface BuyerDao {
 	//공지사항 상세보기
 	public Notice getNoticeView(int noticeNo);
 
+	//reservation예약테이블 status "예약"=>"취소"로 변경하기
+	public void updateStatusOfReservation(int magazineNo);
+	
+	//magazineNo으로 Reservation 조회
+	public Reservation selectReservationByMagazineNo(int magazineNo);
+	
+	//bookListInfo 빅이슈테이블 circulation(보유부수) 예약취소한 수 만큼 증가시키기
+	public void increaseCirculation(Reservation reservationInfo);
+
+	//배너 정보 조회
+	public List<MainBanner> selectBanner();
 }

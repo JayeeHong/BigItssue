@@ -371,6 +371,24 @@
 		</choose>
 	</delete>
 	
+
+	
+	<select id="selectBanner" resultType="web.dto.MainBanner">
+		SELECT * FROM MainBanner
+		ORDER BY bannerNo
+	</select>
+	
+	<insert id="insertBanner" parameterType="web.dto.MainBanner">
+		INSERT INTO MainBanner (bannerNo, bannerImg)
+		VALUES (MainBanner_seq.nextval, #{bannerImg })	
+	</insert>
+	
+	
+	
+	
+	
+	
+
 	<select id="userIdList" parameterType="String" resultType="String">
 		SELECT sellerId FROM ${value }
 	
@@ -381,6 +399,7 @@
 		where sellerId = #{value }
 	
 	</select>
+
 	
 	
 </mapper>

@@ -15,6 +15,7 @@ import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.MainBanner;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -399,6 +400,11 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
+
+	public List<MainBanner> getBanner() {
+		return adminDao.selectBanner();
+	}
+
 	public List<String> userIdList(String abc) {
 		return adminDao.userIdList(abc);
 	}
@@ -412,6 +418,12 @@ public class AdminServiceImpl implements AdminService{
 				list.addAll((adminDao.nullUserInfo(i)));
 			}
 		return list;
+
+	}
+
+	@Override
+	public void writeBanner(MainBanner mainBanner) {
+		adminDao.insertBanner(mainBanner);
 	}
 	
 }

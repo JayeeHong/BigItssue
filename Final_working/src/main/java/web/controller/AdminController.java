@@ -26,6 +26,7 @@ import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.MainBanner;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -829,9 +830,36 @@ public class AdminController {
 		
 	}
 	
+	
+	//메인배너관리
 	@RequestMapping(value="/admin/banner/list", method=RequestMethod.GET)
-	public void adminBannerlist() { // 배너관리
+	public void adminBannerList(MainBanner mainBanner, Model model) {
 		
+		logger.info("배너관리");
+		
+		List<MainBanner> bannerList = adminService.getBanner();
+		model.addAttribute("bannerList", bannerList);
+		
+	}
+	
+	@RequestMapping(value="/admin/banner/write", method=RequestMethod.GET)
+	public String bannerWrite() {
+		return "admin/banner/write";
+	}
+	
+	@RequestMapping(value="/admin/banner/write", method=RequestMethod.POST)
+	public String bannerWriteProc(MainBanner mainBanner) {
+		
+		adminService.writeBanner(mainBanner);
+		
+		return "redirect:/admin/banner/list";
+	}
+	
+	@RequestMapping(value="/admin/banner/delete", method=RequestMethod.GET)
+	public void bannerDelete(MainBanner mainBanner, HttpServletRequest req) {
+		
+		int bannerNo = Integer.parseInt(req.getParameter("bannerNo"));
+//		adminService.deleteBanner(bannerNo);
 	}
 	
 	
@@ -882,6 +910,8 @@ public class AdminController {
 		
 		return "admin/loc/list";
 	}
+
+
 	
 	
 	@RequestMapping(value="/admin/seller/select", method=RequestMethod.GET)
@@ -903,4 +933,5 @@ public class AdminController {
 	}
 	
 	
+
 }

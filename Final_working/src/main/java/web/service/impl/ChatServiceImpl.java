@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import web.dao.face.ChatDao;
 import web.dto.Chat;
 import web.dto.Message;
+import web.dto.MessageChk;
 import web.dto.User;
 import web.service.face.ChatService;
 
@@ -111,6 +112,86 @@ public class ChatServiceImpl implements ChatService{
 	public Chat selectChatRoomIds(int roomNo) {
 		return chatDao.selectChatRoomIds(roomNo);
 	}
+
+	@Override
+	public MessageChk setDtoMessageChk(String chatId, int chatRoomNo, Date sysdate) {
+		
+		MessageChk messageChk = new MessageChk();
+		messageChk.setChatFinalDate(sysdate);
+		messageChk.setChatId(chatId);
+		messageChk.setChatRoomNo(chatRoomNo);
+		return messageChk;
+	}
+
+	@Override
+	public void insertMessageChk(MessageChk messageChk) {
+		chatDao.insertMessageChk(messageChk);	
+	}
+
+	@Override
+	public boolean getExistenceStatusOfChatId(MessageChk messageChk) {
+		
+		//MessageChk테이블에 현재 로그인한id cnt세서 이미 존재하는지 확인.
+		int cnt = chatDao.selectCntByChatId(messageChk);
+		
+		logger.info("cnt:"+cnt);
+		
+		//로그인한 id 이미 존재하는지 확인
+		if( cnt == 0 ) {
+			return true; //id없음
+		} else {
+			return false; //id있음
+		}
+		
+	}
+
+	@Override
+	public void updateMessageChk(MessageChk messageChk) {
+		chatDao.updateMessageChk(messageChk);		
+	}
+
+	@Override
+	public List<MessageChk> getFinalDateListById(String chatId) {
+		return chatDao.selectFinalDateListById(chatId);
+	}
+
+	@Override
+	public MessageChk getMessageNoReadNum(MessageChk messageChk) {
+
+		return chatDao.selectMessageNoReadNum(messageChk);
+	}
+
+	@Override
+	public void createMessageChk(Chat chat) {
+		
+		MessageChk messageChk = new MessageChk();
+		messageChk.setChatRoomNo(chat.getChatRoomNo());
+		
+		Date date = new Date();
+		
+		long tempDate = date.parse ( "Dec 25, 2001 10:10:10" );
+
+		Date defaultDate = new Date ( tempDate );
+		
+		messageChk.setChatFinalDate(defaultDate);
+		
+		//방 생성될때 messageChk DB에 넣기. 날짜는 null값
+		if(chat.getBuyerId()!=null) {
+			messageChk.setChatId(chat.getBuyerId());
+			chatDao.createMessageChk(messageChk);
+		}
+		if(chat.getSellerId()!=null) {
+			messageChk.setChatId(chat.getSellerId());
+			chatDao.createMessageChk(messageChk);
+		}
+		if(chat.getBigdomId()!=null) {
+			messageChk.setChatId(chat.getBigdomId());
+			chatDao.createMessageChk(messageChk);
+		}
+
+	}
+
+
 	
 	
 }

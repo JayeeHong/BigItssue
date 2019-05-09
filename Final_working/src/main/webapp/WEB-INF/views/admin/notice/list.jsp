@@ -153,6 +153,7 @@ function getLocList(){
 
 function noticeWrite(){
 	window.location.href="/admin/notice/write"
+	
 }
 
 </script>    

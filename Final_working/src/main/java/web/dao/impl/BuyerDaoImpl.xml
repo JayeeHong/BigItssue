@@ -124,10 +124,15 @@
 		ORDER BY month
 	</select>
 	
+	<select id="selectBookListInfo" parameterType="int" resultType="web.dto.BookListInfo">
+		SELECT * FROM bookListInfo
+		WHERE magazineNo = #{magazineNo }
+	</select>
+	
 	<!-- 예약하기 -->
 	<insert id="insertResrvation" parameterType="web.dto.Reservation">
-		INSERT INTO Reservation(reserveNo, sellerId, buyerId, zone, station, spot, bookMonth, bookNumber, status, total, pickupDate, bookDate)
-		VALUES(Reservation_seq.nextval, #{sellerId }, #{buyerId }, #{zone }, #{station }, #{spot }, #{bookMonth }, #{bookNumber }, #{status }, #{total }, #{pickupDate },#{bookDate } )
+		INSERT INTO Reservation(reserveNo, sellerId, buyerId, zone, station, spot, bookMonth, bookNumber, status, total, pickupDate, bookDate, magazineNo)
+		VALUES(Reservation_seq.nextval, #{sellerId }, #{buyerId }, #{zone }, #{station }, #{spot }, #{bookMonth }, #{bookNumber }, #{status }, #{total }, #{pickupDate },#{bookDate }, #{magazineNo} )
 	</insert>
 	
 	<!-- 예약 buyerId,sellerId로 검색 -->
@@ -236,5 +241,28 @@
 	<select resultType="web.dto.Notice" parameterType="int" id="getNoticeView"> 
 	SELECT * FROM NOTICE WHERE noticeNo = #{noticeNo}
 	 </select>
+
+  <update id="updateStatusOfReservation" parameterType="int">
+		UPDATE reservation
+		SET status='예약취소'
+		WHERE magazineNo=#{magazineNo }
+	</update>
+	
+	<select id="selectReservationByMagazineNo" parameterType="int" resultType="web.dto.Reservation">
+		SELECT * FROM reservation
+		WHERE magazineNo = #{magazineNo} AND status='예약'
+	</select>
+	
+	<update id="increaseCirculation" parameterType="web.dto.Reservation">
+		update bookListInfo
+		set circulation = circulation+#{bookNumber }
+		where magazineNo = #{magazineNo }
+	
+	</update>
+	
+	<select id="selectBanner" resultType="web.dto.MainBanner">
+		SELECT * FROM MainBanner
+		ORDER BY bannerNo
+	</select>
 	
 </mapper>
