@@ -99,4 +99,8 @@ public interface SellerService {
 
 	//후기 댓글 수정
 	public void replyUpdate(ReviewReply reviewReply);
+
+	// 판매자 카드 결제 여부 변경
+	public void setSellerCard(SellerLoc sellerloc);
+
 }

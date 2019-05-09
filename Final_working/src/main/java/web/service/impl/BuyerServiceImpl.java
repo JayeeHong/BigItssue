@@ -243,6 +243,20 @@ public class BuyerServiceImpl implements BuyerService {
 	}
 
 	@Override
+	public BuyerInfo getBuyerInfoAtBuyermyinfo(BuyerInfo buyerInfo) {
+		return buyerDao.selectBuyerInfoAtBuyermyinfo(buyerInfo);
+	}
+
+	@Override
+	public void setBuyerPhone(BuyerInfo buyerInfo) {
+		buyerDao.updateBuyerPhone(buyerInfo);
+	}
+
+	@Override
+	public void setBuyerEmail(BuyerInfo buyerInfo) {
+		buyerDao.updateBuyerEmail(buyerInfo);
+
+  @Override
 	public int getTotalCountOfSellerLocByZoneAndStation(Map<String, Object> map) {
 		return buyerDao.selectTotalCountOfSellerLocByZoneAndStation(map);
 	}

@@ -167,7 +167,7 @@ public class SellerController {
 	@RequestMapping(value="/seller/login", method=RequestMethod.POST)
 	public String sellerLogin(
 			SellerInfo sellerInfo,
-			HttpSession session) {
+			HttpSession session, Model model) {
 		
 		//chat에서 session정보를 가져올때
 		//User라는(판매자,빅돔,구매자)정보 모두를 포함하는 dto의 정보를  불러와야해서 만듦.
@@ -181,11 +181,13 @@ public class SellerController {
 			
 			// 판매자 전체 정보 가져오기
 			sellerInfo = sellerService.getSellerInfo(sellerInfo.getSellerId());
-//			logger.info(sellerInfo.toString());
+//			logger.info(":::::sellerinfo::::::"+sellerInfo.toString());
+			session.setAttribute("sellerInfo", sellerInfo);
 			
 			//User으로 정보가 필요해서 추가
 			LoginInfo = sellerService.getSellerInfoUser(sellerInfo);
 			session.setAttribute("LoginInfo", LoginInfo);
+			
 		}
 		
 		
@@ -210,7 +212,7 @@ public class SellerController {
 		// 판매시간 조회
 		sellerLoc = sellerService.getSellerLoc(sellerId);
 		
-//		logger.info(sellerLoc.toString());
+		logger.info(":::::판매시간 조회:::::"+sellerLoc.toString());
 		
 		String startTime="";
 		String startTime1="";
@@ -230,23 +232,25 @@ public class SellerController {
 		}
 		
 //		logger.info(startTime1 + ":" + startTime2);
-		//---------------
+		//--------------- 판매시간 조회 끝
 
-		// 판매부수 조회
+		// 활성화 상태인지 조회
 		List<BookListInfo> bookListInfo = sellerService.getBookList(sellerId);
 		
 //		logger.info(bookListInfo.toString());
 		
-		model.addAttribute("startTime1", startTime1);
-		model.addAttribute("startTime2", startTime2);
-		model.addAttribute("endTime1", endTime1);
-		model.addAttribute("endTime2", endTime2);
-		if(sellerLoc != null && !"".equals(sellerLoc)) {
+		// 시작시간
+		model.addAttribute("startTime1", startTime1); //시
+		model.addAttribute("startTime2", startTime2); //분
+		// 종료시간
+		model.addAttribute("endTime1", endTime1); //시
+		model.addAttribute("endTime2", endTime2); //분
+		if(sellerLoc != null && !"".equals(sellerLoc)) { // 시작, 종료시간 null 처리
 			model.addAttribute("sellerTimeS", sellerLoc.getSellerTimeS());
 			model.addAttribute("sellerTimeE", sellerLoc.getSellerTimeE());
 		}
-		
-		model.addAttribute("bookListInfo", bookListInfo);
+		model.addAttribute("sellerLoc", sellerLoc); // 카드 가능/불가능
+		model.addAttribute("bookListInfo", bookListInfo); // 활성화 상태인지
 		
 	}
 	
@@ -290,10 +294,24 @@ public class SellerController {
 		return "redirect:/seller/time";
 	}
 	
-	@RequestMapping(value="/seller/mUpdate", method=RequestMethod.POST)
-	public String mUpdate(BookListInfo bookListInfo) {
+	@RequestMapping(value="/seller/time/cardUpdate", method=RequestMethod.POST)
+	public String cardUpdateAtTime(SellerLoc sellerloc) {
 		
-//		logger.info("수정할 내용:"+bookListInfo.toString());
+//		logger.info("::::카드 결제 여부 변경::::"+sellerloc);
+		// 카드 결제 여부 변경
+		sellerService.setSellerCard(sellerloc);
+		
+		return "redirect:/seller/time";
+	}
+	
+	@RequestMapping(value="/seller/mUpdate", method=RequestMethod.POST)
+	public String mUpdate(BookListInfo bookListInfo, HttpSession session) {
+		
+//		logger.info("::::::수정할 내용::::::"+bookListInfo.toString());
+		
+		// 세션값 가져오기
+		String sellerId = (String) session.getAttribute("sellerId");
+		bookListInfo.setSellerId(sellerId);
 		
 		// 판매 호수, 판매 부수 수정
 		sellerService.setMegazine(bookListInfo);
@@ -333,33 +351,40 @@ public class SellerController {
 		// 세션값 가져오기
 		String sellerId = (String) session.getAttribute("sellerId");
 		
-		// 판매자의 예약내역 조회
-		List<Reservation> bookListInfo = sellerService.getReserve(sellerId);
-		
-		// --- 수령시간이 지났을 경우 취소상태로 변경하기 ---
-		// 1. 현재시간과 수령시간 비교
+		// 판매시간 조회
+		SellerLoc sellerLoc = sellerService.getSellerLoc(sellerId);
+//		logger.info("::::::예약내역조회에서 sellerloc::::::"+sellerLoc.toString());
+		if(sellerLoc != null && !"".equals(sellerLoc)) {
+			
+			// 판매자의 예약내역 조회
+			List<Reservation> bookListInfo = sellerService.getReserve(sellerId);
+			
+			// --- 수령시간이 지났을 경우 취소상태로 변경하기 ---
+			// 1. 현재시간과 수령시간 비교
 //		logger.info("수령시간:"+bookListInfo.get(0).getPickupDate().toString());
-		
-		Date sysdate = new Date(); // 현재시간
-		
-		// 2. bookListInfo의 크기동안 반복
-		for(int i=0; i<bookListInfo.size(); i++) {
-			if(sysdate.before(bookListInfo.get(i).getPickupDate())) {
+			
+			Date sysdate = new Date(); // 현재시간
+			
+			// 2. bookListInfo의 크기동안 반복
+			for(int i=0; i<bookListInfo.size(); i++) {
+				if(sysdate.before(bookListInfo.get(i).getPickupDate())) {
 //				logger.info("현재시간이 더 큼");
-				
-			} else { 
+					
+				} else { 
 //				logger.info("DB시간이 더 큼");
-				
-				// 3. DB에 저장된 시간이 현재시간보다 클때 취소상태로 변경
-				sellerService.setPickupDate(bookListInfo.get(i));
+					
+					// 3. DB에 저장된 시간이 현재시간보다 클때 취소상태로 변경
+					sellerService.setPickupDate(bookListInfo.get(i));
+				}
 			}
+			
+			// 4. 예약내역 재조회
+			bookListInfo = sellerService.getReserve(sellerId);
+			// ------------------------------------------ 상태변경 끝
+			
+			model.addAttribute("bookListInfo", bookListInfo);
 		}
 		
-		// 4. 예약내역 재조회
-		bookListInfo = sellerService.getReserve(sellerId);
-		// ------------------------------------------ 상태변경 끝
-		
-		model.addAttribute("bookListInfo", bookListInfo);
 		
 	}
 	
