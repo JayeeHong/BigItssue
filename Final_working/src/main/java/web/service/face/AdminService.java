@@ -52,8 +52,6 @@ public interface AdminService {
 
 	public String getSellerName(SellerLoc locInfo);
 
-	public void changeSellerName(HashMap hm);
-
 	// 판매 장소 추가하기
 	public void insertList(SellerLoc sellerLoc);
 
@@ -205,12 +203,6 @@ public interface AdminService {
 
 	// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회
 	public List<ChatReport> getReportByChatReport(ChatReport reportByReportNo);
-
-	//판매 장소 추가하기
-	public void insertList(SellerLoc sellerLoc);
-  
-	//판매 장소 삭제하기
-	public void deleteList(SellerLoc sellerLoc);
 
 	
 	//배너 리스트 얻기
