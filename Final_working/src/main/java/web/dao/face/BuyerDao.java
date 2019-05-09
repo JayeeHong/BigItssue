@@ -1,12 +1,17 @@
 package web.dao.face;
 
 import java.util.List;
+import java.util.Map;
 
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.Notice;
+import web.dto.MainBanner;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
+import web.util.MyBookingPaging;
+import web.util.Paging;
 import web.util.SellerLocPaging;
 
 public interface BuyerDao {
@@ -68,6 +73,7 @@ public interface BuyerDao {
 	
 	//중복 뺀 zoneList 얻기
 	public List<SellerLoc> selectZoneList();
+	
 	//중복 뺸 stationList 얻기
 	public List<SellerLoc> selectStationList();
 
@@ -81,4 +87,36 @@ public interface BuyerDao {
 	// /buyer/my/info에서 회원 이메일 업데이트 쿼리
 	public void updateBuyerEmail(BuyerInfo buyerInfo);
 	
+	//zone,station으로 sellerLoc 개수새기
+	public int selectTotalCountOfSellerLocByZoneAndStation(Map<String, Object> map);
+	
+	//zone,station으로 sellerLoc 조회
+	public List<SellerLoc> selectPagingListOfSellerLocByZoneAndStation(SellerLocPaging paging);
+	
+	//나의 예약내역의 총count구하기
+	public int selectTotalCountOfMyBooking(String buyerId);
+	
+	//나의 예약페이징리스트 조회
+	public List<Reservation> selectPagingListOfMyReservation(MyBookingPaging paging);
+	
+	//공지사항 총갯수
+	public int getNoticeCnt();
+		
+	//공지사항 페이징리스트
+	public List<Notice> getNoticeList(Paging paging);
+		
+	//공지사항 상세보기
+	public Notice getNoticeView(int noticeNo);
+
+	//reservation예약테이블 status "예약"=>"취소"로 변경하기
+	public void updateStatusOfReservation(int magazineNo);
+	
+	//magazineNo으로 Reservation 조회
+	public Reservation selectReservationByMagazineNo(int magazineNo);
+	
+	//bookListInfo 빅이슈테이블 circulation(보유부수) 예약취소한 수 만큼 증가시키기
+	public void increaseCirculation(Reservation reservationInfo);
+
+	//배너 정보 조회
+	public List<MainBanner> selectBanner();
 }

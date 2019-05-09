@@ -69,6 +69,16 @@
 								</c:if>
 							</c:forEach>
 							</p>
+							<!-- 안읽은 메시지 개수 표시 -->
+							<div id="c${item.chatRoomNo }">
+							<c:forEach var="item3" items="${messageChkResult}" begin="0" end="${messageChkResult.size()}" step="1">
+			                	<c:if test="${item.chatRoomNo eq item3.chatRoomNo}">
+				                	<div class="text-center messageChkResult" style="border-radius: 50%;height: 20px; width: 20px; background-color: red; color:white;">
+				                	${item3.messageNoReadNum}
+				                	</div>
+			                	</c:if>
+		               		</c:forEach>
+		               		</div>
 		                </div>
 	              	</div>
 	           	</div>
@@ -261,9 +271,17 @@ function connect(){
 				
 				console.log("[TEST]list확인:${chatRoomList}")
 				
+				//안본 메시지 개수List
+				var messageChkResult = receive.messageChkResult;
+				
 				//부트스트랩의 채팅창
 				var msg_history = $(".msg_history");
 				var inbox_chat = $(".inbox_chat");
+				
+				//채팅방 위치 재배치		
+				var replace = $("#b"+noFlag).wrap("<div><div/>").parent().html();
+				$("#b"+noFlag).remove();
+				inbox_chat.prepend(replace);
 				
 				/* 현재방번호와 #앞의 번호가 같을경우 */
 				if( ${chatRoomNo} == noFlag){
@@ -285,11 +303,41 @@ function connect(){
 					for(var i=0; i<refreshList.length; i++){
 						if(refreshList[i].chatRoomNo==noFlag){
 							$("#b"+refreshList[i].chatRoomNo+" p").html("<span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result);
+							//안 읽은 채팅내역 개수 표시.
+							for(var j=0; j<messageChkResult.length; j++){
+								if(messageChkResult[j] !=null && refreshList[i].chatRoomNo==messageChkResult[j].chatRoomNo){
+									console.log("-----[TEST]-----:"+$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length)
+									/* 안 읽은 채팅내역 표시가 아예 없을 경우 생성해주자. */
+									if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length<=0){
+										var a = "<div class=\"text-center messageChkResult\" style=\"border-radius: 50%;height: 20px; width: 20px; background-color: red; color:white;\">"+messageChkResult[j].messageNoReadNum+"</div>"
+										$("#c"+refreshList[i].chatRoomNo).append(a);
+									}
+									/* 안 읽은 채팅내역 표시가 있으면 그곳에 숫자를 넣어주자. */
+									if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length>0){
+										$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").html(messageChkResult[j].messageNoReadNum);
+									}
+								}
+							}
 						}
 						console.log("[TEST]:"+$("#b"+refreshList[i].chatRoomNo).length)			
 						if($("#b"+refreshList[i].chatRoomNo).length<=0){//있어야할 id가 없다면 생성해주자.
-							var a = "<div class=\"chat_list\"><a href=\"/buyer/my/chat?chatRoomNo="+noFlag+"\">"+noFlag+"번방["+refreshList[i].theOtherParty+"]</a> <div id=\"b"+noFlag+"\" onclick=\"location.href='/buyer/my/chat?chatRoomNo="+noFlag+"'\"class=\"chat_people\"><div class=\"chat_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"chat_ib\"><p><span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result+"</p></div></div></div>";
-							inbox_chat.append(a);
+							var a = "<div class=\"chat_list\"><a href=\"/seller/main?chatRoomNo="+noFlag+"\">"+noFlag+"번방["+refreshList[i].theOtherParty+"]</a> <div id=\"b"+noFlag+"\" onclick=\"location.href='/seller/main?chatRoomNo="+noFlag+"'\"class=\"chat_people\"><div class=\"chat_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"chat_ib\"><p><span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result+"</p><div id=\"c"+refreshList[i].chatRoomNo+"\">	 </div></div></div></div>"
+							inbox_chat.prepend(a);
+							//안 읽은 채팅내역 개수 표시.
+							for(var j=0; j<messageChkResult.length; j++){
+								if(messageChkResult[j] !=null && refreshList[i].chatRoomNo==messageChkResult[j].chatRoomNo){
+									console.log("-----[TEST]-----:"+$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length)
+									/* 안 읽은 채팅내역 표시가 아예 없을 경우 생성해주자. */
+									if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length<=0){
+										var a = "<div class=\"text-center messageChkResult\" style=\"border-radius: 50%;height: 20px; width: 20px; background-color: red; color:white;\">"+messageChkResult[j].messageNoReadNum+"</div>"
+										$("#c"+refreshList[i].chatRoomNo).append(a);
+									}
+									/* 안 읽은 채팅내역 표시가 있으면 그곳에 숫자를 넣어주자. */
+									if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length>0){
+										$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").html(messageChkResult[j].messageNoReadNum);
+									}
+								}
+							}
 						}
 					}
 

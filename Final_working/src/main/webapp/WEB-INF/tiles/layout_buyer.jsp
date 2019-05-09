@@ -43,7 +43,7 @@
 <tiles:insertAttribute name="header" />
 
 <!-- BODY -->
-<div class="wrap container">
+<div class="wrap">
 	<tiles:insertAttribute name="body" />
 </div>
 

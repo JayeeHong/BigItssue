@@ -85,6 +85,35 @@ $(document).ready(function(){
 	})
 	
 
+	
+	$("#sellerId").click(function(){
+		var openWin;
+		var url= "/admin/seller/select";    //팝업창 페이지 URL
+		var winWidth = 450;
+	   	var winHeight = 400;
+
+	    var popupOption= "width="+winWidth+", height="+winHeight;    //팝업창 옵션(optoin)
+		openWin = window.open(url,"사용자선택",popupOption);
+	    
+	})
+	
+	
+	//지도 팝업
+	$("#spot").click(function() {
+		var openMap;
+		var station = $("#station").val();
+		var spot = $("#spot").val();
+		
+		var url = "/revSpot?station="+station+"&spot="+spot; //지도는 header, footer 필요없음
+		var w = (screen.availWidth)/3;
+		var h = (screen.availHeight)/2.5;
+		
+		var popupOption = "width="+w+", height="+h;
+		openMap = window.open(url, "변경될 출구를 찾을 지도", popupOption);
+		
+	})
+	
+	
 })
 
 
@@ -161,6 +190,8 @@ function subwayList(){
 	})
 }
 
+
+
 </script>
     
 <style>
@@ -196,8 +227,8 @@ input[type=number]{
 		<input type="hidden" name="locNo" id="locNo" value="">
 		<table class="table table-bordered">
 		<tr>
-			<td class="tdLeft">지역</td>
-			<td class="tdRight">
+			<td class="tdLeft" >지역</td>
+			<td class="tdRight" colspan="3">
 				<label class="radio-inline" id="sellerArea">
 				<input type="radio" name="bigArea" value="서울">서울/경기
 				</label>
@@ -209,7 +240,7 @@ input[type=number]{
 		
 		<tr>
 			<td class="tdLeft">호선</td>
-			<td class="tdRight">
+			<td class="tdRight" colspan="3">
 			<div id="divSearch">
 			<input type="search" name="searchWord" id="searchWord"><input type="button" onclick="subwayList()" value="찾기">
 			</div>
@@ -225,7 +256,7 @@ input[type=number]{
 	
 		<tr>
 			<td class="tdLeft">판매장소</td>
-			<td class="tdRight">
+			<td class="tdRight" colspan="3">
 			<input class="form-control" type="text" id="station" name="station">
 			</td>
 		</tr>
@@ -236,11 +267,16 @@ input[type=number]{
 			<td class="tdRight"><div id="spotInfo">
 			<input class="form-control" type="text" id="spot" name="spot"placeholder="직접입력">
 			</div></td>
+			<td class="tdLeft" style="display:none">좌표</td>
+			<td class="tdRight" style="display:none"><div id="LatLng">
+			<input class="form-control" type="text" id="lat" name="lat" value="${sellerInfo.lat }">
+			<input class="form-control" type="text" id="lng" name="lng" value="${sellerInfo.lng }">
+			</div>
 		</tr>
 		
 		<tr>
 			<td class="tdLeft">카드결제여부</td>
-			<td class="tdRight">
+			<td class="tdRight" colspan="3">
 			<label class="radio-inline">
 			<input type="radio" name="sellerCard" value="카드 가능">카드 가능
 			</label>
@@ -252,7 +288,7 @@ input[type=number]{
 		
 		<tr>
 			<td class="tdLeft">판매시간</td>
-			<td class="tdRight">
+			<td class="tdRight" colspan="3">
 				<div class="form-group">
 				<input class="form-control" style="width:75px;" type="number" name="startTime1" id="startTime1"><b> :</b>
 				<input class="form-control" style="width:75px;" type="number" name="startTime2" id="startTime2"><b> ~</b>
@@ -263,9 +299,9 @@ input[type=number]{
 		</tr>
 		
 		<tr>
-			<td class="tdLeft">판매자</td>
-			<td class="tdRight">
-			<input class="form-control" type="text" id="sellerName" name="sellerName" value="${sellerName }" >
+			<td class="tdLeft">판매자ID</td>
+			<td class="tdRight" colspan="3">
+			<input class="form-control" type="text" id="sellerId" name="sellerId" value="${sellerInfo.sellerId }" >
 			</td>
 		</tr>
 		
@@ -279,8 +315,8 @@ input[type=number]{
 		<a href="/admin/seller/list"><button class="btn btn-danger" type="button">취소</button></a>
 		</div>
 		
-		<input type="hidden" id="arrZone" name="arrZone"> <!-- 배열로 만들어진 zone을 보내기 위한 input type히든 -->
-		<input type="hidden" id="sellerId" name="sellerId" value="${sellerInfo.sellerId }">
+		<input type="hidden" id="arrZone" name="arrZone"> <!-- 배열로 만들어진 zone을 보내기 위한 input type히든 건들지마시오 -->
+<%-- 		<input type="hidden" id="sellerId" name="sellerId" value="${sellerInfo.sellerId }"> --%>
 	</form>
 	
 	</div>

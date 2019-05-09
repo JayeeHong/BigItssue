@@ -1,12 +1,17 @@
 package web.service.face;
 
 import java.util.List;
+import java.util.Map;
 
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.Notice;
+import web.dto.MainBanner;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
+import web.util.MyBookingPaging;
+import web.util.Paging;
 import web.util.SellerLocPaging;
 
 public interface BuyerService {
@@ -82,6 +87,38 @@ public interface BuyerService {
 	// /buyer/my/info 에서 구매자 이메일 업데이트
 	public void setBuyerEmail(BuyerInfo buyerInfo);
 	
+	//zone,station으로 sellerLoc 개수새기
+	public int getTotalCountOfSellerLocByZoneAndStation(Map<String, Object> map);
+	
+	//zone,station으로 sellerLoc 조회
+	public List<SellerLoc> getPagingListOfSellerLocByZoneAndStation(SellerLocPaging paging);
+	
+	//나의 예약내역의 총count구하기
+	public int getTotalCountOfMyBooking(String buyerId);
+	
+	//나의 예약페이징리스트 조회
+	public List<Reservation> getPagingListOfMyReservation(MyBookingPaging paging);
+	
+	//공지사항 갯수조회
+	public int getNoticeCnt();
+		
+	//공지사항 페이징리스트조회
+	public List<Notice> getNoticeList(Paging paging);
+		
+	//공지사항 상세보기
+	public Notice getNoticeView(int noticeNo);
+
+	//reservation예약테이블 status "예약"=>"취소"로 변경하기
+	public void setStatusOfReservation(int magazineNo);
+	
+	//magazineNo으로 Reservation 조회
+	public Reservation getReservaionByMagazineNo(int magazineNo);
+	
+	//bookListInfo 빅이슈테이블 circulation(보유부수) 예약취소한 수 만큼 증가시키기
+	public void increaseCirculation(Reservation reservationInfo);
+
+	//메인베너 정보 가져오기
+	public List<MainBanner> getBannerList();
 	
 	
 }

@@ -1,5 +1,6 @@
 package web.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.ChatReport;
+import web.dto.MainBanner;
+import web.dto.Message;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -406,11 +409,6 @@ public class AdminServiceImpl implements AdminService{
 		return adminDao.getSellerName(locInfo);
 	}
 
-	@Override
-	public void changeSellerName(HashMap hm) {
-		adminDao.changeSellerName(hm);
-		
-	}
 
   @Override
 	public void insertList(SellerLoc sellerLoc) {
@@ -466,6 +464,36 @@ public class AdminServiceImpl implements AdminService{
 	public List<ChatReport> getReportByChatReport(ChatReport reportByReportNo) {
 		return adminDao.selectReportByChatReport(reportByReportNo);
 	}
+
+	public List<MainBanner> getBanner() {
+		return adminDao.selectBanner();
+	}
+
+	public List<String> userIdList(String abc) {
+		return adminDao.userIdList(abc);
+	}
+
+	@Override
+	public List<SellerInfo> nullUserInfo(List<String> idOfinfo) {
+		
+		List<SellerInfo> list = new ArrayList<SellerInfo>();
+				
+			for(String i : idOfinfo) {
+				list.addAll((adminDao.nullUserInfo(i)));
+			}
+		return list;
+
+	}
+
+	@Override
+	public void writeBanner(MainBanner mainBanner) {
+		adminDao.insertBanner(mainBanner);
+	}
+  
+  @Override
+  public List<Message> getChatRoomNo() {
+		return adminDao.getChatRoomNo();
+  }
 	
 }
 

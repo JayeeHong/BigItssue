@@ -73,15 +73,25 @@ $(document).ready(function() {
 
 	
 	$("#buyerPw").keyup(function() {
-		var getCheck= RegExp(/^[a-zA-Z0-9]{8,12}$/);
 		
-		if( !getCheck.test($("#buyerPw").val()) ) {
-			$("#pwTest").html("비밀번호는 소문자, 대문자, 숫자로 이루어진 8~12자리입니다");
+		var pwpw = $("#buyerPw").val()
+		
+		var num = pwpw.search(/[0-9]/g);
+		var eng = pwpw.search(/[a-z]/ig);
+		var spe = pwpw.search(/[`~!@#$%^&*|\\\'\";:/?.,]/gi);
+
+		if(!/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/.test(pwpw)){            
+			$("#pwTest").html("비밀번호는 영문자, 숫자, 특수문자를 혼합한 이루어진 8~16자리입니다");
 			$("#pwTest").css("color", "red")
-		} else {
-			$("#pwTest").html("가능한 비밀번호입니다");
-			$("#pwTest").css("color", "green")
-		}
+	    }else{
+	    	$("#pwTest").html("가능한 비밀번호입니다");
+			$("#pwTest").css("color", "#ff6c00")
+			if(pwpw.length>12){
+				$("#pwTest").html("아주 좋은 비밀번호입니다");
+				$("#pwTest").css("color", "green")
+			}
+	    }
+		
 	})
 
 	
@@ -177,8 +187,8 @@ function joinConfirm() {
 		alert("비밀번호를 입력하세요")
 		return false
 		
-	} else if( !getCheck.test($("#buyerPw").val()) ) {
-		alert("비밀번호는 4~12자리 사이입니다 ")
+	} else if( !/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/.test($("#buyerPw").val()) ) {
+		alert("비밀번호는 특수문자를 포함한 8~16자리 사이입니다 ")
 		return false
 		
 	} else if($("#buyerEmail").val()=='') {
@@ -248,7 +258,7 @@ function joinConfirm() {
 	<div class="form-group">
 		<label class="col-sm-3 col-sm-offset-1 control-label">비밀번호</label>
 		<div class="col-sm-5">
-			<input class="form-control" type="password" name="buyerPw" id="buyerPw">
+			<input class="form-control" type="password" name="buyerPw" id="buyerPw" placeholder="영어,숫자,특수문자를  모두포함한 8~16자리 비밀번호를 입력해주세요">
 		</div> 
 		<div id="pwTest"></div>
 	</div>

@@ -11,6 +11,8 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.ChatReport;
+import web.dto.MainBanner;
+import web.dto.Message;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -188,7 +190,7 @@ public interface AdminService {
 
 	// 해당 판매자의 보유 빅이슈 삭제
 	public void adminBookViewDelete(BookListInfo booklistInfo);
-
+  
 	// 신고내역 전체 불러오기
 	public List<ChatReport> getChatReportList();
 
@@ -203,6 +205,27 @@ public interface AdminService {
 
 	// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회
 	public List<ChatReport> getReportByChatReport(ChatReport reportByReportNo);
+
+	//판매 장소 추가하기
+	public void insertList(SellerLoc sellerLoc);
+  
+	//판매 장소 삭제하기
+	public void deleteList(SellerLoc sellerLoc);
+
+	
+	//배너 리스트 얻기
+	public List<MainBanner> getBanner();
+
+	//배너 추가하기
+	public void writeBanner(MainBanner mainBanner);
+	
+	
+  public List<String> userIdList(String abc);
+
+  public List<SellerInfo> nullUserInfo(List<String> idOfinfo);
+
+
+  	public List<Message> getChatRoomNo();
 
 }
 

@@ -27,12 +27,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.Chat;
+import web.dto.MainBanner;
 import web.dto.Message;
+import web.dto.Notice;
+import web.dto.MessageChk;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.service.face.BuyerService;
 import web.service.face.ChatService;
+import web.util.MyBookingPaging;
+import web.util.Paging;
 import web.util.SellerLocPaging;
 
 @Controller
@@ -44,24 +49,100 @@ public class BuyerController {
 	@Autowired ChatService chatService;
 
 	@RequestMapping(value="/buyer/main", method=RequestMethod.GET)
-	public void buyerMain(
+	public void buyerMainGet(
+			String zoneSelect, 
+			String stationSelect,
 			@RequestParam(defaultValue="0") String curPage,
 			Model model) { 
 		
 		//현재 페이지 번호 얻기
 		logger.info("curPage:"+curPage);
 		
-		//총 게시글 수 얻기
-		int totalCount = buyerService.getTotalCountOfSellerLoc();
+		//총 게시글 수 얻기(map을 통해 파라미터 전달) 검색되고 다시 페이지번호 누르면 GET방식으로 오기때문에 map을통해서 zone,station조건으로 조회
+		Map<String, Object> map = new HashMap<String, Object>(); // MAP을 이용해 담기
+        map.put("zoneSelect", zoneSelect);
+        map.put("stationSelect", stationSelect);
+		int totalCount = buyerService.getTotalCountOfSellerLocByZoneAndStation(map);
+		
+		logger.info("totalCount:"+totalCount);
+		
+		//페이지 객체 생성
+		SellerLocPaging paging = new SellerLocPaging(totalCount, Integer.parseInt(curPage));
+		//paging에 zoneSelect,stationSelect추가
+		paging.setZone(zoneSelect);
+		paging.setStation(stationSelect);
+		
+		logger.info("paging:"+paging);
+		
+		List<SellerLoc> sellerLocList = buyerService.getPagingListOfSellerLocByZoneAndStation(paging);
+		
+		logger.info("sellerLocList:"+sellerLocList);
+			
+		//조회 결과를 VIEW에 전달하기
+		model.addAttribute("sellerLocList", sellerLocList);
+
+		//페이징 객체 MODEL로 추가
+		model.addAttribute("paging", paging);
+		
+		//현재시간, int형으로 바꿔서 보내주기
+		Date date = new Date();
+		
+		SimpleDateFormat transFormat = new SimpleDateFormat("HHmm");
+				
+		String stringNow = transFormat.format(date);
+		
+		int intNow = Integer.parseInt(stringNow);
+				
+		model.addAttribute("intNow", intNow);
+		
+		//중복뺸 zoneList얻기
+		List<SellerLoc> zoneList = buyerService.getZoneList();
+		
+		model.addAttribute("zoneList", zoneList);
+		
+		//중복뺀 stationList얻기
+		List<SellerLoc> stationList = buyerService.getStationList();
+		
+		model.addAttribute("stationList", stationList);
+		
+		//------------------------------------------------------
+		//메인 배너
+		// 배너목록 MODEL로 추가
+		List<MainBanner> mainBannerList = buyerService.getBannerList();
+		model.addAttribute("mainBannerList", mainBannerList);
+				
+	}
+	@RequestMapping(value="/buyer/main", method=RequestMethod.POST)
+	public void buyerMainPost(
+			String zoneSelect, 
+			String stationSelect,
+			@RequestParam(defaultValue="0") String curPage,
+			Model model) {
+		
+		logger.info("zoneSelect:"+zoneSelect);
+		logger.info("stationSelect:"+stationSelect);
+		
+		//현재 페이지 번호 얻기
+		logger.info("curPage:"+curPage);
+		
+		//총 게시글 수 얻기(map을 통해 파라미터 전달)
+		Map<String, Object> map = new HashMap<String, Object>(); // MAP을 이용해 담기
+        map.put("zoneSelect", zoneSelect);
+        map.put("stationSelect", stationSelect);
+		int totalCount = buyerService.getTotalCountOfSellerLocByZoneAndStation(map);
 		
 		logger.info("totalCount:"+totalCount);
 		
 		//페이지 객체 생성
 		SellerLocPaging paging = new SellerLocPaging(totalCount, Integer.parseInt(curPage));
 		
-		logger.info("paging:"+paging);
+		//paging에 zoneSelect,stationSelect추가
+		paging.setZone(zoneSelect);
+		paging.setStation(stationSelect);
 		
-		List<SellerLoc> sellerLocList = buyerService.getPagingListOfSellerLoc(paging);
+		logger.info("paging:"+paging);
+			
+		List<SellerLoc> sellerLocList = buyerService.getPagingListOfSellerLocByZoneAndStation(paging);
 		
 		logger.info("sellerLocList:"+sellerLocList);
 			
@@ -93,11 +174,6 @@ public class BuyerController {
 		model.addAttribute("stationList", stationList);
 		
 	}
-	@RequestMapping(value="/buyer/main", method=RequestMethod.POST)
-	public void buyerMain(String zoneSelect, String stationSelect) {
-		logger.info("zoneSelect:"+zoneSelect);
-		logger.info("stationSelect:"+stationSelect);
-	}
 	
 	@RequestMapping(value="/buyer/locview", method=RequestMethod.GET)
 	public void buyerLocView(int locNo, Model model, HttpSession session) {
@@ -123,11 +199,12 @@ public class BuyerController {
 		reservationInfo.setBuyerId((String)session.getAttribute("buyerId"));
 		reservationInfo.setSellerId(sellerLoc.getSellerId());
 		
-		//그냥 날짜 잘 들어갔나 구경
+		//구매자,판매자로 Reservation 리스트 조회(확인용)
 		List<Reservation> reservationList = buyerService.getResrvaionList(reservationInfo);
 		logger.info("reservationList:"+reservationList);
 		
-		//buyerId,sellerId로 cnt개수 가져오기.
+		//buyerId,sellerId, status가"예약"인 cnt개수 가져오기.
+		logger.info("reservationInfo:"+reservationInfo);
 		int cntReservation = buyerService.getResrvaionCnt(reservationInfo);
 		logger.info("cntReservation:"+cntReservation);
 		
@@ -149,7 +226,7 @@ public class BuyerController {
 			
 	}
 	
-	@RequestMapping(value="/sellerLocMap", method=RequestMethod.GET)
+	@RequestMapping("/sellerLocMap")
 	public void buyerSellerLocMap(int locNo, Model model) {
 	
 		SellerLoc sellerLoc = buyerService.getSellerLoc(locNo);
@@ -403,6 +480,7 @@ public class BuyerController {
 			String AmPm,
 			int locNo,
 			String month[],
+			int magazineNo[],
 			HttpSession session) { // 마이페이지-예약내역
 		
 		//예약DTO
@@ -423,6 +501,7 @@ public class BuyerController {
 		//				(month는 예약호수정보를 담은 String형 배열)
 		for(int i=0; i<selectBookingNum.length; i++) {
 			
+			
 			//예약부수가 0보다 작다면 아래 코드들 실행못하게 continue
 			if(selectBookingNum[i]<=0)
 				continue;
@@ -436,6 +515,7 @@ public class BuyerController {
 			reservationInfo.setStatus("예약");
 			reservationInfo.setTotal(5000*selectBookingNum[i]);
 			reservationInfo.setBookDate(date);
+			reservationInfo.setMagazineNo(magazineNo[i]);
 			
 			//현재시간(년,월,일)+예약한시간(시,분)+오전/오후
 			String bookingTime = bookingTimeHour+":"+bookingTimeMin+" "+AmPm;
@@ -462,36 +542,53 @@ public class BuyerController {
 	}
 	
 	@RequestMapping(value="/buyer/my/booking", method=RequestMethod.GET)
-	public void myBooking(HttpSession session, Model model) {
+	public void myBooking(HttpSession session, 
+			Model model,
+			@RequestParam(defaultValue="0") String curPage) {
+		//페이징처리
+		//현재 페이지 번호 얻기
+		logger.info("curPage:"+curPage);
+		
 		// 세션값 가져오기
-		String buyerId = (String) session.getAttribute("buyerId");
-		
-		logger.info("buyerId:"+buyerId);
+		String buyerId = (String) session.getAttribute("buyerId");	
+		logger.info("buyerId:"+buyerId); 
 				
-		// 구매자의 예약내역 조회(buyerId로 조회)
-		List<Reservation> bookListInfo = buyerService.getResrvaionListByBuyerId(buyerId);
+		//총 예약내역 수 얻기(buyerId를 이용해서)
+		int totalCount = buyerService.getTotalCountOfMyBooking(buyerId);
 		
-		logger.info("bookListInfo:"+bookListInfo);
+		logger.info("totalCount:"+totalCount);
 		
+		//페이징 객체 생성
+		MyBookingPaging paging = new MyBookingPaging(totalCount, Integer.parseInt(curPage));
+		paging.setBuyerId(buyerId);
+		logger.info("paging:"+paging);
+		
+		//구매자의 예약내역 페이징리스트 조회
+		List<Reservation> reservationList = buyerService.getPagingListOfMyReservation(paging);
+		
+		logger.info("reservationList:"+reservationList);
+					
 		// --- 수령시간이 지났을 경우 취소상태로 변경하기 ---
 		// 1. 현재시간과 수령시간 비교		
 		Date now = new Date(); // 현재시간
-		for(int i=0; i<bookListInfo.size(); i++) {
-			if(now.before(bookListInfo.get(i).getPickupDate())) {
+		for(int i=0; i<reservationList.size(); i++) {
+			if(now.before(reservationList.get(i).getPickupDate())) {
 //				logger.info("현재시간이 더 작음");
 
 			} else { 
 //				logger.info("현재시간이 더 큼");	
 				// 3. DB에 저장된 시간이 현재시간보다 클때 취소상태로 변경
-				buyerService.setPickupDate(bookListInfo.get(i));
+				buyerService.setPickupDate(reservationList.get(i));
 			}
 		}
 		
 		// 4. 예약내역 재조회
-		bookListInfo = buyerService.getResrvaionListByBuyerId(buyerId);
+		reservationList = buyerService.getPagingListOfMyReservation(paging);
 		// ------------------------------------------ 상태변경 끝
 		
-		model.addAttribute("bookListInfo", bookListInfo);
+		model.addAttribute("reservationList", reservationList);
+		
+		model.addAttribute("paging", paging);
 
 	}
 	
@@ -580,6 +677,37 @@ public class BuyerController {
 		//보조채팅창 message list
 		logger.info("subMsgList:"+subMsgList);
 		model.addAttribute("subMsgList", subMsgList);
+		
+		//----- 안읽은 메시지표시 -----
+		//방에 들어가면 현재id,방no,들어간date를 MessageChk에 넣어주자. - 나중에 안읽은 메시지 표시하기 위해서
+		//dto는 MessageChk사용.
+		MessageChk messageChk = new MessageChk();
+		Date sysdate = new Date();//현재 방에 들어온 시간
+		messageChk = chatService.setDtoMessageChk(LoginInfo.getId(),chatRoomNo,sysdate);
+		logger.info("messageChk확인:"+messageChk);
+		
+		//MessageChk테이블에 이미 id가 들어가 있는지 없는지 확인
+		boolean existenceStatusOfChatId = chatService.getExistenceStatusOfChatId(messageChk);
+		
+		if(existenceStatusOfChatId) {//Id없으면
+			logger.info("MessageChk에 이미 Id가 존재하지 않음");
+			chatService.insertMessageChk(messageChk);
+		}else {//Id있으면
+			logger.info("MessageChk에 이미 Id가 존재함");
+			chatService.updateMessageChk(messageChk);
+		}
+		
+		//로그인한 id를 포함하는 방에서 내가 방에 접속한 시간보다 작은 메시지 개수 세기 (List리턴)
+		List<MessageChk> finalDateListById = chatService.getFinalDateListById(LoginInfo.getId());
+		logger.info("finalDateListById:"+finalDateListById);
+		//finalDateListById크기만큼 반복해서 읽지 않은 메시직 개수 가져오기
+		List<MessageChk> messageChkResult = new ArrayList<>();
+		for(int i=0; i<finalDateListById.size(); i++) {
+			MessageChk tempMessageChk = chatService.getMessageNoReadNum(finalDateListById.get(i));
+			messageChkResult.add(tempMessageChk);
+		}
+		logger.info("messageChkResult:"+messageChkResult);
+		model.addAttribute("messageChkResult", messageChkResult);
 		
 		return "buyer/my/chat";
 	}
@@ -677,5 +805,63 @@ public class BuyerController {
 		}
 		
 //		return "redirect:/buyer/my/info";
+	}
+	
+	//공지사항리스트띄우기
+		@RequestMapping(value="/buyer/notice/list", method=RequestMethod.GET)
+		public void noticeList() {
+			
+		}
+		
+		//공지사항리스트ajax메소드
+		@RequestMapping(value="/buyer/notice/getNoticeList", method=RequestMethod.GET)
+		public String getNoticeList(Model model, Paging p) {
+			
+			
+			int noticeCnt = buyerService.getNoticeCnt();
+			
+			Paging paging = new Paging(noticeCnt, p.getCurPage());
+			
+			List<Notice> noticeList = buyerService.getNoticeList(paging);
+			
+			Map map = new HashMap();
+			
+			map.put("paging", paging);
+			map.putIfAbsent("noticeList", noticeList);
+			
+			model.addAttribute("map", map);
+			return "jsonView";
+		}
+		
+		
+		
+		@RequestMapping(value="/buyer/notice/view", method=RequestMethod.GET)
+		public void buyerNoticeView(Model model, Notice n) {
+			
+			Notice notice = buyerService.getNoticeView(n.getNoticeNo());
+			
+			model.addAttribute("notice", notice);
+			
+			
+		}
+
+	
+	@RequestMapping(value="/buyer/bookingCancel", method=RequestMethod.GET)
+	public String buyerBookingCancel(int magazineNo, Model model) { 
+		
+		logger.info("magazineNo:"+magazineNo);
+			
+		//magazineNo으로 reservation테이블 조회
+		Reservation reservationInfo = buyerService.getReservaionByMagazineNo(magazineNo);
+		
+		logger.info("reservationInfo:"+reservationInfo);
+		
+		//bookListInfo 빅이슈테이블 circulation(보유부수) 예약취소한 수 만큼 증가시키기
+		buyerService.increaseCirculation(reservationInfo);
+		
+		//reservation 예약테이블 status "예약"=>"취소"로 변경하기
+		buyerService.setStatusOfReservation(magazineNo);
+		
+		return "redirect:/buyer/my/booking";
 	}
 }

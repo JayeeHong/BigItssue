@@ -28,6 +28,8 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.ChatReport;
+import web.dto.MainBanner;
+import web.dto.Message;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -573,8 +575,16 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/chat/list", method=RequestMethod.GET)
-	public void adminChatlist() { // 채팅 내역 관리
+	public void adminChatlist(
+			Message message,
+			Model model) { // 채팅 내역 관리
+		List<Message> list = adminService.getChatRoomNo();
+		logger.info("Test : " + list.toString());
+		logger.info("Test2 : "+list.size());
+		int cnt = list.size();
 		
+			
+		model.addAttribute("message", list);
 	}
 	
 	@RequestMapping(value="/admin/seller/getSellerInfolist", method=RequestMethod.GET)
@@ -590,10 +600,11 @@ public class AdminController {
 		
 		if(searchWord ==null) {
 			searchWord = "";
+			condition = null;
 		}
-		if(condition == null) {
-			condition = "zone";
-		}
+//		if(condition == null) {
+//			condition = "zone";
+//		}
 		
 		//현재 페이지 번호 얻기
 		int curPage = 0; 
@@ -649,11 +660,13 @@ public class AdminController {
 			) {
 		
 		SellerLoc locInfo = adminService.getSellerInfo(sellerloc);
-		
+		model.addAttribute("sellerInfo", locInfo);
+
+		if(locInfo.getSellerId() != null) {
 		String sellerName = adminService.getSellerName(locInfo);
 		
-		model.addAttribute("sellerInfo", locInfo);
 		model.addAttribute("sellerName", sellerName);
+		}
 	}
 	
 	@RequestMapping(value="/admin/seller/view", method=RequestMethod.POST)
@@ -691,13 +704,6 @@ public class AdminController {
 		//sellerLoc DB변경
 		adminService.adminSellserUpdate(sellerLoc);
 		
-		HashMap hm = new HashMap<String, SellerLoc>();
-		
-		hm.put("sellerName", sellerName);
-		hm.put("sellerLoc", sellerLoc);
-		
-		//sellerInfo의 sellerName변경
-		adminService.changeSellerName(hm);
 		
 		return "redirect:/admin/seller/view?locNo="+sellerLoc.getLocNo();
 	}
@@ -972,9 +978,36 @@ public class AdminController {
 		model.addAttribute("chatReport", chatReport);
 	}
 	
+	
+	//메인배너관리
 	@RequestMapping(value="/admin/banner/list", method=RequestMethod.GET)
-	public void adminBannerlist() { // 배너관리
+	public void adminBannerList(MainBanner mainBanner, Model model) {
 		
+		logger.info("배너관리");
+		
+		List<MainBanner> bannerList = adminService.getBanner();
+		model.addAttribute("bannerList", bannerList);
+		
+	}
+	
+	@RequestMapping(value="/admin/banner/write", method=RequestMethod.GET)
+	public String bannerWrite() {
+		return "admin/banner/write";
+	}
+	
+	@RequestMapping(value="/admin/banner/write", method=RequestMethod.POST)
+	public String bannerWriteProc(MainBanner mainBanner) {
+		
+		adminService.writeBanner(mainBanner);
+		
+		return "redirect:/admin/banner/list";
+	}
+	
+	@RequestMapping(value="/admin/banner/delete", method=RequestMethod.GET)
+	public void bannerDelete(MainBanner mainBanner, HttpServletRequest req) {
+		
+		int bannerNo = Integer.parseInt(req.getParameter("bannerNo"));
+//		adminService.deleteBanner(bannerNo);
 	}
 	
 	
@@ -1025,5 +1058,43 @@ public class AdminController {
 		
 		return "admin/loc/list";
 	}
+
+
 	
+	
+	@RequestMapping(value="/admin/seller/select", method=RequestMethod.GET)
+	public void selectUserForm(Model model) {
+		
+		List<String> idOfinfo = adminService.userIdList("sellerInfo"); 
+		List<String> idOfLocList = adminService.userIdList("sellerLoc");
+		
+		for(String i : idOfLocList) {
+			idOfinfo.remove(i);
+		}
+		List<SellerInfo> infoList = adminService.nullUserInfo(idOfinfo);
+		
+		
+		System.out.println(infoList);
+		model.addAttribute("sellerInfo", infoList);
+		
+		
+	}
+	
+	
+	
+	@RequestMapping("revSpot")
+	public void revisionSpot(
+			SellerLoc sellerLoc,
+			String station,
+			String spot,
+			Model model) {
+		
+		sellerLoc.setStation(station);
+		sellerLoc.setSpot(spot);
+		
+		SellerLoc selLoc = adminService.getSellerInfo(sellerLoc);
+		logger.info("TEST : "+String.valueOf(selLoc));
+		model.addAttribute("sellerLoc", selLoc);
+	}
+
 }

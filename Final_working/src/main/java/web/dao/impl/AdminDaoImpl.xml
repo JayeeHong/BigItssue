@@ -8,17 +8,32 @@
 
 	<select resultType="int" parameterType="hashMap" id="getTotalCount"> 
 		SELECT COUNT(*) FROM sellerLoc 
-		where ${condition} like '%' || #{searchWord} || '%' order by locno desc 
+		<choose>
+			<when test="condition != null">
+			where ${condition} like '%' || #{searchWord} || '%' order by locno desc 
+			</when>
+			<otherwise>
+			order by locno desc
+			</otherwise>
+		</choose>
 	</select>
 
 	<select resultType="web.dto.SellerLoc" parameterType="hashMap" id="getPagingList"> 
-		SELECT * FROM ( 
+		SELECT c.*, s.sellername from (SELECT * FROM ( 
 			SELECT rownum rnum, B.* FROM ( 
 				SELECT * FROM sellerLoc 
-				WHERE ${condition} like '%' || #{searchWord} || '%' 
-				ORDER BY locno desc ) 
+				<choose>
+				<when test="condition != null">
+				WHERE ${condition} like '%' || #{searchWord} || '%' ORDER BY locno desc
+				</when>
+				<otherwise>
+				order by locno desc
+				</otherwise> 
+				</choose>
+				) 
 			B ORDER BY rnum ) R 
-		WHERE rnum BETWEEN #{p.startNo } AND #{p.endNo } 
+		WHERE rnum BETWEEN #{p.startNo } AND #{p.endNo } ) c
+		left join sellerinfo s on c.sellerid = s.sellerid
 	</select>
 	
 	<delete parameterType="web.dto.SellerLoc" id="adminSellerListDelete"> 
@@ -26,7 +41,15 @@
 	</delete>
 	
 	<select resultType="web.dto.SellerLoc" parameterType="web.dto.SellerLoc" id="getSellerInfo"> 
-		SELECT * FROM sellerLoc where locNo = #{locNo } 
+		SELECT * FROM sellerLoc
+		<choose>
+			<when test="locNo != 0">
+			WHERE locNo = #{locNo } 
+			</when>
+			<otherwise>
+			WHERE station = #{station } AND spot = #{spot }
+			</otherwise>
+		</choose>
 	</select>
 
 	<select id="viewLoc" parameterType="String" resultType="web.dto.SellerLoc">
@@ -84,8 +107,6 @@
 		noticeContent = #{noticeContent },
 		noticeImg = #{noticeImg }
 	where noticeNo = #{noticeNo}
-	
-
 </update>
 	
 	<!-- *********** 계정관리 *********** -->
@@ -410,4 +431,44 @@
 			AND to_char(chatDate, 'yy/mm/dd')=to_char(#{chatDate },'yy/mm/dd')
 		ORDER BY reportNo
 	</select>
+    
+  <select id="selectBanner" resultType="web.dto.MainBanner">
+		SELECT * FROM MainBanner
+		ORDER BY bannerNo
+	</select>
+	
+	<insert id="insertBanner" parameterType="web.dto.MainBanner">
+		INSERT INTO MainBanner (bannerNo, bannerImg)
+		VALUES (MainBanner_seq.nextval, #{bannerImg })	
+	</insert>
+	
+	
+	
+	
+	
+	
+
+	<select id="userIdList" parameterType="String" resultType="String">
+		SELECT sellerId FROM ${value }
+	
+	</select>
+	
+	<select id="nullUserInfo" parameterType="String" resultType="web.dto.SellerInfo">
+		SELECT * FROM sellerInfo
+		where sellerId = #{value }
+	
+	</select>
+
+	
+	
+	<select id="getChatRoomNo" resultType="web.dto.Message">
+		SELECT DISTINCT a.chatRoomNo, a.BigdomId, a.BuyerId, a.SellerId FROM (
+			SELECT chat.chatRoomNo, chat.BigdomId, chat.BuyerId, chat.SellerId, message.ChatDate
+			FROM chat, message
+			WHERE message.chatRoomNo = chat.chatRoomNo
+			ORDER BY chat.chatRoomNo
+		) a
+		ORDER BY chatRoomNo;
+	</select>
+
 </mapper>

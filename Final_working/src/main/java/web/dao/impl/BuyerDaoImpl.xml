@@ -23,8 +23,8 @@
 		where buyerId = #{buyerId }
 		and	buyerPw = #{buyerPw }
 	</select>
-
-
+	
+	
 	<select id="buyerFindId" parameterType="web.dto.BuyerInfo" resultType="web.dto.BuyerInfo">
 		SELECT * FROM buyerinfo
 		where buyerName = #{buyerName }
@@ -73,12 +73,27 @@
 	
 	<select id="selectCntOfSellerLoc" resultType="int">
 		SELECT COUNT(*) FROM SellerLoc
+		WHERE 1=1
+		<if test="zoneSelect != null and zoneSelect != ''">
+			AND zone=#{zoneSelect}
+		</if>
+		<if test="stationSelect != null and stationSelect != ''">
+			AND station=#{stationSelect}
+		</if>
 	</select>
 	
 	<select id="selectPaginglistOfSellerLoc" parameterType="web.util.SellerLocPaging" resultType="web.dto.SellerLoc">
 		SELECT * FROM(
 			SELECT rownum rnum, b.* FROM(
-					SELECT * FROM SellerLoc ORDER BY locNo desc
+					SELECT * FROM SellerLoc
+					WHERE 1=1
+					<if test="zone != null and zone != ''">
+						AND zone=#{zone}
+					</if>
+					<if test="station != null and station != ''">
+						AND station=#{station}
+					</if>
+					ORDER BY locNo desc
 				)B 
 			ORDER BY rnum
 		)R
@@ -109,10 +124,15 @@
 		ORDER BY month
 	</select>
 	
+	<select id="selectBookListInfo" parameterType="int" resultType="web.dto.BookListInfo">
+		SELECT * FROM bookListInfo
+		WHERE magazineNo = #{magazineNo }
+	</select>
+	
 	<!-- 예약하기 -->
 	<insert id="insertResrvation" parameterType="web.dto.Reservation">
-		INSERT INTO Reservation(reserveNo, sellerId, buyerId, zone, station, spot, bookMonth, bookNumber, status, total, pickupDate, bookDate)
-		VALUES(Reservation_seq.nextval, #{sellerId }, #{buyerId }, #{zone }, #{station }, #{spot }, #{bookMonth }, #{bookNumber }, #{status }, #{total }, #{pickupDate },#{bookDate } )
+		INSERT INTO Reservation(reserveNo, sellerId, buyerId, zone, station, spot, bookMonth, bookNumber, status, total, pickupDate, bookDate, magazineNo)
+		VALUES(Reservation_seq.nextval, #{sellerId }, #{buyerId }, #{zone }, #{station }, #{spot }, #{bookMonth }, #{bookNumber }, #{status }, #{total }, #{pickupDate },#{bookDate }, #{magazineNo} )
 	</insert>
 	
 	<!-- 예약 buyerId,sellerId로 검색 -->
@@ -124,7 +144,7 @@
 	<!-- 예약 buyerId,sellerId로 cnt개수검색 -->
 	<select id="selectResrvaionCnt" parameterType="web.dto.Reservation" resultType="int">
 		SELECT count(*) FROM Reservation
-		WHERE buyerId = #{buyerId } AND sellerId = #{sellerId }
+		WHERE buyerId = #{buyerId } AND sellerId = #{sellerId } AND status='예약'
 	</select>
 	
 	<!-- 예약 buyerId로 검색 -->
@@ -175,4 +195,91 @@
 		WHERE buyerId=#{buyerId }
 	</update>
 
+	<select id="selectTotalCountOfSellerLocByZoneAndStation" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM sellerLoc
+		WHERE 1=1
+		<if test="zoneSelect != null and zoneSelect != ''">
+			AND zone=#{zoneSelect}
+		</if>
+		<if test="stationSelect != null and stationSelect != ''">
+			AND station=#{stationSelect}
+		</if>
+	</select>
+	
+	<select id="selectPagingListOfSellerLocByZoneAndStation" parameterType="web.util.SellerLocPaging" resultType="web.dto.SellerLoc">
+		SELECT * FROM(
+			SELECT rownum rnum, b.* FROM(
+					SELECT * FROM SellerLoc
+					WHERE 1=1
+					<if test="zone != null and zone != ''">
+						AND zone=#{zone}
+					</if>
+					<if test="station != null and station != ''">
+						AND station=#{station}
+					</if>
+					ORDER BY locNo desc
+				)B 
+			ORDER BY rnum
+		)R
+		WHERE rnum BETWEEN #{startNo} AND #{endNo}
+	</select>
+	
+	<select id="selectTotalCountOfMyBooking" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM reservation
+		WHERE buyerId = #{buyerId}
+	</select>
+	
+	<select id="selectPagingListOfMyReservation" parameterType="web.util.MyBookingPaging" resultType="web.dto.Reservation">
+		SELECT * FROM(
+			SELECT rownum rnum, b.* FROM(
+					SELECT * FROM reservation
+					WHERE buyerId = #{buyerId}
+					ORDER BY reserveNo desc
+				)B 
+			ORDER BY rnum
+		)R
+		WHERE rnum BETWEEN #{startNo} AND #{endNo}
+	</select>
+	
+	<select resultType="int" id="getNoticeCnt"> 
+	SELECT COUNT(*) FROM NOTICE 
+	</select>
+	
+	<select resultType="web.dto.Notice" parameterType="web.util.Paging" id="getNoticeList"> 
+	SELECT * FROM( 
+		SELECT rownum rnum, b.* FROM(
+			 SELECT * FROM NOTICE 
+			 ORDER BY noticeNo desc 
+			 )B 
+		ORDER BY rnum )R 
+	WHERE rnum BETWEEN 
+	#{startNo} AND #{endNo} </select>
+	
+	<select resultType="web.dto.Notice" parameterType="int" id="getNoticeView"> 
+	SELECT * FROM NOTICE WHERE noticeNo = #{noticeNo}
+	 </select>
+
+  <update id="updateStatusOfReservation" parameterType="int">
+		UPDATE reservation
+		SET status='예약취소'
+		WHERE magazineNo=#{magazineNo }
+	</update>
+	
+	<select id="selectReservationByMagazineNo" parameterType="int" resultType="web.dto.Reservation">
+		SELECT * FROM reservation
+		WHERE magazineNo = #{magazineNo} AND status='예약'
+	</select>
+	
+	<update id="increaseCirculation" parameterType="web.dto.Reservation">
+		update bookListInfo
+		set circulation = circulation+#{bookNumber }
+		where magazineNo = #{magazineNo }
+	
+	</update>
+	
+	<select id="selectBanner" resultType="web.dto.MainBanner">
+		SELECT * FROM MainBanner
+		ORDER BY bannerNo
+	</select>
+	
 </mapper>

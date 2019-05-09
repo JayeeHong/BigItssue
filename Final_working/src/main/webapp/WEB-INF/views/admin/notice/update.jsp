@@ -43,13 +43,13 @@ function readImg(input){//미리보기를 한다
 
 </script>
 
-<div class="row row-offcanvas row-offcanvas-right" >
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
     
+<div class="" style="float:left; width:600px;" >
     
-<div style="position:absolute; left: 220px; top: 230px; width:70%;">
+<div >
 <form action="/admin/notice/update" method="post" enctype="multipart/form-data">
 <table class="table table-bordered">
 <tr>

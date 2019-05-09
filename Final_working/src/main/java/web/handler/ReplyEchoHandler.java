@@ -2,6 +2,7 @@ package web.handler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,11 @@ public class ReplyEchoHandler extends TextWebSocketHandler {
 		RoomSessions.put(session, chatRoomNo);
 		logger.info("[TEST]RoomSessions:"+RoomSessions);
 		
+		//----- 이곳이 메시지를 읽었다 라고 인식해주는 부분. -----
+		//----- 읽은 메시지는 1로, 읽지 않은 메시지는 0(default값)으로 표시. -----
+		//보내는사람=로그인된id이면, 방번호에 맞는 모든메시지의 senderChk 1로
+		//보내는사람!=로그인된id이면, 방번호에 맞는 모든메시지의 receiverChk 1로
+		
 	}
 	
 	@Override
@@ -81,7 +87,7 @@ public class ReplyEchoHandler extends TextWebSocketHandler {
 		msg.setChatContent(message.getPayload());
 		msg.setChatSender(senderId);
 		msg.setChatRoomNo(roomNo);
-
+		
 		chatService.insertMessage(msg);
 		
 		//메시지 저장한 시간 msg로 반환 받음.확인.
@@ -90,11 +96,14 @@ public class ReplyEchoHandler extends TextWebSocketHandler {
 		//Date보기 좋게 변경
 		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 		SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
+//		SimpleDateFormat dateTime = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		
 		String presentTime=time.format(msg.getChatDate());
 		logger.info("메시지 시간:"+presentTime);
-
 		
+		//---------- sub메시지창 최신순 으로 나열해주기 ---------------
+		// 방에서 메시지가 오갈때마다  방에 최신날짜 저장.
+		chatService.updateChatFinalDate(msg);
 		
 		//-------------------------
 

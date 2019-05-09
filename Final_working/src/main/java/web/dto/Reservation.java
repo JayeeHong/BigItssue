@@ -16,15 +16,15 @@ public class Reservation { // 마이페이지 예약내역
 	private int total; // 결제 예정금액
 	private Date pickupDate; // 수령할 날짜
 	private Date bookDate; // 예약신청 날짜
+	private int magazineNo; //FK. bookListInfo의 PK를 FK로 가져옴.
 	
 	@Override
 	public String toString() {
 		return "Reservation [reserveNo=" + reserveNo + ", sellerId=" + sellerId + ", buyerId=" + buyerId + ", zone="
 				+ zone + ", station=" + station + ", spot=" + spot + ", bookMonth=" + bookMonth + ", bookNumber="
 				+ bookNumber + ", status=" + status + ", total=" + total + ", pickupDate=" + pickupDate + ", bookDate="
-				+ bookDate + "]";
+				+ bookDate + ", magazineNo=" + magazineNo + "]";
 	}
-	
 	public int getReserveNo() {
 		return reserveNo;
 	}
@@ -97,5 +97,13 @@ public class Reservation { // 마이페이지 예약내역
 	public void setBookDate(Date bookDate) {
 		this.bookDate = bookDate;
 	}
+	public int getMagazineNo() {
+		return magazineNo;
+	}
+	public void setMagazineNo(int magazineNo) {
+		this.magazineNo = magazineNo;
+	}
+	
+	
 	
 }

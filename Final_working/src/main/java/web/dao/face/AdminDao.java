@@ -9,6 +9,8 @@ import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
 import web.dto.ChatReport;
+import web.dto.MainBanner;
+import web.dto.Message;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -177,12 +179,33 @@ public interface AdminDao {
 
 	// 신고내역 갯수 조회 쿼리
 	public int selectReportListCnt();
-
+  
 	// reportNo로 해당하는 신고내역 조회 쿼리
 	public ChatReport selectReportByReportNo(int reportNo);
 
 	// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회 쿼리
 	public List<ChatReport> selectReportByChatReport(ChatReport reportByReportNo);
+
+
+
+
+	
+	//배너 리스트 조회
+	public List<MainBanner> selectBanner();
+	
+	//배너 insert
+	public void insertBanner(MainBanner mainBanner);
+	
+	
+	
+	
+
+	public List<String> userIdList(String abc);
+
+	public List<SellerInfo> nullUserInfo(String i);
+
+	
+	public List<Message> getChatRoomNo();
 
 
 

@@ -16,8 +16,11 @@ public class SellerLoc { // 판매자 판매정보
 	private int magazineNo; // 판매부수번호 (fk)
 	private String sellerId; // 판매자아이디 (fk)
 	private String bigdomId; // 빅돔아이디 (fk)
+	private String sellerName; // 판매자이름(추가)
 	private double lat; //경도
 	private double lng; //위도
+	
+	
 	
 	@Override
 	public String toString() {
@@ -25,9 +28,18 @@ public class SellerLoc { // 판매자 판매정보
 				+ ", sellerTimeS=" + sellerTimeS + ", startTime1=" + startTime1 + ", startTime2=" + startTime2
 				+ ", sellerTimeE=" + sellerTimeE + ", endTime1=" + endTime1 + ", endTime2=" + endTime2 + ", sellerCard="
 				+ sellerCard + ", magazineNo=" + magazineNo + ", sellerId=" + sellerId + ", bigdomId=" + bigdomId
-				+ ", lat=" + lat + ", lng=" + lng + "]";
+				+ ", sellerName=" + sellerName + ", lat=" + lat + ", lng=" + lng + "]";
 	}
 	
+	
+	public String getSellerName() {
+		return sellerName;
+	}
+
+	public void setSellerName(String sellerName) {
+		this.sellerName = sellerName;
+	}
+
 	public double getLat() {
 		return lat;
 	}
