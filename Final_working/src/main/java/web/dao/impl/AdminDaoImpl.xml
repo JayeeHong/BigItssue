@@ -388,6 +388,11 @@
 		ORDER BY bannerNo
 	</select>
 	
+	<insert id="insertBanner" parameterType="web.dto.MainBanner">
+		INSERT INTO MainBanner (bannerNo, bannerImg)
+		VALUES (MainBanner_seq.nextval, #{bannerImg })	
+	</insert>
+	
 	
 	
 	

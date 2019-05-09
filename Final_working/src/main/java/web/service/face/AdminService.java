@@ -185,13 +185,17 @@ public interface AdminService {
 	//배너 리스트 얻기
 	public List<MainBanner> getBanner();
 
+	//배너 추가하기
+	public void writeBanner(MainBanner mainBanner);
+	
+	
   public List<String> userIdList(String abc);
 
   public List<SellerInfo> nullUserInfo(List<String> idOfinfo);
 
-  
-  
+
   	public List<Message> getChatRoomNo();
+
 
 }
 

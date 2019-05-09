@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import web.dto.BookListInfo;
 import web.dto.Chat;
 import web.dto.Message;
+import web.dto.MessageChk;
 import web.dto.Reservation;
 import web.dto.Review;
 import web.dto.ReviewReply;
@@ -125,6 +126,40 @@ public class SellerController {
 		//보조채팅창 message list
 		logger.info("subMsgList:"+subMsgList);
 		model.addAttribute("subMsgList", subMsgList);
+		
+		//----- 안읽은 메시지표시 -----
+		//방에 들어가면 현재id,방no,들어간date를 MessageChk에 넣어주자. - 나중에 안읽은 메시지 표시하기 위해서
+		//dto는 MessageChk사용.
+		
+		MessageChk messageChk = new MessageChk();
+		Date sysdate = new Date();//현재 방에 들어온 시간
+		messageChk = chatService.setDtoMessageChk(LoginInfo.getId(),chatRoomNo,sysdate);
+		logger.info("messageChk확인:"+messageChk);
+		
+		//MessageChk테이블에 이미 id가 들어가 있는지 없는지 확인
+		boolean existenceStatusOfChatId = chatService.getExistenceStatusOfChatId(messageChk);
+		
+		if(existenceStatusOfChatId) {//Id없으면
+			logger.info("MessageChk에 이미 Id가 존재하지 않음");
+			chatService.insertMessageChk(messageChk);
+		}else {//Id있으면
+			logger.info("MessageChk에 이미 Id가 존재함");
+			chatService.updateMessageChk(messageChk);
+		}
+		
+		//로그인한 id를 포함하는 방에서 내가 방에 접속한 시간보다 작은 메시지 개수 세기 (List리턴)
+		List<MessageChk> finalDateListById = chatService.getFinalDateListById(LoginInfo.getId());
+		logger.info("finalDateListById:"+finalDateListById);
+		//finalDateListById크기만큼 반복해서 읽지 않은 메시직 개수 가져오기
+		List<MessageChk> messageChkResult = new ArrayList<>();
+		for(int i=0; i<finalDateListById.size(); i++) {
+			if(finalDateListById.get(i)!=null) {
+				MessageChk tempMessageChk = chatService.getMessageNoReadNum(finalDateListById.get(i));
+				messageChkResult.add(tempMessageChk);
+			}
+		}
+		logger.info("messageChkResult:"+messageChkResult);
+		model.addAttribute("messageChkResult", messageChkResult);
 		
 		return "seller/main";
 	}
@@ -410,7 +445,7 @@ public class SellerController {
 	}
 	
 	@RequestMapping(value="/seller/review/write", method=RequestMethod.GET)
-	public String reviewWrite(HttpSession session) {
+	public String reviewWrite() {
 		
 		logger.info("후기 글쓰기 페이지");
 		

@@ -423,9 +423,14 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public List<Message> getChatRoomNo() {
-		return adminDao.getChatRoomNo();
+	public void writeBanner(MainBanner mainBanner) {
+		adminDao.insertBanner(mainBanner);
 	}
+  
+  @Override
+  public List<Message> getChatRoomNo() {
+		return adminDao.getChatRoomNo();
+  }
 	
 }
 
