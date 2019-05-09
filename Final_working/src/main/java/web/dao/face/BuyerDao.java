@@ -5,11 +5,13 @@ import java.util.Map;
 
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.Notice;
 import web.dto.MainBanner;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.util.MyBookingPaging;
+import web.util.Paging;
 import web.util.SellerLocPaging;
 
 public interface BuyerDao {
@@ -87,6 +89,15 @@ public interface BuyerDao {
 	//나의 예약페이징리스트 조회
 	public List<Reservation> selectPagingListOfMyReservation(MyBookingPaging paging);
 	
+	//공지사항 총갯수
+	public int getNoticeCnt();
+		
+	//공지사항 페이징리스트
+	public List<Notice> getNoticeList(Paging paging);
+		
+	//공지사항 상세보기
+	public Notice getNoticeView(int noticeNo);
+
 	//reservation예약테이블 status "예약"=>"취소"로 변경하기
 	public void updateStatusOfReservation(int magazineNo);
 	

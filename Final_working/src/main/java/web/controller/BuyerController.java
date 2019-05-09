@@ -29,6 +29,7 @@ import web.dto.BuyerInfo;
 import web.dto.Chat;
 import web.dto.MainBanner;
 import web.dto.Message;
+import web.dto.Notice;
 import web.dto.MessageChk;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
@@ -36,6 +37,7 @@ import web.dto.User;
 import web.service.face.BuyerService;
 import web.service.face.ChatService;
 import web.util.MyBookingPaging;
+import web.util.Paging;
 import web.util.SellerLocPaging;
 
 @Controller
@@ -746,6 +748,45 @@ public class BuyerController {
 		
 //		return "redirect:/buyer/my/info";
 	}
+	
+	//공지사항리스트띄우기
+		@RequestMapping(value="/buyer/notice/list", method=RequestMethod.GET)
+		public void noticeList() {
+			
+		}
+		
+		//공지사항리스트ajax메소드
+		@RequestMapping(value="/buyer/notice/getNoticeList", method=RequestMethod.GET)
+		public String getNoticeList(Model model, Paging p) {
+			
+			
+			int noticeCnt = buyerService.getNoticeCnt();
+			
+			Paging paging = new Paging(noticeCnt, p.getCurPage());
+			
+			List<Notice> noticeList = buyerService.getNoticeList(paging);
+			
+			Map map = new HashMap();
+			
+			map.put("paging", paging);
+			map.putIfAbsent("noticeList", noticeList);
+			
+			model.addAttribute("map", map);
+			return "jsonView";
+		}
+		
+		
+		
+		@RequestMapping(value="/buyer/notice/view", method=RequestMethod.GET)
+		public void buyerNoticeView(Model model, Notice n) {
+			
+			Notice notice = buyerService.getNoticeView(n.getNoticeNo());
+			
+			model.addAttribute("notice", notice);
+			
+			
+		}
+
 	
 	@RequestMapping(value="/buyer/bookingCancel", method=RequestMethod.GET)
 	public String buyerBookingCancel(int magazineNo, Model model) { 

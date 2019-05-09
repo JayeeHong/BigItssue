@@ -224,7 +224,25 @@
 		WHERE rnum BETWEEN #{startNo} AND #{endNo}
 	</select>
 	
-	<update id="updateStatusOfReservation" parameterType="int">
+	<select resultType="int" id="getNoticeCnt"> 
+	SELECT COUNT(*) FROM NOTICE 
+	</select>
+	
+	<select resultType="web.dto.Notice" parameterType="web.util.Paging" id="getNoticeList"> 
+	SELECT * FROM( 
+		SELECT rownum rnum, b.* FROM(
+			 SELECT * FROM NOTICE 
+			 ORDER BY noticeNo desc 
+			 )B 
+		ORDER BY rnum )R 
+	WHERE rnum BETWEEN 
+	#{startNo} AND #{endNo} </select>
+	
+	<select resultType="web.dto.Notice" parameterType="int" id="getNoticeView"> 
+	SELECT * FROM NOTICE WHERE noticeNo = #{noticeNo}
+	 </select>
+
+  <update id="updateStatusOfReservation" parameterType="int">
 		UPDATE reservation
 		SET status='예약취소'
 		WHERE magazineNo=#{magazineNo }

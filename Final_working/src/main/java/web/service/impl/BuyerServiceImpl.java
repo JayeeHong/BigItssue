@@ -18,12 +18,14 @@ import org.springframework.stereotype.Service;
 import web.dao.face.BuyerDao;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.Notice;
 import web.dto.MainBanner;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.service.face.BuyerService;
 import web.util.MyBookingPaging;
+import web.util.Paging;
 import web.util.SellerLocPaging;
 
 @Service
@@ -280,7 +282,22 @@ public class BuyerServiceImpl implements BuyerService {
 		return buyerDao.selectBanner();
 	}
   
-  
+	@Override
+	public int getNoticeCnt() {
+		
+		return buyerDao.getNoticeCnt();
+	}
+
+	@Override
+	public List<Notice> getNoticeList(Paging paging) {
+		
+		return buyerDao.getNoticeList(paging);
+	}
+
+	@Override
+	public Notice getNoticeView(int noticeNo) {
+		return buyerDao.getNoticeView(noticeNo);
+	}
   
 
 }
