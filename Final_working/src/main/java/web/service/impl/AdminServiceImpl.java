@@ -425,6 +425,10 @@ public class AdminServiceImpl implements AdminService{
 	public void writeBanner(MainBanner mainBanner) {
 		adminDao.insertBanner(mainBanner);
 	}
+
+	
+	
+
 	
 }
 

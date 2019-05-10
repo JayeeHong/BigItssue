@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import web.dto.AdminInfo;
@@ -569,9 +571,10 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/seller/view", method=RequestMethod.POST)
-	public String adminSellserUpdate(SellerLoc sellerLoc,
+	public void adminSellserUpdate(SellerLoc sellerLoc,
 									String arrZone,
-									String sellerName) {
+									String sellerName,
+									HttpServletResponse res) {
 		
 		logger.info(sellerLoc.toString());
 		logger.info(arrZone);
@@ -603,8 +606,24 @@ public class AdminController {
 		//sellerLoc DB변경
 		adminService.adminSellserUpdate(sellerLoc);
 		
+		PrintWriter out =null;
+		res.setContentType("text/html; charset=UTF-8");
+		try {
+			out=res.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-		return "redirect:/admin/seller/view?locNo="+sellerLoc.getLocNo();
+		out.println("<script>alert('변경되었습니다.');location.href='/admin/seller/list'</script>");
+		
+		out.flush();
+		
+	
+		
+		
+		
+//		return "redirect:/admin/seller/view?locNo="+sellerLoc.getLocNo();
+//		return "redirect:/admin/seller/list";
 	}
 	
 	
@@ -932,6 +951,7 @@ public class AdminController {
 		
 	}
 	
-	
 
+	
+	
 }
