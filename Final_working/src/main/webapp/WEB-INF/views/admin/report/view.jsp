@@ -24,6 +24,10 @@
 	}
 </style>
 
+<script type="text/javascript">
+
+</script>
+
 <div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
@@ -83,7 +87,7 @@
 </div>
 
 <div style="text-align: center;">
-<button class="btn btn-default">목록</button>
+<a href="#" onclick="history.go(-1); return false;"><button class="btn btn-default">목록</button></a>
 </div>
 
 </div>

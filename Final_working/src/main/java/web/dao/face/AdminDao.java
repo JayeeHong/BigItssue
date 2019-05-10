@@ -3,6 +3,8 @@ package web.dao.face;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
@@ -193,12 +195,17 @@ public interface AdminDao {
 	//배너 리스트 조회
 	public List<MainBanner> selectBanner();
 	
+	//배너번호 조회
+	public int selectBannerNo();
+	
 	//배너 insert
 	public void insertBanner(MainBanner mainBanner);
+
+	//배너 delete
+	public void deleteBanner(int bannerNo);
 	
 	
-	
-	
+
 
 	public List<String> userIdList(String abc);
 
@@ -206,6 +213,8 @@ public interface AdminDao {
 
 	
 	public List<Message> getChatRoomNo();
+
+
 
 
 

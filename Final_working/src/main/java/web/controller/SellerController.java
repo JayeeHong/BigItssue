@@ -470,14 +470,14 @@ public class SellerController {
 	}
 	
 	@RequestMapping(value="/seller/review/write", method=RequestMethod.GET)
-	public String reviewWrite() {
+	public void reviewWrite() {
 		
 		logger.info("후기 글쓰기 페이지");
 		
 //		if(session.getAttribute("sellerLogin") == null ) {
 //			return "redirect:/seller/review/list";
 //		} else {
-			return "seller/review/write";
+//			return "seller/review/write";
 //		}
 		
 	}
@@ -581,8 +581,6 @@ public class SellerController {
 		//댓글 리스트 MODEL 추가
 		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
 //		for(ReviewReply r : replyList) System.out.println(r);
-		
-//		model.addAllAttributes(replyList);
 		
 		model.addAttribute("replyList", replyList);
 		

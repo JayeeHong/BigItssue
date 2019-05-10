@@ -110,7 +110,7 @@ public class BuyerController {
 		// 배너목록 MODEL로 추가
 		List<MainBanner> mainBannerList = buyerService.getBannerList();
 		model.addAttribute("mainBannerList", mainBannerList);
-				
+		
 	}
 	@RequestMapping(value="/buyer/main", method=RequestMethod.POST)
 	public void buyerMainPost(
@@ -172,6 +172,9 @@ public class BuyerController {
 		List<SellerLoc> stationList = buyerService.getStationList();
 		
 		model.addAttribute("stationList", stationList);
+		
+		//main에선 방번호 -1을가지고 있게하자.
+		
 		
 	}
 	
@@ -256,10 +259,11 @@ public class BuyerController {
 		model.addAllAttributes(map);
 
 		
-		String subject = "가입인증 메일입니다 "; //메일 제목 입력해주세요. 
-		String frontBody = "인증코드란에 "; //앞단
+		String subject = "[빅이슈] 인증 메일입니다."; //메일 제목 입력해주세요. 
+		String frontBody = "이메일 인증을 완료하려면 인증코드란에 "; //앞단
 		String middleBody = code;
-		String endBody = "를 써주세요"; //뒷단
+		String endBody = "를 써주세요\n"; //뒷단
+		endBody += "본 메일은 발신전용입니다.";
 		String body = frontBody+middleBody+endBody;
 		
 		
@@ -776,6 +780,17 @@ public class BuyerController {
 		return "jsonView";
 	}
 	
+	// ------------------------------------진행중
+	@RequestMapping(value="/buyer/my/info/changePw", method=RequestMethod.POST)
+	public String myInfoChangePw(BuyerInfo buyerInfo) {
+		
+		logger.info(":::비밀번호 변경::::"+buyerInfo.toString());
+		// 세션 정보 가져오기
+		
+		return "jsonView";
+	}
+	// ------------------------------------진행중
+	
 	@RequestMapping(value="/buyer/my/confirmpw", method=RequestMethod.POST)
 	public void myPwConfirm(BuyerInfo buyerInfo, HttpSession session, HttpServletResponse res) throws IOException { // 마이페이지-정보수정 -> 비밀번호확인
 		
@@ -864,4 +879,9 @@ public class BuyerController {
 		
 		return "redirect:/buyer/my/booking";
 	}
+	
+
+	@RequestMapping(value="/buyer/practice", method=RequestMethod.GET)
+	public void pratice() {}
+	
 }

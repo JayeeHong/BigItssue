@@ -244,7 +244,7 @@ $(document).ready(function() {
 		<div id="topMenu">
 			<ul>
 				<li><a href="/buyer/main">판매처 보기</a></li>
-				<li><a href="/buyer/notice">공지사항</a></li>
+				<li><a href="/buyer/notice/list">공지사항</a></li>
 			</ul>			
 			
 			<div id="btnBox">
