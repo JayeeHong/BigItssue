@@ -72,7 +72,7 @@ function checkDelete() {
 			<tbody>
 			<c:forEach items="${bannerList}" var="b">
 				<tr>
-					<td><input type="checkbox" name="checkRow" value="${b.bannerNo}" /></td>
+					<td><input type="checkbox" name="checkRow" value="${b.bannerNo }" /></td>
 					<td><img src="/upload/${b.bannerImg }" width="300px" height="150px"></td>
 				</tr>
 			</c:forEach>

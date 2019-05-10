@@ -557,8 +557,6 @@ public class SellerController {
 		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
 //		for(ReviewReply r : replyList) System.out.println(r);
 		
-//		model.addAllAttributes(replyList);
-		
 		model.addAttribute("replyList", replyList);
 		
 		return "jsonView";

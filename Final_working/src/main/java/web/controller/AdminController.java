@@ -850,7 +850,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/addBanner", method=RequestMethod.POST)
-	public String bannerWriteProc(MultipartFile bannerFile, MainBanner mainBanner) {
+	public String bannerWriteProc(MultipartFile bannerFile, MainBanner mainBanner, Model model) {
 		
 		logger.info("파일업로드");
 //		logger.info(bannerImg.toString());
@@ -879,11 +879,15 @@ public class AdminController {
 			e.printStackTrace();
 		}
 		
+		mainBanner.setBannerNo(adminService.getBannerNo());
 		mainBanner.setBannerImg(stored_name);
 		
 		adminService.addBanner(mainBanner);
 		
-		return "redirect:/admin/banner/list";
+//		model.addAttribute("res", mainBanner);
+		
+//		return "redirect:/admin/banner/list";
+		return "jsonView";
 	}
 	
 	@RequestMapping(value="/admin/banner/delete", method=RequestMethod.GET)

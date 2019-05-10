@@ -186,7 +186,10 @@ public interface AdminService {
 	
 	//배너 리스트 얻기
 	public List<MainBanner> getBanner();
-
+	
+	//배너 번호 얻기
+	public int getBannerNo();
+	
 	//배너 추가하기
 	public void addBanner(MainBanner mainBanner);
 

@@ -406,10 +406,11 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-
 	public List<MainBanner> getBanner() {
 		return adminDao.selectBanner();
 	}
+	
+	
 
 	@Override
 	public void addBanner(MainBanner mainBanner) {
@@ -422,9 +423,11 @@ public class AdminServiceImpl implements AdminService{
 		adminDao.deleteBanner(bannerNo);
 	}
 	
-	
-	
-	
+	@Override
+	public int getBannerNo() {
+		return adminDao.selectBannerNo();
+	}
+		
 	public List<String> userIdList(String abc) {
 		return adminDao.userIdList(abc);
 	}
@@ -440,6 +443,7 @@ public class AdminServiceImpl implements AdminService{
 		return list;
 
 	}
+
 
 	
 }
