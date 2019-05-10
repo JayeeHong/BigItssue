@@ -56,7 +56,13 @@ public class ReplyEchoHandler extends TextWebSocketHandler {
 		logger.info("[TEST]userSessions.values():"+userSessions.values());
 		
 		//웹소켓 session과 연동된 httpSession의 chatRoomNo 불러오기
-		int chatRoomNo =  (int)getHttpSession(session).get("chatRoomNo");
+		int chatRoomNo=0;
+		logger.info("[TEST]getHttpSession(session).get(\"chatRoomNo\")핸들러쪽확인:"+getHttpSession(session).get("chatRoomNo"));
+		if(getHttpSession(session).get("chatRoomNo")==null) {
+			chatRoomNo = -1;		
+		}else { 
+			chatRoomNo =  (int)getHttpSession(session).get("chatRoomNo");
+		}
 		logger.info("[TEST]chatRoomNo:"+chatRoomNo);
 		
 		//웹소켓 session, httpSession의 chatRoomNo Map에 추가 
