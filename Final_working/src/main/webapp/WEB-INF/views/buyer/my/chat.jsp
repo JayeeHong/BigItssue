@@ -2,8 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
-<div class="row">
+<div class="container">
+<div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_buyer.jsp" />
 
@@ -154,6 +154,7 @@
 </div>
 </div>
 </div>
+</div>
 
 <!-- 채팅 script -->
 <script type="text/javascript">
@@ -278,6 +279,11 @@ function connect(){
 				var msg_history = $(".msg_history");
 				var inbox_chat = $(".inbox_chat");
 				
+				//채팅방 위치 재배치		
+				var replace = $("#b"+noFlag).wrap("<div><div/>").parent().html();
+				$("#b"+noFlag).remove();
+				inbox_chat.prepend(replace);
+				
 				/* 현재방번호와 #앞의 번호가 같을경우 */
 				if( ${chatRoomNo} == noFlag){
 					//옆 사이드에도 내방이 보여야 하니까
@@ -317,7 +323,7 @@ function connect(){
 						console.log("[TEST]:"+$("#b"+refreshList[i].chatRoomNo).length)			
 						if($("#b"+refreshList[i].chatRoomNo).length<=0){//있어야할 id가 없다면 생성해주자.
 							var a = "<div class=\"chat_list\"><a href=\"/seller/main?chatRoomNo="+noFlag+"\">"+noFlag+"번방["+refreshList[i].theOtherParty+"]</a> <div id=\"b"+noFlag+"\" onclick=\"location.href='/seller/main?chatRoomNo="+noFlag+"'\"class=\"chat_people\"><div class=\"chat_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"chat_ib\"><p><span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result+"</p><div id=\"c"+refreshList[i].chatRoomNo+"\">	 </div></div></div></div>"
-							inbox_chat.append(a);
+							inbox_chat.prepend(a);
 							//안 읽은 채팅내역 개수 표시.
 							for(var j=0; j<messageChkResult.length; j++){
 								if(messageChkResult[j] !=null && refreshList[i].chatRoomNo==messageChkResult[j].chatRoomNo){

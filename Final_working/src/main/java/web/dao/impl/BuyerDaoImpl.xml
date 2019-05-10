@@ -177,6 +177,23 @@
 	<select id="selectStationList" resultType="web.dto.SellerLoc">
 		SELECT DISTINCT station FROM sellerLoc
 	</select>
+	
+	<select id="selectBuyerInfoAtBuyermyinfo" parameterType="web.dto.BuyerInfo" resultType="web.dto.BuyerInfo">
+		SELECT * FROM buyerInfo
+		WHERE buyerId = #{buyerId}
+	</select>
+	
+	<update id="updateBuyerPhone" parameterType="web.dto.BuyerInfo">
+		UPDATE buyerInfo
+		SET buyerPhone=#{buyerPhone }
+		WHERE buyerId=#{buyerId }
+	</update>
+	
+	<update id="updateBuyerEmail" parameterType="web.dto.BuyerInfo">
+		UPDATE buyerInfo
+		SET buyerEmail=#{buyerEmail }
+		WHERE buyerId=#{buyerId }
+	</update>
 
 	<select id="selectTotalCountOfSellerLocByZoneAndStation" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM sellerLoc
@@ -224,7 +241,25 @@
 		WHERE rnum BETWEEN #{startNo} AND #{endNo}
 	</select>
 	
-	<update id="updateStatusOfReservation" parameterType="int">
+	<select resultType="int" id="getNoticeCnt"> 
+	SELECT COUNT(*) FROM NOTICE 
+	</select>
+	
+	<select resultType="web.dto.Notice" parameterType="web.util.Paging" id="getNoticeList"> 
+	SELECT * FROM( 
+		SELECT rownum rnum, b.* FROM(
+			 SELECT * FROM NOTICE 
+			 ORDER BY noticeNo desc 
+			 )B 
+		ORDER BY rnum )R 
+	WHERE rnum BETWEEN 
+	#{startNo} AND #{endNo} </select>
+	
+	<select resultType="web.dto.Notice" parameterType="int" id="getNoticeView"> 
+	SELECT * FROM NOTICE WHERE noticeNo = #{noticeNo}
+	 </select>
+
+  <update id="updateStatusOfReservation" parameterType="int">
 		UPDATE reservation
 		SET status='예약취소'
 		WHERE magazineNo=#{magazineNo }

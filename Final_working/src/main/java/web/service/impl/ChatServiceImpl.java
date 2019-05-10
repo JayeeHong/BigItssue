@@ -191,6 +191,11 @@ public class ChatServiceImpl implements ChatService{
 
 	}
 
+	@Override
+	public void updateChatFinalDate(Message msg) {
+		chatDao.updateChatFinalDate(msg);	
+	}
+
 
 	
 	

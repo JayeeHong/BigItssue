@@ -63,7 +63,18 @@ public class SellerServiceImpl implements SellerService {
 
 	@Override
 	public void putMegazine(BookListInfo bookListInfo) {
-		sellerDao.insertMegazine(bookListInfo);
+		
+		// sellerid 와 month로 booklistinfo 갯수 조회
+		int hasbook = sellerDao.selectCntBookListInfoBySelleridAndMonth(bookListInfo);
+		
+		if( hasbook > 0 ) { // 있다면
+			// 해당 magazineNo에 circulation 추가
+			sellerDao.insertBookListInfoByMagazineno(bookListInfo);
+			
+		} else { // 없다면
+			// 새로 추가
+			sellerDao.insertMegazine(bookListInfo);
+		}
 	}
 
 	@Override
@@ -187,6 +198,11 @@ public class SellerServiceImpl implements SellerService {
 	@Override
 	public void replyUpdate(ReviewReply reviewReply) {
 		sellerDao.updateReply(reviewReply);
+	}
+
+	@Override
+	public void setSellerCard(SellerLoc sellerloc) {
+		sellerDao.updateSellerCard(sellerloc);
 	}
 
 }

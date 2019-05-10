@@ -52,16 +52,17 @@ function inquire(id,sort){
 </script>
 
 
-
-
 <jsp:include page="mainBanner.jsp" />
 
 
 
 <div class="container">
 
-	<!-- 현재시간 받아오기 -->
-	<fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
+  <!-- 웹소켓 열기. 다른페이지에서도 새로운 메시지 확인하기위해서. -->
+
+
+  <!-- 현재시간 받아오기 -->
+  <fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
 
 
 	<!-- 장소,위치 검색 (select태그이용) -->

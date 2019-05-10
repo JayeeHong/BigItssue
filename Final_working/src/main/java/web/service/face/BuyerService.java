@@ -5,11 +5,13 @@ import java.util.Map;
 
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.Notice;
 import web.dto.MainBanner;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.util.MyBookingPaging;
+import web.util.Paging;
 import web.util.SellerLocPaging;
 
 public interface BuyerService {
@@ -73,6 +75,17 @@ public interface BuyerService {
 	
 	//중복뺸 stationList얻기
 	public List<SellerLoc> getStationList();
+
+	
+	
+	// /buyer/my/info 에서 구매자 회원정보 가져오기
+	public BuyerInfo getBuyerInfoAtBuyermyinfo(BuyerInfo buyerInfo);
+
+	// /buyer/my/info 에서 구매자 전화번호 업데이트
+	public void setBuyerPhone(BuyerInfo buyerInfo);
+
+	// /buyer/my/info 에서 구매자 이메일 업데이트
+	public void setBuyerEmail(BuyerInfo buyerInfo);
 	
 	//zone,station으로 sellerLoc 개수새기
 	public int getTotalCountOfSellerLocByZoneAndStation(Map<String, Object> map);
@@ -86,6 +99,15 @@ public interface BuyerService {
 	//나의 예약페이징리스트 조회
 	public List<Reservation> getPagingListOfMyReservation(MyBookingPaging paging);
 	
+	//공지사항 갯수조회
+	public int getNoticeCnt();
+		
+	//공지사항 페이징리스트조회
+	public List<Notice> getNoticeList(Paging paging);
+		
+	//공지사항 상세보기
+	public Notice getNoticeView(int noticeNo);
+
 	//reservation예약테이블 status "예약"=>"취소"로 변경하기
 	public void setStatusOfReservation(int magazineNo);
 	
@@ -97,7 +119,6 @@ public interface BuyerService {
 
 	//메인베너 정보 가져오기
 	public List<MainBanner> getBannerList();
-	
 	
 	
 }

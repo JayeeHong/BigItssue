@@ -263,7 +263,7 @@ function connect(){
 			 type: "post"
 			 , url: "/chatRoomListAjax"
 			 /*data: 전달 Parameter (댓글내용, boardnoQA)  */
-			 , data: {"noFlag":noFlag}
+			 , data: {}
 			 , dataType: "json"
 			 /* receive(이름은 내가 정하는것 )로 결과값 html을 받아옴 */
 			 , success: function(receive){
@@ -283,6 +283,11 @@ function connect(){
 				//부트스트랩의 채팅창
 				var msg_history = $(".msg_history");
 				var inbox_chat = $(".inbox_chat");
+				
+				//채팅방 위치 재배치		
+				var replace = $("#b"+noFlag).wrap("<div><div/>").parent().html();
+				$("#b"+noFlag).remove();
+				inbox_chat.prepend(replace);
 				
 				
 				/* 현재방번호와 #앞의 번호가 같을경우 */
@@ -321,8 +326,23 @@ function connect(){
 							}
 						}	
 						if($("#b"+refreshList[i].chatRoomNo).length<=0){//있어야할 id가 없다면 생성해주자.
-							var a = "<div class=\"chat_list\"><a href=\"/chatting?chatRoomNo="+noFlag+"\">"+noFlag+"번방</a> <div id=\"b"+noFlag+"\" onclick=\"location.href='/chatting?chatRoomNo="+noFlag+"'\"class=\"chat_people\"><div class=\"chat_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"chat_ib\"><p><span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result+"</p></div></div></div>";
-							inbox_chat.append(a);
+							var a = "<div class=\"chat_list\"><a href=\"/seller/main?chatRoomNo="+noFlag+"\">"+noFlag+"번방["+refreshList[i].theOtherParty+"]</a> <div id=\"b"+noFlag+"\" onclick=\"location.href='/seller/main?chatRoomNo="+noFlag+"'\"class=\"chat_people\"><div class=\"chat_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"chat_ib\"><p><span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result+"</p><div id=\"c"+refreshList[i].chatRoomNo+"\">	 </div></div></div></div>"
+							inbox_chat.prepend(a);
+							//안 읽은 채팅내역 개수 표시.
+							for(var j=0; j<messageChkResult.length; j++){
+								if(messageChkResult[j] !=null && refreshList[i].chatRoomNo==messageChkResult[j].chatRoomNo){
+									console.log("-----[TEST]-----:"+$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length)
+									/* 안 읽은 채팅내역 표시가 아예 없을 경우 생성해주자. */
+									if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length<=0){
+										var a = "<div class=\"text-center messageChkResult\" style=\"border-radius: 50%;height: 20px; width: 20px; background-color: red; color:white;\">"+messageChkResult[j].messageNoReadNum+"</div>"
+										$("#c"+refreshList[i].chatRoomNo).append(a);
+									}
+									/* 안 읽은 채팅내역 표시가 있으면 그곳에 숫자를 넣어주자. */
+									if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length>0){
+										$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").html(messageChkResult[j].messageNoReadNum);
+									}
+								}
+							}
 						}
 					}
 			

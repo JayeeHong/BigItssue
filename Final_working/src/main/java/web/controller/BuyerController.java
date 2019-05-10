@@ -29,6 +29,7 @@ import web.dto.BuyerInfo;
 import web.dto.Chat;
 import web.dto.MainBanner;
 import web.dto.Message;
+import web.dto.Notice;
 import web.dto.MessageChk;
 import web.dto.Reservation;
 import web.dto.SellerLoc;
@@ -36,6 +37,7 @@ import web.dto.User;
 import web.service.face.BuyerService;
 import web.service.face.ChatService;
 import web.util.MyBookingPaging;
+import web.util.Paging;
 import web.util.SellerLocPaging;
 
 @Controller
@@ -224,7 +226,7 @@ public class BuyerController {
 			
 	}
 	
-	@RequestMapping(value="/sellerLocMap", method=RequestMethod.GET)
+	@RequestMapping("/sellerLocMap")
 	public void buyerSellerLocMap(int locNo, Model model) {
 	
 		SellerLoc sellerLoc = buyerService.getSellerLoc(locNo);
@@ -711,8 +713,67 @@ public class BuyerController {
 	}
 	
 	@RequestMapping(value="/buyer/my/info", method=RequestMethod.GET)
-	public void myInfo() { // 마이페이지-정보수정
+	public void myInfo(
+			BuyerInfo buyerInfo, 
+			HttpSession session, Model model) { // 마이페이지-정보수정
 		
+		String buyerId = (String) session.getAttribute("buyerId");
+//		logger.info("::::::buyerID::::::"+buyerId);
+		
+		buyerInfo.setBuyerId(buyerId);
+		
+		//buyerId로 회원정보 조회
+		buyerInfo = buyerService.getBuyerInfoAtBuyermyinfo(buyerInfo);
+//		logger.info(":::::buyerInfo:::::"+buyerInfo.toString());
+		
+		// 연락처 정보
+		buyerInfo.setBuyerPhone1(buyerInfo.getBuyerPhone().split("-")[0]);
+		buyerInfo.setBuyerPhone2(buyerInfo.getBuyerPhone().split("-")[1]);
+		buyerInfo.setBuyerPhone3(buyerInfo.getBuyerPhone().split("-")[2]);
+		
+		// 이메일 정보
+		buyerInfo.setBuyerEmail1(buyerInfo.getBuyerEmail().split("@")[0]);;
+		buyerInfo.setBuyerEmail2(buyerInfo.getBuyerEmail().split("@")[1]);;
+		
+//		logger.info(":::split 정보 확인:::"+buyerInfo.toString());
+		
+		model.addAttribute("buyerInfo", buyerInfo);
+		
+	}
+	
+	@RequestMapping(value="/buyer/my/info/changePhone", method=RequestMethod.POST)
+	public String myInfoChangePhone(BuyerInfo buyerInfo, HttpSession session) {
+		
+//		logger.info(buyerInfo.toString());
+		
+		// 세션 정보 가져오기
+		String buyerId = (String)session.getAttribute("buyerId");
+		buyerInfo.setBuyerId(buyerId);
+		
+		if(buyerInfo != null && !"".equals(buyerInfo)) {
+			buyerInfo.setBuyerPhone(buyerInfo.getBuyerPhone1()+"-"+buyerInfo.getBuyerPhone2()+"-"+buyerInfo.getBuyerPhone3());
+
+			buyerService.setBuyerPhone(buyerInfo);
+		}
+		
+		return "jsonView";
+		
+	}
+	
+	@RequestMapping(value="/buyer/my/info/changeEmail", method=RequestMethod.POST)
+	public String myInfoChangeEmail(BuyerInfo buyerInfo, HttpSession session) {
+		
+		// 세션 정보 가져오기
+		String buyerId = (String)session.getAttribute("buyerId");
+		buyerInfo.setBuyerId(buyerId);
+		
+		if(buyerInfo != null && !"".equals(buyerInfo)) {
+			buyerInfo.setBuyerEmail(buyerInfo.getBuyerEmail1()+"@"+buyerInfo.getBuyerEmail2());
+
+			buyerService.setBuyerEmail(buyerInfo);
+		}
+		
+		return "jsonView";
 	}
 	
 	@RequestMapping(value="/buyer/my/confirmpw", method=RequestMethod.POST)
@@ -723,7 +784,6 @@ public class BuyerController {
 		out = res.getWriter();
 		
 //		logger.info(buyerInfo.toString());
-		
 		buyerInfo.setBuyerId((String) session.getAttribute("buyerId"));
 		
 		// 입력한 비밀번호 맞는지 확인
@@ -746,6 +806,45 @@ public class BuyerController {
 		
 //		return "redirect:/buyer/my/info";
 	}
+	
+	//공지사항리스트띄우기
+		@RequestMapping(value="/buyer/notice/list", method=RequestMethod.GET)
+		public void noticeList() {
+			
+		}
+		
+		//공지사항리스트ajax메소드
+		@RequestMapping(value="/buyer/notice/getNoticeList", method=RequestMethod.GET)
+		public String getNoticeList(Model model, Paging p) {
+			
+			
+			int noticeCnt = buyerService.getNoticeCnt();
+			
+			Paging paging = new Paging(noticeCnt, p.getCurPage());
+			
+			List<Notice> noticeList = buyerService.getNoticeList(paging);
+			
+			Map map = new HashMap();
+			
+			map.put("paging", paging);
+			map.putIfAbsent("noticeList", noticeList);
+			
+			model.addAttribute("map", map);
+			return "jsonView";
+		}
+		
+		
+		
+		@RequestMapping(value="/buyer/notice/view", method=RequestMethod.GET)
+		public void buyerNoticeView(Model model, Notice n) {
+			
+			Notice notice = buyerService.getNoticeView(n.getNoticeNo());
+			
+			model.addAttribute("notice", notice);
+			
+			
+		}
+
 	
 	@RequestMapping(value="/buyer/bookingCancel", method=RequestMethod.GET)
 	public String buyerBookingCancel(int magazineNo, Model model) { 

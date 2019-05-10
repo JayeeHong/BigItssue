@@ -41,7 +41,15 @@
 	</delete>
 	
 	<select resultType="web.dto.SellerLoc" parameterType="web.dto.SellerLoc" id="getSellerInfo"> 
-		SELECT * FROM sellerLoc where locNo = #{locNo } 
+		SELECT * FROM sellerLoc
+		<choose>
+			<when test="locNo != 0">
+			WHERE locNo = #{locNo } 
+			</when>
+			<otherwise>
+			WHERE station = #{station } AND spot = #{spot }
+			</otherwise>
+		</choose>
 	</select>
 
 	<select id="viewLoc" parameterType="String" resultType="web.dto.SellerLoc">
@@ -99,8 +107,6 @@
 		noticeContent = #{noticeContent },
 		noticeImg = #{noticeImg }
 	where noticeNo = #{noticeNo}
-	
-
 </update>
 	
 	<!-- *********** 계정관리 *********** -->
@@ -151,16 +157,22 @@
 	</select>
 	
 	<select id="selectSBInfo" resultType="web.dto.SellerBigdomInfo" parameterType="String">
-		SELECT si.*, sl.bigdomId
+		SELECT si.*, sl.bigdomId, sl.sellerCard
 		FROM sellerInfo si
 		LEFT OUTER JOIN sellerLoc sl
 		ON si.sellerId = sl.sellerId
 		WHERE si.sellerId=#{_parameter }
 	</select>
 	
+	<update id="updateSellerImgupAtadmin" parameterType="web.dto.SellerInfo">
+		UPDATE sellerInfo
+		SET sellerImg=#{selelrImg }
+		WHERE sellerId=#{sellerId }
+	</update>
+	
 	<update id="updateSellerInfo" parameterType="web.dto.SellerBigdomInfo">
 		UPDATE sellerInfo
-		SET sellerName=#{sellerName }, sellerPw=#{sellerPw }, sellerPhone=#{sellerPhone }
+		SET sellerName=#{sellerName }, sellerPw=#{sellerPw }, sellerPhone=#{sellerPhone }, sellerImg=#{sellerImg }
 		WHERE sellerId=#{sellerId }
 	</update>
 	
@@ -327,10 +339,32 @@
 		ORDER BY month
 	</select>
 	
+	<select id="selectCntBookListInfoBySelleridAndMonth" parameterType="web.dto.BookListInfo" resultType="int">
+		SELECT count(*) FROM bookListInfo
+		WHERE sellerId=#{sellerId } AND month=#{month }
+	</select>
+	
+	<update id="insertBookListInfoByMagazineno" parameterType="web.dto.BookListInfo">
+		UPDATE booklistinfo
+		SET circulation=circulation+#{circulation }
+		WHERE sellerId=#{sellerId } AND month=#{month }
+	</update>
+	
 	<insert id="insertBookListInfoAtadminBook" parameterType="web.dto.BookListInfo">
 		INSERT INTO bookListInfo(magazineNo, month, circulation, sellerId)
 		VALUES(bookListInfo_seq.nextval, #{month }, #{circulation }, #{sellerId })
 	</insert>
+	
+	<update id="updateAdminBookView" parameterType="web.dto.BookListInfo">
+		UPDATE booklistinfo
+		SET month=#{month }, circulation=#{circulation }
+		WHERE magazineNo=#{magazineNo }
+	</update>
+	
+	<delete id="deleteAdminBookView" parameterType="web.dto.BookListInfo">
+		DELETE booklistinfo
+		WHERE magazineNo=#{magazineNo }
+	</delete>
 	<!-- **************************************** -->
 	
 	<update id="adminSellserUpdate" parameterType="web.dto.SellerLoc">
@@ -340,8 +374,7 @@
 			spot = #{spot },
 			sellerTimeS = #{sellerTimeS },
 			sellerTimeE = #{sellerTimeE },
-			sellerCard = #{sellerCard },
-			sellerId = #{sellerId }
+			sellerCard = #{sellerCard }
 		WHERE locNo = #{locNo }
 	</update>
 	
@@ -351,7 +384,12 @@
 	
 	</select>
 
-
+	<update id="changeSellerName" parameterType="hashMap">
+		Update SellerInfo
+		set sellerName = #{sellerName }
+		where sellerId = #{sellerLoc.sellerId }
+	
+	</update>
 	
 
 	<insert id="insertList" parameterType="web.dto.SellerLoc">
@@ -371,9 +409,30 @@
 		</choose>
 	</delete>
 	
-
+	<select id="selectChatReportList" resultType="web.dto.ChatReport">
+		SELECT * FROM chatReport
+		WHERE chkNo=1
+		ORDER BY reportNo desc
+	</select>
 	
-	<select id="selectBanner" resultType="web.dto.MainBanner">
+	<select id="selectReportListCnt" resultType="int">
+		SELECT count(*) FROM chatReport
+		WHERE chkNo=1
+	</select>
+	
+	<select id="selectReportByReportNo" resultType="web.dto.ChatReport" parameterType="int">
+		SELECT * FROM chatReport
+		WHERE reportNo=#{reportNo }
+	</select>
+	
+	<select id="selectReportByChatReport" resultType="web.dto.ChatReport" parameterType="web.dto.ChatReport">
+		SELECT * FROM chatReport
+		WHERE chatRoomNo=#{chatRoomNo } 
+			AND to_char(chatDate, 'yy/mm/dd')=to_char(#{chatDate },'yy/mm/dd')
+		ORDER BY reportNo
+	</select>
+    
+  <select id="selectBanner" resultType="web.dto.MainBanner">
 		SELECT * FROM MainBanner
 		ORDER BY bannerNo
 	</select>
@@ -407,4 +466,14 @@
 
 	
 	
+	<select id="getChatRoomNo" resultType="web.dto.Message">
+		SELECT DISTINCT a.chatRoomNo, a.BigdomId, a.BuyerId, a.SellerId FROM (
+			SELECT chat.chatRoomNo, chat.BigdomId, chat.BuyerId, chat.SellerId, message.ChatDate
+			FROM chat, message
+			WHERE message.chatRoomNo = chat.chatRoomNo
+			ORDER BY chat.chatRoomNo
+		) a
+		ORDER BY chatRoomNo
+	</select>
+
 </mapper>
