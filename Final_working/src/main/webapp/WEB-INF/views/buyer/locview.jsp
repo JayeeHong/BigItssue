@@ -11,6 +11,9 @@
 th{
 	text-align:center;
 }
+.mapHover:hover {
+	background-color: rgba(196, 202, 206, .5);
+}
 </style>
 
 <script type="text/javascript">
@@ -19,6 +22,13 @@ $(document).ready(function() {
 	
 });
 
+//판매처 지도 열기
+function mapView(locNo){
+	var w = (screen.availWidth)/3;
+	var h = (screen.availHeight)/2.5;
+	//팝업창 새로 띄우기
+	window.open("/sellerLocMap?locNo="+locNo, "판매처지도", "width="+w+'px'+", height="+h+'px'+", left=100, top=50");
+}
 //채팅창 열기
 function inquire(id,sort){
 	
@@ -62,7 +72,7 @@ function inquire(id,sort){
 		<!-- 판매자 -->
 		<tr>
 		<td>${sellerLoc.zone }</td>
-		<td>${sellerLoc.station } ${sellerLoc.spot }</td>
+		<td class="mapHover" onclick="mapView(${sellerLoc.locNo})">${sellerLoc.station } ${sellerLoc.spot }</td>
 		<td>
 			<c:if test="${sellerLoc.sellerTimeS.length() eq 4 && sellerLoc.sellerTimeE.length() eq 4}">
 			${sellerLoc.sellerTimeS.substring( 0, 2 ) }:${sellerLoc.sellerTimeS.substring( 2, 4 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 2 )}:${sellerLoc.sellerTimeE.substring( 2, 4 )} 

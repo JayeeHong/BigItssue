@@ -84,8 +84,10 @@ function getLocList(){
 			console.log(condition);
 			console.log(searchWord);
 			var html =""
+
 				html ="<div id='tableAndpaging' >"
-				html += '<div class="">'
+				html += '<div class="yapyap">'
+
 				html += '<table class="table table-striped" style="table-layout: fixed; left: 220px; top: 230px; width:80%;">'
 				html += '<tr style="background: gray; text-align: center;">'
 				html += '<td><b>No.</b></td>'
@@ -132,8 +134,8 @@ function getLocList(){
 					}else{
 					html += '<td>'+value.sellerName+'</td>'
 					}
-					html += '<td><input class="btn btn-primary" type="button" value="수정" onclick="detailView('+value.locNo+')">'
-					html += '<input class="btn btn-danger" type="button" value="삭제" onclick="listDelete('+value.locNo+')"> </td>'
+					html += '<td><label><input class="btn btn-sm" style="background:#e0effd;" type="button" value="수정" onclick="detailView('+value.locNo+')">'
+					html += '<input class="btn btn-sm" style="background:#ff8a8a;" type="button" value="삭제" onclick="listDelete('+value.locNo+')"></label> </td>'
 					html +='</tr>'
 					
 				})
@@ -179,7 +181,7 @@ function getLocList(){
 					
 					if(p.curPage == p.totalPage){
 // 						html += '<li class="disabled"><span>&gt;</span></li>'
-						html += '<li><a">&gt;</a></li>'
+						html += '<li><a>&gt;</a></li>'
 					}
 					if(p.curPage != p.totalPage){
 // 						html += '<li><a href='+'"/admin/seller/list?curPage='+cpp1+"&condition="+condition+"&seachWord="+searchWord+'">&gt;</a></li>'
@@ -216,30 +218,31 @@ function getLocList(){
 
     
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
-<div class="">
+<div class="qna" style="width: 1100px;">
 
 
 <h3>판매자 판매정보 관리</h3>
 <hr>
 
 <div class="right-block">
-	<div class="col-xs-1">
-		<select class="form-control" style="width: 80px;" name="condition" id="condition" >
+	<div class="col-xs-2" style="width: 125px;">
+		<select class="form-control" style="width: 120px;" name="condition" id="condition" >
 			<option value="zone">호선</option>
 			<option value="station">판매장소</option>
 			<option value="sellerId">판매자</option>
 		</select>
 	</div>
-	<div class="col-xs-2">
+	<div class="col-xs-2" style="width: 185px;">
 		<input class="form-control form-inline" style="width: 180px;" type="search" name="searchWord" value="${searchWord }" id="searchWord">
 	</div>
 	<div class="col-xs-1">
 		<input class="form-inline btn" type="button" onclick="searchSeller()" value="찾기">
 	
 	</div>
-	
-	<div class="text-right">
-		<input class="btn" type="button" value="처음으로" onclick="goBack()">
+	<div class="text-right" style="margin-bottom: 5px;">
+		<input class="btn" type="button" value="처음으로" onclick="goBack()" style="margin-right: 25px;">
+	</div>
+
 		
 		<!-- 스크립트로 html들어가는 영역  -->
 		<div id="locListArea">
@@ -247,7 +250,6 @@ function getLocList(){
 		
 		
 		</div>    
-	</div>
 </div>    
 
 
@@ -256,4 +258,4 @@ function getLocList(){
 
 </div>
 
-</div>
+

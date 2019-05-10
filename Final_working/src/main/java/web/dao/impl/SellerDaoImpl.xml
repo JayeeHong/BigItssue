@@ -32,7 +32,7 @@
 	 parameterType="String" resultType="web.dto.BookListInfo">
 		SELECT * FROM bookListInfo
 		WHERE sellerId=#{sellerId }
-		ORDER BY magazineNo desc
+		ORDER BY month
 	</select>
 	
 	<update id="updateBookList" parameterType="web.dto.BookListInfo">
@@ -45,6 +45,18 @@
 		DELETE bookListInfo
 		WHERE magazineNo=#{magazineNo }
 	</delete>
+	
+	<select id="selectCntBookListInfoBySelleridAndMonth"
+	 parameterType="web.dto.BookListInfo" resultType="int">
+		SELECT count(*) FROM bookListInfo
+		WHERE sellerId=#{sellerId } AND month=#{month }
+	</select>
+	
+	<update id="insertBookListInfoByMagazineno" parameterType="web.dto.BookListInfo">
+		UPDATE booklistinfo
+		SET circulation=circulation+#{circulation }
+		WHERE sellerId=#{sellerId } AND month=#{month }
+	</update>
 	
 	<insert id="insertMegazine" parameterType="web.dto.BookListInfo">
 		INSERT INTO bookListInfo(magazineNo, month, circulation, sellerId)
@@ -193,6 +205,12 @@
 		UPDATE ReviewReply
 		SET replyContent = #{replyContent }
 		WHERE replyNo = #{replyNo }
+	</update>
+	
+	<update id="updateSellerCard" parameterType="web.dto.SellerLoc">
+		UPDATE sellerLoc
+		SET sellerCard=#{sellerCard }
+		WHERE sellerId=#{sellerId }
 	</update>
 
 </mapper>

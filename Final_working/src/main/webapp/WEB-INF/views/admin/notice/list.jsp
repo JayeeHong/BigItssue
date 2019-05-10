@@ -63,10 +63,10 @@ function getLocList(){
 					
 					html +='<tr style="text-align: center;">'
 					html += '<td>'+value.noticeNo+'</td>'
-					html += '<td>'
-					html += '<a href="/admin/notice/view?noticeNo='+value.noticeNo+'">'
+					html += '<td class="goDetailView" onclick="goDetailView('+value.noticeNo+')">'
+// 					html += '<a href="/admin/notice/view?noticeNo='+value.noticeNo+'">'
 					html += value.noticeTitle
-					html += '</a>'
+// 					html += '</a>'
 					html += '</td>'
 					
 					var date = new Date(value.noticeDate);
@@ -156,15 +156,23 @@ function noticeWrite(){
 	
 }
 
-</script>    
+function goDetailView(a){
+	window.location.href="/admin/notice/view?noticeNo="+a
+}
 
+</script>    
+<style>
+.goDetailView:hover{
+text-decoration: underline;
+cursor: pointer;
+}
+</style>
 
 
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
-<div class="" style="">
-</div>
+<div class="" style="width: 1000px;">
 <div style="width:auto; position:static;  left:20%;">
 <h3>공지사항 게시판 관리</h3>
 <hr>
@@ -177,6 +185,7 @@ function noticeWrite(){
 
 </div>    
 </div>    
+</div>
     
 
 

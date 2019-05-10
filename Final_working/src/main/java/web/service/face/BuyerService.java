@@ -75,6 +75,17 @@ public interface BuyerService {
 	
 	//중복뺸 stationList얻기
 	public List<SellerLoc> getStationList();
+
+	
+	
+	// /buyer/my/info 에서 구매자 회원정보 가져오기
+	public BuyerInfo getBuyerInfoAtBuyermyinfo(BuyerInfo buyerInfo);
+
+	// /buyer/my/info 에서 구매자 전화번호 업데이트
+	public void setBuyerPhone(BuyerInfo buyerInfo);
+
+	// /buyer/my/info 에서 구매자 이메일 업데이트
+	public void setBuyerEmail(BuyerInfo buyerInfo);
 	
 	//zone,station으로 sellerLoc 개수새기
 	public int getTotalCountOfSellerLocByZoneAndStation(Map<String, Object> map);
