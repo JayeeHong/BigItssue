@@ -49,10 +49,10 @@ function deactivateSeller(sellerId) {
 
 function activateSeller(sellerId) {
 	result = confirm('판매자를 활성화하시겠습니까?'+'\n'
-			+'확인을 클릭하시면 판매장소관리 페이지로 넘어갑니다.');
+			+'확인을 클릭하시면 판매자 판매정보 관리 페이지로 넘어갑니다.');
 	
 	if(result==true) {
-		$(location).attr("href", "/admin/loc/list");
+		$(location).attr("href", "/admin/seller/list");
 	} else {
 		return false;
 	}
@@ -101,7 +101,15 @@ function activateSeller(sellerId) {
 			<td rowspan="3">${(totalCount-status.index)-((curPage-1)*10) }</td>
 			</c:if>
 		
-			<td>${sellerbigdomList[i].sellerName }</td>
+			<td>
+				<c:if test="${sellerbigdomList[i].sellerImg ne null }">
+					<img style="width: 25px; height: 25px;" src="/upload/${sellerbigdomList[i].sellerImg }">
+				</c:if>
+				<c:if test="${sellerbigdomList[i].sellerImg eq null }">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+				</c:if>
+				${sellerbigdomList[i].sellerName }
+			</td>
 			<td>${sellerbigdomList[i].sellerId }</td>
 			<td>${sellerbigdomList[i].sellerPw }</td>
 			<td>${sellerbigdomList[i].sellerPhone }</td>

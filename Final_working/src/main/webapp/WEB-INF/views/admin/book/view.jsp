@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*, java.text.*"  %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -31,10 +32,10 @@ $(document).ready(function() {
 });
 
 function addBookInfo(sellerId) {
-	if(!document.addBook.month.value) {
-		alert("판매 호수를 입력하세요!");
-		return false;
-	}
+// 	if(!document.addBook.month.value) {
+// 		alert("판매 호수를 입력하세요!");
+// 		return false;
+// 	}
 	
 	if(!document.addBook.circulation.value) {
 		alert("판매 부수를 입력하세요!");
@@ -47,8 +48,46 @@ function addBookInfo(sellerId) {
 	form.submit();
 }
 
+// function mUpdate(magazineNo) {
+	
+// 	result = confirm('빅이슈를 수정하시겠습니까?');
+	
+// 	if(result==true) {
+// 		form = document.menageMegazine;
+// 		form.method="post";
+// 		form.action="/admin/book/view/update?magazineNo="+magazineNo;
+// 		form.submit();	
+// 	} else {
+// 		return false;
+// 	}
+// }
+
+function mDelete(magazineNo, sellerId) {
+	
+	result = confirm('판매중인 빅이슈를 삭제하시겠습니까?'+'\n'+
+						'삭제 후에는 변경할 수 없습니다.');
+	//console.log(result);
+	if(result==true) {
+		$(location).attr("href", "/admin/book/view/delete?magazineNo="+magazineNo+"&sellerId="+sellerId);
+	} else {
+		return false;
+	}
+	
+}
 
 </script>
+
+<!-- 현재시간 가져오기 -->
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate value="${now}" pattern="yyyy" var="sysYear" />
+<fmt:formatDate value="${now}" pattern="M" var="sysMonth" />
+<fmt:formatDate value="${now}" pattern="yyyy-M" var="sysDate" />
+<%-- ${sysYear }-${sysMonth }<br>${sysDate }<br>${sysYear-1 }<br>${sysYear }-${sysMonth-1 } --%>
+
+<%-- <c:set var="sysDate1" value="${sysYear }-${sysMonth-1 }" /> --%>
+<%-- <c:set var="sysDate2" value="${sysYear }-${sysMonth-2 }" /> --%>
+
+<%-- <c:out value="${sysDate1 }" /> --%>
 
 <div class="row row-offcanvas row-offcanvas-right">
 
@@ -106,13 +145,18 @@ function addBookInfo(sellerId) {
 </c:if>
 
 <c:if test="${bookList.size() ne 0 }">
-<c:forEach var="i" begin="0" end="${bookList.size()-1 }" step="1">
+<c:forEach items="${bookList }" var="b">
+<%-- <c:forEach var="i" begin="0" end="${bookList.size()-1 }" step="1"> --%>
 <tr>
-	<td>${bookList[i].month }</td>
-	<td><input style="text-align: center; width: 30px;" maxlength="3" type="text" value="${bookList[i].circulation }" /></td>
+	<form action="/admin/book/view/update?magazineNo=${b.magazineNo }" method="post" style="display: inline;">
+	<input type="hidden" name="sellerId" value="${sellerloc.sellerId }" />	
+	<input type="hidden" name="month" value="${b.month }" />
+	<td>${b.month }</td>
+	<td><input style="text-align: center; width: 30px;" name="circulation" maxlength="3" type="text" value="${b.circulation }" /></td>
 	<td>
 		<button class="btn btn-xs btn-primary">수정</button>
-		<button class="btn btn-xs btn-danger">삭제</button>
+	</form>
+		<button id="mDelete" class="btn btn-xs btn-danger" onclick="mDelete('${b.magazineNo }','${sellerloc.sellerId }')">삭제</button>
 	</td>
 </tr>
 </c:forEach>
@@ -123,7 +167,10 @@ function addBookInfo(sellerId) {
 <form name="addBook">
 <input type="hidden" name="sellerId" value="${sellerloc.sellerId }" />
 <table class="table table-bordered">
-<caption>판매할 빅이슈를 추가하고 싶다면, 아래 표 작성 후 '추가' 버튼을 누르세요</caption>
+<caption>
+	판매할 빅이슈를 추가하고 싶다면, 아래 표 작성 후 '추가' 버튼을 누르세요.<br>
+	최근 3개월 간 발간된 빅이슈만 추가 가능합니다. 만약 이미 보유한 호수인 경우 부수만 추가됩니다.	
+</caption>
 <thead>
 <tr>
 	<td>판매할 호수</td>
@@ -131,7 +178,23 @@ function addBookInfo(sellerId) {
 </tr>
 </thead>
 <tr>
-	<td style="width: 50%"><input style="width: 150px; text-align:center;" maxlength="3" type="text" name="month"/></td>
+	<td style="width: 50%">
+		<!-- 최근 3개월의 호수만 보여주고, 이미 보유한 호수인 경우 정보를 넣을 때 부수가 합쳐짐 -->
+		<select style="height: 26px;" name="month">
+			<option value="${sysYear }-${sysMonth-2 }">${sysYear }-${sysMonth-2 }</option>
+			<option value="${sysYear }-${sysMonth-1 }">${sysYear }-${sysMonth-1 }</option>
+			<option value="${sysDate }" selected>${sysDate }</option>
+<%-- 			<c:forEach var="i" begin="0" end="${bookList.size()-1 }" step="1"> --%>
+<%-- 			<c:if test="${bookList[i].month eq sysDate }"> --%>
+<!-- 				<option value="month" disabled>11111</option> -->
+<%-- 			</c:if> --%>
+<%-- 			<c:if test="${bookList[i].month ne sysDate }"> --%>
+<%-- 				<option value="month">${sysDate }</option> --%>
+<%-- 			</c:if> --%>
+<%-- 			</c:forEach> --%>
+		</select>
+<!-- 		<input style="width: 150px; text-align:center;" maxlength="3" type="text" name="month"/> -->
+	</td>
 	<td style="width: 50%">
 		<input style="width: 30px; text-align:center;" name="circulation" maxlength="3" type="text"/>&nbsp;
 		<button type="button" id="btnPlus" class="btn btn-xs btn-primary" onclick="addBookInfo('${sellerloc.sellerId }');">추가</button>		
@@ -139,6 +202,13 @@ function addBookInfo(sellerId) {
 </tr>
 </table>
 </form>
+
+<%-- <c:forEach var="i" begin="0" end="${bookList.size()-1 }" step="1"> --%>
+<%-- 	<c:if test="${bookList[i].month ne sysDate }"> --%>
+<%-- 	${bookList[i].month }////${sysdate } --%>
+<%-- 	</c:if> --%>
+<%-- </c:forEach> --%>
+<%-- ${bookList } --%>
 
 </div>
 

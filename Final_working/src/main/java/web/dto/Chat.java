@@ -1,5 +1,7 @@
 package web.dto;
 
+import java.util.Date;
+
 public class Chat { // 채팅내역
 	
 	private int chatRoomNo; // 채팅방 번호
@@ -7,6 +9,7 @@ public class Chat { // 채팅내역
 	private String buyerId; // 구매자 아이디
 	private String sellerId; // 판매자 아이디
 	private String TheOtherParty; //상대방  - 채팅내역의 상대방 이름을 띄워 주기위해서 추가
+	private Date chatFinalDate; //채팅방에서 메시지 오갈때, 최신 날짜.
 	
 	public int getChatRoomNo() {
 		return chatRoomNo;
@@ -39,10 +42,19 @@ public class Chat { // 채팅내역
 		TheOtherParty = theOtherParty;
 	}
 	
+	public Date getChatFinalDate() {
+		return chatFinalDate;
+	}
+	public void setChatFinalDate(Date chatFinalDate) {
+		this.chatFinalDate = chatFinalDate;
+	}
+	
 	@Override
 	public String toString() {
 		return "Chat [chatRoomNo=" + chatRoomNo + ", bigdomId=" + bigdomId + ", buyerId=" + buyerId + ", sellerId="
-				+ sellerId + ", TheOtherParty=" + TheOtherParty + "]";
+				+ sellerId + ", TheOtherParty=" + TheOtherParty + ", chatFinalDate=" + chatFinalDate + "]";
 	}
+	
+
 	
 }

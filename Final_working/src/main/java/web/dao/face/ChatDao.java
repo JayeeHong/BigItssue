@@ -42,8 +42,11 @@ public interface ChatDao {
 	//finalDateListById크기만큼 반복해서 읽지 않은 메시직 개수 가져오기
 	public MessageChk selectMessageNoReadNum(MessageChk messageChk);
 	
-	//
+	//방만들때 messageChk DB에 id와 날짜2001/**/**을 넣어주자. 
 	public void createMessageChk(MessageChk messageChk);
+	
+	// 방에서 메시지가 오갈때마다  방에 최신날짜 저장.
+	public void updateChatFinalDate(Message msg);
 	
 	
 		

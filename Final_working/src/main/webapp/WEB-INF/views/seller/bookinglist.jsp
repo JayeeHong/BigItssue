@@ -53,6 +53,12 @@ function bookUpdate(reserveNo) {
 <h3>예약내역</h3>
 1. 구매자가 예약하고 찾아가지 않은 경우, 상태가 '예약취소(시간초과)' 로 변경됩니다.<br>
 2. 수령, 취소 버튼으로 판매자가 구매자의 예약상태를 변경할 수 있습니다. 변경 후에는 취소할 수 없으므로 유의하시기 바랍니다.<br>
+<br>
+<c:if test="${bookListInfo eq null }">
+현재 활성화된 판매자가 아닙니다.
+</c:if>
+
+<c:if test="${bookListInfo ne null }">
 <div style="text-align: center;">
 
 <table class="table table-bordered table-striped">
@@ -99,5 +105,6 @@ function bookUpdate(reserveNo) {
 </table>
 
 </div>
+</c:if>
 
 </div>

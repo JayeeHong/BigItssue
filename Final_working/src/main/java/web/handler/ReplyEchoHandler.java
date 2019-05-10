@@ -2,6 +2,7 @@ package web.handler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,8 +100,10 @@ public class ReplyEchoHandler extends TextWebSocketHandler {
 		
 		String presentTime=time.format(msg.getChatDate());
 		logger.info("메시지 시간:"+presentTime);
-
 		
+		//---------- sub메시지창 최신순 으로 나열해주기 ---------------
+		// 방에서 메시지가 오갈때마다  방에 최신날짜 저장.
+		chatService.updateChatFinalDate(msg);
 		
 		//-------------------------
 

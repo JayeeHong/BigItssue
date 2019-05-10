@@ -219,8 +219,11 @@
 				로그인이 필요합니다
 			</c:if>
 			<c:if test="${sellerLogin }">
+				<c:if test="${sellerInfo.sellerImg ne null }">
+					<img style="width: 35px; height: 35px; " src="/upload/${sellerInfo.sellerImg }" />
+				</c:if>
 				<c:if test="${sellerInfo.sellerImg eq null }">
-				<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 				</c:if>
 				${sellerId }님, 환영합니다&nbsp;
 				<a href="/seller/logout"><button id="sellerLogout" class="btn btn-sm btn-primary">로그아웃</button></a>

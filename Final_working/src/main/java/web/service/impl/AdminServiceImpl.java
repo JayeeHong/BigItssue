@@ -1,13 +1,19 @@
 package web.service.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import web.dao.face.AdminDao;
 import web.dto.AdminInfo;
@@ -15,7 +21,9 @@ import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.ChatReport;
 import web.dto.MainBanner;
+import web.dto.Message;
 import web.dto.Notice;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
@@ -118,6 +126,11 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<SellerBigdomInfo> getSellerBigdomInfo(Paging paging) {
 		return adminDao.selectSellerBigdomInfo(paging);
+	}
+
+	@Override
+	public void sellerImgupAtadmin(SellerInfo sellerinfo) {
+		adminDao.updateSellerImgupAtadmin(sellerinfo);
 	}
 
 	@Override
@@ -374,7 +387,21 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public void putBookListInfoAtadminBook(BookListInfo bli) {
-		adminDao.insertBookListInfoAtadminBook(bli);
+		
+		// sellerid 와 month로 booklistinfo 갯수 조회
+		int hasbook = adminDao.selectCntBookListInfoBySelleridAndMonth(bli);
+//		System.out.println("hasbook:::::::::::"+hasbook);
+		
+		if( hasbook > 0 ) { // 있다면
+			// 해당 magazineNo에 circulation 추가
+			adminDao.insertBookListInfoByMagazineno(bli);
+			
+		} else { // 없다면
+			// 새로 추가
+			adminDao.insertBookListInfoAtadminBook(bli);
+			
+		}
+		
 	}
 
 	@Override
@@ -400,11 +427,73 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
+	public void adminBookViewUpdate(BookListInfo booklistInfo) {
+		adminDao.updateAdminBookView(booklistInfo);
+	}
 
+	@Override
+	public void adminBookViewDelete(BookListInfo booklistInfo) {
+		adminDao.deleteAdminBookView(booklistInfo);
+	}
+
+	@Override
+	public List<ChatReport> getChatReportList() {
+		return adminDao.selectChatReportList();
+	}
+
+	@Override
+	public int getReportInfoCurPage(HttpServletRequest req) {
+		//요청파라미터 curPage 받기
+		String param = req.getParameter("curPage");
+	
+		//null이나 ""이 아니면 int로 리턴
+		if( param != null && !"".equals(param) ) {
+			int curPage = Integer.parseInt(param);
+			return curPage;
+		}
+		
+		//null이나 ""면 0으로 반환하기
+		return 0;
+	}
+
+	@Override
+	public int getReportInfoTotalCount() {
+		return adminDao.selectReportListCnt();
+	}
+
+	@Override
+	public ChatReport getReportByReportNo(int reportNo) {
+		return adminDao.selectReportByReportNo(reportNo);
+	}
+
+	@Override
+	public List<ChatReport> getReportByChatReport(ChatReport reportByReportNo) {
+		return adminDao.selectReportByChatReport(reportByReportNo);
+	}
+
+  
+  
+  @Override
 	public List<MainBanner> getBanner() {
 		return adminDao.selectBanner();
 	}
 
+	@Override
+	public void addBanner(MainBanner mainBanner) {
+		
+		adminDao.insertBanner(mainBanner);
+	}
+	
+	@Override
+	public void deleteBanner(int bannerNo) {
+		adminDao.deleteBanner(bannerNo);
+	}
+	
+	@Override
+	public int getBannerNo() {
+		return adminDao.selectBannerNo();
+	}
+		
 	public List<String> userIdList(String abc) {
 		return adminDao.userIdList(abc);
 	}
@@ -418,16 +507,18 @@ public class AdminServiceImpl implements AdminService{
 				list.addAll((adminDao.nullUserInfo(i)));
 			}
 		return list;
-
 	}
+
 
 	@Override
 	public void writeBanner(MainBanner mainBanner) {
 		adminDao.insertBanner(mainBanner);
 	}
 
-	
-	
+  @Override
+  public List<Message> getChatRoomNo() {
+		return adminDao.getChatRoomNo();
+  }
 
 	
 }

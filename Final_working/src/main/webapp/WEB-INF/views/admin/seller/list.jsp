@@ -84,8 +84,10 @@ function getLocList(){
 			console.log(condition);
 			console.log(searchWord);
 			var html =""
+
 				html ="<div id='tableAndpaging' >"
 				html += '<div class="yapyap">'
+
 				html += '<table class="table table-striped" style="table-layout: fixed; left: 220px; top: 230px; width:80%;">'
 				html += '<tr style="background: gray; text-align: center;">'
 				html += '<td><b>No.</b></td>'
@@ -256,4 +258,4 @@ function getLocList(){
 
 </div>
 
-<
+
