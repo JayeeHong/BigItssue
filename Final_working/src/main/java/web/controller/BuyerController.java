@@ -173,6 +173,9 @@ public class BuyerController {
 		
 		model.addAttribute("stationList", stationList);
 		
+		//main에선 방번호 -1을가지고 있게하자.
+		
+		
 	}
 	
 	@RequestMapping(value="/buyer/locview", method=RequestMethod.GET)
@@ -806,4 +809,9 @@ public class BuyerController {
 		
 		return "redirect:/buyer/my/booking";
 	}
+	
+
+	@RequestMapping(value="/buyer/practice", method=RequestMethod.GET)
+	public void pratice() {}
+	
 }

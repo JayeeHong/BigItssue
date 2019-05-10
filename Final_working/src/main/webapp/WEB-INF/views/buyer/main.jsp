@@ -2,15 +2,21 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
 <style type="text/css">
 .fr{
 	float:right;
 }th{
 	text-align:center;
-}</style>
+}
+</style>
+
 <script type="text/javascript">
 $(document).ready(function() {
-	});
+    
+});
+
 //예약페이지 열기
 function booking(locNo){
 		console.log("locNo:"+locNo);
@@ -37,12 +43,121 @@ function inquire(id,sort){
 </script>
 
 <!-- 웹소켓 열기. 다른페이지에서도 새로운 메시지 확인하기위해서. -->
+<script type="text/javascript">
 
+var socket=null;
+
+$(document).ready(function(){
+	
+	if(${buyerLogin eq true}){
+		connect();
+	}
+});
+
+
+function connect(){
+	//ws://localhost:8088/replyEcho
+	var ws = new WebSocket("ws://localhost:8088/replyEcho");
+	socket = ws;
+
+	ws.onopen = function(){
+		console.log('Info: connection opened');
+		
+	};
+ 	
+	//서버가 보낸 메시지 받는곳.
+	ws.onmessage = function(receive){
+		console.log("receive:"+receive);
+		console.log("receive.data:",receive.data+'\n');
+		
+		//데이터 형식  "(방번호)#(보내는사람:내용)"에서 #을 기준으로 
+		//(방번호)는 noFlag에 (보내는사람:내용)는 result에 저장.
+		var noFlag = receive.data.split('#')[0];
+		var senderId = receive.data.split('#')[1];
+		var result = receive.data.split('#')[2];
+		var presentDate = receive.data.split('#')[3];
+		console.log("noFlag:"+noFlag);
+		console.log("senderId:"+senderId);
+		console.log("result:"+result);
+		console.log("presentDate:"+presentDate);
+
+		//현재방번호와 메시지에서 받은 #앞의 번호가 같을경우엔 메인창에 띄워주고
+ 		//현재방번호와 메시지에서 받은 #앞의 번호가 다를경우앤 채팅내역 리스트에서 방번호에서 같은번호가 있는지 찾는다.
+ 		//메시지를 받았을때는 새롭게 다시 채팅방 리스트를 검사하자.
+ 		
+// 		var list = ${chatRoomList}
+		//ajax쓰는 이유는 메시지를 받았을때, 새로운 방이 생겼을경우
+		//chatRoomList를 다시 받아 와야 하기 때문에 사용. 
+		$.ajax({
+			 type: "post"
+			 , url: "/chatRoomListAjax"
+			 /*data: 전달 Parameter (댓글내용, boardnoQA)  */
+			 , data: {}
+			 , dataType: "json"
+			 /* receive(이름은 내가 정하는것 )로 결과값 html을 받아옴 */
+			 , success: function(receive){
+				 
+				var refreshList = receive.refreshChatRoomList;
+				console.log(refreshList);
+				console.log(refreshList[0]);
+				console.log(refreshList[0].chatRoomNo);
+				console.log(refreshList.length);
+				console.log(refreshList[0].theOtherParty);
+				console.log(refreshList[0].buyerId);
+				
+				//안본 메시지 개수List
+				var messageChkResult = receive.messageChkResult;
+				
+				//안 읽은 메시지 있으면 띄워주는 틀
+				var messageAram = $("#messageAram");
+				//안 읽은 메시지 개수 변수		
+				var messageNoNumAll = 0;
+				
+				for(var i=0; i<refreshList.length; i++){
+					//안 읽은 메시지 총 개수 보여주기
+					if(messageChkResult[i] !=null){
+						messageNoNumAll = messageNoNumAll+messageChkResult[i].messageNoReadNum		
+					}
+					//새로온 메시지 보여주기
+					if(refreshList[i].theOtherParty== senderId){
+						var a = "<div style=\" width: 200px;height: 65px;padding-top: 0px;border: 1px solid black;padding-bottom: 0px;padding-left:5px;padding-right:5px;\" class=\"chat_list\"><a href=\"#\">"+noFlag+"번방["+refreshList[i].theOtherParty+"]</a> <div id=\"b"+noFlag+"\" onclick=\"window.open(\'/chatting?chatRoomNo="+noFlag+"\',\'문의하기\',\'width=800,height=750,left=100, top=50\')\" class=\"chat_people\"><div class=\"chat_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"chat_ib\"><p style=\"overflow:hidden;height:38px;\"><span style=\"float:left;margin: 0px;\" class=\"time_date\"> ["+presentDate+"]</span><span style=\"clear:both;\"></span><span style=\"float:left\">"+senderId+" : "+result+"</span></p><div id=\"c"+refreshList[i].chatRoomNo+"\">	 </div></div></div></div>"
+						messageAram.html(a);
+					}
+				}
+				//안 읽은 메시지 총 개수가 0보다 클때만 띄우주자
+				if(messageNoNumAll>0){
+					var a ="<div style=\"width: 200px;height: 23px;padding-top: 0px;border: 1px solid black;padding-bottom: 0px;\">안본 메시지 총개수: <span style=\"display: inline-block; border-radius: 50%;height: 20px; width: 20px; background-color: red; color:white;\">"+messageNoNumAll+"</span></div>"
+					messageAram.prepend(a);
+				}
+
+			 }		 
+			 , error: function(e){
+				 alert("실패");
+				 console.log(e);
+			 }
+		});
+		
+		
+	};
+
+	ws.onclose = function (event) { 
+		console.log('Info: connection closed.'); 
+		//setTimeout( function(){ connect();},1000); // retry connection!!
+	};
+	ws.onerror = function (event) { console.log('Error:',err); };
+	
+}
+
+function closeSocket(){
+	socket.close();
+}
+
+</script>
 
 <!-- 현재시간 받아오기 -->
 <fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
 
-<jsp:include page="mainBanner.jsp" />
+<%-- <jsp:include page="mainBanner.jsp" /> --%>
 
 <!-- 장소,위치 검색 (select태그이용) -->
 <form action="/buyer/main" method="POST">
@@ -142,6 +257,8 @@ function inquire(id,sort){
 	</c:forEach>
 	</tbody>
 </table>
+<div id="messageAram"></div>
+
 <jsp:include page="sellerLocPaging.jsp" />
 </div>
 </div>

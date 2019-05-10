@@ -180,7 +180,17 @@ public class ChattingController {
 		logger.info("LoginInfo:"+LoginInfo);
 		List<Chat> refreshChatRoomList = chatService.selectRooms(LoginInfo);
 		
-		int chatRoomNo = (int)session.getAttribute("chatRoomNo");
+//		int chatRoomNo = (int)session.getAttribute("chatRoomNo");
+		int chatRoomNo=0;
+		logger.info("[TEST]확인!session.getAttribute(\"chatRoomNo\"):"+session.getAttribute("chatRoomNo"));
+		if(session.getAttribute("chatRoomNo")==null) {
+			logger.info("[TEST]확인! 들어오냐!!!!!!");
+			chatRoomNo = -1;
+			session.setAttribute("chatRoomNo", -1);
+			
+		}else { 
+			chatRoomNo =  (int)session.getAttribute("chatRoomNo");
+		}
 		
 		//채팅내역의 상대방 이름을 띄워 주기 위해서 추가
 		//Chat의 TheOtherParty에
@@ -366,6 +376,14 @@ public class ChattingController {
 			return "redirect:/seller/main";
 		}
 		return "redirect:/bigdom/main";
+	}
+	
+	@RequestMapping(value="/sessionRoomNoInit", method=RequestMethod.POST)
+	public String sessionRoomNoInit(HttpSession session) {	
+		
+		session.setAttribute("chatRoomNo", -1);
+		
+		return "jsonView";
 	}
 
 }
