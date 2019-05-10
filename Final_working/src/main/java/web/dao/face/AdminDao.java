@@ -193,9 +193,14 @@ public interface AdminDao {
 	//배너 리스트 조회
 	public List<MainBanner> selectBanner();
 	
+	//배너번호 조회
+	public int selectBannerNo();
+	
 	//배너 insert
 	public void insertBanner(MainBanner mainBanner);
-	
+
+	//배너 delete
+	public void deleteBanner(int bannerNo);
 	
 	
 	
@@ -206,6 +211,7 @@ public interface AdminDao {
 
 	
 	public List<Message> getChatRoomNo();
+
 
 
 

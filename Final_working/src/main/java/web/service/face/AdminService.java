@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
@@ -207,9 +210,15 @@ public interface AdminService {
 	
 	//배너 리스트 얻기
 	public List<MainBanner> getBanner();
-
+	
+	//배너 번호 얻기
+	public int getBannerNo();
+	
 	//배너 추가하기
-	public void writeBanner(MainBanner mainBanner);
+	public void addBanner(MainBanner mainBanner);
+
+	//배너 삭제
+	public void deleteBanner(int bannerNo);
 	
 	
   public List<String> userIdList(String abc);
@@ -217,7 +226,8 @@ public interface AdminService {
   public List<SellerInfo> nullUserInfo(List<String> idOfinfo);
 
 
-  	public List<Message> getChatRoomNo();
+  public List<Message> getChatRoomNo();
+
 
 }
 

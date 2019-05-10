@@ -437,14 +437,19 @@
 		ORDER BY bannerNo
 	</select>
 	
+	<select id="selectBannerNo" resultType="int">
+		SELECT MainBanner_seq.nextval FROM dual
+	</select>
+	
 	<insert id="insertBanner" parameterType="web.dto.MainBanner">
 		INSERT INTO MainBanner (bannerNo, bannerImg)
-		VALUES (MainBanner_seq.nextval, #{bannerImg })	
+		VALUES (#{bannerNo }, #{bannerImg })	
 	</insert>
 	
-	
-	
-	
+	<delete id="deleteBanner" parameterType="web.dto.MainBanner">
+		DELETE MainBanner
+		WHERE bannerNo = #{bannerNo }
+	</delete>
 	
 	
 

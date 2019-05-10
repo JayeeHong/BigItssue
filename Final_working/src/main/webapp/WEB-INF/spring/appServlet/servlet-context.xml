@@ -65,6 +65,7 @@
 	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/upload/**" location="/upload/" />
 	<resources mapping="/img/**" location="/resources/image/" />
+	<resources mapping="/upload/**" location="/upload/" />
 	
 	<!-- websocket handler -->
 	<beans:bean id="replyEchochoHandler" class="web.handler.ReplyEchoHandler" />

@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
@@ -990,24 +991,66 @@ public class AdminController {
 		
 	}
 	
-	@RequestMapping(value="/admin/banner/write", method=RequestMethod.GET)
-	public String bannerWrite() {
-		return "admin/banner/write";
+	@RequestMapping(value="/addBanner", method=RequestMethod.GET)
+	public void bannerWrite() {
+		
 	}
 	
-	@RequestMapping(value="/admin/banner/write", method=RequestMethod.POST)
-	public String bannerWriteProc(MainBanner mainBanner) {
+	@RequestMapping(value="/addBanner", method=RequestMethod.POST)
+	public String bannerWriteProc(MultipartFile bannerFile, MainBanner mainBanner, Model model) {
 		
-		adminService.writeBanner(mainBanner);
+		logger.info("파일업로드");
+//		logger.info(bannerImg.toString());
+//		logger.info(bannerImg.getName());
+//		logger.info(bannerImg.getOriginalFilename());
 		
-		return "redirect:/admin/banner/list";
+		
+		// 고유 식별자
+		String uId = UUID.randomUUID().toString().split("-")[0];
+
+		// 저장될 파일이름
+		String stored_name = null;
+		stored_name = bannerFile.getOriginalFilename() + "_" + uId;
+		
+		// 파일 저장 경로
+		String path = context.getRealPath("upload");
+		
+		// 저장될 파일
+		File dest = new File(path, stored_name);
+		
+		try {
+			bannerFile.transferTo(dest);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		mainBanner.setBannerNo(adminService.getBannerNo());
+		mainBanner.setBannerImg(stored_name);
+		
+		adminService.addBanner(mainBanner);
+		
+//		model.addAttribute("res", mainBanner);
+		
+//		return "redirect:/admin/banner/list";
+		return "jsonView";
 	}
 	
 	@RequestMapping(value="/admin/banner/delete", method=RequestMethod.GET)
-	public void bannerDelete(MainBanner mainBanner, HttpServletRequest req) {
+	public String bannerDelete(MainBanner mainBanner, HttpServletRequest req) {
 		
-		int bannerNo = Integer.parseInt(req.getParameter("bannerNo"));
-//		adminService.deleteBanner(bannerNo);
+		logger.info("배너 선택 삭제");
+		
+//		int bannerNo = Integer.parseInt(req.getParameter("bannerNo"));
+
+		String[] arrCheck = req.getParameter("checkRow").toString().split(",");
+		
+		for(int i=0; i<arrCheck.length; i++) {
+			adminService.deleteBanner(Integer.parseInt(arrCheck[i]));
+		}
+		
+		return "redirect:/admin/banner/list";
 	}
 	
 	
