@@ -226,7 +226,9 @@ public interface AdminService {
   public List<SellerInfo> nullUserInfo(List<String> idOfinfo);
 
 
+
   public List<Message> getChatRoomNo();
+
 
 
 }

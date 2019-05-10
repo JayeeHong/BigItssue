@@ -461,7 +461,7 @@
 	<select id="nullUserInfo" parameterType="String" resultType="web.dto.SellerInfo">
 		SELECT * FROM sellerInfo
 		where sellerId = #{value }
-	
+		
 	</select>
 
 	

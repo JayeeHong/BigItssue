@@ -54,9 +54,9 @@ function noticeDelete(a){
 	    <br>
     	<br>
 		<input type="button" class="btn" value="목록" onclick="noticeListGo()">
-		<input type="button" class="btn btn-info" value="수정" onclick="noticeUpdate(${notice.noticeNo})">
+		<input type="button" class="btn" value="수정" style="background:#e0effd;" onclick="noticeUpdate(${notice.noticeNo})">
 		<input type="hidden" value="${notice.noticeNo }" name="noticeNo">
-		<input type="button" class="btn btn-danger" value="삭제" onclick="noticeDelete(${notice.noticeNo})">
+		<input type="button" class="btn" style="background:#ff8a8a;" value="삭제" onclick="noticeDelete(${notice.noticeNo})">
     	</div>
 		<br>
 		<br>
