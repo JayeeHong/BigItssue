@@ -12,6 +12,10 @@
 
 <script type="text/javascript">
 
+var passwordVerify; // 비밀번호 유효성 결과 담을 변수
+var passwordConfirm; // 비밀번호 확인 결과 담을 변수
+var emailConfirm; // emailcode 담을 변수
+
 function email_change() {
 	if (document.upForm.emailSelect.options[document.upForm.emailSelect.selectedIndex].value == '0') {
 // 		document.upForm.buyerEmail2.disabled = true;
@@ -33,16 +37,112 @@ function email_change() {
 
 $(document).ready(function() {
 	
-	// ------------- buyerPw 부분 ------------- 
-	$("#confirmPw").keyup(function() {
+	// ------------- buyerPw 부분 -------------
+	
+	$(document).on("click", "#changePw", function() {
+	
+		// 비밀번호 수정 폼 보여주기
+		var pwForm = '';
+		pwForm += '<div>';
+		pwForm += '	<br><label>변경할 비밀번호 : </label>';
+		pwForm += '	&nbsp;<input type="password" id="buyerPw" /><br>';
+		pwForm += '</div>';
+		pwForm += '<div id="insertPw"></div>'; // 비밀번호 유효성 결과가 보여질 구역
+		
+		pwForm += '<div>';
+		pwForm += '	<label>비밀번호 확인 : </label>&nbsp;';
+		pwForm += '	&nbsp;&nbsp;&nbsp;<input type="password" id="confirmPw"/>';
+		pwForm += '</div>';
+		pwForm += '<div id="okPw"></div>'; // 비밀번호 비교결과가 보여질 구역
+		
+		pwForm += '<button type="button" id="changePwOk" class="btn btn-xs btn-primary">확인</button>';
+		
+		pwForm += '<div id="changePassSuccess"></div>'; // 비밀번호 변경 결과가 보여질 구역
+		$("#changePwArea").html(pwForm);
+		
+	});
+	
+	// 비밀번호 유효성 검사
+	$(document).on("keyup", "#buyerPw", function() {
+		
+		var pwpw = $("#buyerPw").val(); // 입력한 buyerPw값
+		
+		var num = pwpw.search(/[0-9]/g);
+		var eng = pwpw.search(/[a-z]/ig);
+		var spe = pwpw.search(/[`~!@#$%^&*|\\\'\";:/?.,]/gi);
+		
+		if(!/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/.test(pwpw)){            
+			$("#insertPw").html("비밀번호는 영문자, 숫자, 특수문자를 혼합한 이루어진 8~16자리입니다");
+			$("#insertPw").css("color", "red");
+			passwordVerify = false; // 유효성 결과 false
+			
+	    } else{
+	    	$("#insertPw").html("보통");
+			$("#insertPw").css("color", "orange");
+			passwordVerify = true; // 유효성 결과 true
+			
+			if(pwpw.length>12){
+				$("#insertPw").html("좋음");
+				$("#insertPw").css("color", "green");
+				passwordVerify = true; // 유효성 결과 true
+			}
+	    }
+		
+	});
+	
+	// 비밀번호가 같은지 검사
+// 	$("#confirmPw").keyup(function() {
+	$(document).on("keyup", "#confirmPw", function() {
 		var pw1 = $("#buyerPw").val();
 		var pw2 = $("#confirmPw").val();
 		
 		if(pw1==pw2) {
 			$("#okPw").html("비밀번호가 같습니다.");
+			$("#okPw").css("color", "green");
+			passwordConfirm = true; // 비밀번호 같은지 검사 결과
+			
 		} else {
 			$("#okPw").html("비밀번호가 다릅니다.");
+			$("#okPw").css("color", "red");
+			passwordConfirm = false; // 비밀번호 같은지 검사 결과
+			
 		}
+	});
+	
+	// 최종 비밀번호 변경 실행 (확인버튼)
+	$(document).on("click", "#changePwOk", function() {
+		
+		// 유효성 검사 true, 비밀번호 같은 경우에만 비밀번호 변경 가능
+		if(passwordVerify && passwordConfirm) {
+// 			console.log('모두 완료');
+			
+			var changePass = '';
+			$.ajax({
+				type: 'post'
+				, url: '/buyer/my/info/changePw'
+				, data: {'buyerPw':$('#buyerPw').val()}
+				, dataType: 'json'
+				, success: function(res) {
+					changePass += '<label>비밀번호가 성공적으로 변경되었습니다.</label>';
+					$("#changePassSuccess").html();
+					$("#changePassSuccess").css("color", "green");
+				}
+				, error: function(e) {
+					console.log(e);
+					changePass += '<label>비밀번호 변경에 실패하였습니다.</label>';
+					$("#changePassSuccess").html();
+					$("#changePassSuccess").css("color", "red");
+				}
+			
+			});
+			
+		} else {
+// 			console.log('완료 안됨');
+			changePass += '<label>비밀번호를 다시 확인해주세요.</label>';
+			$("#changePassSuccess").html();
+			$("#changePassSuccess").css("color", "red");
+		}
+		
 	});
 	// --------------------------------- buyerPw 부분 끝
 	
@@ -65,31 +165,103 @@ $(document).ready(function() {
 		emailForm += '</select>';
 		emailForm += '&nbsp;';
 		emailForm += '<button type="button" id="checkEmailbtn" class="btn btn-xs btn-default">인증번호 발송</button>';
-		$("#changeEmail").html(emailForm);
+		$("#verifyNumberForm").html(emailForm);
 	});
 	
 	// 이메일 인증번호 발송 클릭이벤트
 	$(document).on("click", "#checkEmailbtn", function() {
 	
 // 		console.log("인증번호 발송 버튼");
+		// 이메일로 인증번호 발송
+		var originEmail = $('#buyerEmail1').val()+'@'+$('#buyerEmail2').val();
+		var email = $('#buyerEmail11').val()+'@'+$('#buyerEmail22').val();
+// 		console.log(email);
 		
-	})
+		if(originEmail == email) { // 이전 이메일과 입력한 이메일이 같을때
+			// 받은 인증번호 입력 폼
+			var verifyNumberForm = '';
+			verifyNumberForm += '<label>동일한 이메일입니다.</label>';
+			
+			$("#changeEmail").html(verifyNumberForm);
+			
+		} else { // 이전 이메일과 입력한 이메일이 다를 때
+		
+			$.ajax({
+				type: 'post'
+				, url: '/buyer/mailsender'
+				, data: {'email': email}
+				, dataType: 'json'
+				, success: function(res) {
+	// 				console.log(res);
+	
+					// 이메일로 보낸 인증번호 값 저장
+					var emailCode = res.emailCode; 
+					emailConfirm = emailCode;
+	// 				console.log("이메일인증번호값"+emailConfirm);
+				}
+				, error: function(e) {
+					console.log(e);
+					return;
+				}
+			});
+			
+			// 받은 인증번호 입력 폼
+			var verifyNumberForm = '';
+			verifyNumberForm += '<label>인증번호 입력</label>';
+			verifyNumberForm += '&nbsp;&nbsp;';
+			verifyNumberForm += '<input type="text" id="verifyNumber" name="verifyNumber" />';
+			verifyNumberForm += '&nbsp;&nbsp;';
+			verifyNumberForm += '<button type="button" id="changeEmailOk" class="btn btn-xs btn-primary">확인</button>';
+			verifyNumberForm += '<div id="verifyConfirm"></div>';
+			
+			$("#changeEmail").html(verifyNumberForm);
+		
+		}
+		
+	});
 	
 	// 이메일 수정 버튼 클릭이벤트
 	$(document).on("click", "#changeEmailOk", function() {
 		
-		$.ajax({
-			type: 'post'
-			, url: '/buyer/my/info/changeEmail'
-			, data: {'buyerEmail1':$('#buyerEmail11').val(), 'buyerEmail2':$('#buyerEmail22').val()}
-			, dataType: 'json'
-			, success: function(res) {
-				console.log(res);
-			}
-			, error: function(e) {
-				console.log(e);
-			}
-		});
+		// 사용자가 입력한 인증번호 값
+		var emailCode = $("#verifyNumber").val();
+		
+		var verifyConfirm = ''; // 이메일 변경 성공 여부 보여줄 내용 담는 변수
+		
+		if(emailCode == emailConfirm) {
+// 			console.log('인증번호 일치');
+// 			console.log(emailCode);
+// 			console.log(emailConfirm);
+			
+			$.ajax({
+				type: 'post'
+				, url: '/buyer/my/info/changeEmail'
+				, data: {'buyerEmail1':$('#buyerEmail11').val(), 'buyerEmail2':$('#buyerEmail22').val()}
+				, dataType: 'json'
+				, success: function(res) {
+//	 				console.log(res);
+					verifyConfirm += '<label>메일이 성공적으로 변경되었습니다!</label>';
+					$("#verifyConfirm").html(verifyConfirm);
+					$("#verifyConfirm").css("color", "green");
+				}
+				, error: function(e) {
+					console.log(e);
+					verifyConfirm += '<label>메일변경에 실패하였습니다.</label>';
+					$("#verifyConfirm").html(verifyConfirm);
+					$("#verifyConfirm").css("color", "green");
+				}
+			});
+			
+		} else {
+// 			console.log('인증번호 불일치');
+// 			console.log(emailCode);
+// 			console.log(emailConfirm);
+		
+			verifyConfirm += '<label>인증번호를 다시 확인해주세요!</label>';
+			$("#verifyConfirm").html(verifyConfirm);
+			$("#verifyConfirm").css("color", "red");
+			
+		}
 		
 	});
 	
@@ -211,19 +383,23 @@ $(document).ready(function() {
 
 <tr>
 	<td>비밀번호</td>
-	<td><input type="password" id="buyerPw" name="buyerPw" /></td>
+	<td>
+		<button type="button" id="changePw" class="btn btn-xs btn-default">변경</button>
+		<div id="changePwArea"></div>
+	</td>
+<!-- 	<td><input type="password" id="buyerPw" name="buyerPw" /></td> -->
 </tr>
 
-<tr>
-	<td>비밀번호 확인</td>
-	<td>
-		<div style="float: left;">
-			<input type="password" id="confirmPw" name="confirmPw" />
-		</div>
-		<div id="okPw" style="float: left; padding-left: 5px;"></div> <!-- 비밀번호 비교결과가 보여질 부분 -->
-	</td>
+<!-- <tr> -->
+<!-- 	<td>비밀번호 확인</td> -->
+<!-- 	<td> -->
+<!-- 		<div style="float: left;"> -->
+<!-- 			<input type="password" id="confirmPw" name="confirmPw" /> -->
+<!-- 		</div> -->
+<!-- 		<div id="okPw" style="float: left; padding-left: 5px;"></div> 비밀번호 비교결과가 보여질 부분 -->
+<!-- 	</td> -->
 	
-</tr>
+<!-- </tr> -->
 
 <tr>
 	<td>이름</td>
@@ -233,9 +409,9 @@ $(document).ready(function() {
 <tr>
 	<td>이메일</td>
 	<td>
-		<input style="width: 80px; text-align: center;" type="text" value="${buyerInfo.buyerEmail1 }" name="buyerEmail1" disabled />
+		<input id="buyerEmail1" style="width: 80px; text-align: center;" type="text" value="${buyerInfo.buyerEmail1 }" name="buyerEmail1" disabled />
 		&nbsp;@&nbsp;
-		<input style="width: 80px; text-align: center;" type="text" value="${buyerInfo.buyerEmail2 }" name="buyerEmail2" disabled />
+		<input id="buyerEmail2" style="width: 80px; text-align: center;" type="text" value="${buyerInfo.buyerEmail2 }" name="buyerEmail2" disabled />
 		&nbsp;
 		<button type="button" id="changeEmailbtn" class="btn btn-xs btn-default">변경</button>
 		<!-- 
@@ -251,7 +427,8 @@ $(document).ready(function() {
 			<option value="nate.com">nate.com</option> 
 		</select>
 		 -->
-		<div id="changeEmail" style="padding-top: 20px;"></div> <!-- 이메일 변경 구역 -->
+		<div id="verifyNumberForm" style="padding-top: 20px;"></div> <!-- 변경할 이메일 입력 구역 --> 
+		<div id="changeEmail" style="padding-top: 20px;"></div> <!-- 인증번호 입력 구역 -->
 	</td>
 </tr>
 
@@ -274,72 +451,6 @@ $(document).ready(function() {
 
 </table>
 
-	<div class="">
-		<div style="">
-		<label>아이디</label>
-			${buyerId }
-		</div>
-	</div>
-	
-	<div style="">
-		<label>비밀번호</label>
-			<input class="" type="password" name="buyerPw" id="buyerPw">
-	</div> 
-	<div id="pwTest"></div>
-	
-	<div class="">
-		<label class="">비밀번호 확인</label>
-		<div class="">
-			<input class="" type="password" name="pwConfirm" id="pwConfirm">
-		</div>
-		<div id="okPw"></div>
-	</div>
-	
-	<div class="">
-		<label class="">이름</label>
-		<div class="">
-			<input class="" type="text" name="buyerName" id="buyerName">
-		</div>
-	</div>
-	
-	<div class="">
-		<label class="">Email</label>
-		<div class="">
-			<input class="" type="" name="buyerEmail" id="buyerEmail">
-		</div>
-		<input class="btn"type="button" value="인증코드발송" id="okemail">
-		<div id="isItEmail"></div>
-	</div>
-	
-	<div class="">
-		<label class="">인증코드</label>
-		<div class="">
-			<input class="" type="text" name="emailCode" id="emailCode"> <!-- 메일로 받은 인증코드를 입력하는 값  -->
-		</div>
-		<input class="btn" type="button" id="codeSame" value="확인">		<!-- 메일의 인증코드와 같은지 확인하는 버튼 -->
-		<input type="hidden" value="" id="emailConfirm">		<!-- 메일로 보낸 인증코드를 저장하여 비교하는 hidden값 -->
-	</div>
-	
-	<div class="">
-		<label class="">휴대전화</label>
-		<div class="">
-			<input class="" type="text" name="buyerPhone" id="buyerPhone">
-		</div>
-	</div>
-	
-	<br><br>
-	
-	<div class=""></div>
-	<div class="">
-		<input class="btn btn-primary btn-lg btn-block" type="submit" name="join" id="join" value="가입" />
-	</div>
-	
-
-	<div class="col-sm-2">
-		<a href="/buyer/login"><button class="btn btn-lg btn-block" type="button">취소</button></a>
-	</div>
-	
-	<br><br><br><br><br><br><br>
 </form>
 </c:if>
 
