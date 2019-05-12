@@ -113,24 +113,25 @@ $(document).ready(function() {
 	$(document).on("click", "#changePwOk", function() {
 		
 		// 유효성 검사 true, 비밀번호 같은 경우에만 비밀번호 변경 가능
+		var changePass = '';
 		if(passwordVerify && passwordConfirm) {
 // 			console.log('모두 완료');
 			
-			var changePass = '';
 			$.ajax({
 				type: 'post'
 				, url: '/buyer/my/info/changePw'
 				, data: {'buyerPw':$('#buyerPw').val()}
 				, dataType: 'json'
 				, success: function(res) {
+					console.log('비밀번호 변경:'+res);
 					changePass += '<label>비밀번호가 성공적으로 변경되었습니다.</label>';
-					$("#changePassSuccess").html();
+					$("#changePassSuccess").html(changePass);
 					$("#changePassSuccess").css("color", "green");
 				}
 				, error: function(e) {
 					console.log(e);
 					changePass += '<label>비밀번호 변경에 실패하였습니다.</label>';
-					$("#changePassSuccess").html();
+					$("#changePassSuccess").html(changePass);
 					$("#changePassSuccess").css("color", "red");
 				}
 			
@@ -139,7 +140,7 @@ $(document).ready(function() {
 		} else {
 // 			console.log('완료 안됨');
 			changePass += '<label>비밀번호를 다시 확인해주세요.</label>';
-			$("#changePassSuccess").html();
+			$("#changePassSuccess").html(changePass);
 			$("#changePassSuccess").css("color", "red");
 		}
 		
@@ -248,7 +249,7 @@ $(document).ready(function() {
 					console.log(e);
 					verifyConfirm += '<label>메일변경에 실패하였습니다.</label>';
 					$("#verifyConfirm").html(verifyConfirm);
-					$("#verifyConfirm").css("color", "green");
+					$("#verifyConfirm").css("color", "red");
 				}
 			});
 			

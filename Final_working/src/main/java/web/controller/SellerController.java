@@ -212,7 +212,7 @@ public class SellerController {
 		// 판매시간 조회
 		sellerLoc = sellerService.getSellerLoc(sellerId);
 		
-		logger.info(":::::판매시간 조회:::::"+sellerLoc.toString());
+//		logger.info(":::::판매시간 조회:::::"+sellerLoc.toString());
 		
 		String startTime="";
 		String startTime1="";
@@ -257,7 +257,7 @@ public class SellerController {
 	@RequestMapping(value="/seller/updateTime", method=RequestMethod.POST)
 	public String updateTime(SellerLoc sellerLoc, HttpSession session) {
 		
-//		logger.info("변경할 시간:"+sellerLoc);
+		logger.info("변경할 시간:"+sellerLoc);
 		
 		// 세션값 가져오기
 		String sellerId = (String) session.getAttribute("sellerId");
@@ -271,14 +271,14 @@ public class SellerController {
 		String endTime2 = sellerLoc.getEndTime2();
 		String sellerTimeE = "";
 		
-		if(Integer.parseInt(startTime2)>=0 && Integer.parseInt(startTime2)<10) {
+		if(Integer.parseInt(startTime2)>0 && Integer.parseInt(startTime2)<10) {
 			sellerTimeS = startTime1 + "0" + startTime2;
 		} else {
 			sellerTimeS = startTime1 + startTime2;
 		}
 //		logger.info("sellerTimeS:"+sellerTimeS);
 		
-		if(Integer.parseInt(endTime2)>=0 && Integer.parseInt(endTime2)<10) {
+		if(Integer.parseInt(endTime2)>0 && Integer.parseInt(endTime2)<10) {
 			sellerTimeE = endTime1 + "0" + endTime2;
 		} else {
 			sellerTimeE = endTime1 + endTime2;
@@ -367,14 +367,19 @@ public class SellerController {
 			
 			// 2. bookListInfo의 크기동안 반복
 			for(int i=0; i<bookListInfo.size(); i++) {
-				if(sysdate.before(bookListInfo.get(i).getPickupDate())) {
-//				logger.info("현재시간이 더 큼");
-					
-				} else { 
-//				logger.info("DB시간이 더 큼");
-					
-					// 3. DB에 저장된 시간이 현재시간보다 클때 취소상태로 변경
-					sellerService.setPickupDate(bookListInfo.get(i));
+				// 상태가 예약인 경우에만
+				if(bookListInfo.get(i).getStatus().equals("예약")) {
+					if(sysdate.before(bookListInfo.get(i).getPickupDate())) {
+	//				logger.info("현재시간이 더 큼");
+						
+					} else { 
+	//				logger.info("DB시간이 더 큼");
+						
+						// 취소한 부수만큼 증가시키기
+						sellerService.setCirculation(bookListInfo.get(i));
+						// 4. DB에 저장된 시간이 현재시간보다 클때 취소상태로 변경
+						sellerService.setPickupDate(bookListInfo.get(i));
+					}
 				}
 			}
 			
@@ -392,9 +397,14 @@ public class SellerController {
 	public String bookCancel(Reservation reservation) {
 		
 //		logger.info(reservation.toString());
+		// reserveNo로 해당 컬럼 조회
+		reservation = sellerService.getReservationInfo(reservation);
 		
 		// reserveNo로 예약내역-예약취소로 변경
 		sellerService.cancelReserve(reservation.getReserveNo());
+		
+		// sellerloc에 취소한 수량 증가
+		sellerService.setCirculation(reservation);
 		
 		return "redirect:/seller/bookinglist";
 	}
