@@ -282,4 +282,10 @@
 		ORDER BY bannerNo
 	</select>
 	
+	<update id="updateBuyerInfoAtMypage" parameterType="web.dto.BuyerInfo">
+		UPDATE buyerInfo
+		SET buyerPw = #{buyerPw }
+		WHERE buyerId = #{buyerId }
+	</update>
+	
 </mapper>

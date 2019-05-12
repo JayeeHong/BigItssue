@@ -45,7 +45,7 @@ $(document).ready(function() {
 		var pwForm = '';
 		pwForm += '<div>';
 		pwForm += '	<br><label>변경할 비밀번호 : </label>';
-		pwForm += '	&nbsp;<input type="password" id="buyerPw" /><br>';
+		pwForm += '	&nbsp;<input type="password" maxlength="16" id="buyerPw" /><br>';
 		pwForm += '</div>';
 		pwForm += '<div id="insertPw"></div>'; // 비밀번호 유효성 결과가 보여질 구역
 		
@@ -123,10 +123,14 @@ $(document).ready(function() {
 				, data: {'buyerPw':$('#buyerPw').val()}
 				, dataType: 'json'
 				, success: function(res) {
-					console.log('비밀번호 변경:'+res);
-					changePass += '<label>비밀번호가 성공적으로 변경되었습니다.</label>';
+					console.log('비밀번호 변경:'+res.buyerInfo);
+					console.log('비밀번호 변경 세션:'+res.session);
+					changePass += '<label>비밀번호가 성공적으로 변경되었습니다.<br>3초 후 자동으로 로그아웃됩니다.</label>';
 					$("#changePassSuccess").html(changePass);
 					$("#changePassSuccess").css("color", "green");
+					
+					setTimeout('history.go(0);',3000);
+
 				}
 				, error: function(e) {
 					console.log(e);
@@ -307,7 +311,7 @@ $(document).ready(function() {
 		$("#cancelArea").html(null); // 취소버튼 영역 안보이게
 		$("#changePhone").html(null); // 수정할 연락처 부분 안보이게
 	
-	})
+	});
 	
 	// 연락처 수정 버튼 클릭이벤트
 // 	$("#changePhoneOk").click(function() {

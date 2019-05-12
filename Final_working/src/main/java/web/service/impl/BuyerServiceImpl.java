@@ -313,6 +313,11 @@ public class BuyerServiceImpl implements BuyerService {
 	public Notice getNoticeView(int noticeNo) {
 		return buyerDao.getNoticeView(noticeNo);
 	}
+
+	@Override
+	public void setBuyerInfoAtMypage(BuyerInfo buyerInfo) {
+		buyerDao.updateBuyerInfoAtMypage(buyerInfo);
+	}
   
 
 }
