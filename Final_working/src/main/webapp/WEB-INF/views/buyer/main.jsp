@@ -208,7 +208,8 @@ function inquire(id,sort){
 <%-- <jsp:include page="mainBanner.jsp" /> --%>
 
 
-<div class="container">
+<!-- <div class="container"> -->
+
 
   <!-- 웹소켓 열기. 다른페이지에서도 새로운 메시지 확인하기위해서. -->
   <!-- 현재시간 받아오기 -->
@@ -244,6 +245,7 @@ function inquire(id,sort){
 		<button style="margin-bottom:6px;" class="btn btn-primary btn-sm">검색</button>
 		</div><br>
 	</form>
+
 	
 	
 	
@@ -329,6 +331,5 @@ function inquire(id,sort){
 <!-- <input style ="width:1px; height:1px; float:left;"id="popupFlag" type="text" onFocus="popupFunc()"> -->
 
 
-</div>
 </div>
 </div>

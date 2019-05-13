@@ -3,6 +3,7 @@ package web.dao.face;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Param;
 
 import web.dto.AdminInfo;
@@ -212,7 +213,17 @@ public interface AdminDao {
 	public List<SellerInfo> nullUserInfo(String i);
 
 	
-	public List<Message> getChatRoomNo();
+	public List<Message> getChatRoomNo(Paging paging);
+
+	public List<Message> getChatMessage(int chatRoomNo);
+
+	public int getChatListTotalCount();
+
+	// 판매자 이미지만 지우기
+	public void deleteSellerImg(SellerBigdomInfo sbInfo);
+
+	// 판매자 정보 이미지 제외하고 업데이트 쿼리(이미지가 없을 때)
+	public void updateSellerWithoutImg(SellerBigdomInfo sbInfo);
 
 
 

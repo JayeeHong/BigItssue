@@ -110,6 +110,23 @@
  	margin: 0px auto; 
 }
 
+#deleteImg {
+	display: inline-block; 
+	padding: .5em .75em; 
+	color: #999; 
+	font-size: inherit; 
+	line-height: normal; 
+	vertical-align: middle; 
+	background-color: #e8e8e8; 
+	cursor: pointer; 
+	border: 0px; 
+	border-bottom-color: #e2e2e2; 
+	border-radius: .25em;
+	text-align: center;
+	margin: auto 0; 
+	font-weight: bold;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -261,6 +278,12 @@ $(document).ready(function() {
 // 	});
 });
 
+function deleteImage() { // 사진 삭제 버튼
+// 	console.log('ㅁㄴㅇㅁㄴㅇ');
+	$('.filebox .upload-hidden2').value=''; // 파일명 위치 값 지우기
+	$('#imgUp_area2').html('사진이 없습니다.<br>사진을 등록해주세요.'); // 이미지 위치에 사진없음으로 표시
+}
+
 function inNumber(){
 	if(event.keyCode<48 || event.keyCode>57){
 		event.returnValue=false;
@@ -296,6 +319,18 @@ function toList() {
 // }
 
 function upSeller(sellerId) {
+	
+	if(true) {
+		if(!document.upForm.sellerPhone2.value) {
+			alert("전화번호를 입력하세요!");
+			return false;
+		}
+		if(!document.upForm.sellerPhone3.value) {
+			alert("전화번호를 입력하세요!");
+			return false;
+		}
+	}
+	
 	result = confirm('판매자 정보를 변경하시겠습니까?');
 	
 	if(result==true) {
@@ -393,19 +428,27 @@ function activateBigdom(bigdomId) {
 		<!-- input file 디자인 테스트 -->
 		
 		<div class="filebox preview-image"> 
-			<div style="text-align: center;" class="upload-display">
-				<div style="width: 150px; height: 150px;" class="upload-thumb-wrap" id="imgUp_area">
-					<c:if test="${sbList.sellerImg eq null }">
-						사진이 없습니다.<br>사진을 등록해주세요.
-					</c:if>
-					<c:if test="${sbList.sellerImg ne null }">
-						<img class="upload-thumb" name="sellerImg" src="/upload/${sbList.sellerImg }" />
-					</c:if>
+			<c:if test="${sbList.sellerImg eq null }">
+				<div style="text-align: center;" class="upload-display">
+					<div style="width: 150px; height: 150px;" class="upload-thumb-wrap" id="imgUp_area">
+							사진이 없습니다.<br>사진을 등록해주세요.
+					</div>
+	<!-- 			<img id="img_preview" style="display:none;"/> -->
+				<label for="file">사진 편집</label>
+				<input type="file" id="file" name="file" class="upload-hidden" accept="image/*" />
 				</div>
-<!-- 			<img id="img_preview" style="display:none;"/> -->
-			<label for="file">사진 편집</label>
-			<input type="file" id="file" name="file" class="upload-hidden" accept="image/*" />
-			</div>
+			</c:if>
+					
+			<c:if test="${sbList.sellerImg ne null }">
+				<div style="text-align: center;" class="upload-display">
+					<div style="width: 150px; height: 150px;" class="upload-thumb-wrap" id="imgUp_area2">
+						<img class="upload-thumb" name="sellerImg" src="/upload/${sbList.sellerImg }" />
+					</div>	
+				<button type="button" id="deleteImg" onclick="deleteImage();" style="width: 81px;">사진 삭제</button>
+				<label style="width: 81px;" for="file">사진 편집</label>
+				<input type="file" id="file" name="file" class="upload-hidden2" accept="image/*" />
+				</div>
+			</c:if>
 		</div>
 
 
@@ -475,10 +518,10 @@ function activateBigdom(bigdomId) {
 <%-- 	<button class="btn btn-xs btn-danger" onclick="delBigdom('${sbList.bigdomId }');">삭제</button> --%>
 	<c:if test="${sellerStatus }">
 		<c:if test="${not bigdomStatus }">
-		<button class="btn btn-xs btn-success" onclick="activateBigdom('${sbList.bigdomId}');">활성화</button>
+		<button type="button" class="btn btn-xs btn-success" onclick="activateBigdom('${sbList.bigdomId}');">활성화</button>
 		</c:if>
 		<c:if test="${bigdomStatus }">
-		<button class="btn btn-xs btn-danger" onclick="deactivateBigdom('${sbList.bigdomId}');">비활성화</button>
+		<button type="button" class="btn btn-xs btn-danger" onclick="deactivateBigdom('${sbList.bigdomId}');">비활성화</button>
 		</c:if>
 	</c:if>
 	
@@ -488,14 +531,14 @@ function activateBigdom(bigdomId) {
 </table>
 <br><br>
 <div style="text-align: center;">
-<button class="btn btn-default" onclick="toList();">목록</button>
-<button class="btn btn-primary" onclick="upSeller('${sbList.sellerId}');">수정</button>
+<button type="button" class="btn btn-default" onclick="toList();">목록</button>
+<button type="button" class="btn btn-primary" onclick="upSeller('${sbList.sellerId}');">수정</button>
 
 <c:if test="${not sellerStatus }">
-<button class="btn btn-success" onclick="activateSeller('${sbList.sellerId}');">활성화</button>
+<button type="button" class="btn btn-success" onclick="activateSeller('${sbList.sellerId}');">활성화</button>
 </c:if>
 <c:if test="${sellerStatus }">
-<button class="btn btn-danger" onclick="deactivateSeller('${sbList.sellerId}');">비활성화</button>
+<button type="button" class="btn btn-danger" onclick="deactivateSeller('${sbList.sellerId}');">비활성화</button>
 </c:if>
 
 </div>

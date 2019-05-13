@@ -216,12 +216,9 @@ input[type=number]{
 </style>    
 
 
-<div class="row row-offcanvas row-offcanvas-right" >
-
-
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
-
+<div class="" style=" width:1200px;" >
 
 <h3>판매자정보 수정</h3>
 	<div class="container-center" style="float:left; width:70%;" >
@@ -238,6 +235,7 @@ input[type=number]{
 				<input type="radio" name="bigArea" value="부산">부산
 				</label>
 			</td>
+			<td style="border-bottom: hidden;border-top: hidden;border-right: hidden;">&nbsp;</td>
 		</tr>
 		
 		<tr>
@@ -253,7 +251,7 @@ input[type=number]{
 			<div id="addZone"><!-- 추가한 버튼이 들어오는 영역 -->
 			</div>
 			</td>
-		
+			
 		</tr>
 	
 		<tr>
@@ -261,6 +259,7 @@ input[type=number]{
 			<td class="tdRight" colspan="3">
 			<input class="form-control" type="text" id="station" name="station">
 			</td>
+			
 		</tr>
 	
 		<tr>
@@ -286,6 +285,7 @@ input[type=number]{
 			<input type="radio" name="sellerCard" value="카드 불가능">카드 불가능
 			</label>
 			</td>
+			
 		</tr>
 		
 		<tr>
@@ -298,6 +298,7 @@ input[type=number]{
 				<input class="form-control" style="width:75px;" type="number" name="endTime2" id="endTime2">
 				</div>
 			</td>
+			
 		</tr>
 		
 		<tr>
@@ -305,6 +306,7 @@ input[type=number]{
 			<td class="tdRight" colspan="3">
 			<input class="form-control" type="text" id="sellerId" name="sellerId" value="${sellerInfo.sellerId }" >
 			</td>
+			
 		</tr>
 		
 		

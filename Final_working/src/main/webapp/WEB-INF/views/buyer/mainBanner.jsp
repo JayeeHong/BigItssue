@@ -13,13 +13,13 @@ $(document).ready(function() {
 <style type="text/css">
 .carousel-inner {
   width: 100%;
-  height: 638.469px;
+  height: 460px;
 /*   background-size: contain; */
 }
 
 .bannerImg { 
   width: 100%;
-  height: 638.469px; 
+  height: 460px; 
 }
 
 </style>

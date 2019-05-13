@@ -1,5 +1,6 @@
 package web.service.impl;
 
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -67,9 +68,9 @@ public class BuyerServiceImpl implements BuyerService {
 
 
 				// 네이버일 경우 smtp.naver.com 을 입력합니다. // Google일 경우 smtp.gmail.com 을 입력합니다. 
-				String host = "smtp.naver.com"; 
-				final String username = "eungone0205"; //네이버 아이디를 입력해주세요. @naver.com은 입력하지 마시구요. 
-				final String password = "jeon1027"; //네이버 이메일 비밀번호를 입력해주세요. 
+				String host = "smtp.gmail.com"; 
+				final String username = "bigitssue4"; //네이버 아이디를 입력해주세요. @naver.com은 입력하지 마시구요. 
+				final String password = "bigitssue4_final"; //네이버 이메일 비밀번호를 입력해주세요. 
 				int port=465; //포트번호 
 				
 				
@@ -312,6 +313,42 @@ public class BuyerServiceImpl implements BuyerService {
 	@Override
 	public Notice getNoticeView(int noticeNo) {
 		return buyerDao.getNoticeView(noticeNo);
+	}
+
+	@Override
+	public void setBuyerInfoAtMypage(BuyerInfo buyerInfo) {
+		buyerDao.updateBuyerInfoAtMypage(buyerInfo);
+
+  @Override
+	public String shaPw(String buyerPw) {
+		String pw = buyerPw;
+		
+		 try{
+	            MessageDigest md = MessageDigest.getInstance("SHA-256");
+	            md.update(pw.getBytes());
+	            byte byteData[] = md.digest();
+
+	            StringBuffer sb = new StringBuffer();
+	            for (int i = 0; i < byteData.length; i++) {
+	                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+	            }
+
+	            StringBuffer hexString = new StringBuffer();
+	            for (int i=0;i<byteData.length;i++) {
+	                String hex=Integer.toHexString(0xff & byteData[i]);
+	                if(hex.length()==1){
+	                    hexString.append('0');
+	                }
+	                hexString.append(hex);
+	            }
+
+	           return hexString.toString();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	            throw new RuntimeException();
+	        }
+		
+
 	}
   
 

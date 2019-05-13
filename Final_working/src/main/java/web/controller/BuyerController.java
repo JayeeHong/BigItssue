@@ -108,6 +108,7 @@ public class BuyerController {
 		//------------------------------------------------------
 		//메인 배너
 		// 배너목록 MODEL로 추가
+
 		List<MainBanner> mainBannerList = buyerService.getBannerList();
 		model.addAttribute("mainBannerList", mainBannerList);
 		
@@ -259,10 +260,11 @@ public class BuyerController {
 		model.addAllAttributes(map);
 
 		
-		String subject = "가입인증 메일입니다 "; //메일 제목 입력해주세요. 
-		String frontBody = "인증코드란에 "; //앞단
+		String subject = "[빅이슈] 인증 메일입니다."; //메일 제목 입력해주세요. 
+		String frontBody = "이메일 인증을 완료하려면 인증코드란에 "; //앞단
 		String middleBody = code;
-		String endBody = "를 써주세요"; //뒷단
+		String endBody = "를 써주세요\n"; //뒷단
+		endBody += "본 메일은 발신전용입니다.";
 		String body = frontBody+middleBody+endBody;
 		
 		
@@ -315,7 +317,11 @@ public class BuyerController {
 	@RequestMapping(value="/buyer/join", method=RequestMethod.POST)
 	public String buyerJoin(BuyerInfo buyerInfo) {
 		
-		System.out.println(buyerInfo.toString());
+//		System.out.println(buyerInfo.toString());
+		buyerInfo.setBuyerPhone(buyerInfo.getBuyerPhone1()+"-"+buyerInfo.getBuyerPhone2()+"-"+buyerInfo.getBuyerPhone3());
+		
+		//비밀번호를 암호화하여여 buyerInfo에 다시 세팅하기
+		buyerInfo.setBuyerPw(buyerService.shaPw(buyerInfo.getBuyerPw()));
 		
 		buyerService.buyerJoin(buyerInfo);
 		
@@ -330,6 +336,9 @@ public class BuyerController {
 	
 	@RequestMapping(value="/buyer/login", method=RequestMethod.POST)
 	public String buyerLogin(BuyerInfo buyerInfo, HttpSession session) {
+		
+		//비밀번호를 암호화하여여 buyerInfo에 다시 세팅하기
+		buyerInfo.setBuyerPw(buyerService.shaPw(buyerInfo.getBuyerPw()));
 		
 		boolean user = buyerService.buyerLogin(buyerInfo);
 		
@@ -446,7 +455,8 @@ public class BuyerController {
 			//1. 있다면 비밀번호 변경	
 			String newPw = UUID.randomUUID().toString().split("-")[0];
 			
-			buyerInfo.setBuyerPw(newPw);
+			//비밀번호를 암호화하여여 buyerInfo에 다시 세팅하기
+			buyerInfo.setBuyerPw(buyerService.shaPw(newPw));
 			
 			buyerService.pwUpdate(buyerInfo);
 			
@@ -778,6 +788,25 @@ public class BuyerController {
 		
 		return "jsonView";
 	}
+	
+	// ------------------------------------진행중
+	@RequestMapping(value="/buyer/my/info/changePw", method=RequestMethod.POST)
+	public String myInfoChangePw(BuyerInfo buyerInfo, HttpSession session) {
+		
+		// 세션 정보 가져오기
+		buyerInfo.setBuyerId((String) session.getAttribute("buyerId"));
+
+//		logger.info(":::비밀번호 변경::::"+buyerInfo.toString());
+		
+		// 비밀번호 변경
+		buyerService.setBuyerInfoAtMypage(buyerInfo);
+		
+		// 비밀번호 변경 후 세션 만료
+		session.invalidate();
+		
+		return "jsonView";
+	}
+	// ------------------------------------진행중
 	
 	@RequestMapping(value="/buyer/my/confirmpw", method=RequestMethod.POST)
 	public void myPwConfirm(BuyerInfo buyerInfo, HttpSession session, HttpServletResponse res) throws IOException { // 마이페이지-정보수정 -> 비밀번호확인
