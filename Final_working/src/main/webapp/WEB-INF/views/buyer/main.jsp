@@ -42,7 +42,7 @@ function inquire(id,sort){
 <!-- 현재시간 받아오기 -->
 <fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
 
-<jsp:include page="mainBanner.jsp" />
+<%-- <jsp:include page="mainBanner.jsp" /> --%>
 
 <!-- 장소,위치 검색 (select태그이용) -->
 <form action="/buyer/main" method="POST">

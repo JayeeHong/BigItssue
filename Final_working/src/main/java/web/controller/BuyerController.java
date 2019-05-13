@@ -108,8 +108,8 @@ public class BuyerController {
 		//------------------------------------------------------
 		//메인 배너
 		// 배너목록 MODEL로 추가
-		List<MainBanner> mainBannerList = buyerService.getBannerList();
-		model.addAttribute("mainBannerList", mainBannerList);
+		//List<MainBanner> mainBannerList = buyerService.getBannerList();
+		//model.addAttribute("mainBannerList", mainBannerList);
 				
 	}
 	@RequestMapping(value="/buyer/main", method=RequestMethod.POST)
