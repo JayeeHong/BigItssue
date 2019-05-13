@@ -95,7 +95,7 @@ function sellerlocActivate() {
 <tr>
 	<td>${sellerlocListActivate[i].locNo }</td>
 	<td>${sellerlocListActivate[i].zone }</td>
-	<td><a href="/admin/book/view?sellerId=${sellerlocList[i].sellerId }">${sellerlocListActivate[i].station }</a></td>
+	<td><a href="/admin/book/view?sellerId=${sellerlocListActivate[i].sellerId }">${sellerlocListActivate[i].station }</a></td>
 	<td>${sellerlocListActivate[i].spot }</td>
 	<td>${sellerlocListActivate[i].sellerId }</td>
 </tr>

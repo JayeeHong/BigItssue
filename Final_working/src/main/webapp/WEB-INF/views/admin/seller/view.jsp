@@ -133,8 +133,8 @@ function addZone(){
 function add(){
 	var html =""
 	for(var i=0; i< arr.length; i++){
-		html += '<input class="form control" style="border:none; background:white; width:40px;"type="text" value="'+arr[i]+'" disabled/>'
-		html += '<input class="btn btn-danger btn-xs" style="width:30px; padding:0px; border:0px;" "type="button" value="삭제" onclick="arrDelete('+i+')">'
+		html += '<input class="form control" style="margin-right:3px; border:none; background:white; width:40px;"type="text" value="'+arr[i]+'" disabled/>'
+		html += '<input class="btn btn-xs" style="background:#ff8a8a; width:30px; padding:0px; border:0px;" "type="button" value="삭제" onclick="arrDelete('+i+')">'
 		html += '&nbsp;'
 	}
 	
@@ -190,7 +190,9 @@ function subwayList(){
 	})
 }
 
-
+function btnCc(){
+	window.location.href="/admin/seller/list"
+}
 
 </script>
     
@@ -311,8 +313,8 @@ input[type=number]{
 		
 		</table>
 		<div class="container container-center">
-		<input class="btn btn-primary" type="submit" value="수정">
-		<a href="/admin/seller/list"><button class="btn btn-danger" type="button">취소</button></a>
+		<input class="btn" style="background:#e0effd;" type="submit" value="수정">
+		<button class="btn" style="background:#ff8a8a;" type="button" onclick="btnCc()">취소</button>
 		</div>
 		
 		<input type="hidden" id="arrZone" name="arrZone"> <!-- 배열로 만들어진 zone을 보내기 위한 input type히든 건들지마시오 -->

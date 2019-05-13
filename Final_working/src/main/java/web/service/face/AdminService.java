@@ -5,11 +5,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.ChatReport;
 import web.dto.MainBanner;
 import web.dto.Message;
 import web.dto.Notice;
@@ -46,6 +50,17 @@ public interface AdminService {
 
 	public void noticeUpdate(Notice notice);
 
+	// 판매자 정보관리 수정
+	public void adminSellserUpdate(SellerLoc sellerLoc);
+
+	public String getSellerName(SellerLoc locInfo);
+
+	// 판매 장소 추가하기
+	public void insertList(SellerLoc sellerLoc);
+
+	// 판매 장소 삭제하기
+	public void deleteList(SellerLoc sellerLoc);
+
 	// 관리자 로그인
 	public boolean login(AdminInfo adminInfo);
 
@@ -61,6 +76,9 @@ public interface AdminService {
 
 	// 판매자 정보와 판매자에 따른 빅돔 정보 불러오기(sellerid에 해당하는것만)
 	public SellerBigdomInfo getSellerBigdomInfo(String sellerId);
+
+	// 판매자 계정관리에서 이미지 업로드
+	public void sellerImgupAtadmin(SellerInfo sellerinfo);
 
 	// 판매자 정보 업데이트
 	public void sellerUpdate(SellerBigdomInfo sbInfo);
@@ -168,25 +186,39 @@ public interface AdminService {
 	// 해당 판매자의 보유 빅이슈 정보 추가
 	public void putBookListInfoAtadminBook(BookListInfo bli);
 
-	
-	//판매자 정보관리 수정
-	public void adminSellserUpdate(SellerLoc sellerLoc);
+	// 해당 판매자의 보유 빅이슈 수정
+	public void adminBookViewUpdate(BookListInfo booklistInfo);
 
-	public String getSellerName(SellerLoc locInfo);
-
-
-	//판매 장소 추가하기
-	public void insertList(SellerLoc sellerLoc);
+	// 해당 판매자의 보유 빅이슈 삭제
+	public void adminBookViewDelete(BookListInfo booklistInfo);
   
-	//판매 장소 삭제하기
-	public void deleteList(SellerLoc sellerLoc);
+	// 신고내역 전체 불러오기
+	public List<ChatReport> getChatReportList();
+
+	// 요청파라미터로 현재페이지 받기-신고내역 리스트
+	public int getReportInfoCurPage(HttpServletRequest req);
+
+	// 해당게시글 수 불러오기-신고내역 리스트
+	public int getReportInfoTotalCount();
+
+	// reportNo로 해당하는 신고내역 조회
+	public ChatReport getReportByReportNo(int reportNo);
+
+	// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회
+	public List<ChatReport> getReportByChatReport(ChatReport reportByReportNo);
 
 	
 	//배너 리스트 얻기
 	public List<MainBanner> getBanner();
-
+	
+	//배너 번호 얻기
+	public int getBannerNo();
+	
 	//배너 추가하기
-	public void writeBanner(MainBanner mainBanner);
+	public void addBanner(MainBanner mainBanner);
+
+	//배너 삭제
+	public void deleteBanner(int bannerNo);
 	
 	
   public List<String> userIdList(String abc);

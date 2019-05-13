@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -19,13 +21,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
 import web.dto.BookListInfo;
 import web.dto.BuyerInfo;
+import web.dto.ChatReport;
 import web.dto.MainBanner;
 import web.dto.Message;
 import web.dto.Notice;
@@ -151,13 +156,15 @@ public class AdminController {
 		
 		// sellerid로 정보 조회
 		SellerBigdomInfo sbList = adminService.getSellerBigdomInfo(sbInfo.getSellerId());
-//		logger.info(sbList.toString());
+		logger.info(":::::sellerBigdomInfo:::::"+sbList.toString());
 		
-		String sellerPhone = sbList.getSellerPhone();
-		if(sellerPhone != null && !"".equals(sellerPhone)) {
-			sbList.setSellerPhone1(sellerPhone.split("-")[0]);
-			sbList.setSellerPhone2(sellerPhone.split("-")[1]);
-			sbList.setSellerPhone3(sellerPhone.split("-")[2]);
+		if(sbList != null && !"".equals(sbList)) {
+			String sellerPhone = sbList.getSellerPhone();
+			if(sellerPhone != null && !"".equals(sellerPhone)) {
+				sbList.setSellerPhone1(sellerPhone.split("-")[0]);
+				sbList.setSellerPhone2(sellerPhone.split("-")[1]);
+				sbList.setSellerPhone3(sellerPhone.split("-")[2]);
+			}
 		}
 		
 		// sellerloc에 해당 판매자가 있는지 조회
@@ -174,15 +181,81 @@ public class AdminController {
 		model.addAttribute("bigdomStatus", bigdomStatus);
 	}
 	
-	@RequestMapping(value="/admin/info/sellerUp", method=RequestMethod.GET)
-	public String infoSellerUp(SellerBigdomInfo sbInfo) { // 계정관리-판매자_정보수정
+	@RequestMapping(value="/admin/info/sellerUp", method=RequestMethod.POST)
+	public String infoSellerUp(SellerBigdomInfo sbInfo, MultipartFile file) { // 계정관리-판매자_정보수정
 		
 		sbInfo.setSellerPhone(sbInfo.getSellerPhone1()+"-"+sbInfo.getSellerPhone2()+"-"+sbInfo.getSellerPhone3());
+//		logger.info("file:::::::"+file);
+		// --- 파일 업로드 ---
+		// 고유한 식별자
+		String uID = UUID.randomUUID().toString().split("-")[0];
+		
+		// 저장될 파일 이름
+		String stored_name = null;
+		stored_name = file.getOriginalFilename()+"_"+uID;
+//		logger.info(":::::stored_name:::::"+stored_name);
+		// 파일이 저장될 경로
+		String path = context.getRealPath("upload");
+//		logger.info(":::::path::::::::"+path);
+		// 저장될 파일
+		File dest = new File(path, stored_name);
+		
+		// 파일 업로드
+		try {
+			file.transferTo(dest);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		sbInfo.setSellerImg(stored_name);
+		
 //		logger.info("ssssss::::::"+sbInfo.toString());
 		// sellerid로 해당 판매자 정보 업데이트
 		adminService.sellerUpdate(sbInfo);
 		
 		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
+	}
+	
+	@RequestMapping(value="/admin/info/seller/imgUp", method=RequestMethod.POST)
+	public String infoSellerImgup(
+			SellerInfo sellerinfo, MultipartFile file,
+			Model model) {
+		
+//		logger.info(":::::사진업로드 시 판매자정보:::::"+sellerinfo.toString());
+
+		// 고유한 식별자
+		String uID = UUID.randomUUID().toString().split("-")[0];
+		
+		// 저장될 파일 이름
+		String stored_name = null;
+		stored_name = file.getOriginalFilename()+"_"+uID;
+		
+		// 파일이 저장될 경로
+		String path = context.getRealPath("upload");
+		
+		// 저장될 파일
+		File dest = new File(path, stored_name);
+		
+		// 파일 업로드
+		try {
+			file.transferTo(dest);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		sellerinfo.setSellerImg(stored_name);
+		
+		// 디비에 이미지 업로드
+//		adminService.sellerImgupAtadmin(sellerinfo);
+		
+		model.addAttribute("sellerinfo", sellerinfo);
+		
+		return "jsonView";
+		
 	}
 	
 	@RequestMapping(value="/admin/info/deactivateSeller", method=RequestMethod.GET)
@@ -472,6 +545,28 @@ public class AdminController {
 		
 	}
 	
+	// ------ 빅이슈 수정, 삭제 ------
+	
+	@RequestMapping(value="/admin/book/view/update", method=RequestMethod.POST)
+	public String adminBookViewUpdate(BookListInfo booklistInfo) { // 빅이슈 수정
+		
+//		logger.info("::::::빅이슈 수정:::::::"+booklistInfo.toString());
+		adminService.adminBookViewUpdate(booklistInfo);
+		
+		return "redirect:/admin/book/view?sellerId="+booklistInfo.getSellerId();
+	}
+	
+	@RequestMapping(value="/admin/book/view/delete", method=RequestMethod.GET)
+	public String adminBookViewDelete(BookListInfo booklistInfo) {
+		
+//		logger.info("::::::빅이슈 삭제::::::"+booklistInfo.toString());
+		adminService.adminBookViewDelete(booklistInfo);
+		
+		return "redirect:/admin/book/view?sellerId="+booklistInfo.getSellerId();
+	}
+	
+	// -------------------------------
+	
 	@RequestMapping(value="/admin/book/addBook", method=RequestMethod.POST)
 	public String adminBookAdd(BookListInfo bli) {
 		
@@ -611,9 +706,10 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/seller/view", method=RequestMethod.POST)
-	public String adminSellserUpdate(SellerLoc sellerLoc,
+	public void adminSellserUpdate(SellerLoc sellerLoc,
 									String arrZone,
-									String sellerName) {
+									String sellerName,
+									HttpServletResponse res) {
 		
 		logger.info(sellerLoc.toString());
 		logger.info(arrZone);
@@ -645,8 +741,24 @@ public class AdminController {
 		//sellerLoc DB변경
 		adminService.adminSellserUpdate(sellerLoc);
 		
+		PrintWriter out =null;
+		res.setContentType("text/html; charset=UTF-8");
+		try {
+			out=res.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-		return "redirect:/admin/seller/view?locNo="+sellerLoc.getLocNo();
+		out.println("<script>alert('변경되었습니다.');location.href='/admin/seller/list'</script>");
+		
+		out.flush();
+		
+	
+		
+		
+		
+//		return "redirect:/admin/seller/view?locNo="+sellerLoc.getLocNo();
+//		return "redirect:/admin/seller/list";
 	}
 	
 	
@@ -868,8 +980,55 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/report/list", method=RequestMethod.GET)
-	public void adminReportlist() { // 신고내역 관리
+	public void adminReportlist(
+			ChatReport chatReport, Model model, 
+			HttpServletRequest req) { // 신고내역 관리
 		
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getReportInfoCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getReportInfoTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+//		logger.info(paging.toString());
+		
+		// 신고내역 불러오기
+		List<ChatReport> chatReportList = adminService.getChatReportList();
+		logger.info(":::::신고내역:::::"+chatReportList.toString());
+		
+		// --- 페이징 관련 ---
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+		
+		model.addAttribute("chatReportList", chatReportList);
+	}
+	
+	@RequestMapping(value="/admin/report/view", method=RequestMethod.GET)
+	public void adminReportView(int reportNo, Model model) {
+		
+//		logger.info(":::신고내역 상세 ::::"+reportNo);
+		
+		// reportNo에 해당하는 내역 조회
+		ChatReport reportByReportNo = adminService.getReportByReportNo(reportNo);
+//		logger.info(":::해당하는 신고내역:::"+reportByReportNo);
+		
+		// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회
+		List<ChatReport> chatReport = adminService.getReportByChatReport(reportByReportNo);
+//		logger.info(":::::해당 신고내역 전체조회:::::"+chatReport.toString());
+		
+		model.addAttribute("reportByReportNo", reportByReportNo);
+		model.addAttribute("chatReport", chatReport);
 	}
 	
 	
@@ -884,24 +1043,66 @@ public class AdminController {
 		
 	}
 	
-	@RequestMapping(value="/admin/banner/write", method=RequestMethod.GET)
-	public String bannerWrite() {
-		return "admin/banner/write";
+	@RequestMapping(value="/addBanner", method=RequestMethod.GET)
+	public void bannerWrite() {
+		
 	}
 	
-	@RequestMapping(value="/admin/banner/write", method=RequestMethod.POST)
-	public String bannerWriteProc(MainBanner mainBanner) {
+	@RequestMapping(value="/addBanner", method=RequestMethod.POST)
+	public String bannerWriteProc(MultipartFile bannerFile, MainBanner mainBanner, Model model) {
 		
-		adminService.writeBanner(mainBanner);
+		logger.info("파일업로드");
+//		logger.info(bannerImg.toString());
+//		logger.info(bannerImg.getName());
+//		logger.info(bannerImg.getOriginalFilename());
 		
-		return "redirect:/admin/banner/list";
+		
+		// 고유 식별자
+		String uId = UUID.randomUUID().toString().split("-")[0];
+
+		// 저장될 파일이름
+		String stored_name = null;
+		stored_name = bannerFile.getOriginalFilename() + "_" + uId;
+		
+		// 파일 저장 경로
+		String path = context.getRealPath("upload");
+		
+		// 저장될 파일
+		File dest = new File(path, stored_name);
+		
+		try {
+			bannerFile.transferTo(dest);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		mainBanner.setBannerNo(adminService.getBannerNo());
+		mainBanner.setBannerImg(stored_name);
+		
+		adminService.addBanner(mainBanner);
+		
+//		model.addAttribute("res", mainBanner);
+		
+//		return "redirect:/admin/banner/list";
+		return "jsonView";
 	}
 	
 	@RequestMapping(value="/admin/banner/delete", method=RequestMethod.GET)
-	public void bannerDelete(MainBanner mainBanner, HttpServletRequest req) {
+	public String bannerDelete(MainBanner mainBanner, HttpServletRequest req) {
 		
-		int bannerNo = Integer.parseInt(req.getParameter("bannerNo"));
-//		adminService.deleteBanner(bannerNo);
+		logger.info("배너 선택 삭제");
+		
+//		int bannerNo = Integer.parseInt(req.getParameter("bannerNo"));
+
+		String[] arrCheck = req.getParameter("checkRow").toString().split(",");
+		
+		for(int i=0; i<arrCheck.length; i++) {
+			adminService.deleteBanner(Integer.parseInt(arrCheck[i]));
+		}
+		
+		return "redirect:/admin/banner/list";
 	}
 	
 	
@@ -973,9 +1174,7 @@ public class AdminController {
 		
 		
 	}
-	
-	
-	
+
 	@RequestMapping("revSpot")
 	public void revisionSpot(
 			SellerLoc sellerLoc,
@@ -990,5 +1189,4 @@ public class AdminController {
 		logger.info("TEST : "+String.valueOf(selLoc));
 		model.addAttribute("sellerLoc", selLoc);
 	}
-	
 }

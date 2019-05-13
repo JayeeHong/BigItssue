@@ -3,36 +3,262 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <style type="text/css">
+.table {
+	margin: 10px;
+	width: 100%;
+	vertical-align: middle;
+}
 
-	.table {
-		margin: 10px;
-		width: 100%;
+.table tr td:first-child {
+	text-align: center;
+	background: #cccccc4d;
+}
+
+.table tr td select {
+	height: 26px;
+}
+
+.table>tbody>tr>td {
+	vertical-align: middle;
+}
+
+.table>thead>tr>td {
+	vertical-align: middle;
+}
+
+.sellerInfo tr td {
+	height: 70px;
+}
+
+/* input file 디자인 테스트 */
+.filebox label { 
+	display: inline-block; 
+	padding: .5em .75em; 
+	color: #999; 
+	font-size: inherit; 
+	line-height: normal; 
+	vertical-align: middle; 
+	background-color: #e8e8e8; 
+	cursor: pointer; 
+	border: 0px; 
+	border-bottom-color: #e2e2e2; 
+	border-radius: .25em;
+	width: 143.36px;
+	text-align: center;
+	margin: auto 0; 
+}
+
+.filebox input[type="file"] { /* 파일 필드 숨기기 */ 
+ 	position: absolute;  
+ 	width: 1px;  
+ 	height: 1px;  
+ 	padding: 0;  
+	margin: -1px;  
+ 	overflow: hidden;  
+ 	clip:rect(0,0,0,0); 
+ 	border: 0;  
+}
+
+/* named upload */
+.filebox .upload-name {
+	display: inline-block;
+	paddimg: .5em .75em; /* label의 패딩값과 일치 */
+	font-size: inherit;
+	font-family: inherit;
+	line-height: normal;
+	vertical-align: middle;
+	background-color: #f5f5f5;
+	border: 1px solid #ebebeb;
+	border-bottom-color: #e2e2e2;
+	border-radius: .25em;
+	-webkit-appearance: none; /* native 외형 감추기 */
+	-moz0apperarance: none;
+	appearance: none;
+}
+
+/* image preview */
+.filebox .upload-display { /* 이미지가 표시될 지역 */
+	margin-bottom: 5px;
+}
+
+@media(min-width: 768px) {
+	.filebox .upload-display {
+		display: inline-block;
+		margin-right: 5px;
+		margin-bottom: 0;
 	}
-	
-	.table tr td:first-child {
-		text-align: center;
-		background: #cccccc4d;
-	}
-	
-	.table tr td select {
-		height: 26px;
-	}
-	
-	.table>tbody>tr>td {
-		vertical-align: middle;
-	}
-	
-	.table>thead>tr>td {
-		vertical-align: middle;
-	}
-	
+}
+
+.filebox .upload-thumb-wrap { /* 추가될 이미지를 감싸는 요소 */
+	display: inline-block;
+	width: 150px; /* 이미지 크기 변경시 이 값 수정 */
+	padding: 2px;
+	margin-left: 30px;
+	margin-right: 30px;
+	margin-bottom: 5px;
+	vertical-align: middle;
+	border: 0px;
+	border-radius: 5px;
+	background-color: #fff;
+}
+
+.filebox .upload-display img { /* 추가될 이미지 */
+	display: block;
+	max-width: 100%;
+/* 	width: 100% \9; */
+ 	height: 150px;
+ 	margin: 0px auto; 
+}
+
 </style>
 
 <script type="text/javascript">
 
-$(document).ready(function() {
-	$("select option[value=${sbList.sellerPhone1 }]").attr("selected","selected");
+// -------- input file 디자인 테스트 --------
+/*
+$.fn.setPreview = function(opt){
+    "use strict"
+    var defaultOpt = {
+        inputFile: $(this),
+        img: null,
+        w: 200,
+        h: 200
+    };
+    $.extend(defaultOpt, opt);
+ 
+    var previewImage = function(){
+        if (!defaultOpt.inputFile || !defaultOpt.img) return;
+ 
+        var inputFile = defaultOpt.inputFile.get(0);
+        var img       = defaultOpt.img.get(0);
+ 
+        // FileReader
+        if (window.FileReader) {
+            // image 파일만
+            if (!inputFile.files[0].type.match(/image\//)) return;
+ 
+            // preview
+            try {
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    img.src = e.target.result;
+                    img.style.width  = defaultOpt.w+'px';
+                    img.style.height = defaultOpt.h+'px';
+                    img.style.display = '';
+                }
+                reader.readAsDataURL(inputFile.files[0]);
+            } catch (e) {
+                // exception...
+            }
+        // img.filters (MSIE)
+        } else if (img.filters) {
+            inputFile.select();
+            inputFile.blur();
+            var imgSrc = document.selection.createRange().text;
+ 
+            img.style.width  = defaultOpt.w+'px';
+            img.style.height = defaultOpt.h+'px';
+            img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")";           
+            img.style.display = '';
+        // no support
+        } else {
+            // Safari5, ...
+        }
+    };
+ 
+    // onchange
+    $(this).change(function(){
+        previewImage();
+    });
+};
+*/
 
+// -------------------------------------------
+
+$(document).ready(function() {
+	
+	// ----- input file 디자인 테스트 -----
+/*
+	var opt = {
+        img: $('#img_preview'),
+        w: 200,
+        h: 200
+    };
+ 
+    $('#input-file').setPreview(opt);
+*/
+	
+	var fileTarget = $('.filebox .upload-hidden'); 
+	fileTarget.on('change', function() { // 값이 변경되면 
+		
+		if(window.FileReader){ // modern browser 
+			var filename = $(this)[0].files[0].name; 
+		
+		} else { // old IE 
+			var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출 
+		
+		} // 추출한 파일명 삽입 
+		
+		$(this).siblings('.upload-name').val(filename); 
+		
+	});
+
+	var imgTarget = $('.preview-image .upload-hidden'); 
+	
+	imgTarget.on('change', function() {
+		var parent = $(this).parent(); 
+		parent.children('.upload-display').remove(); 
+		
+		if(window.FileReader){ //image 파일만 
+			if (!$(this)[0].files[0].type.match(/image\//)) return; 
+		
+			var reader = new FileReader(); 
+			reader.onload = function(e){ 
+				var src = e.target.result; 
+// 				parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img src="'+src+'" class="upload-thumb" name="sellerImg"></div></div>'); 
+				$("#imgUp_area").html('<img src="'+src+'" class="upload-thumb" name="sellerImg">');
+			}
+			
+			reader.readAsDataURL($(this)[0].files[0]); 
+		
+		} else {
+			$(this)[0].select(); 
+			$(this)[0].blur(); 
+			var imgSrc = document.selection.createRange().text; 
+			parent.html('<img class="upload-thumb" name="sellerImg">'); 
+			
+			var img = $(this).siblings('.upload-display').find('img'); 
+			img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")"; 
+			
+		}
+		
+	});
+
+	//출처: https://webdir.tistory.com/435 [WEBDIR]
+	
+	// ------------------------------------
+
+	
+	$("select option[value=${sbList.sellerPhone1 }]").attr("selected","selected");
+	
+// 	$("#imgUp").click(function() {
+		
+// 		$.ajax({
+// 			type: "post"
+// 			, url: "/admin/info/seller/imgUp"
+// 			, data: {"sellerinfo": sellerinfo}
+// 			, dataType: "json"
+// 			, success: function(res) {
+// 				console.log("성공");
+// 				console.log(res);
+// 			}
+// 			, error: function(e) {
+// 				console.log("실패");
+// 				console.log(e);
+// 			}
+// 		});
+		
+// 	});
 });
 
 function inNumber(){
@@ -62,11 +288,20 @@ function toList() {
 	form.submit();
 }
 
+// function imgUp(sellerId) {
+// 	form = document.upForm;
+// 	form.method="post";
+// 	form.action="/admin/info/seller/imgUp";
+// 	form.submit();
+// }
+
 function upSeller(sellerId) {
 	result = confirm('판매자 정보를 변경하시겠습니까?');
 	
 	if(result==true) {
 		form = document.upForm;
+		form.method="post";
+		form.enctype="multipart/form-data";
 		form.action="/admin/info/sellerUp?sellerId="+sellerId;
 		form.submit();
 // 		$(location).attr("href", "/admin/info/sellerUp?sellerId="+sellerId);
@@ -142,11 +377,39 @@ function activateBigdom(bigdomId) {
 <form name="upForm">
 <input type="hidden" name="sellerId" value="${sbList.sellerId }"/>
 <input type="hidden" name="bigdomId" value="${sbList.bigdomId }"/>
-<table class="table table-bordered">
+<table class="table table-bordered sellerInfo">
 
 <tr>
-	<td style="width: 35%">판매자 이름</td>
-	<td style="width: 65%"><input style="width: 100px;" type="text" value="${sbList.sellerName }" name="sellerName" /></td>
+	<td style="width: 35%; height: 70px;">판매자 이름</td>
+	<td style="width: 40%;"><input style="width: 100px;" type="text" value="${sbList.sellerName }" name="sellerName" /></td>
+	<td style="width: 25%; padding: 0px;" rowspan="3">
+<!-- 		<div style="height: 90px; text-align: center;"> -->
+<%-- 			<img id="sellerImg" style="width: 90px; height: 90px;" name="sellerImg" src="${sellerinfo.sellerImg }"/> --%>
+<!-- 		</div> -->
+<!-- 		<div style="text-align: center;"> -->
+<!-- 			<button style="width: 90px; border-style: solid;">사진 수정</button> -->
+<%-- 			<input type="file" id="imgUp" style="width: 125.6px; background-color: #e8e8e8; border:0px;" onclick="imgUp('${sbList.sellerId }')" /> --%>
+<!-- 		</div> -->
+		<!-- input file 디자인 테스트 -->
+		
+		<div class="filebox preview-image"> 
+			<div style="text-align: center;" class="upload-display">
+				<div style="width: 150px; height: 150px;" class="upload-thumb-wrap" id="imgUp_area">
+					<c:if test="${sbList.sellerImg eq null }">
+						사진이 없습니다.<br>사진을 등록해주세요.
+					</c:if>
+					<c:if test="${sbList.sellerImg ne null }">
+						<img class="upload-thumb" name="sellerImg" src="/upload/${sbList.sellerImg }" />
+					</c:if>
+				</div>
+<!-- 			<img id="img_preview" style="display:none;"/> -->
+			<label for="file">사진 편집</label>
+			<input type="file" id="file" name="file" class="upload-hidden" accept="image/*" />
+			</div>
+		</div>
+
+
+	</td>
 </tr>
 
 <tr>
@@ -162,7 +425,7 @@ function activateBigdom(bigdomId) {
 
 <tr>
 	<td>연락처</td>
-	<td>
+	<td colspan="2">
 		<c:if test="${sbList.sellerPhone ne null }">
 		<select name="sellerPhone1">
 			<option value="010">010</option>

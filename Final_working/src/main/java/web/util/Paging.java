@@ -16,10 +16,11 @@ public class Paging {
 	private int endNo; //게시글 끝번호 (계산으로 알아냄)
 	
 	private String sellerId; //작성자
-		
+	
 	public Paging() {
 
 	}
+
 	public String getSellerId() {
 		return sellerId;
 	}

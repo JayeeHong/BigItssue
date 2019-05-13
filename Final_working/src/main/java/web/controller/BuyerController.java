@@ -108,9 +108,10 @@ public class BuyerController {
 		//------------------------------------------------------
 		//메인 배너
 		// 배너목록 MODEL로 추가
-		//List<MainBanner> mainBannerList = buyerService.getBannerList();
-		//model.addAttribute("mainBannerList", mainBannerList);
-				
+
+		List<MainBanner> mainBannerList = buyerService.getBannerList();
+		model.addAttribute("mainBannerList", mainBannerList);
+		
 	}
 	@RequestMapping(value="/buyer/main", method=RequestMethod.POST)
 	public void buyerMainPost(
@@ -172,6 +173,9 @@ public class BuyerController {
 		List<SellerLoc> stationList = buyerService.getStationList();
 		
 		model.addAttribute("stationList", stationList);
+		
+		//main에선 방번호 -1을가지고 있게하자.
+		
 		
 	}
 	
@@ -256,10 +260,11 @@ public class BuyerController {
 		model.addAllAttributes(map);
 
 		
-		String subject = "가입인증 메일입니다 "; //메일 제목 입력해주세요. 
-		String frontBody = "인증코드란에 "; //앞단
+		String subject = "[빅이슈] 인증 메일입니다."; //메일 제목 입력해주세요. 
+		String frontBody = "이메일 인증을 완료하려면 인증코드란에 "; //앞단
 		String middleBody = code;
-		String endBody = "를 써주세요"; //뒷단
+		String endBody = "를 써주세요\n"; //뒷단
+		endBody += "본 메일은 발신전용입니다.";
 		String body = frontBody+middleBody+endBody;
 		
 		
@@ -713,9 +718,79 @@ public class BuyerController {
 	}
 	
 	@RequestMapping(value="/buyer/my/info", method=RequestMethod.GET)
-	public void myInfo() { // 마이페이지-정보수정
+	public void myInfo(
+			BuyerInfo buyerInfo, 
+			HttpSession session, Model model) { // 마이페이지-정보수정
+		
+		String buyerId = (String) session.getAttribute("buyerId");
+//		logger.info("::::::buyerID::::::"+buyerId);
+		
+		buyerInfo.setBuyerId(buyerId);
+		
+		//buyerId로 회원정보 조회
+		buyerInfo = buyerService.getBuyerInfoAtBuyermyinfo(buyerInfo);
+//		logger.info(":::::buyerInfo:::::"+buyerInfo.toString());
+		
+		// 연락처 정보
+		buyerInfo.setBuyerPhone1(buyerInfo.getBuyerPhone().split("-")[0]);
+		buyerInfo.setBuyerPhone2(buyerInfo.getBuyerPhone().split("-")[1]);
+		buyerInfo.setBuyerPhone3(buyerInfo.getBuyerPhone().split("-")[2]);
+		
+		// 이메일 정보
+		buyerInfo.setBuyerEmail1(buyerInfo.getBuyerEmail().split("@")[0]);;
+		buyerInfo.setBuyerEmail2(buyerInfo.getBuyerEmail().split("@")[1]);;
+		
+//		logger.info(":::split 정보 확인:::"+buyerInfo.toString());
+		
+		model.addAttribute("buyerInfo", buyerInfo);
 		
 	}
+	
+	@RequestMapping(value="/buyer/my/info/changePhone", method=RequestMethod.POST)
+	public String myInfoChangePhone(BuyerInfo buyerInfo, HttpSession session) {
+		
+//		logger.info(buyerInfo.toString());
+		
+		// 세션 정보 가져오기
+		String buyerId = (String)session.getAttribute("buyerId");
+		buyerInfo.setBuyerId(buyerId);
+		
+		if(buyerInfo != null && !"".equals(buyerInfo)) {
+			buyerInfo.setBuyerPhone(buyerInfo.getBuyerPhone1()+"-"+buyerInfo.getBuyerPhone2()+"-"+buyerInfo.getBuyerPhone3());
+
+			buyerService.setBuyerPhone(buyerInfo);
+		}
+		
+		return "jsonView";
+		
+	}
+	
+	@RequestMapping(value="/buyer/my/info/changeEmail", method=RequestMethod.POST)
+	public String myInfoChangeEmail(BuyerInfo buyerInfo, HttpSession session) {
+		
+		// 세션 정보 가져오기
+		String buyerId = (String)session.getAttribute("buyerId");
+		buyerInfo.setBuyerId(buyerId);
+		
+		if(buyerInfo != null && !"".equals(buyerInfo)) {
+			buyerInfo.setBuyerEmail(buyerInfo.getBuyerEmail1()+"@"+buyerInfo.getBuyerEmail2());
+
+			buyerService.setBuyerEmail(buyerInfo);
+		}
+		
+		return "jsonView";
+	}
+	
+	// ------------------------------------진행중
+	@RequestMapping(value="/buyer/my/info/changePw", method=RequestMethod.POST)
+	public String myInfoChangePw(BuyerInfo buyerInfo) {
+		
+		logger.info(":::비밀번호 변경::::"+buyerInfo.toString());
+		// 세션 정보 가져오기
+		
+		return "jsonView";
+	}
+	// ------------------------------------진행중
 	
 	@RequestMapping(value="/buyer/my/confirmpw", method=RequestMethod.POST)
 	public void myPwConfirm(BuyerInfo buyerInfo, HttpSession session, HttpServletResponse res) throws IOException { // 마이페이지-정보수정 -> 비밀번호확인
@@ -725,7 +800,6 @@ public class BuyerController {
 		out = res.getWriter();
 		
 //		logger.info(buyerInfo.toString());
-		
 		buyerInfo.setBuyerId((String) session.getAttribute("buyerId"));
 		
 		// 입력한 비밀번호 맞는지 확인
@@ -806,4 +880,9 @@ public class BuyerController {
 		
 		return "redirect:/buyer/my/booking";
 	}
+	
+
+	@RequestMapping(value="/buyer/practice", method=RequestMethod.GET)
+	public void pratice() {}
+	
 }

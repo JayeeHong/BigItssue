@@ -54,8 +54,8 @@
             <!-- 보조 채팅내역 -->
             <%-- 역기서 item은 하줄 한줄씩 보여주니까 dto겠지? --%>
 			<c:forEach var="item" items="${chatRoomList}" begin="0" end="${chatRoomList.size()}" step="1">				
-				<div id="b${item.chatRoomNo }" onclick="location.href='/chatting?chatRoomNo=${item.chatRoomNo }'" class="chat_list">
-					<a href="/chatting?chatRoomNo=${item.chatRoomNo }">${item.chatRoomNo }번방 [${item.theOtherParty}]</a>
+				<div id="b${item.chatRoomNo }" onclick="reloadChk(${item.chatRoomNo })" class="chat_list">
+					<a href="#">${item.chatRoomNo }번방 [${item.theOtherParty}]</a>
 	            	<div class="chat_people">
 	            		<div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
 		                <div class="chat_ib">     
@@ -153,13 +153,46 @@
     </div></div>
 
 </body>
-
+<!-- window.opener.reload() -->
 <script type="text/javascript">
+
+//자식창 url바뀔땐 동작안하고, 자식창이 꺼질때만 동작.
+var checkUnload = true;
+$( window ).unload(function() {
+	if(checkUnload==true){
+		//session의 방 번호 없애기	
+		$.ajax({
+			 type: "post"
+			 , url: "/sessionRoomNoInit"
+			 /*data: 전달 Parameter (댓글내용, boardnoQA)  */
+			 , data: {}
+			 , dataType: "json"
+			 /* receive(이름은 내가 정하는것 )로 결과값 html을 받아옴 */
+			 , success: function(receive){
+				//부모창 리로드
+				opener.location.reload();
+			 }
+		});
+		//부모창에 있던 소켓끊기
+// 		opener.parent.closeSocket();
+
+	}
+});
+
+// function sessionRemove(){
+<%-- 	<%request.getSession().removeAttribute("chatRoomNo");%> --%>
+// }
+
+//url이동시 checkUnload=false로해서 부모창 리로드 안시키게 한다.
+function reloadChk(noFlag){
+	checkUnload = false;
+	$(location).attr("href", "/chatting?chatRoomNo="+noFlag);
+}
 
 var socket=null;
 
 $(document).ready(function(){
-
+			
 	//enter누르면 메시지보내기
 	$('input#msg2').keydown(function(key) {
 
@@ -289,9 +322,16 @@ function connect(){
 				$("#b"+noFlag).remove();
 				inbox_chat.prepend(replace);
 				
+// 				var charRoomNo;
+				
+// 				if(${chatRoomNo eq "" || chatRoomNo eq null}){
+// 					chatRoomNo=-1;
+// 				} else {
+// 					charRoomNo = ${chatRoomNo }
+// 				}
 				
 				/* 현재방번호와 #앞의 번호가 같을경우 */
-				if( ${chatRoomNo} == noFlag){
+				if(${chatRoomNo} == noFlag){
 					//옆 사이드에도 내방이 보여야 하니까
 					$("#b"+${chatRoomNo}+" p").html("<span class=\"time_date\">["+presentDate+"]</span>"+senderId+" : "+result);
 					
@@ -326,7 +366,7 @@ function connect(){
 							}
 						}	
 						if($("#b"+refreshList[i].chatRoomNo).length<=0){//있어야할 id가 없다면 생성해주자.
-							var a = "<div class=\"chat_list\"><a href=\"/seller/main?chatRoomNo="+noFlag+"\">"+noFlag+"번방["+refreshList[i].theOtherParty+"]</a> <div id=\"b"+noFlag+"\" onclick=\"location.href='/seller/main?chatRoomNo="+noFlag+"'\"class=\"chat_people\"><div class=\"chat_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"chat_ib\"><p><span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result+"</p><div id=\"c"+refreshList[i].chatRoomNo+"\">	 </div></div></div></div>"
+							var a = "<div class=\"chat_list\"><a href=\"#\">"+noFlag+"번방["+refreshList[i].theOtherParty+"]</a> <div id=\"b"+noFlag+"\" onclick=\"reloadChk("+noFlag+")'\"class=\"chat_people\"><div class=\"chat_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"chat_ib\"><p><span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result+"</p><div id=\"c"+refreshList[i].chatRoomNo+"\">	 </div></div></div></div>"
 							inbox_chat.prepend(a);
 							//안 읽은 채팅내역 개수 표시.
 							for(var j=0; j<messageChkResult.length; j++){
@@ -345,10 +385,8 @@ function connect(){
 							}
 						}
 					}
-			
-					
-
 				}
+			 
 				//스크롤 제일 아래로 내려주기
 				if(msg_history_id != null){
 					msg_history_id.scrollTop = msg_history_id.scrollHeight;
@@ -365,6 +403,7 @@ function connect(){
 
 	ws.onclose = function (event) { 
 		console.log('Info: connection closed.'); 
+		
 		//setTimeout( function(){ connect();},1000); // retry connection!!
 	};
 	ws.onerror = function (event) { console.log('Error:',err); };
@@ -372,7 +411,7 @@ function connect(){
 }
 
 function closeSocket(){
-	socket.close();
+	socket.close();	
 }
 
 //메시지창 불러오기

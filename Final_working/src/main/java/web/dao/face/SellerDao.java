@@ -25,13 +25,19 @@ public interface SellerDao {
 	// sellerId의 판매부수 조회
 	public List<BookListInfo> selectBookList(String sellerId);
 
-	// 판매 호수, 판매 부수 업데이트 쿼리
+	// 없는 호수라면 판매 호수, 판매 부수 업데이트 쿼리
 	public void updateBookList(BookListInfo bookListInfo);
 
 	// 판매 호수, 판매 부수 삭제 쿼리
 	public void deleteMegazine(int magazineNo);
 
-	// 판매할 빅이슈 추가 쿼리
+	// sellerid 와 month 로 보유한 호수인지 조회 쿼리
+	public int selectCntBookListInfoBySelleridAndMonth(BookListInfo bookListInfo);
+
+	// 있는 호수라면 판매 부수만 업데이트 쿼리
+	public void insertBookListInfoByMagazineno(BookListInfo bookListInfo);
+
+	// 없다면 판매할 빅이슈 추가 쿼리
 	public void insertMegazine(BookListInfo bookListInfo);
 
 	// 오픈 마감시간 업데이트 쿼리
@@ -97,5 +103,8 @@ public interface SellerDao {
 
 	//후기 댓글 수정
 	public void updateReply(ReviewReply reviewReply);
+
+	// 판매자 카드 결제여부 변경
+	public void updateSellerCard(SellerLoc sellerloc);
 
 }

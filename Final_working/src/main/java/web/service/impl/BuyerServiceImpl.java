@@ -67,9 +67,9 @@ public class BuyerServiceImpl implements BuyerService {
 
 
 				// 네이버일 경우 smtp.naver.com 을 입력합니다. // Google일 경우 smtp.gmail.com 을 입력합니다. 
-				String host = "smtp.naver.com"; 
-				final String username = "eungone0205"; //네이버 아이디를 입력해주세요. @naver.com은 입력하지 마시구요. 
-				final String password = "jeon1027"; //네이버 이메일 비밀번호를 입력해주세요. 
+				String host = "smtp.gmail.com"; 
+				final String username = "bigitssue4"; //네이버 아이디를 입력해주세요. @naver.com은 입력하지 마시구요. 
+				final String password = "bigitssue4_final"; //네이버 이메일 비밀번호를 입력해주세요. 
 				int port=465; //포트번호 
 				
 				
@@ -243,6 +243,21 @@ public class BuyerServiceImpl implements BuyerService {
 	}
 
 	@Override
+	public BuyerInfo getBuyerInfoAtBuyermyinfo(BuyerInfo buyerInfo) {
+		return buyerDao.selectBuyerInfoAtBuyermyinfo(buyerInfo);
+	}
+
+	@Override
+	public void setBuyerPhone(BuyerInfo buyerInfo) {
+		buyerDao.updateBuyerPhone(buyerInfo);
+	}
+
+	@Override
+	public void setBuyerEmail(BuyerInfo buyerInfo) {
+		buyerDao.updateBuyerEmail(buyerInfo);
+	}
+
+  @Override
 	public int getTotalCountOfSellerLocByZoneAndStation(Map<String, Object> map) {
 		return buyerDao.selectTotalCountOfSellerLocByZoneAndStation(map);
 	}

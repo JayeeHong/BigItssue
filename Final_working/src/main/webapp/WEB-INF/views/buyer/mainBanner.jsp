@@ -11,65 +11,58 @@ $(document).ready(function() {
 
 
 <style type="text/css">
-.carousel-inner,
-.img {
+.carousel-inner {
   width: 100%;
   height: 638.469px;
-  background-size: cover;
+/*   background-size: contain; */
 }
+
+.bannerImg { 
+  width: 100%;
+  height: 638.469px; 
+}
+
 </style>
 
 <div class="mainBanner" style="margin-bottom: 50px;">
 
 	<div id="Mcarousel" class="carousel slide" data-ride="carousel">
+	  
 	  <!-- Indicators -->
 	  <ol class="carousel-indicators">
-<!-- 	    <li data-target="#Mcarousel" data-slide-to="0" class="active"></li> -->
-<!-- 	    <li data-target="#Mcarousel" data-slide-to="1"></li> -->
-<!-- 	    <li data-target="#Mcarousel" data-slide-to="2"></li> -->
 	    
 	    <c:forEach var="i" begin="0" end="${mainBannerList.size()-1 }">
 			<c:if test="${i eq 0 }">
    			<li data-target="#Mcarousel" data-slide-to="${i }" class="active"></li>
 			</c:if>
 			<c:if test="${i ne 0 }">
-   			<li data-target="#Mcarousel" data-slide-to="${i }" class=""></li>
+   			<li data-target="#Mcarousel" data-slide-to="${i }"></li>
    			</c:if>
 		</c:forEach>
 	    
-	    
-	    
-	    
 	  </ol>
+
+
 
 	  <!-- Wrapper for slides -->
 	  <div class="carousel-inner" role="listbox">
-<!-- 	    <div class="item active"> -->
-<!-- 	      <img src="//bigissue.kr/wp-content/uploads/2019/04/홈페이지202호_대지-1.jpg"> -->
-<!-- 	    </div> -->
-<!-- 	    <div class="item"> -->
-<!-- 	      <img src="//bigissue.kr/wp-content/uploads/2019/04/홈페이지201호_대지-1.jpg"> -->
-<!-- 	    </div> -->
-<!-- 	    <div class="item"> -->
-<!-- 	      <img src="//bigissue.kr/wp-content/uploads/2019/04/홈페이지200호A형-29_대지-1.jpg"> -->
-<!-- 	    </div> -->
-	    
 	    
 	    <c:forEach var="i" begin="0" end="${mainBannerList.size()-1 }">
 	  		<c:if test="${i eq 0 }">
 	    	<div class="item active">
-	      		<img src="/upload/${mainBannerList[i].bannerImg }">
+	      		<img class="bannerImg" src="/upload/${mainBannerList[i].bannerImg }">
 	    	</div>
 	    	</c:if>
 	    	<c:if test="${i ne 0 }">
 	    	<div class="item">
-	      		<img src="/upload/${mainBannerList[i].bannerImg }">
+	      		<img class="bannerImg" src="/upload/${mainBannerList[i].bannerImg }">
 	    	</div>
 	    	</c:if>
 		</c:forEach>
-	    
-	    
+	        
 	  </div>
+	
+	
 	
 	  <!-- Controls -->
 	  <a class="left carousel-control" href="#Mcarousel" role="button" data-slide="prev">
