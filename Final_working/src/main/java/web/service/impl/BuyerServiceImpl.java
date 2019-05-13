@@ -318,6 +318,7 @@ public class BuyerServiceImpl implements BuyerService {
 	@Override
 	public void setBuyerInfoAtMypage(BuyerInfo buyerInfo) {
 		buyerDao.updateBuyerInfoAtMypage(buyerInfo);
+	}
 
   @Override
 	public String shaPw(String buyerPw) {

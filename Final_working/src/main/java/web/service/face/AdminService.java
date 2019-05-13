@@ -220,7 +220,6 @@ public interface AdminService {
 	//배너 삭제
 	public void deleteBanner(int bannerNo);
 	
-	public void writeBanner(MainBanner mainBanner);
 	
 	
   public List<String> userIdList(String abc);
@@ -232,9 +231,6 @@ public interface AdminService {
 
 	public List<Message> getChatMessage(int chatRoomNo);
 
-
-  
-  
   
 	// sellerimg만 삭제하기
 	public void sellerImgDelete(SellerBigdomInfo sbInfo);
@@ -243,10 +239,7 @@ public interface AdminService {
 	public void sellerUpdateWithoutImg(SellerBigdomInfo sbInfo);
 
 
-  public List<Message> getChatRoomNo();
   
- public void writeBanner(MainBanner mainBanner);
-
 	public int getChatListCurPage(HttpServletRequest req);
 
 
