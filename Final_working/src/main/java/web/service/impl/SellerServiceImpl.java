@@ -205,4 +205,14 @@ public class SellerServiceImpl implements SellerService {
 		sellerDao.updateSellerCard(sellerloc);
 	}
 
+	@Override
+	public void setCirculation(Reservation reservation) {
+		sellerDao.updateCirculation(reservation);
+	}
+
+	@Override
+	public Reservation getReservationInfo(Reservation reservation) {
+		return sellerDao.selectReservationInfo(reservation);
+	}
+
 }

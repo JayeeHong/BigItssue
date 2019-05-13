@@ -219,6 +219,12 @@ public interface AdminDao {
 
 	public int getChatListTotalCount();
 
+	// 판매자 이미지만 지우기
+	public void deleteSellerImg(SellerBigdomInfo sbInfo);
+
+	// 판매자 정보 이미지 제외하고 업데이트 쿼리(이미지가 없을 때)
+	public void updateSellerWithoutImg(SellerBigdomInfo sbInfo);
+
 
 
 

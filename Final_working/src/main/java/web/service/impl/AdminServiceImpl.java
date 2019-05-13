@@ -509,16 +509,24 @@ public class AdminServiceImpl implements AdminService{
 		return list;
 	}
 
-
-	@Override
-	public void writeBanner(MainBanner mainBanner) {
-		adminDao.insertBanner(mainBanner);
-	}
-
   @Override
   public List<Message> getChatRoomNo(Paging paging) {
 		return adminDao.getChatRoomNo(paging);
   }
+
+
+  
+  
+	@Override
+	public void sellerImgDelete(SellerBigdomInfo sbInfo) {
+		adminDao.deleteSellerImg(sbInfo);
+	}
+
+	@Override
+	public void sellerUpdateWithoutImg(SellerBigdomInfo sbInfo) {
+		adminDao.updateSellerWithoutImg(sbInfo);
+	}
+
 
 
   @Override
@@ -545,6 +553,7 @@ public int getChatListCurPage(HttpServletRequest req) {
 public int getChatListTotalCount() {
 	return adminDao.getChatListTotalCount();
 }
+
 	
 }
 

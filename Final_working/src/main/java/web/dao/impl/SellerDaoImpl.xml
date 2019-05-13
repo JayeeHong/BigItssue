@@ -212,5 +212,16 @@
 		SET sellerCard=#{sellerCard }
 		WHERE sellerId=#{sellerId }
 	</update>
+	
+	<update id="updateCirculation" parameterType="web.dto.Reservation">
+		UPDATE bookListInfo
+		SET circulation=circulation+#{bookNumber }
+		WHERE magazineNo=#{magazineNo }
+	</update>
+	
+	<select id="selectReservationInfo" parameterType="web.dto.Reservation" resultType="web.dto.Reservation">
+		SELECT * FROM reservation
+		WHERE reserveNo = #{reserveNo }
+	</select>
 
 </mapper>

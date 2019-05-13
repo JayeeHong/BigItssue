@@ -156,11 +156,16 @@ public class AdminController {
 		
 		// sellerid로 정보 조회
 		SellerBigdomInfo sbList = adminService.getSellerBigdomInfo(sbInfo.getSellerId());
-		logger.info(":::::sellerBigdomInfo:::::"+sbList.toString());
+//		logger.info(":::::sellerBigdomInfo:::::"+sbList.toString());
 		
 		if(sbList != null && !"".equals(sbList)) {
 			String sellerPhone = sbList.getSellerPhone();
 			if(sellerPhone != null && !"".equals(sellerPhone)) {
+				for(int i=0; i<sellerPhone.split("-").length; i++) {
+					if((sellerPhone.split("-")[i]).equals(null)) {
+						sellerPhone.split("-")[i] = "0000";
+					}
+				}
 				sbList.setSellerPhone1(sellerPhone.split("-")[0]);
 				sbList.setSellerPhone2(sellerPhone.split("-")[1]);
 				sbList.setSellerPhone3(sellerPhone.split("-")[2]);
@@ -184,36 +189,54 @@ public class AdminController {
 	@RequestMapping(value="/admin/info/sellerUp", method=RequestMethod.POST)
 	public String infoSellerUp(SellerBigdomInfo sbInfo, MultipartFile file) { // 계정관리-판매자_정보수정
 		
+		logger.info("넘어오는 값 확인::::"+sbInfo);
+		logger.info("파일명:::::"+file.getOriginalFilename());
+
+		// 연락처 정보
 		sbInfo.setSellerPhone(sbInfo.getSellerPhone1()+"-"+sbInfo.getSellerPhone2()+"-"+sbInfo.getSellerPhone3());
-//		logger.info("file:::::::"+file);
-		// --- 파일 업로드 ---
-		// 고유한 식별자
-		String uID = UUID.randomUUID().toString().split("-")[0];
 		
-		// 저장될 파일 이름
-		String stored_name = null;
-		stored_name = file.getOriginalFilename()+"_"+uID;
-//		logger.info(":::::stored_name:::::"+stored_name);
-		// 파일이 저장될 경로
-		String path = context.getRealPath("upload");
-//		logger.info(":::::path::::::::"+path);
-		// 저장될 파일
-		File dest = new File(path, stored_name);
-		
-		// 파일 업로드
-		try {
-			file.transferTo(dest);
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(file.getOriginalFilename().equals("")) {
+			adminService.sellerImgDelete(sbInfo);
+			
+		} else {
+			
+//			logger.info("file:::::::"+file);
+			// --- 파일 업로드 ---
+			// 고유한 식별자
+			String uID = UUID.randomUUID().toString().split("-")[0];
+			
+			// 저장될 파일 이름
+			String stored_name = null;
+			stored_name = file.getOriginalFilename()+"_"+uID;
+//			logger.info(":::::stored_name:::::"+stored_name);
+			// 파일이 저장될 경로
+			String path = context.getRealPath("upload");
+//			logger.info(":::::path::::::::"+path);
+			// 저장될 파일
+			File dest = new File(path, stored_name);
+			
+			// 파일 업로드
+			try {
+				file.transferTo(dest);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			logger.info("ssssss::::::"+sbInfo.toString());
+			sbInfo.setSellerImg(stored_name);
+			
 		}
 		
-		sbInfo.setSellerImg(stored_name);
-		
-//		logger.info("ssssss::::::"+sbInfo.toString());
+		logger.info("ssssss::::::"+sbInfo.toString());
 		// sellerid로 해당 판매자 정보 업데이트
-		adminService.sellerUpdate(sbInfo);
+		
+		if(sbInfo.getSellerImg() != null && !"".equals(sbInfo.getSellerImg())) {
+			adminService.sellerUpdate(sbInfo);
+		} else {
+			adminService.sellerUpdateWithoutImg(sbInfo);
+		}
 		
 		return "redirect:/admin/info/seller/update?sellerId="+sbInfo.getSellerId();
 	}

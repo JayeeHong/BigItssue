@@ -107,4 +107,10 @@ public interface SellerDao {
 	// 판매자 카드 결제여부 변경
 	public void updateSellerCard(SellerLoc sellerloc);
 
+	// 예약취소시(시간초과한 경우, 판매자가 취소한경우) 판매부수 증가 쿼리
+	public void updateCirculation(Reservation reservation);
+
+	// reserveNo로 해당 예약정보 조회 쿼리
+	public Reservation selectReservationInfo(Reservation reservation);
+
 }

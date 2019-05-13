@@ -40,15 +40,19 @@
 <body>
 
 <!-- HEADER -->
-<tiles:insertAttribute name="header" />
+<div class="container">
+	<tiles:insertAttribute name="header" />
+</div>
 
 <!-- BODY -->
-<div class="wrap">
+<div class="wrap container">
 	<tiles:insertAttribute name="body" />
 </div>
 
 <!-- FOOTER -->
-<tiles:insertAttribute name="footer" />
+<div style="padding-top: 200px;">
+	<tiles:insertAttribute name="footer" />
+</div>
 
 </body>
 </html>

@@ -45,7 +45,7 @@ $(document).ready(function() {
 		var pwForm = '';
 		pwForm += '<div>';
 		pwForm += '	<br><label>변경할 비밀번호 : </label>';
-		pwForm += '	&nbsp;<input type="password" id="buyerPw" /><br>';
+		pwForm += '	&nbsp;<input type="password" maxlength="16" id="buyerPw" /><br>';
 		pwForm += '</div>';
 		pwForm += '<div id="insertPw"></div>'; // 비밀번호 유효성 결과가 보여질 구역
 		
@@ -113,24 +113,29 @@ $(document).ready(function() {
 	$(document).on("click", "#changePwOk", function() {
 		
 		// 유효성 검사 true, 비밀번호 같은 경우에만 비밀번호 변경 가능
+		var changePass = '';
 		if(passwordVerify && passwordConfirm) {
 // 			console.log('모두 완료');
 			
-			var changePass = '';
 			$.ajax({
 				type: 'post'
 				, url: '/buyer/my/info/changePw'
 				, data: {'buyerPw':$('#buyerPw').val()}
 				, dataType: 'json'
 				, success: function(res) {
-					changePass += '<label>비밀번호가 성공적으로 변경되었습니다.</label>';
-					$("#changePassSuccess").html();
+					console.log('비밀번호 변경:'+res.buyerInfo);
+					console.log('비밀번호 변경 세션:'+res.session);
+					changePass += '<label>비밀번호가 성공적으로 변경되었습니다.<br>잠시 후 자동으로 로그아웃됩니다.</label>';
+					$("#changePassSuccess").html(changePass);
 					$("#changePassSuccess").css("color", "green");
+					
+					setTimeout('history.go(0);',3000);
+
 				}
 				, error: function(e) {
 					console.log(e);
 					changePass += '<label>비밀번호 변경에 실패하였습니다.</label>';
-					$("#changePassSuccess").html();
+					$("#changePassSuccess").html(changePass);
 					$("#changePassSuccess").css("color", "red");
 				}
 			
@@ -139,7 +144,7 @@ $(document).ready(function() {
 		} else {
 // 			console.log('완료 안됨');
 			changePass += '<label>비밀번호를 다시 확인해주세요.</label>';
-			$("#changePassSuccess").html();
+			$("#changePassSuccess").html(changePass);
 			$("#changePassSuccess").css("color", "red");
 		}
 		
@@ -243,12 +248,15 @@ $(document).ready(function() {
 					verifyConfirm += '<label>메일이 성공적으로 변경되었습니다!</label>';
 					$("#verifyConfirm").html(verifyConfirm);
 					$("#verifyConfirm").css("color", "green");
+					
+					setTimeout('history.go(0);',3000);
+					
 				}
 				, error: function(e) {
 					console.log(e);
 					verifyConfirm += '<label>메일변경에 실패하였습니다.</label>';
 					$("#verifyConfirm").html(verifyConfirm);
-					$("#verifyConfirm").css("color", "green");
+					$("#verifyConfirm").css("color", "red");
 				}
 			});
 			
@@ -279,10 +287,10 @@ $(document).ready(function() {
 		phoneCancel += '&nbsp;';
 		phoneCancel += '<button type="button" class="btn btn-xs btn-default" id="phoneCancel">취소</button>';
 		
-		$("#cancelArea").html(phoneCancel);
+// 		$("#cancelArea").html(phoneCancel);
 		
 		// 연락처 수정 폼 보여주기
-		var phoneTag = '';
+		var phoneTag = '<br>';
 		phoneTag += '<label>수정할 연락처</label><br>';
 		phoneTag += '<select id="changePhone1" name="changePhone1">';
 		phoneTag += '<option value="010">010</option>';
@@ -302,11 +310,11 @@ $(document).ready(function() {
 	});
 	
 	// 연락처 변경 옆에 취소 버튼 클릭이벤트
-	$(document).on("click", "#phoneCancel", function() {
-		$("#cancelArea").html(null); // 취소버튼 영역 안보이게
-		$("#changePhone").html(null); // 수정할 연락처 부분 안보이게
+// 	$(document).on("click", "#phoneCancel", function() {
+// 		$("#cancelArea").html(null); // 취소버튼 영역 안보이게
+// 		$("#changePhone").html(null); // 수정할 연락처 부분 안보이게
 	
-	})
+// 	});
 	
 	// 연락처 수정 버튼 클릭이벤트
 // 	$("#changePhoneOk").click(function() {

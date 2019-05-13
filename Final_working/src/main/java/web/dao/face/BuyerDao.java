@@ -119,4 +119,7 @@ public interface BuyerDao {
 
 	//배너 정보 조회
 	public List<MainBanner> selectBanner();
+
+	// 비밀번호 변경 쿼리
+	public void updateBuyerInfoAtMypage(BuyerInfo buyerInfo);
 }

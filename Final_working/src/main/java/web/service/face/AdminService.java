@@ -232,7 +232,19 @@ public interface AdminService {
 
 	public List<Message> getChatMessage(int chatRoomNo);
 
+
+  
+  
+  
+	// sellerimg만 삭제하기
+	public void sellerImgDelete(SellerBigdomInfo sbInfo);
+
+	// 판매자 정보 이미지 제외하고 업데이트하기
+	public void sellerUpdateWithoutImg(SellerBigdomInfo sbInfo);
+
+
 	public int getChatListCurPage(HttpServletRequest req);
+
 
 	public int getChatListTotalCount();
 

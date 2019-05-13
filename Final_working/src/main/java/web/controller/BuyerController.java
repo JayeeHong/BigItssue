@@ -317,7 +317,8 @@ public class BuyerController {
 	@RequestMapping(value="/buyer/join", method=RequestMethod.POST)
 	public String buyerJoin(BuyerInfo buyerInfo) {
 		
-		System.out.println(buyerInfo.toString());
+//		System.out.println(buyerInfo.toString());
+		buyerInfo.setBuyerPhone(buyerInfo.getBuyerPhone1()+buyerInfo.getBuyerPhone2()+buyerInfo.getBuyerPhone3());
 		
 		//비밀번호를 암호화하여여 buyerInfo에 다시 세팅하기
 		buyerInfo.setBuyerPw(buyerService.shaPw(buyerInfo.getBuyerPw()));
@@ -790,10 +791,18 @@ public class BuyerController {
 	
 	// ------------------------------------진행중
 	@RequestMapping(value="/buyer/my/info/changePw", method=RequestMethod.POST)
-	public String myInfoChangePw(BuyerInfo buyerInfo) {
+	public String myInfoChangePw(BuyerInfo buyerInfo, HttpSession session) {
 		
-		logger.info(":::비밀번호 변경::::"+buyerInfo.toString());
 		// 세션 정보 가져오기
+		buyerInfo.setBuyerId((String) session.getAttribute("buyerId"));
+
+//		logger.info(":::비밀번호 변경::::"+buyerInfo.toString());
+		
+		// 비밀번호 변경
+		buyerService.setBuyerInfoAtMypage(buyerInfo);
+		
+		// 비밀번호 변경 후 세션 만료
+		session.invalidate();
 		
 		return "jsonView";
 	}

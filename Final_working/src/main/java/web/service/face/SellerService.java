@@ -103,4 +103,10 @@ public interface SellerService {
 	// 판매자 카드 결제 여부 변경
 	public void setSellerCard(SellerLoc sellerloc);
 
+	// 예약취소시(시간초과한 경우, 판매자가 취소한경우) 판매부수 증가
+	public void setCirculation(Reservation reservation);
+
+	// reserveNo로 해당 컬럼 조회
+	public Reservation getReservationInfo(Reservation reservation);
+
 }
