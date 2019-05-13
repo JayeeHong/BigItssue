@@ -232,3 +232,6 @@
 	</nav>
 	
 </div>
+
+<!-- 새로운 메시지출력(웹소켓) -->
+<%-- <jsp:include page="../../views/buyer/connectWebsocket.jsp" /> --%>

@@ -228,6 +228,8 @@ public interface AdminService {
 
 
   public List<Message> getChatRoomNo();
+  
+ public void writeBanner(MainBanner mainBanner);
 
 
 
