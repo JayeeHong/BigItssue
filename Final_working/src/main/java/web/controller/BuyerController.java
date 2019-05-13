@@ -319,6 +319,9 @@ public class BuyerController {
 		
 		System.out.println(buyerInfo.toString());
 		
+		//비밀번호를 암호화하여여 buyerInfo에 다시 세팅하기
+		buyerInfo.setBuyerPw(buyerService.shaPw(buyerInfo.getBuyerPw()));
+		
 		buyerService.buyerJoin(buyerInfo);
 		
 		return "redirect:/buyer/login";
@@ -332,6 +335,9 @@ public class BuyerController {
 	
 	@RequestMapping(value="/buyer/login", method=RequestMethod.POST)
 	public String buyerLogin(BuyerInfo buyerInfo, HttpSession session) {
+		
+		//비밀번호를 암호화하여여 buyerInfo에 다시 세팅하기
+		buyerInfo.setBuyerPw(buyerService.shaPw(buyerInfo.getBuyerPw()));
 		
 		boolean user = buyerService.buyerLogin(buyerInfo);
 		
@@ -448,7 +454,8 @@ public class BuyerController {
 			//1. 있다면 비밀번호 변경	
 			String newPw = UUID.randomUUID().toString().split("-")[0];
 			
-			buyerInfo.setBuyerPw(newPw);
+			//비밀번호를 암호화하여여 buyerInfo에 다시 세팅하기
+			buyerInfo.setBuyerPw(buyerService.shaPw(newPw));
 			
 			buyerService.pwUpdate(buyerInfo);
 			

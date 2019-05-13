@@ -3,6 +3,7 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<jsp:useBean id="sysdate" class="java.util.Date"/>
 
 
 <script type="text/javascript">
@@ -48,6 +49,7 @@ function getLocList(){
 			var cpp1 = p.curPage + 1
 			var spppc = p.startPage + p.pageCount
 			
+			console.log('${sysdate}');
 			
 			var html =""
 				html ='<div id="tableAndpaging" style="height:400px;">'
@@ -60,18 +62,30 @@ function getLocList(){
 				html += '<td><b>조회수</b></td>'
 				html += '</tr>'
 				$.each(list, function(index, value){
+					var date = new Date(value.noticeDate);
+					var now = new Date();
+					
+					console.log(now)
 					
 					html +='<tr style="text-align: center;">'
 					html += '<td>'+value.noticeNo+'</td>'
 					html += '<td class="goDetailView" onclick="goDetailView('+value.noticeNo+')">'
 // 					html += '<a href="/admin/notice/view?noticeNo='+value.noticeNo+'">'
+					
 					html += value.noticeTitle
 // 					html += '</a>'
 					html += '</td>'
 					
-					var date = new Date(value.noticeDate);
 					
-					html += '<td>'+date.getFullYear(2)+'-'+date.getMonth(2)+'-'+date.getDate()+'</td>'
+					html += '<td>'+date.getFullYear(2)+'-'
+					if(date.getMonth()<10){
+					html += 0	
+					}
+					html += date.getMonth()+'-'
+					if(date.getDate()<10){
+					html += 0
+					}
+					html += date.getDate()+'</td>'
 					html += '<td>'+value.noticeHit+'</td>'
 					html +='</tr>'
 					
@@ -164,6 +178,9 @@ function goDetailView(a){
 <style>
 .goDetailView:hover{
 text-decoration: underline;
+cursor: pointer;
+}
+a{
 cursor: pointer;
 }
 </style>
