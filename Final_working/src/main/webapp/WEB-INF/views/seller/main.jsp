@@ -14,12 +14,13 @@
 
 <script type="text/javascript">
 
-	// 아이디 저장
+	// 로그인 정보 저장
 	$(document).ready(function() {
-		
 		// 저장된 쿠키값을 가져와서 ID칸에 넣어준다. 없으면 공백
 		var key = getCookie("key");
 		$("#sellerId").val(key);
+		var keypw = getCookie("keypw");
+		$("#sellerPw").val(keypw);
 		
 // 		console.log(key);
 		
@@ -28,20 +29,27 @@
 		}
 		
 		$("#saveId").change(function() { // 체크박스에 변화가 있다면,
-			if($("#saveId").is(":checked")) { // ID저장하기 체크했을 대
+			if($("#saveId").is(":checked")) { // ID저장하기 체크했을 때
 				setCookie("key", $("#sellerId").val(), 7); // 7일 동안 쿠키 보관
+				setCookie("keypw", $("#sellerPw").val(), 7);
 			} else { // ID저장 체크 해제 시
 				deleteCookie("key");
+				deleteCookie("keypw");
 			}
 		});
 		
-		// ID저장을 체크한 상태에서 ID를 입력하는 경우, 이경우에도 쿠키 저장
+		// 로그인 정보 저장을 체크한 상태에서 로그인 정보를 입력하는 경우, 이경우에도 쿠키 저장
 		$("#sellerId").keyup(function() { // id 입력칸에 id 입력할 때
 			if($("#saveId").is(":checked")) { // id 저장하기를 체크한 상태라면
 				setCookie("key", $("#sellerId").val(), 7); // 7일 동안 쿠키 보관
 			}
 		});
 		
+		$("#sellerPw").keyup(function() { // pw 입력할 때
+			if($("#saveId").is(":checked")) { // 로그인 정보 저장하기를 체크한 상태라면
+				setCookie("keypw", $("#sellerPw").val(), 7); // 7일 동안 쿠키 보관
+			}
+		});
 	});
 	
 	function setCookie(cookieName, value, exdays){
@@ -100,12 +108,12 @@
 <input style="height: 30px; width: 250px; margin: 10px" type="text" id="sellerId" name="sellerId" />
 <br>
 <span style="margin: 10px;" class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-<input style="height: 30px; width: 250px; margin: 10px" type="password" name="sellerPw" />
+<input style="height: 30px; width: 250px; margin: 10px" type="password" id="sellerPw" name="sellerPw" />
 <br>
 
 <div style="text-align: right; margin: 10px;">
-<input style="margin: 10px;" type="checkbox" id="saveId" /><label for="saveId" id="saveId">아이디 저장</label>
-<input style="margin: 10px;" type="checkbox" id="autoLogin" /><label for="autoLogin" id="autoLogin">자동 로그인</label>
+<input style="margin: 10px;" type="checkbox" id="saveId" /><label for="saveId" id="saveId">로그인 정보 저장</label>
+<!-- <input style="margin: 10px;" type="checkbox" id="autoLogin" /><label for="autoLogin" id="autoLogin">자동 로그인</label> -->
 </div>
 
 <button style="width: 300px;" class="btn btn-primary">로그인</button>
