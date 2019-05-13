@@ -520,10 +520,11 @@ public class SellerController {
 		model.addAttribute("reviewView", reviewView);
 		
 		
-//		//댓글 리스트 MODEL 추가
-//		List<ReviewReply> replyList = sellerService.getReplyList(reviewno);
-////		for(ReviewReply r : replyList) System.out.println(r);
-//		model.addAttribute("replyList", replyList);
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = sellerService.getReplyList(reviewno);
+//		for(ReviewReply r : replyList) System.out.println(r);
+		
+		model.addAttribute("replyList", replyList);
 				
 	}
 	
@@ -585,25 +586,12 @@ public class SellerController {
 
 	}
 	
-	@RequestMapping(value="/seller/review/reply/list", method=RequestMethod.GET)
-	public String replyList(int reviewNo, Model model) {
-		
-		//댓글 리스트 MODEL 추가
-		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
-//		for(ReviewReply r : replyList) System.out.println(r);
-		
-		model.addAttribute("replyList", replyList);
-		
-		return "jsonView";
-	}
 		
 	@RequestMapping(value="/seller/review/reply/insert", method=RequestMethod.POST)
 	public String replyWrite(ReviewReply reviewReply, Model model) {
 		
 		logger.info("댓글 달기");
-		System.out.println(reviewReply.toString());
-		 
-//		reviewReply.setWriter( (String) session.getAttribute("sellerId") );
+//		System.out.println(reviewReply.toString());		 
 		
 		//댓글 입력
 		sellerService.replyWrite(reviewReply);
@@ -613,28 +601,21 @@ public class SellerController {
 
 		model.addAttribute("replyList", replyList);
 		
-//		return "redirect:/seller/review/view?reviewno=" + reviewReply.getReviewNo();
-		return "jsonView";
+		return "redirect:/seller/review/view?reviewNo=" + reviewReply.getReviewNo();
+		
 	}
 	
-	@RequestMapping(value="/seller/review/reply/delete", method=RequestMethod.POST)
+	@RequestMapping(value="/seller/review/reply/delete", method=RequestMethod.GET)
 	public String replyDelete(int replyNo, int reviewNo, Model model) {
 		
 		logger.info("댓글 삭제");
-//		logger.info(reviewReply.toString());
 		
-//		int replyno = Integer.parseInt( req.getParameter("replyNo") );
 //		System.out.println(replyNo);
 //		System.out.println(reviewNo);
 		
 		sellerService.replyDelete(replyNo);
-		
-		//댓글 리스트 MODEL 추가
-		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
-		
-		model.addAttribute("replyList", replyList);
-		
-		return "jsonView";
+
+		return "redirect:/seller/review/view?reviewNo=" + reviewNo;
 	}
 
 	@RequestMapping(value="/seller/review/reply/update", method=RequestMethod.POST)
