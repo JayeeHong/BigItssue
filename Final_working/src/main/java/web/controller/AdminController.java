@@ -603,14 +603,47 @@ public class AdminController {
 	@RequestMapping(value="/admin/chat/list", method=RequestMethod.GET)
 	public void adminChatlist(
 			Message message,
-			Model model) { // 채팅 내역 관리
-		List<Message> list = adminService.getChatRoomNo();
+			Model model,
+			HttpServletRequest req) { // 채팅 내역 관리
+		// 페이징처리
+		// 현재 페이지 번호 얻기
+		int curPage = adminService.getChatListCurPage(req);
+		// 총 게시글 수
+		int totalCount = 0;
+
+		// 총 게시글 수 얻기
+		int cnt = adminService.getChatListTotalCount();
+		if(cnt==0) {
+			totalCount = 1;
+		} else {
+			totalCount = cnt;
+		}
+		
+		// 페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+		//Chat 전체 조회
+		List<Message> list = adminService.getChatRoomNo(paging);
 		logger.info("Test : " + list.toString());
 		logger.info("Test2 : "+list.size());
-		int cnt = list.size();
-		
 			
+		logger.info(paging.toString());
 		model.addAttribute("message", list);
+		
+		model.addAttribute("paging", paging);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("curPage", curPage);
+	}
+	
+	@RequestMapping(value="/admin/chat/view", method=RequestMethod.GET)
+	public void adminChatDetail(
+			int chatRoomNo,
+			Message message,
+			Model model) {
+		
+		List<Message> list = adminService.getChatMessage(chatRoomNo);
+		logger.info(String.valueOf(list));
+		model.addAttribute("message", list);
+		
 	}
 	
 	@RequestMapping(value="/admin/seller/getSellerInfolist", method=RequestMethod.GET)
@@ -1179,8 +1212,4 @@ public class AdminController {
 		logger.info("TEST : "+String.valueOf(selLoc));
 		model.addAttribute("sellerLoc", selLoc);
 	}
-
-
-	
-	
 }

@@ -220,14 +220,18 @@ public interface AdminService {
 	//배너 삭제
 	public void deleteBanner(int bannerNo);
 	
+	public void writeBanner(MainBanner mainBanner);
+	
 	
   public List<String> userIdList(String abc);
 
   public List<SellerInfo> nullUserInfo(List<String> idOfinfo);
 
 
+  	public List<Message> getChatRoomNo(Paging paging);
 
-  public List<Message> getChatRoomNo();
+	public List<Message> getChatMessage(int chatRoomNo);
+
 
   
   
@@ -239,6 +243,10 @@ public interface AdminService {
 	public void sellerUpdateWithoutImg(SellerBigdomInfo sbInfo);
 
 
+	public int getChatListCurPage(HttpServletRequest req);
+
+
+	public int getChatListTotalCount();
 
 }
 

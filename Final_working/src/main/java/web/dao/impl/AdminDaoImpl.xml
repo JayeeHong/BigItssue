@@ -438,6 +438,7 @@
 		ORDER BY bannerNo
 	</select>
 	
+
 	<select id="selectBannerNo" resultType="int">
 		SELECT MainBanner_seq.nextval FROM dual
 	</select>
@@ -467,14 +468,31 @@
 
 	
 	
-	<select id="getChatRoomNo" resultType="web.dto.Message">
-		SELECT DISTINCT a.chatRoomNo, a.BigdomId, a.BuyerId, a.SellerId FROM (
-			SELECT chat.chatRoomNo, chat.BigdomId, chat.BuyerId, chat.SellerId, message.ChatDate
-			FROM chat, message
-			WHERE message.chatRoomNo = chat.chatRoomNo
-			ORDER BY chat.chatRoomNo
-		) a
-		ORDER BY chatRoomNo
+	<select id="getChatRoomNo" parameterType="web.util.Paging" resultType="web.dto.Chat">
+		SELECT * FROM (
+		    SELECT rownum rnum, B.* FROM (
+		        SELECT * FROM chat
+				ORDER BY chatRoomNo DESC
+		    ) B
+		    ORDER BY rnum
+		) 
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+	</select>
+	
+	
+	<select id="getChatMessage" parameterType="int" resultType="web.dto.Message">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, B.* FROM (
+				select * FROM message
+				WHERE chatRoomNo = #{chatRoomNo }
+				ORDER BY chatMessageNo DESC
+				) B
+			ORDER BY rnum
+		) WHERE rnum BETWEEN 1 and 25
+	</select>
+	
+	<select id="getChatListTotalCount" resultType="int">
+		SELECT count(*) FROM chat
 	</select>
 	
 	

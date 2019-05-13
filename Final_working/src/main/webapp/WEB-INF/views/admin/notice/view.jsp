@@ -34,7 +34,7 @@ function noticeDelete(a){
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 <br>
-<div class="" style="width:auto;" >
+<div class="" style="width: 1200px;" >
 	<div class="container text-left" style="width:60%; height:70px;">
     <h1><label>${notice.noticeTitle }</label></h1>
 	</div>
