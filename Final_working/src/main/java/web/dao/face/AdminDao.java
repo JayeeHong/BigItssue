@@ -3,6 +3,7 @@ package web.dao.face;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Param;
 
 import web.dto.AdminInfo;
@@ -212,7 +213,11 @@ public interface AdminDao {
 	public List<SellerInfo> nullUserInfo(String i);
 
 	
-	public List<Message> getChatRoomNo();
+	public List<Message> getChatRoomNo(Paging paging);
+
+	public List<Message> getChatMessage(int chatRoomNo);
+
+	public int getChatListTotalCount();
 
 
 

@@ -516,10 +516,35 @@ public class AdminServiceImpl implements AdminService{
 	}
 
   @Override
-  public List<Message> getChatRoomNo() {
-		return adminDao.getChatRoomNo();
+  public List<Message> getChatRoomNo(Paging paging) {
+		return adminDao.getChatRoomNo(paging);
   }
 
+
+  @Override
+  public List<Message> getChatMessage(int chatRoomNo) {
+	  return adminDao.getChatMessage(chatRoomNo);
+  }
+
+@Override
+public int getChatListCurPage(HttpServletRequest req) {
+	//요청파라미터 curPage 받기
+	String param = req.getParameter("curPage");
+
+	//null이나 ""이 아니면 int로 리턴
+	if( param != null && !"".equals(param) ) {
+		int curPage = Integer.parseInt(param);
+		return curPage;
+	}
+	
+	//null이나 ""면 0으로 반환하기
+	return 0;
+}
+
+@Override
+public int getChatListTotalCount() {
+	return adminDao.getChatListTotalCount();
+}
 	
 }
 

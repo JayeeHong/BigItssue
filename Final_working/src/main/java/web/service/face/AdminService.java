@@ -226,10 +226,13 @@ public interface AdminService {
   public List<SellerInfo> nullUserInfo(List<String> idOfinfo);
 
 
+  	public List<Message> getChatRoomNo(Paging paging);
 
-  public List<Message> getChatRoomNo();
+	public List<Message> getChatMessage(int chatRoomNo);
 
+	public int getChatListCurPage(HttpServletRequest req);
 
+	public int getChatListTotalCount();
 
 }
 

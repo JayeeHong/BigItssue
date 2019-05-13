@@ -163,7 +163,7 @@ function closeSocket(){
 
 </script>
 
-<jsp:include page="mainBanner.jsp" />
+<%-- <jsp:include page="mainBanner.jsp" /> --%>
 
 
 
