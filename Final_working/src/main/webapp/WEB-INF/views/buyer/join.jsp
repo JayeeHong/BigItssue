@@ -311,7 +311,7 @@ function joinConfirm() {
 	<div class="form-group">
 		<label class="col-sm-3 col-sm-offset-1 control-label">휴대전화</label>
 		<div class="">
-			<select class="form-control" style="display: inline; width: 80px;" name="sellerPhone1">
+			<select class="form-control" style="display: inline; width: 80px;" name="buyerPhone1">
 				<option value="010">010</option>
 				<option value="011">011</option>
 				<option value="016">016</option>
@@ -320,9 +320,9 @@ function joinConfirm() {
 				<option value="031">031</option>
 			</select>
 			&nbsp;-&nbsp;
-			<input class="form-control" style="display: inline; width: 80px; text-align: center;" type="text" maxlength="4" value="" name="sellerPhone2" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
+			<input class="form-control" style="display: inline; width: 80px; text-align: center;" type="text" maxlength="4" value="" name="buyerPhone2" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
 			&nbsp;-&nbsp;
-			<input class="form-control" style="display: inline; width: 80px; text-align: center;" type="text" maxlength="4" value="" name="sellerPhone3" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
+			<input class="form-control" style="display: inline; width: 80px; text-align: center;" type="text" maxlength="4" value="" name="buyerPhone3" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
 		
 <!-- 			<input class="form-control" type="text" name="buyerPhone" id="buyerPhone"> -->
 		</div>

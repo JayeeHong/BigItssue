@@ -317,7 +317,7 @@ public class BuyerController {
 	public String buyerJoin(BuyerInfo buyerInfo) {
 		
 //		System.out.println(buyerInfo.toString());
-		buyerInfo.setBuyerPhone(buyerInfo.getBuyerPhone1()+buyerInfo.getBuyerPhone2()+buyerInfo.getBuyerPhone3());
+		buyerInfo.setBuyerPhone(buyerInfo.getBuyerPhone1()+"-"+buyerInfo.getBuyerPhone2()+"-"+buyerInfo.getBuyerPhone3());
 		
 		buyerService.buyerJoin(buyerInfo);
 		
