@@ -125,7 +125,7 @@ $(document).ready(function() {
 				, success: function(res) {
 					console.log('비밀번호 변경:'+res.buyerInfo);
 					console.log('비밀번호 변경 세션:'+res.session);
-					changePass += '<label>비밀번호가 성공적으로 변경되었습니다.<br>3초 후 자동으로 로그아웃됩니다.</label>';
+					changePass += '<label>비밀번호가 성공적으로 변경되었습니다.<br>잠시 후 자동으로 로그아웃됩니다.</label>';
 					$("#changePassSuccess").html(changePass);
 					$("#changePassSuccess").css("color", "green");
 					
@@ -248,6 +248,9 @@ $(document).ready(function() {
 					verifyConfirm += '<label>메일이 성공적으로 변경되었습니다!</label>';
 					$("#verifyConfirm").html(verifyConfirm);
 					$("#verifyConfirm").css("color", "green");
+					
+					setTimeout('history.go(0);',3000);
+					
 				}
 				, error: function(e) {
 					console.log(e);
@@ -284,10 +287,10 @@ $(document).ready(function() {
 		phoneCancel += '&nbsp;';
 		phoneCancel += '<button type="button" class="btn btn-xs btn-default" id="phoneCancel">취소</button>';
 		
-		$("#cancelArea").html(phoneCancel);
+// 		$("#cancelArea").html(phoneCancel);
 		
 		// 연락처 수정 폼 보여주기
-		var phoneTag = '';
+		var phoneTag = '<br>';
 		phoneTag += '<label>수정할 연락처</label><br>';
 		phoneTag += '<select id="changePhone1" name="changePhone1">';
 		phoneTag += '<option value="010">010</option>';
@@ -307,11 +310,11 @@ $(document).ready(function() {
 	});
 	
 	// 연락처 변경 옆에 취소 버튼 클릭이벤트
-	$(document).on("click", "#phoneCancel", function() {
-		$("#cancelArea").html(null); // 취소버튼 영역 안보이게
-		$("#changePhone").html(null); // 수정할 연락처 부분 안보이게
+// 	$(document).on("click", "#phoneCancel", function() {
+// 		$("#cancelArea").html(null); // 취소버튼 영역 안보이게
+// 		$("#changePhone").html(null); // 수정할 연락처 부분 안보이게
 	
-	});
+// 	});
 	
 	// 연락처 수정 버튼 클릭이벤트
 // 	$("#changePhoneOk").click(function() {

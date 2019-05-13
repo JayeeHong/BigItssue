@@ -374,7 +374,8 @@
 			spot = #{spot },
 			sellerTimeS = #{sellerTimeS },
 			sellerTimeE = #{sellerTimeE },
-			sellerCard = #{sellerCard }
+			sellerCard = #{sellerCard },
+			sellerId = #{sellerId }
 		WHERE locNo = #{locNo }
 	</update>
 	
@@ -475,5 +476,20 @@
 		) a
 		ORDER BY chatRoomNo
 	</select>
+	
+	
+	
+	
+	<update id="deleteSellerImg" parameterType="web.dto.SellerBigdomInfo">
+		UPDATE sellerinfo
+		SET sellerImg=null
+		WHERE sellerId=#{sellerId }
+	</update>
+	
+	<update id="updateSellerWithoutImg" parameterType="web.dto.SellerBigdomInfo">
+		UPDATE sellerInfo
+		SET sellerName=#{sellerName }, sellerPw=#{sellerPw }, sellerPhone=#{sellerPhone }
+		WHERE sellerId=#{sellerId }
+	</update>
 
 </mapper>

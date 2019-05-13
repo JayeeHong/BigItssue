@@ -514,6 +514,18 @@ public class AdminServiceImpl implements AdminService{
 		return adminDao.getChatRoomNo();
   }
 
+  
+  
+	@Override
+	public void sellerImgDelete(SellerBigdomInfo sbInfo) {
+		adminDao.deleteSellerImg(sbInfo);
+	}
+
+	@Override
+	public void sellerUpdateWithoutImg(SellerBigdomInfo sbInfo) {
+		adminDao.updateSellerWithoutImg(sbInfo);
+	}
+
 	
 }
 
