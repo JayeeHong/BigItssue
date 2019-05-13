@@ -797,6 +797,9 @@ public class BuyerController {
 		buyerInfo.setBuyerId((String) session.getAttribute("buyerId"));
 
 //		logger.info(":::비밀번호 변경::::"+buyerInfo.toString());
+		// 비밀번호 암호화
+		String codedPw = buyerService.shaPw(buyerInfo.getBuyerPw());
+		buyerInfo.setBuyerPw(codedPw);
 		
 		// 비밀번호 변경
 		buyerService.setBuyerInfoAtMypage(buyerInfo);
