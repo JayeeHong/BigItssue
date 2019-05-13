@@ -167,45 +167,45 @@ function closeSocket(){
 
 
 
-<div class="container">
+<!-- <div class="container"> -->
 
-  <!-- 웹소켓 열기. 다른페이지에서도 새로운 메시지 확인하기위해서. -->
-
-
-  <!-- 현재시간 받아오기 -->
-  <fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
+<!-- 웹소켓 열기. 다른페이지에서도 새로운 메시지 확인하기위해서. -->
 
 
-	<!-- 장소,위치 검색 (select태그이용) -->
-	<form action="/buyer/main" method="POST">
-		<div style="float: right;">
-		<select name="zoneSelect">
-			<option value="">지역을 선택하세요</option>
-			<c:forEach var="item" items="${zoneList}" begin="0" end="${zoneList.size()}" step="1">
-				<!-- 한번 검색한 것은 새로고침해도 유지되도록 -->
-				<c:if test="${paging.zone eq item.zone }">
-					<option value="${item.zone }" selected>${item.zone }</option>
-				</c:if>
-				<c:if test="${paging.zone ne item.zone }">
-					<option value="${item.zone }">${item.zone }</option>
-				</c:if>
-			</c:forEach>
-		</select>
-			<select name="stationSelect">
-			<option value="">판매위치</option>
-			<c:forEach var="item" items="${stationList}" begin="0" end="${stationList.size()}" step="1">
-				<!-- 한번 검색한 것은 새로고침해도 유지되도록 -->
-				<c:if test="${paging.station eq item.station }">
-					<option value="${item.station }" selected>${item.station }</option>
-				</c:if>
-				<c:if test="${paging.station ne item.station }">
-					<option value="${item.station }">${item.station }</option>
-				</c:if>
-			</c:forEach>
-		</select>
-		<button style="margin-bottom:6px;" class="btn btn-primary btn-sm">검색</button>
-		</div><br>
-	</form>
+<!-- 현재시간 받아오기 -->
+<fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
+
+
+<!-- 장소,위치 검색 (select태그이용) -->
+<form action="/buyer/main" method="POST">
+	<div style="float: right;">
+	<select name="zoneSelect">
+		<option value="">지역을 선택하세요</option>
+		<c:forEach var="item" items="${zoneList}" begin="0" end="${zoneList.size()}" step="1">
+			<!-- 한번 검색한 것은 새로고침해도 유지되도록 -->
+			<c:if test="${paging.zone eq item.zone }">
+				<option value="${item.zone }" selected>${item.zone }</option>
+			</c:if>
+			<c:if test="${paging.zone ne item.zone }">
+				<option value="${item.zone }">${item.zone }</option>
+			</c:if>
+		</c:forEach>
+	</select>
+		<select name="stationSelect">
+		<option value="">판매위치</option>
+		<c:forEach var="item" items="${stationList}" begin="0" end="${stationList.size()}" step="1">
+			<!-- 한번 검색한 것은 새로고침해도 유지되도록 -->
+			<c:if test="${paging.station eq item.station }">
+				<option value="${item.station }" selected>${item.station }</option>
+			</c:if>
+			<c:if test="${paging.station ne item.station }">
+				<option value="${item.station }">${item.station }</option>
+			</c:if>
+		</c:forEach>
+	</select>
+	<button style="margin-bottom:6px;" class="btn btn-primary btn-sm">검색</button>
+	</div><br>
+</form>
 	
 	
 	
@@ -299,6 +299,5 @@ function closeSocket(){
 
 <jsp:include page="sellerLocPaging.jsp" />
 
-</div>
 </div>
 </div>

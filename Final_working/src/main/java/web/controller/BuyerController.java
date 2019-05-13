@@ -316,7 +316,8 @@ public class BuyerController {
 	@RequestMapping(value="/buyer/join", method=RequestMethod.POST)
 	public String buyerJoin(BuyerInfo buyerInfo) {
 		
-		System.out.println(buyerInfo.toString());
+//		System.out.println(buyerInfo.toString());
+		buyerInfo.setBuyerPhone(buyerInfo.getBuyerPhone1()+buyerInfo.getBuyerPhone2()+buyerInfo.getBuyerPhone3());
 		
 		buyerService.buyerJoin(buyerInfo);
 		

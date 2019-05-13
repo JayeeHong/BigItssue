@@ -1,6 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<style>
+.join {
+	width: 1100px;
+	margin: 0 auto;
+}
+
+.joinForm {
+	width: 1000px;
+	margin: 0 auto;
+}
+</style>
+
 <script type="text/javascript">
 
 	var buyerIdSave = null; //아이디 저장 - 아이디 중복 검사 후 저장 - 가입시 같은지 비교하기 위함
@@ -81,7 +93,7 @@ $(document).ready(function() {
 		var spe = pwpw.search(/[`~!@#$%^&*|\\\'\";:/?.,]/gi);
 
 		if(!/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/.test(pwpw)){            
-			$("#pwTest").html("비밀번호는 영문자, 숫자, 특수문자를 혼합한 이루어진 8~16자리입니다");
+			$("#pwTest").html("비밀번호는 영문자, 숫자, 특수문자로<br>이루어진 8~16자리입니다");
 			$("#pwTest").css("color", "red")
 	    }else{
 	    	$("#pwTest").html("가능한 비밀번호입니다");
@@ -231,65 +243,65 @@ function joinConfirm() {
 }
 </script>
 
+<div class="join">
 
+<div>
+<h3>BigItssue 회원가입</h3>
+<hr>
+</div>
 
-
-
-
-
-
-<div class="container">
-<h3 align="center">회원가입</h3>
-<br><br>
-
-
+<div class="joinForm">
 <form action="/buyer/join" method="post" onsubmit="return joinConfirm()" class="form-horizontal">
 
 	<div class="form-group">
 		<label class="col-sm-3 col-sm-offset-1 control-label">아이디</label>
-		<div class="col-sm-5">
+		<div style= "width: 269px; padding-right: 10px; float: left;">
 			<input class="form-control" type="text" name="buyerId" id="buyerId">
 		</div>
-		<input class="btn" type="button" name="idUse" id="idUse" value="중복확인"> 
+		<div style="width: 82px; float: left;">
+			<input class="btn" type="button" name="idUse" id="idUse" value="중복확인">
+		</div>
 		<input type="hidden" value="" id="idConfirm">
-		<div class="container text-center" id="okId"></div>
+		<div style="padding: 6px; float:left;" id="okId"></div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-3 col-sm-offset-1 control-label">비밀번호</label>
-		<div class="col-sm-5">
-			<input class="form-control" type="password" name="buyerPw" id="buyerPw" placeholder="영어,숫자,특수문자를  모두포함한 8~16자리 비밀번호를 입력해주세요">
+		<div style="width: 360px; padding-right: 10px; float: left;">
+			<input class="form-control" type="password" name="buyerPw" id="buyerPw" maxlength="16" placeholder="영어, 숫자, 특수문자를 모두 포함한 8~16자리입니다">
 		</div> 
 		<div id="pwTest"></div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-3 col-sm-offset-1 control-label">비밀번호 확인</label>
-		<div class="col-sm-5">
+		<div style="width: 360px; padding-right: 10px; float: left;">
 			<input class="form-control" type="password" name="pwConfirm" id="pwConfirm">
 		</div>
-		<div id="okPw"></div>
+		<div style="padding: 6px;" id="okPw"></div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-3 col-sm-offset-1 control-label">이름</label>
-		<div class="col-sm-5">
+		<div style="width: 360px; padding-right: 10px; float: left;">
 			<input class="form-control" type="text" name="buyerName" id="buyerName">
 		</div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-3 col-sm-offset-1 control-label">Email</label>
-		<div class="col-sm-5">
+		<div style="width: 242px; padding-right: 10px; float: left;">
 			<input class="form-control" type="email" name="buyerEmail" id="buyerEmail">
 		</div>
-		<input class="btn"type="button" value="인증코드발송" id="okemail">
-		<div id="isItEmail" class="container text-center"></div>
+		<div style="width: 110px; float: left;">
+			<input class="btn"type="button" value="인증코드발송" id="okemail">
+		</div>
+		<div style="padding: 6px; float:left;" id="isItEmail"></div>
 	</div>
 	
 	<div class="form-group">
 		<label class="col-sm-3 col-sm-offset-1 control-label">인증코드</label>
-		<div class="col-sm-5">
+		<div style= "width: 294px; padding-right: 10px; float: left;">
 			<input class="form-control" type="text" name="emailCode" id="emailCode"> <!-- 메일로 받은 인증코드를 입력하는 값  -->
 		</div>
 		<input class="btn" type="button" id="codeSame" value="확인">		<!-- 메일의 인증코드와 같은지 확인하는 버튼 -->
@@ -298,26 +310,36 @@ function joinConfirm() {
 	
 	<div class="form-group">
 		<label class="col-sm-3 col-sm-offset-1 control-label">휴대전화</label>
-		<div class="col-sm-5">
-			<input class="form-control" type="text" name="buyerPhone" id="buyerPhone">
+		<div class="">
+			<select class="form-control" style="display: inline; width: 80px;" name="sellerPhone1">
+				<option value="010">010</option>
+				<option value="011">011</option>
+				<option value="016">016</option>
+				<option value="017">017</option>
+				<option value="02">02</option>
+				<option value="031">031</option>
+			</select>
+			&nbsp;-&nbsp;
+			<input class="form-control" style="display: inline; width: 80px; text-align: center;" type="text" maxlength="4" value="" name="sellerPhone2" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
+			&nbsp;-&nbsp;
+			<input class="form-control" style="display: inline; width: 80px; text-align: center;" type="text" maxlength="4" value="" name="sellerPhone3" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
+		
+<!-- 			<input class="form-control" type="text" name="buyerPhone" id="buyerPhone"> -->
 		</div>
 	</div>
 	
 	<br><br>
 	
-	<div class="col-sm-3 col-sm-offset-1"></div>
-	<div class="col-sm-3">
-		<input class="btn btn-primary btn-lg btn-block" type="submit" name="join" id="join" value="가입" />
+	<div style="margin-left: 324px; width: 350px;">
+		<input class="btn btn-primary btn-block" type="submit" name="join" id="join" value="가입" />
 	</div>
 	
 
-	<div class="col-sm-2">
-		<a href="/buyer/login"><button class="btn btn-lg btn-block" type="button">취소</button></a>
-	</div>
+<!-- 	<div class="col-sm-2"> -->
+<!-- 		<a href="/buyer/login"><button class="btn btn-lg btn-block" type="button">취소</button></a> -->
+<!-- 	</div> -->
 	
 	<br><br><br><br><br><br><br>
 </form>
 </div>
-
-
-
+</div>
