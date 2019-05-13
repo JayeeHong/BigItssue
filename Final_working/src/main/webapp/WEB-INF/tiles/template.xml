@@ -6,6 +6,10 @@
  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
  
 <tiles-definitions>
+
+	<!-- 타일즈 적용제외jsp처리 -->
+    <definition name="buyer/my/chat" template="/WEB-INF/views/buyer/my/chat.jsp" />
+
 	<definition name="buyer" template="/WEB-INF/tiles/layout_buyer.jsp">
 		<put-attribute name="header" value="/WEB-INF/tiles/layout/header_buyer.jsp"></put-attribute>
 		<put-attribute name="body" />

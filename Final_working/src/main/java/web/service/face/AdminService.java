@@ -243,7 +243,12 @@ public interface AdminService {
 	public void sellerUpdateWithoutImg(SellerBigdomInfo sbInfo);
 
 
+  public List<Message> getChatRoomNo();
+  
+ public void writeBanner(MainBanner mainBanner);
+
 	public int getChatListCurPage(HttpServletRequest req);
+
 
 
 	public int getChatListTotalCount();

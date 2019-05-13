@@ -8,7 +8,7 @@ public class Chat { // 채팅내역
 	private String bigdomId; // 빅돔 아이디
 	private String buyerId; // 구매자 아이디
 	private String sellerId; // 판매자 아이디
-	private String TheOtherParty; //상대방  - 채팅내역의 상대방 이름을 띄워 주기위해서 추가
+	private String theOtherParty; //상대방  - 채팅내역의 상대방 이름을 띄워 주기위해서 추가
 	private Date chatFinalDate; //채팅방에서 메시지 오갈때, 최신 날짜.
 	
 	public int getChatRoomNo() {
@@ -35,25 +35,27 @@ public class Chat { // 채팅내역
 	public void setSellerId(String sellerId) {
 		this.sellerId = sellerId;
 	}
+	
+	
 	public String getTheOtherParty() {
-		return TheOtherParty;
+		return theOtherParty;
 	}
 	public void setTheOtherParty(String theOtherParty) {
-		TheOtherParty = theOtherParty;
+		this.theOtherParty = theOtherParty;
 	}
-	
 	public Date getChatFinalDate() {
 		return chatFinalDate;
 	}
 	public void setChatFinalDate(Date chatFinalDate) {
 		this.chatFinalDate = chatFinalDate;
 	}
-	
 	@Override
 	public String toString() {
 		return "Chat [chatRoomNo=" + chatRoomNo + ", bigdomId=" + bigdomId + ", buyerId=" + buyerId + ", sellerId="
-				+ sellerId + ", TheOtherParty=" + TheOtherParty + ", chatFinalDate=" + chatFinalDate + "]";
+				+ sellerId + ", theOtherParty=" + theOtherParty + ", chatFinalDate=" + chatFinalDate + "]";
 	}
+	
+
 	
 
 	

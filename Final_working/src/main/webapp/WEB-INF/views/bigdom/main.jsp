@@ -207,28 +207,7 @@
                 </span> </div>
             </div>
           </div>
-          <div class="inbox_chat">
-          
-          		 <!-- 옆 채팅 리스트 구조 -->
-          		 
-<!--             <div class="chat_list active_chat"> -->
-<!--               <div class="chat_people"> -->
-<!--                 <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div> -->
-<!--                 <div class="chat_ib"> -->
-<!--                   <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5> -->
-<!--                   <p>practice</p> -->
-<!--                 </div> -->
-<!--               </div> -->
-<!--             </div> -->
-<!--             <div class="chat_list"> -->
-<!--               <div class="chat_people"> -->
-<!--                 <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div> -->
-<!--                 <div class="chat_ib"> -->
-<!--                   <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5> -->
-<!--                   <p>practice</p> -->
-<!--                 </div> -->
-<!--               </div> -->
-<!--             </div> -->
+          <div class="inbox_chat">        
            
             <!-- 보조 채팅내역 -->
             <%-- 역기서 item은 하줄 한줄씩 보여주니까 dto겠지? --%>
@@ -270,26 +249,7 @@
         <c:if test="${chatRoomNo ne '-1' }">
         <div class="mesgs">
           <div id="msg_history_id" class="msg_history">
-          
-          		 <!-- 들어오는 메시지 구조 -->
-          		 
-<!--             <div class="incoming_msg"> -->
-<!--               <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div> -->
-<!--               <div class="received_msg"> -->
-<!--                 <div class="received_withd_msg"> -->
-<!--                   <p>practice</p> -->
-<!--                   <span class="time_date"> 11:01 AM    |    June 9</span></div> -->
-<!--               </div> -->
-<!--             </div> -->
-
-				 <!-- 보내는 메시지 구조 -->
-				 
-<!--             <div class="outgoing_msg"> -->
-<!--               <div class="sent_msg"> -->
-<!--                 <p>practice</p> -->
-<!--                 <span class="time_date"> 11:01 AM    |    June 9</span> </div> -->
-<!--             </div> -->
-        
+ 
             <c:forEach var="item" items="${primaryMsgList}" begin="0" end="${primaryMsgList.size()}" step="1">
 				<c:if test="${LoginInfo.id eq item.chatSender}">
 					<div class="outgoing_msg">
@@ -408,130 +368,109 @@ function connect(){
  	
 	//서버가 보낸 메시지 받는곳.
 	ws.onmessage = function(receive){
-		console.log("receive:"+receive);
-		console.log("receive.data:",receive.data+'\n');
 		
-		//데이터 형식  "(방번호)#(보내는사람:내용)"에서 #을 기준으로 
-		//(방번호)는 noFlag에 (보내는사람:내용)는 result에 저장.
-		var noFlag = receive.data.split('#')[0];
-		var senderId = receive.data.split('#')[1];
-		var result = receive.data.split('#')[2];
-		var presentDate = receive.data.split('#')[3];
+		//json문자열을  자바스크립트 객체로 변환
+		var data = JSON.parse(receive.data);
+		
+		//방번호
+		var noFlag = data.msg.chatRoomNo;
+		//송신자
+		var senderId = data.msg.chatSender;
+		//내용
+		var result = data.msg.chatContent;
+		//시간
+		var presentDate = data.msg.stringChatDate;
+		
 		console.log("noFlag:"+noFlag);
 		console.log("senderId:"+senderId);
 		console.log("result:"+result);
 		console.log("presentDate:"+presentDate);
-
-		//현재방번호와 메시지에서 받은 #앞의 번호가 같을경우엔 메인창에 띄워주고
- 		//현재방번호와 메시지에서 받은 #앞의 번호가 다를경우앤 채팅내역 리스트에서 방번호에서 같은번호가 있는지 찾는다.
- 		//메시지를 받았을때는 새롭게 다시 채팅방 리스트를 검사하자.
- 		
-// 		var list = ${chatRoomList}
-		//ajax쓰는 이유는 메시지를 받았을때, 새로운 방이 생겼을경우
-		//chatRoomList를 다시 받아 와야 하기 때문에 사용. 
-		$.ajax({
-			 type: "post"
-			 , url: "/chatRoomListAjax"
-			 /*data: 전달 Parameter (댓글내용, boardnoQA)  */
-			 , data: {}
-			 , dataType: "json"
-			 /* receive(이름은 내가 정하는것 )로 결과값 html을 받아옴 */
-			 , success: function(receive){
-				 
-				var refreshList = receive.refreshChatRoomList;
-				console.log(refreshList);
-				console.log(refreshList[0]);
-				console.log(refreshList[0].chatRoomNo);
-				console.log(refreshList.length);
-				
-				
-				console.log("[TEST]list확인:${chatRoomList}")
-				
-				//안본 메시지 개수List
-				var messageChkResult = receive.messageChkResult;
-				
-				//부트스트랩의 채팅창
-				var msg_history = $(".msg_history");
-				var inbox_chat = $(".inbox_chat");
-				
-				//채팅방 위치 재배치		
-				var replace = $("#b"+noFlag).wrap("<div><div/>").parent().html();
-				$("#b"+noFlag).remove();
-				inbox_chat.prepend(replace);
-				
-				/* 현재방번호와 #앞의 번호가 같을경우 */
-				if( ${chatRoomNo} == noFlag){
-					//옆 사이드에도 내방이 보여야 하니까
-					$("#b"+${chatRoomNo}+" p").html("<span class=\"time_date\">["+presentDate+"]</span>"+senderId+" : "+result);
-					
-					//부트스트랩에서 로그인된id와 메시지보낸id가 같을때
-					if('${LoginInfo.id}' == senderId){
-						var a = "<div class=\"outgoing_msg\"><div class=\"sent_msg\"> <p>"+result+"</p> <span class=\"time_date\"> "+presentDate+"</span> </div></div>"
-						msg_history.append(a);
-					}else{//부트스트랩에서 로그인된id와 메시지보낸id가 다를때
-						var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span class=\"time_date\"> "+presentDate+"</span></div></div></div>"
-						msg_history.append(a);
-					}
-					
-					
-				}else{/* 현재방번호와 #앞의 번호가 다를경우 */
-					/* 채팅내역 번호와 #앞의 번호가 같은곳을 업데이트해준다. */
-					for(var i=0; i<refreshList.length; i++){
-						if(refreshList[i].chatRoomNo==noFlag){
-							$("#b"+refreshList[i].chatRoomNo+" p").html("<span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result);
-							//안 읽은 채팅내역 개수 표시.
-							for(var j=0; j<messageChkResult.length; j++){
-								if(messageChkResult[j] !=null && refreshList[i].chatRoomNo==messageChkResult[j].chatRoomNo){
-									console.log("-----[TEST]-----:"+$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length)
-									/* 안 읽은 채팅내역 표시가 아예 없을 경우 생성해주자. */
-									if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length<=0){
-										var a = "<div class=\"text-center messageChkResult\" style=\"border-radius: 50%;height: 20px; width: 20px; background-color: red; color:white;\">"+messageChkResult[j].messageNoReadNum+"</div>"
-										$("#c"+refreshList[i].chatRoomNo).append(a);
-									}
-									/* 안 읽은 채팅내역 표시가 있으면 그곳에 숫자를 넣어주자. */
-									if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length>0){
-										$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").html(messageChkResult[j].messageNoReadNum);
-									}
-								}
-							}						
+		
+		//현재 로그인된 id에 맞는 채팅방들 리스트
+		var refreshList = data.refreshChatRoomList;
+		
+		//안본 메시지 개수List
+		var messageChkResult = data.messageChkResult;
+		
+		//부트스트랩의 채팅창
+		var msg_history = $(".msg_history");
+		
+		var inbox_chat = $(".inbox_chat");
+		
+		//채팅방 위치 재배치
+		//여기서 id="b(방번호)"는 채팅방list div하나 하나를 가리킴
+		//여기서 id="c(방번호)"는 안본메시지 개수 div 하나 하나를 가리킴
+		var replace = $("#b"+noFlag).wrap("<div><div/>").parent().html();
+		$("#b"+noFlag).remove();
+		inbox_chat.prepend(replace);
+		
+		
+		/* 현재방번호와 메시지보낸 방번호가 같을경우 */
+		if( ${chatRoomNo} == noFlag){
+			//옆 사이드에서의 내방에도 메시지 갱신
+			$("#b"+${chatRoomNo}+" p").html("<span class=\"time_date\">["+presentDate+"]</span>"+senderId+" : "+result);
+			
+			//로그인된id와 메시지보낸id가 같을때, primary채팅창 오른쪽에 출력
+			if('${LoginInfo.id}' == senderId){
+				var a = "<div class=\"outgoing_msg\"><div class=\"sent_msg\"> <p>"+result+"</p> <span class=\"time_date\"> "+presentDate+"</span> </div></div>"
+				msg_history.append(a);
+			}else{//로그인된id와 메시지보낸id가 다를때,  primary채팅창 왼쪽에 출력
+				var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span class=\"time_date\"> "+presentDate+"</span></div></div></div>"
+				msg_history.append(a);
+			}
+			
+			
+		}else{/* 현재방번호와 메시지보낸 방번호가  다를경우 */
+			/* sub메시지창의 방번호와  메시지보낸 방번호가 같은곳을 업데이트해준다. */
+			for(var i=0; i<refreshList.length; i++){
+				if(refreshList[i].chatRoomNo==noFlag){
+					$("#b"+refreshList[i].chatRoomNo+" p").html("<span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result);
+					//안 읽은 채팅내역 개수 표시.
+					for(var j=0; j<messageChkResult.length; j++){
+						if(messageChkResult[j] !=null && refreshList[i].chatRoomNo==messageChkResult[j].chatRoomNo){
+							console.log("-----[TEST]-----:"+$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length)
+							/* 안 읽은 채팅내역 표시가 아예 없을 경우 생성해주자. */
+							if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length<=0){
+								var a = "<div class=\"text-center messageChkResult\" style=\"border-radius: 50%;height: 20px; width: 20px; background-color: red; color:white;\">"+messageChkResult[j].messageNoReadNum+"</div>"
+								$("#c"+refreshList[i].chatRoomNo).append(a);
+							}
+							/* 안 읽은 채팅내역 표시가 있으면 그곳에 숫자를 넣어주자. */
+							if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length>0){
+								$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").html(messageChkResult[j].messageNoReadNum);
+							}
 						}
-						console.log("[TEST]:"+$("#b"+refreshList[i].chatRoomNo).length)			
-						if($("#b"+refreshList[i].chatRoomNo).length<=0){//있어야할 id가 없다면 생성해주자.
-							var a = "<div class=\"chat_list\"><a href=\"/seller/main?chatRoomNo="+noFlag+"\">"+noFlag+"번방["+refreshList[i].theOtherParty+"]</a> <div id=\"b"+noFlag+"\" onclick=\"location.href='/seller/main?chatRoomNo="+noFlag+"'\"class=\"chat_people\"><div class=\"chat_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"chat_ib\"><p><span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result+"</p><div id=\"c"+refreshList[i].chatRoomNo+"\">	 </div></div></div></div>"
-							inbox_chat.prepend(a);
-							//안 읽은 채팅내역 개수 표시.
-							for(var j=0; j<messageChkResult.length; j++){
-								if(messageChkResult[j] !=null && refreshList[i].chatRoomNo==messageChkResult[j].chatRoomNo){
-									console.log("-----[TEST]-----:"+$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length)
-									/* 안 읽은 채팅내역 표시가 아예 없을 경우 생성해주자. */
-									if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length<=0){
-										var a = "<div class=\"text-center messageChkResult\" style=\"border-radius: 50%;height: 20px; width: 20px; background-color: red; color:white;\">"+messageChkResult[j].messageNoReadNum+"</div>"
-										$("#c"+refreshList[i].chatRoomNo).append(a);
-									}
-									/* 안 읽은 채팅내역 표시가 있으면 그곳에 숫자를 넣어주자. */
-									if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length>0){
-										$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").html(messageChkResult[j].messageNoReadNum);
-									}
-								}
+					}						
+				}
+				//있어야할 sub채팅방이 없을경우, 생성해주고 채팅갱신해주자.			
+				if($("#b"+refreshList[i].chatRoomNo).length<=0){
+					var a = "<div id=\"b"+noFlag+"\" onclick=\"location.href='/bigdom/main?chatRoomNo="+noFlag+"'\" class=\"chat_list\"><a href=\"/seller/main?chatRoomNo="+noFlag+"\">"+noFlag+"번방["+refreshList[i].theOtherParty+"]</a> <div class=\"chat_people\"><div class=\"chat_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"chat_ib\"><p><span class=\"time_date\"> ["+presentDate+"]</span>"+senderId+" : "+result+"</p><div id=\"c"+refreshList[i].chatRoomNo+"\"></div></div></div></div>"
+					inbox_chat.prepend(a);
+					//안 읽은 채팅내역 개수 표시.
+					for(var j=0; j<messageChkResult.length; j++){
+						if(messageChkResult[j] !=null && refreshList[i].chatRoomNo==messageChkResult[j].chatRoomNo){
+							console.log("-----[TEST]-----:"+$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length)
+							/* 안 읽은 채팅내역 표시가 아예 없을 경우 생성해주자. */
+							if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length<=0){
+								var a = "<div class=\"text-center messageChkResult\" style=\"border-radius: 50%;height: 20px; width: 20px; background-color: red; color:white;\">"+messageChkResult[j].messageNoReadNum+"</div>"
+								$("#c"+refreshList[i].chatRoomNo).append(a);
+							}
+							/* 안 읽은 채팅내역 표시가 있으면 그곳에 숫자를 넣어주자. */
+							if($("#b"+refreshList[i].chatRoomNo+" .messageChkResult").length>0){
+								$("#b"+refreshList[i].chatRoomNo+" .messageChkResult").html(messageChkResult[j].messageNoReadNum);
 							}
 						}
 					}
-
 				}
-				//스크롤 제일 아래로 내려주기
-				if(msg_history_id != null){
-					msg_history_id.scrollTop = msg_history_id.scrollHeight;
-				}
-			 }		 
-			 , error: function(e){
-				 alert("실패");
-				 console.log(e);
-			 }
-		});
-		
-		
-	};
+			}
 
+		}
+		//스크롤 제일 아래로 내려주기
+		if(msg_history_id != null){
+			msg_history_id.scrollTop = msg_history_id.scrollHeight;
+		}
+		
+	 };	 
+	
 	ws.onclose = function (event) { 
 		console.log('Info: connection closed.'); 
 		//setTimeout( function(){ connect();},1000); // retry connection!!

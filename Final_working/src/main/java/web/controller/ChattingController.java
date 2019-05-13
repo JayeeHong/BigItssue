@@ -35,16 +35,18 @@ public class ChattingController {
 		
 		//현재 넘어온 user에는 문의하기 버튼을 클릭했을때,
 		//상대방에 대한 정보가 들어있음.
-
 		
-		//로그인한id와 문의하기버튼눌렀을때 상대방id chat에 저장
+		//문의하기버튼눌렀을때, 현재id와 상대방id를 chat에 저장
 		Chat chat = chatService.getChat(user, session);
-		
-		
+			
 		//방이 이미 존재하는지 판단
 		boolean createRoomChk =  chatService.createRoomChk(chat);
 		//-1로 방번호 초기화
-		int chatRoomNo = -1;
+		int chatRoomNo=0;
+		if(session.getAttribute("chatRoomNo")==null) {
+			chatRoomNo = -1;		
+			session.setAttribute("chatRoomNo", -1);
+		}
 		
 		if(createRoomChk==true) {
 			
@@ -173,76 +175,7 @@ public class ChattingController {
 		return "/chat/chat";
 	}
 	
-	@RequestMapping(value="chatRoomListAjax", method=RequestMethod.POST)
-	public String chatRoomListAjax(HttpSession session, Model model) {
-		logger.info("/////////////////////////////////////////");
-		User LoginInfo = (User)session.getAttribute("LoginInfo");
-		logger.info("LoginInfo:"+LoginInfo);
-		List<Chat> refreshChatRoomList = chatService.selectRooms(LoginInfo);
-		
-//		int chatRoomNo = (int)session.getAttribute("chatRoomNo");
-		int chatRoomNo=0;
-		logger.info("[TEST]확인!session.getAttribute(\"chatRoomNo\"):"+session.getAttribute("chatRoomNo"));
-		if(session.getAttribute("chatRoomNo")==null) {
-			logger.info("[TEST]확인! 들어오냐!!!!!!");
-			chatRoomNo = -1;
-			session.setAttribute("chatRoomNo", -1);
-			
-		}else { 
-			chatRoomNo =  (int)session.getAttribute("chatRoomNo");
-		}
-		
-		//채팅내역의 상대방 이름을 띄워 주기 위해서 추가
-		//Chat의 TheOtherParty에
-		//refreshChatRoomList속에 있는 Chat를 하나하나 조사해서 로그인된 아이디와 같지않고 null이 아닌 아이디를 넣어주자.
-		for(int i=0; i<refreshChatRoomList.size(); i++) {
-			if(refreshChatRoomList.get(i).getBuyerId() != null && !refreshChatRoomList.get(i).getBuyerId().equals(LoginInfo.getId())) {
-				refreshChatRoomList.get(i).setTheOtherParty(refreshChatRoomList.get(i).getBuyerId());
-			}else if(refreshChatRoomList.get(i).getSellerId() != null && !refreshChatRoomList.get(i).getSellerId().equals(LoginInfo.getId())) {
-				refreshChatRoomList.get(i).setTheOtherParty(refreshChatRoomList.get(i).getSellerId());
-			}else if(refreshChatRoomList.get(i).getBigdomId() != null && !refreshChatRoomList.get(i).getBigdomId().equals(LoginInfo.getId())) {
-				refreshChatRoomList.get(i).setTheOtherParty(refreshChatRoomList.get(i).getBigdomId());
-			}
-		}
-
-		logger.info("refreshChatRoomList:"+refreshChatRoomList);
-		
-		model.addAttribute("refreshChatRoomList",refreshChatRoomList);
-		
-		//----- 안읽은 메시지표시 -----
-		//방에 들어가면 현재id,방no,들어간date를 MessageChk에 넣어주자. - 나중에 안읽은 메시지 표시하기 위해서
-		//dto는 MessageChk사용.
-		
-		MessageChk messageChk = new MessageChk();
-		Date sysdate = new Date();//현재 방에 들어온 시간
-		messageChk = chatService.setDtoMessageChk(LoginInfo.getId(),chatRoomNo,sysdate);
-		logger.info("messageChk확인:"+messageChk);
-		
-		//MessageChk테이블에 이미 id가 들어가 있는지 없는지 확인
-		boolean existenceStatusOfChatId = chatService.getExistenceStatusOfChatId(messageChk);
-		
-		if(existenceStatusOfChatId) {//Id없으면
-			logger.info("MessageChk에 이미 Id가 존재하지 않음");
-			chatService.insertMessageChk(messageChk);
-		}else {//Id있으면
-			logger.info("MessageChk에 이미 Id가 존재함");
-			chatService.updateMessageChk(messageChk);
-		}
-		
-		//로그인한 id를 포함하는 방에서 내가 방에 접속한 시간보다 작은 메시지 개수 세기 (List리턴)
-		List<MessageChk> finalDateListById = chatService.getFinalDateListById(LoginInfo.getId());
-		logger.info("finalDateListById:"+finalDateListById);
-		//finalDateListById크기만큼 반복해서 읽지 않은 메시직 개수 가져오기
-		List<MessageChk> messageChkResult = new ArrayList<>();
-		for(int i=0; i<finalDateListById.size(); i++) {
-			MessageChk tempMessageChk = chatService.getMessageNoReadNum(finalDateListById.get(i));
-			messageChkResult.add(tempMessageChk);
-		}
-		logger.info("messageChkResult:"+messageChkResult);
-		model.addAttribute("messageChkResult", messageChkResult);
-		
-		return "jsonView";
-	}
+	
 	@RequestMapping(value="/chatting",method=RequestMethod.GET)
 	public String requestParamGet(int chatRoomNo, HttpSession session, Model model) {
 		
@@ -381,9 +314,11 @@ public class ChattingController {
 	@RequestMapping(value="/sessionRoomNoInit", method=RequestMethod.POST)
 	public String sessionRoomNoInit(HttpSession session) {	
 		
+		logger.info("여긴?");
 		session.setAttribute("chatRoomNo", -1);
 		
 		return "jsonView";
 	}
+
 
 }
