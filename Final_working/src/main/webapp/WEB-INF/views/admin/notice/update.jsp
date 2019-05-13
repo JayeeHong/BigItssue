@@ -45,11 +45,11 @@ function readImg(input){//미리보기를 한다
 
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
-
+<br>
     
-<div class="" style="float:left; width:600px;" >
+<div class="" style=" width:1200px;" >
     
-<div >
+<div class="container text-left" style=" width:600px;" >
 <form action="/admin/notice/update" method="post" enctype="multipart/form-data">
 <table class="table table-bordered">
 <tr>

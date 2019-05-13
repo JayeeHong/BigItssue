@@ -119,6 +119,9 @@ public interface BuyerService {
 
 	//메인베너 정보 가져오기
 	public List<MainBanner> getBannerList();
+
+	//비밀번호 암호화
+	public String shaPw(String buyerPw);
 	
 	
 }

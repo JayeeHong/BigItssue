@@ -36,8 +36,8 @@ function getNoticeList(){
 			
 			var html =""
 				html ='<div id="tableAndpaging" style="height:400px;">'
-				html += '<div class="row row-offcanvas" style="height:400px;">'
-				html += '<table class="table table-striped" width:80%;">'
+				html += '<div class="row row-offcanvas" style="height:400px; width:1000px;">'
+				html += '<table class="table table-striped">'
 				html += '<tr style="background: gray; text-align: center;">'
 				html += '<td><b>No.</b></td>'
 				html += '<td><b>제목</b></td>'
@@ -48,15 +48,22 @@ function getNoticeList(){
 					
 					html +='<tr style="text-align: center;">'
 					html += '<td>'+value.noticeNo+'</td>'
-					html += '<td>'
-					html += '<a href="/buyer/notice/view?noticeNo='+value.noticeNo+'">'
+					html += '<td class="goDetailView" onclick="goDetailView('+value.noticeNo+')">'
 					html += value.noticeTitle
-					html += '</a>'
 					html += '</td>'
 					
 					var date = new Date(value.noticeDate);
+				
 					
-					html += '<td>'+date.getFullYear(2)+'-'+date.getMonth(2)+'-'+date.getDate()+'</td>'
+					html += '<td>'+date.getFullYear(2)+'-'
+					if(date.getMonth()<10){
+					html += 0	
+					}
+					html += date.getMonth()+'-'
+					if(date.getDate()<10){
+					html += 0
+					}
+					html += date.getDate()+'</td>'
 					html += '<td>'+value.noticeHit+'</td>'
 					html +='</tr>'
 					
@@ -65,7 +72,7 @@ function getNoticeList(){
 					html += '</table>'
 					html += '</div>'
 					
-					html += '<div class="text-center">'
+					html += '<div class="text-center" style="width:1000px;">'
 					html += '<ul class="pagination pagination-sm">'
 					if(p.curPage != 1){
 // 					html +=	'<li><a href='+'"/admin/seller/list?curPage=1&condtion='+condition+'&searchWord='+searchWord+'">&larr;처음</a></li>'
@@ -135,11 +142,28 @@ function getNoticeList(){
 	})
 }
 
+function goDetailView(a){
+	window.location.href="/buyer/notice/view?noticeNo="+a
+}
+
 </script>
 
+<style>
+.goDetailView:hover{
+text-decoration: underline;
+cursor: pointer;
 
-<div>
-	<div class="container container-center" style="margin-bottom: 100px;">
+}
+a{
+cursor: pointer;
+}
+
+</style>
+
+
+
+<div class="container" style="width: 1100px;">
+	<div class="container" style="margin-bottom: 100px;">
 		<div id="noticeListArea">
 		
 		</div>

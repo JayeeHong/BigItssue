@@ -220,6 +220,8 @@ public interface AdminService {
 	//배너 삭제
 	public void deleteBanner(int bannerNo);
 	
+	public void writeBanner(MainBanner mainBanner);
+	
 	
   public List<String> userIdList(String abc);
 
