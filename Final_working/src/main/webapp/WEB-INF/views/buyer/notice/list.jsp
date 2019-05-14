@@ -8,7 +8,7 @@ var curPage = 0;
 $(document).ready(function(){
 	getNoticeList();
 	
-	
+	$(".btn-xs").toggle(250);
 })
 
 function getCurPage(a){
@@ -45,22 +45,26 @@ function getNoticeList(){
 				html += '<td><b>조회수</b></td>'
 				html += '</tr>'
 				$.each(list, function(index, value){
+					var date = new Date(value.noticeDate);
+					var now = new Date();
 					
 					html +='<tr style="text-align: center;">'
 					html += '<td>'+value.noticeNo+'</td>'
 					html += '<td class="goDetailView" onclick="goDetailView('+value.noticeNo+')">'
+					if(now.getTime()-value.noticeDate <= 24*60*60*1000){
+					html += '<input type="button" class="btn btn-xs" value="new">&nbsp;'
+					}
 					html += value.noticeTitle
 					html += '</td>'
 					
-					var date = new Date(value.noticeDate);
 				
 					
 					html += '<td>'+date.getFullYear(2)+'-'
 					if(date.getMonth()<10){
 					html += 0	
 					}
-					html += date.getMonth()+'-'
-					if(date.getDate()<10){
+					html += date.getMonth()+1+'-'
+					if(date.getDate()+1<10){
 					html += 0
 					}
 					html += date.getDate()+'</td>'
@@ -157,15 +161,22 @@ cursor: pointer;
 a{
 cursor: pointer;
 }
-
+.btn-xs{
+background: none;
+color: red;
+}
+.centered { display: table; margin-left: auto; margin-right: auto; }
 </style>
 
 
 
-<div class="container" style="width: 1100px;">
+<div class="container" style="width: 1100px; height:400px; margin-top: 100px; ">
 	<div class="container" style="margin-bottom: 100px;">
 		<div id="noticeListArea">
-		
+			<div class="centered">
+			<img class="item"src="/upload/loading.gif" style="width: 180px; height: 180px;">
+			</div>
+
 		</div>
 	
 	</div>

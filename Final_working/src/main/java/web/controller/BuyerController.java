@@ -870,6 +870,7 @@ public class BuyerController {
 		@RequestMapping(value="/buyer/notice/view", method=RequestMethod.GET)
 		public void buyerNoticeView(Model model, Notice n) {
 			
+							//공지사항 상세보기 + 조회수추가
 			Notice notice = buyerService.getNoticeView(n.getNoticeNo());
 			
 			model.addAttribute("notice", notice);

@@ -122,4 +122,6 @@ public interface BuyerDao {
 
 	// 비밀번호 변경 쿼리
 	public void updateBuyerInfoAtMypage(BuyerInfo buyerInfo);
+	//공지사항 조회수 추가
+	public void noticeAddHit(int noticeNo);
 }

@@ -28,7 +28,11 @@ function noticeDelete(a){
 </script>
 
 <style>
-
+p{
+word-break:break-all;
+word-wrap:break-word;
+w
+}
 </style>
 
 
@@ -46,7 +50,9 @@ function noticeDelete(a){
 	</div>
    		<div class="container" style="text-align: center; width:auto; padding-right: 200px;">
 	    <br>
+		<p style="width: auto;">
 	    ${notice.noticeContent }
+		</p>
 	    <br>
 	    <c:if test="${notice.noticeImg ne null}">
 	    <img style="width: 40%; height: 40%;" src="/img/${notice.noticeImg }">	

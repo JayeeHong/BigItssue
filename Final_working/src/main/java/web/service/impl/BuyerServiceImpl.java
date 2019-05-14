@@ -312,6 +312,7 @@ public class BuyerServiceImpl implements BuyerService {
 
 	@Override
 	public Notice getNoticeView(int noticeNo) {
+		buyerDao.noticeAddHit(noticeNo);
 		return buyerDao.getNoticeView(noticeNo);
 	}
 
