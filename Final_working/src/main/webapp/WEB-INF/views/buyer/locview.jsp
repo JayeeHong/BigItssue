@@ -114,7 +114,14 @@ function inquire(id,sort){
 			${sellerLoc.sellerTimeS.substring( 0, 1 ) }:${sellerLoc.sellerTimeS.substring( 1, 3 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 1 )}:${sellerLoc.sellerTimeE.substring( 1, 3 )} 
 			</c:if>	
 		</td>
-		<td>${sellerLoc.bigdomId } (빅돔)<button class="btn btn-info btn-sm fr" onclick="inquire('${sellerLoc.bigdomId}','빅돔')">문의하기</button></td>
+		<td>
+		<c:if test="${sellerLoc.bigdomId eq null }">
+			해당 위치에는 빅돔이 없습니다.
+		</c:if>
+		<c:if test="${sellerLoc.bigdomId ne null }">
+			${sellerLoc.bigdomId } (빅돔)<button class="btn btn-info btn-sm fr" onclick="inquire('${sellerLoc.bigdomId}','빅돔')">문의하기</button>
+		</c:if>
+		</td>
 		</tr>
 	</tbody>
 </table>
