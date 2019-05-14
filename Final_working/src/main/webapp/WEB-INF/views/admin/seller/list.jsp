@@ -46,7 +46,14 @@ function listDelete(a){
 }
 
 function goBack(){
-	window.location.href="/admin/seller/list"
+	curPage = 0;
+	condition = 'zone';
+	searchWord =''
+	$("#searchWord").val('')
+	$("#condition").val('zone').prop("selected", true);
+
+	
+	getLocList();
 }
 
 function searchSeller(){
@@ -215,7 +222,12 @@ function getLocList(){
 }
 
 </script>    
-
+<style>
+a{
+cursor: pointer;
+}
+.centered { display: table; margin-left: auto; margin-right: auto; }
+</style>
     
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 <div class="qna" style="width: 1100px;">
@@ -246,7 +258,10 @@ function getLocList(){
 		
 		<!-- 스크립트로 html들어가는 영역  -->
 		<div id="locListArea">
-		
+		<div class="centered">
+		<img class="item"src="/upload/loading.gif" style="width: 180px; height: 180px;">
+		</div>
+
 		
 		
 		</div>    

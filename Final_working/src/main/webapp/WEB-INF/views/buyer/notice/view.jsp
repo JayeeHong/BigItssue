@@ -11,7 +11,12 @@ function noticeListGo(){
 
 </script>
 
-
+<style>
+p{
+word-break:break-all;
+word-wrap:break-word;
+w
+}</style>
 
 <div class="" >
 
@@ -28,7 +33,9 @@ function noticeListGo(){
 	</div>
     <div class="container text-center">
 	    <br>
+	    <p style="width: auto;">
 	    ${notice.noticeContent }
+		</p>
 	    <br>
 	    <c:if test="${notice.noticeImg ne null}">
 	    <img style="width: 40%; height: 40%;" src="/img/${notice.noticeImg }">	
