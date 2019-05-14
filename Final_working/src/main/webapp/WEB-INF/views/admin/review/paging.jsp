@@ -16,7 +16,7 @@
 <ul class="pagination pagination-sm">
 	<%-- 첫페이지가 아니라면 처음 버튼 보이기 --%>
 <%-- 	<c:if test="${paging.curPage ne 1 }"> --%>
-<!-- 	<li><a href="/seller/review/mylist?curPage=1">&larr;처음</a></li> -->
+<!-- 	<li><a href="/admin/review/list?curPage=1">&larr;</a></li> -->
 <%-- 	</c:if> --%>
 	
 	<%-- 이전 페이지그룹 --%>
@@ -24,7 +24,7 @@
 	<li class="disabled"><span>&laquo;</span></li>
 	</c:if>
 	<c:if test="${paging.curPage gt paging.pageCount }">
-	<li><a href="/seller/review/mylist?curPage=${paging.startPage-paging.pageCount}">&laquo;</a></li>
+	<li><a href="/admin/review/list?curPage=${paging.startPage-paging.pageCount}">&laquo;</a></li>
 	</c:if>
 	
 	
@@ -33,7 +33,7 @@
 	<li class="disabled"><span>&lt;</span></li>
 	</c:if>
 	<c:if test="${paging.curPage ne 1 }">
-	<li><a href="/seller/review/mylist?curPage=${paging.curPage-1}">&lt;</a></li>
+	<li><a href="/admin/review/list?curPage=${paging.curPage-1}">&lt;</a></li>
 	</c:if>
 
 	
@@ -43,10 +43,10 @@
 	 var="i">
 	
 	<c:if test="${paging.curPage eq i}">
-	<li class="active"><a href="/seller/review/mylist?curPage=${i }">${i }</a></li>
+	<li class="active"><a href="/seller/review/list?curPage=${i }">${i }</a></li>
 	</c:if>
 	<c:if test="${paging.curPage ne i}">
-	<li><a href="/seller/review/mylist?curPage=${i }">${i }</a></li>
+	<li><a href="/admin/review/list?curPage=${i }">${i }</a></li>
 	</c:if>
 	
 	</c:forEach>
@@ -56,7 +56,7 @@
 	<li class="disabled"><span>&gt;</span></li>
 	</c:if>
 	<c:if test="${paging.curPage ne paging.totalPage }">
-	<li><a href="/seller/review/mylist?curPage=${paging.curPage+1}">&gt;</a></li>
+	<li><a href="/admin/review/list?curPage=${paging.curPage+1}">&gt;</a></li>
 	</c:if>
 	
 	<%-- 다음 페이지그룹 --%>
@@ -64,7 +64,7 @@
 	<li class="disabled"><span>&raquo;</span></li>
 	</c:if>
 	<c:if test="${paging.endPage ne paging.totalPage }">
-	<li><a href="/seller/review/mylist?curPage=${paging.startPage+paging.pageCount}">&raquo;</a></li>
+	<li><a href="/admin/review/list?curPage=${paging.startPage+paging.pageCount}">&raquo;</a></li>
 	</c:if>
 	
 </ul>

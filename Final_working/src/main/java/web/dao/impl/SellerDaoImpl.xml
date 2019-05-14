@@ -175,9 +175,11 @@
 	<select id="selectPagingMylist" resultType="web.dto.Review" parameterType="web.util.Paging">
 		SELECT * FROM (
 			SELECT rownum rnum, B.* FROM (
-				SELECT * FROM review
-				WHERE 1=1
-					AND sellerId = #{sellerId }
+				SELECT C.*,
+					(SELECT COUNT(*) FROM ReviewReply
+					 WHERE reviewno = C.reviewno) AS replyCnt
+				FROM review C
+				WHERE sellerId = #{sellerId }
 				ORDER BY reviewNo desc
 			) B
 			ORDER BY rnum

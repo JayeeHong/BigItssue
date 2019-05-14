@@ -6,9 +6,7 @@
 
 
 
-
 <style type="text/css">
-#review { padding-top: 50px; }
 #btnBox { 
 	text-align: center;
 	height: 74px;
@@ -18,17 +16,12 @@
 
 
 
-
 <script type="text/javascript">
 
 //후기 상세페이지에서 목록/수정/삭제 버튼
 $(document).ready(function() {
 	$("#btnList").click(function() {
-		location.href = "/seller/review/list";
-	});
-	
-	$("#btnUpdate").click(function() {
-		$(location).attr("href", "/seller/review/update?reviewno=${reviewView.reviewNo }");
+		location.href = "/admin/review/list";
 	});
 	
 	$("#btnDelete").click(function() {
@@ -43,6 +36,8 @@ $(document).ready(function() {
 </script>
 
 
+
+
 <script type="text/javascript">
 //댓글 삭제
 function replyDelete(replyNo, reviewNo) { 
@@ -53,7 +48,7 @@ function replyDelete(replyNo, reviewNo) {
 
 	if( confirm("정말 삭제하시겠습니까??") == true ) {    //확인
 		$.ajax({
-			url: '/seller/review/reply/delete',
+			url: '/admin/review/reply/delete',
 			type: 'post',
 			data: { "replyNo":replyNo, "reviewNo":reviewNo },
 			dataType: 'json',
@@ -99,7 +94,7 @@ function replyUpdateProc(replyNo) {
     var updateContent = $('[name=replyContent_'+replyNo+']').val();
     
     $.ajax({
-        url : '/seller/review/reply/update',
+        url : '/admin/review/reply/update',
         type : 'post',
         data : { 'updateContent' : updateContent, 'replyNo' : replyNo },
         dataType: 'json',
@@ -123,6 +118,16 @@ function replyUpdateCancel(replyNo, replyContent) {
 </script>
 
 
+
+
+<div class="row row-offcanvas row-offcanvas-right">
+
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
+
+<div class="col-xs-12 col-sm-9">
+
+<h3>후기게시판 관리</h3>
+<hr>
 
 
 
@@ -153,10 +158,7 @@ function replyUpdateCancel(replyNo, replyContent) {
 
 		<div id="btnBox">
 			<button id="btnList" class="btn">목록</button>
-				<c:if test="${reviewView.sellerId == sellerId }">
-					<button id="btnUpdate" class="btn">수정</button>
-					<button id="btnDelete" class="btn">삭제</button><br><br><br>
-				</c:if>
+			<button id="btnDelete" class="btn">삭제</button><br><br><br>
 		</div>
 	</div>
 	
@@ -166,20 +168,24 @@ function replyUpdateCancel(replyNo, replyContent) {
 	
 	<!-- 댓글 입력 -->
 	<div class="replyInsert">
-		<form id="replyInsertForm" action="/seller/review/reply/insert" method="post">
+		<form id="replyInsertForm" action="/admin/review/reply/insert" method="post">
 			<input type="hidden" name="reviewNo" value="${reviewView.reviewNo }" />
-			<input type="hidden" name="writer" value="${sellerId }" />
+			<input type="hidden" name="writer" value="관리자" />
 			
 			<table class="table table-bordered">
 				<tr><td colspan="3"><strong>댓글달기</strong></td></tr>
 				<tr>
-					<td style="width: 15%">${sellerId }</td>
+					<td style="width: 15%">관리자</td>
 					<td style="width: 75%"><input class="form-control" type="text" name="replyContent" style="width: 100%"></td>
 					<td style="width: 10%; text-align: center;"><button name="replyInsertBtn" class="btn btn-sm">입력</button></td>
 				</tr>
 			</table>
 		</form>
 	</div>
+	
+
+
+	
 	
 	
 	
@@ -193,10 +199,10 @@ function replyUpdateCancel(replyNo, replyContent) {
 				<span><strong>${r.writer }</strong></span>
 				<span style="padding-left: 10px;"><small><fmt:formatDate value="${r.replyDate }" pattern="yyyy-MM-dd HH:mm"/></small></span>
 				<span style="padding-left: 10px;">
-					<c:if test="${r.writer == sellerId }">
+					<c:if test="${r.writer eq '관리자' }">
 						<a onclick="replyUpdate('${r.replyNo }', '${r.replyContent }')">[수정]</a>
-						<a onclick="replyDelete(${r.replyNo }, ${r.reviewNo })">[삭제]</a> 
 					</c:if>
+					<a onclick="replyDelete(${r.replyNo }, ${r.reviewNo })">[삭제]</a> 
 				</span>	
 			</div>
 			
@@ -209,4 +215,6 @@ function replyUpdateCancel(replyNo, replyContent) {
 	</c:forEach>
 	
 
+</div>
+</div>
 </div>

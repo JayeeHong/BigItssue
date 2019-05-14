@@ -205,7 +205,7 @@ function inquire(id,sort){
 
 </script>
 
-<%-- <jsp:include page="mainBanner.jsp" /> --%>
+<jsp:include page="mainBanner.jsp" />
 
 
 <!-- <div class="container"> -->

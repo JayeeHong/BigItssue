@@ -24,7 +24,7 @@
 <div class="header" style="height: 100px">
 
 	<div id="logo">
-	<a href="/bigdom/main">
+	<a href="/admin/main">
 		<img src="http://bigissue.kr/wp-content/themes/canvas/images/Bigissue_kr_logo_main.png">
 	</a>
 	</div>
