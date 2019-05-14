@@ -5,23 +5,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> 
 
 
-<script type="text/javascript">
-//후기 상세페이지에서 목록/수정/삭제 버튼
-$(document).ready(function() {
-	$("#btnList").click(function() {
-		location.href = "/seller/review/list";
-	});
-	
-	$("#btnUpdate").click(function() {
-		$(location).attr("href", "/seller/review/update?reviewno=${reviewView.reviewNo }");
-	});
-	
-	$("#btnDelete").click(function() {
-		alert("삭제?");
-		$(location).attr("href", "/seller/review/delete?reviewno=${reviewView.reviewNo }");
-	});
-});
-</script>
 
 
 <style type="text/css">
@@ -35,99 +18,79 @@ $(document).ready(function() {
 
 
 
+
 <script type="text/javascript">
-// //댓글 목록
-// $(document).ready(function() {
-// 	replyList(); //페이지 로딩시 댓글 목록 출력 
-// });
-// var reviewNo = ${reviewView.reviewNo };
-// //댓글 목록
-// function replyList() {
-// 	$.ajax({
-// 		url: "/seller/review/reply/list",
-// 		type: "get",
-// 		data: { "reviewNo" : reviewNo }, //게시글 번호
-// 		dataType: "json",
-// 		success: function(data) {
-			
-// 			$.each(data.replyList, function(i, e) {
-// // 				console.log("--------------")
-// // 				console.log("i : " + i);
-// // 				console.log("e : " + e);
-				
-// // 				$("#replyNo").html(e.replyNo);
-// // 				$("#replyContent").html(e.replyContent);
-// 				var a = '';
-// 				a += '<div class="replyArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-//                 a += '<div class="replyInfo'+e.replyNo+'">'+'댓글번호 : '+e.replyNo+' / 작성자 : '+e.writer;
-//                 a += '<a onclick="replyUpdate('+e.replyNo+',\''+e.replyContent+'\');"> [수정] </a>';
-//                 a += '<a onclick="replyDelete('+e.replyNo+',\''+e.reviewNo+'\')"> [삭제] </a> </div>';
-//                 a += '<div class="replyContent'+e.replyNo+'"> <p> 내용 : '+e.replyContent +'</p>';
-//                 a += '</div></div>';
-// //                 console.log(a)
-                
-//                 $("div.replyList").append($(a));
-// 			});
-			
-// // 			$(".replyList").html(a);
-// 		},
-// 		error: function(e) {
-// 			console.log("실패");
-// 			console.log(e);
-// 		}
-// 	});
-// }
+//후기 상세페이지에서 목록/수정/삭제 버튼
+$(document).ready(function() {
+	$("#btnList").click(function() {
+		location.href = "/seller/review/list";
+	});
+	
+	$("#btnUpdate").click(function() {
+		$(location).attr("href", "/seller/review/update?reviewno=${reviewView.reviewNo }");
+	});
+	
+	$("#btnDelete").click(function() {
+		if( confirm("후기를 삭제하시겠습니까?") == true ) {
+			$(location).attr("href", "/seller/review/delete?reviewno=${reviewView.reviewNo }");
+		} else {
+			return;
+		}
+	});
+});
+</script>
+
+
+<script type="text/javascript">
 //댓글 삭제
 function replyDelete(replyNo, reviewNo) { 
-//		alert(replyNo,reviewNo); 
-		alert("댓글 삭제??");
-		location.href = "/seller/review/reply/delete?replyNo=" + replyNo +"&reviewNo=" + reviewNo;
-// 	$.ajax({
-// 		url: '/seller/review/reply/delete',
-// 		type: 'post',
-// 		data: {"replyNo":replyNo, "reviewNo":reviewNo},
-// 		dataType: 'json',
-// 		success: function(data) {
-// 			console.log(replyNo);
-// // 			var a = documenet.getElementById("replyList");
-// 			var b = replyNo;
-// // 			console.log(a);
-			
-// // 			$("#replyNo").remove();
-// 			$("#replyList+"+replyNo).remove();
-// // 			$("div").removeClass('replyList');
-			
-			
-// // 			$.each(data.replyList, function(i, e) {
-// // 				a += '<div class="replyArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-// //                 a += '<div class="replyInfo'+e.replyNo+'">'+'댓글번호 : '+e.replyNo+' / 작성자 : '+e.writer;
-// //                 a += '<a onclick="replyUpdate('+e.replyNo+',\''+e.replyContent+'\');"> [수정] </a>';
-// //                 a += '<a onclick="replyDelete('+e.replyNo+',\''+e.reviewNo+'\')"> [삭제] </a> </div>';
-// //                 a += '<div class="replyContent'+e.replyNo+'"> <p> 내용 : '+e.replyContent +'</p>';
-// //                 a += '</div></div>';
-                
-// //                 $("div.replyList").append($(a));
-// // 			});
-			
-// // 			$("div.replyList").html(a); //덮어씌우기....
-// 		},
-// 		error: function(e) {
-// 			console.log("실패");
-// 			console.log(e);
-// 		}
-// 	});
+// 		console.log(replyNo, reviewNo);
+// 		alert("댓글 삭제??");
+// 		$("div").remove("#"+replyNo);
+// 		location.href = "/seller/review/reply/delete?replyNo=" + replyNo +"&reviewNo=" + reviewNo;
+
+	if( confirm("정말 삭제하시겠습니까??") == true ) {    //확인
+		$.ajax({
+			url: '/seller/review/reply/delete',
+			type: 'post',
+			data: { "replyNo":replyNo, "reviewNo":reviewNo },
+			dataType: 'json',
+			success: function(data) {
+				console.log(replyNo, reviewNo);
+				
+				$("div").remove("#"+replyNo);
+		
+			},
+			error: function(e) {
+					console.log("실패");
+					console.log(e);
+			}
+		});
+	
+	} else {   //취소
+	    return;
+	}
+
 }
+
+
+
+
 //댓글 수정 - 댓글 내용 출력을 input 폼으로 변경 
 function replyUpdate(replyNo, replyContent) {
+	console.log(replyNo);
+	console.log(replyContent);
+	
     var a ='';
     
     a += '<div class="input-group">';
     a += '<input type="text" class="form-control" name="replyContent_'+replyNo+'" value="'+replyContent+'"/>';
-    a += '<span class="input-group-btn"><button class="btn btn-default" type="button" onclick="replyUpdateProc('+replyNo+');">수정</button> </span>';
+    a += '<span class="input-group-btn"><button class="btn btn-primary" type="button" onclick="replyUpdateProc('+replyNo+');">수정</button> </span>';
+    a += '<span class="input-group-btn"><button class="btn btn-default" type="button" onclick="replyUpdateCancel('+replyNo+',\''+replyContent+'\');">취소</button></span>';
     a += '</div>';
-    
-    $('.replyContent'+replyNo).html(a);
-    
+
+	$("#"+replyNo).find("p").html(a);
+
 }
  
 //댓글 수정
@@ -137,21 +100,12 @@ function replyUpdateProc(replyNo) {
     $.ajax({
         url : '/seller/review/reply/update',
         type : 'post',
-        data : {'updateContent' : updateContent, 'replyNo' : replyNo, 'reviewNo' : reviewNo},
+        data : { 'updateContent' : updateContent, 'replyNo' : replyNo },
         dataType: 'json',
         success : function(data) {
-			var a = '';
 			
-			$.each(data.replyList, function(i, e) {
-				a += '<div class="replyArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-                a += '<div class="replyInfo'+e.replyNo+'">'+'댓글번호 : '+e.replyNo+' / 작성자 : '+e.writer;
-                a += '<a onclick="replyUpdate('+e.replyNo+',\''+e.replyContent+'\');"> [수정] </a>';
-                a += '<a onclick="replyDelete('+e.replyNo+',\''+e.reviewNo+'\')"> [삭제] </a> </div>';
-                a += '<div class="replyContent'+e.replyNo+'"> <p> 내용 : '+e.replyContent +'</p>';
-                a += '</div></div>';
-			});
-			
-			$("div.replyList").html(a);
+			$("#"+replyNo).find("p").html(updateContent);
+
         },
         error: function(e) {
 			console.log("실패");
@@ -159,6 +113,13 @@ function replyUpdateProc(replyNo) {
 		}        
     });
 }	
+
+
+//댓글 수정 취소
+function replyUpdateCancel(replyNo, replyContent) {
+	$("#"+replyNo).find("p").html(replyContent);
+}
+
 </script>
 
 
@@ -220,21 +181,12 @@ function replyUpdateProc(replyNo) {
 		</form>
 	</div>
 	
-
-	
-	<!-- 댓글 수정 -->
-<!-- 	<div class="input-group"> -->
-<%--     <input type="text" class="form-control" name="replyContent_${replyNo }" value="${replyContent }"> --%>
-<%--     <span class="input-group-btn"><button class="btn btn-default" type="button" onclick="replyUpdateProc(${replyNo });">수정</button> </span> --%>
-<!--    </div> -->
-	
-	
 	
 	
 	
 	<!-- 댓글 리스트 -->
 	<c:forEach items="${replyList }" var="r">
-		<div id="${r.replyNo }" class="replyList+${r.replyNo }" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">
+		<div id="${r.replyNo }" class="replyList" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">
 			
 			<div class="replyInfo">
 				<span class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px;"></span>
@@ -242,13 +194,14 @@ function replyUpdateProc(replyNo) {
 				<span style="padding-left: 10px;"><small><fmt:formatDate value="${r.replyDate }" pattern="yyyy-MM-dd HH:mm"/></small></span>
 				<span style="padding-left: 10px;">
 					<c:if test="${r.writer == sellerId }">
-						<a onclick="replyUpdate(${r.replyNo }, ${r.replyContent })">[수정]</a>
+						<a onclick="replyUpdate('${r.replyNo }', '${r.replyContent }')">[수정]</a>
 						<a onclick="replyDelete(${r.replyNo }, ${r.reviewNo })">[삭제]</a> 
 					</c:if>
 				</span>	
 			</div>
 			
-			<div class="replyContent+${r.replyNo }">
+			
+			<div id="replyContent_${r.replyNo }" class="replyContent">
 				<p>${r.replyContent }</p>
 			</div>
 			

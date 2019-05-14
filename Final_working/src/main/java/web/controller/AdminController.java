@@ -34,6 +34,8 @@ import web.dto.ChatReport;
 import web.dto.MainBanner;
 import web.dto.Message;
 import web.dto.Notice;
+import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
@@ -998,9 +1000,103 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/review/list", method=RequestMethod.GET)
-	public void adminReviewlist() { // 후기게시판 관리
+	public void adminReviewlist(Review review, Model model, HttpServletRequest req) { // 후기게시판 관리
+		
+		logger.info("후기게시판 관리");
+		
+		//현재 페이지 번호 얻기
+		int curPage = adminService.getReviewCurPage(req);
+		
+		//게시글 수 얻기
+		int totalCount = adminService.getReviewTotalCount();
+		
+		//페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+		
+		//페이징객체 MODEL로 추가
+		model.addAttribute("paging", paging);
+		
+		//게시글 목록 MODEL로 추가
+		List<Review> reviewList = adminService.getReviewPagingList(paging);
+		model.addAttribute("reviewList", reviewList);
 		
 	}
+
+	@RequestMapping(value="/admin/review/view", method=RequestMethod.GET)
+	public void reviewView(Review review, Model model, HttpServletRequest req) {
+		
+		logger.info("관리자 후기 상세페이지");
+		
+		int reviewno = Integer.parseInt(req.getParameter("reviewNo"));
+		review.setReviewNo(reviewno);
+		
+		//게시글 조회 수행
+		Review reviewView = adminService.viewReview(reviewno);
+		
+		//MODEL 전달
+		model.addAttribute("reviewView", reviewView);
+		
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = adminService.getReplyList(reviewno);
+		
+		model.addAttribute("replyList", replyList);
+				
+	}
+	
+	@RequestMapping(value="/admin/review/delete", method=RequestMethod.GET)
+	public String reviewDelete(Review review, HttpServletRequest req) {
+		
+		logger.info("후기 글 삭제");
+		
+		int reviewno = Integer.parseInt(req.getParameter("reviewno"));
+		
+		adminService.deleteReview(reviewno);
+		
+		return "redirect:/admin/review/list";
+	}
+	
+	@RequestMapping(value="/admin/review/reply/insert", method=RequestMethod.POST)
+	public String replyWrite(ReviewReply reviewReply, Model model) {
+		
+		logger.info("댓글 달기");
+		
+		//댓글 입력
+		adminService.replyWrite(reviewReply);
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = adminService.getReplyList(reviewReply.getReviewNo());
+
+		model.addAttribute("replyList", replyList);
+		
+		return "redirect:/admin/review/view?reviewNo=" + reviewReply.getReviewNo();
+		
+	}
+	
+	@RequestMapping(value="/admin/review/reply/delete", method=RequestMethod.POST)
+	public String replyDelete(int replyNo, int reviewNo) {
+		
+		logger.info("댓글 삭제");
+
+		adminService.replyDelete(replyNo);
+
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/admin/review/reply/update", method=RequestMethod.POST)
+	public String replyUpdate(int replyNo, String updateContent, ReviewReply reviewReply, Model model) {
+		
+		logger.info("댓글 수정");
+		
+		reviewReply.setReplyNo(replyNo);
+		reviewReply.setReplyContent(updateContent);
+		
+		adminService.replyUpdate(reviewReply);
+		
+		return "jsonView";
+		
+	}	
+	
 	
 	@RequestMapping(value="/admin/report/list", method=RequestMethod.GET)
 	public void adminReportlist(

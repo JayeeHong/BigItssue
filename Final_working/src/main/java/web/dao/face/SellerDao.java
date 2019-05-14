@@ -65,10 +65,10 @@ public interface SellerDao {
 	public User selectSellerInfoUser(SellerInfo sellerInfo);
 	
 	
-	//총 게시글 수 반환
+	//총 후기글 수 반환
 	public int selectCntReview();
 
-	//페이징처리 게시글 반환
+	//페이징처리 후기글 반환
 	public List<Review> selectPaginglist(Paging paging);
 
 	//후기글 삽입

@@ -17,6 +17,8 @@ import web.dto.ChatReport;
 import web.dto.MainBanner;
 import web.dto.Message;
 import web.dto.Notice;
+import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
@@ -245,6 +247,35 @@ public interface AdminService {
 
 
 	public int getChatListTotalCount();
+	
+	
+	//요청 파라미터에서 curPage 반환
+	public int getReviewCurPage(HttpServletRequest req);
+	
+	//총 후기글 수 얻기
+	public int getReviewTotalCount();
+	
+	//페이징 리스트 얻기
+	public List<Review> getReviewPagingList(Paging paging);
+
+	
+	//후기 글 상세 조회
+	public Review viewReview(int reviewno);
+
+	//후기 댓글 리스트 얻기
+	public List<ReviewReply> getReplyList(int reviewno);
+
+	//후기 삭제
+	public void deleteReview(int reviewno);
+
+	//후기 댓글 쓰기
+	public void replyWrite(ReviewReply reviewReply);
+
+	//후기 댓글 삭제
+	public void replyDelete(int replyNo);
+
+	//후기 댓글 수정
+	public void replyUpdate(ReviewReply reviewReply);
 
 }
 
