@@ -314,7 +314,6 @@ public class ChattingController {
 	@RequestMapping(value="/sessionRoomNoInit", method=RequestMethod.POST)
 	public String sessionRoomNoInit(HttpSession session) {	
 		
-		logger.info("여긴?");
 		session.setAttribute("chatRoomNo", -1);
 		
 		return "jsonView";

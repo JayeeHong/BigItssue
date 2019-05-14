@@ -20,7 +20,6 @@
 
 
 <script type="text/javascript">
-
 //후기 상세페이지에서 목록/수정/삭제 버튼
 $(document).ready(function() {
 	$("#btnList").click(function() {
@@ -38,7 +37,6 @@ $(document).ready(function() {
 			return;
 		}
 	});
-
 });
 </script>
 
@@ -74,6 +72,7 @@ function replyDelete(replyNo, reviewNo) {
 	}
 
 }
+
 
 
 
@@ -114,6 +113,7 @@ function replyUpdateProc(replyNo) {
 		}        
     });
 }	
+
 
 //댓글 수정 취소
 function replyUpdateCancel(replyNo, replyContent) {
