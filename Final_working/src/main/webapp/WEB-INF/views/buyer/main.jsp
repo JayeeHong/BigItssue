@@ -210,6 +210,8 @@ function inquire(id,sort){
 
 <!-- <div class="container"> -->
 
+<!-- 판매처 보기를 누르면 여기로 이동! -->
+<div id="moveToSellerloc">
 
   <!-- 웹소켓 열기. 다른페이지에서도 새로운 메시지 확인하기위해서. -->
   <!-- 현재시간 받아오기 -->
@@ -217,7 +219,7 @@ function inquire(id,sort){
 
 	<!-- 장소,위치 검색 (select태그이용) -->
 	<form action="/buyer/main" method="POST">
-		<div style="float: right;">
+		<div style="float: right; padding-right: 10px;">
 		<select name="zoneSelect" id="zoneSelect">
 			<option value="">지역을 선택하세요</option>
 			<c:forEach var="item" items="${zoneList}" begin="0" end="${zoneList.size()}" step="1">
@@ -330,6 +332,7 @@ function inquire(id,sort){
 <!-- 자식창이 리로드,닫혔을 때 동작 -->
 <!-- <input style ="width:1px; height:1px; float:left;"id="popupFlag" type="text" onFocus="popupFunc()"> -->
 
+</div> <!-- 판매처보기로 이동을 위한 div -->
 
 </div>
 </div>
