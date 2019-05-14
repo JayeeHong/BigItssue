@@ -68,10 +68,21 @@
 	<resources mapping="/upload/**" location="/upload/" />
 	
 	<!-- websocket handler -->
+	<!-- 채팅용 웹소켓 -->
 	<beans:bean id="replyEchochoHandler" class="web.handler.ReplyEchoHandler" />
 
 	<websocket:handlers>
 		<websocket:mapping handler="replyEchochoHandler" path="/replyEcho" />
+		<websocket:handshake-interceptors>
+		<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
+		</websocket:handshake-interceptors>	
+	</websocket:handlers>
+	
+	<!-- 댓글용 웹소켓 -->
+	<beans:bean id="replyEchochoCommentHandler" class="web.handler.ReplyEchoCommentHandler" />
+
+	<websocket:handlers>
+		<websocket:mapping handler="replyEchochoCommentHandler" path="/replyEchoComment" />
 		<websocket:handshake-interceptors>
 		<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
 		</websocket:handshake-interceptors>	

@@ -8,7 +8,13 @@
 <tiles-definitions>
 
 	<!-- 타일즈 적용제외jsp처리 -->
+	<!-- 웹소켓 적용한 곳이 buyer의 header에  include 해놨음 -->
+	<!-- 웹소켓 적용한 곳이 seller의 header에  include 해놨음 -->
+	<!-- 아래 2개의 url에서는 웹소켓을 추가로 적용 안하려고 header,footer를 타일즈에서 제외시키고 직접 주었음. -->
+	<!-- 따로 헤더를 만들어서 다시 주었음 (/buyer/header.jsp) -->
     <definition name="buyer/my/chat" template="/WEB-INF/views/buyer/my/chat.jsp" />
+    <!-- 따로 헤더를 만들어서 다시 주었음 (/seller/header.jsp) -->
+    <definition name="seller/main" template="/WEB-INF/views/seller/main.jsp" />
 
 	<definition name="buyer" template="/WEB-INF/tiles/layout_buyer.jsp">
 		<put-attribute name="header" value="/WEB-INF/tiles/layout/header_buyer.jsp"></put-attribute>

@@ -6,7 +6,6 @@
 
 
 <script type="text/javascript">
-
 //후기 상세페이지에서 목록/수정/삭제 버튼
 $(document).ready(function() {
 	$("#btnList").click(function() {
@@ -21,7 +20,6 @@ $(document).ready(function() {
 		alert("삭제?");
 		$(location).attr("href", "/seller/review/delete?reviewno=${reviewView.reviewNo }");
 	});
-
 });
 </script>
 
@@ -42,11 +40,7 @@ $(document).ready(function() {
 // $(document).ready(function() {
 // 	replyList(); //페이지 로딩시 댓글 목록 출력 
 // });
-
-
 // var reviewNo = ${reviewView.reviewNo };
-
-
 // //댓글 목록
 // function replyList() {
 // 	$.ajax({
@@ -63,16 +57,13 @@ $(document).ready(function() {
 				
 // // 				$("#replyNo").html(e.replyNo);
 // // 				$("#replyContent").html(e.replyContent);
-
 // 				var a = '';
-
 // 				a += '<div class="replyArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
 //                 a += '<div class="replyInfo'+e.replyNo+'">'+'댓글번호 : '+e.replyNo+' / 작성자 : '+e.writer;
 //                 a += '<a onclick="replyUpdate('+e.replyNo+',\''+e.replyContent+'\');"> [수정] </a>';
 //                 a += '<a onclick="replyDelete('+e.replyNo+',\''+e.reviewNo+'\')"> [삭제] </a> </div>';
 //                 a += '<div class="replyContent'+e.replyNo+'"> <p> 내용 : '+e.replyContent +'</p>';
 //                 a += '</div></div>';
-
 // //                 console.log(a)
                 
 //                 $("div.replyList").append($(a));
@@ -86,8 +77,6 @@ $(document).ready(function() {
 // 		}
 // 	});
 // }
-
-
 //댓글 삭제
 function replyDelete(replyNo, reviewNo) { 
 //		alert(replyNo,reviewNo); 
@@ -128,16 +117,6 @@ function replyDelete(replyNo, reviewNo) {
 // 		}
 // 	});
 }
-
-
-
-
-
-
-
-
-
-
 //댓글 수정 - 댓글 내용 출력을 input 폼으로 변경 
 function replyUpdate(replyNo, replyContent) {
     var a ='';
@@ -180,8 +159,6 @@ function replyUpdateProc(replyNo) {
 		}        
     });
 }	
-
-
 </script>
 
 

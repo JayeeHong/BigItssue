@@ -6,11 +6,10 @@
 	.login {
 		width: 310px;
 		margin: 0 auto;
-	}
-	
-	/**/
-	
+	}	
 </style>
+
+<jsp:include page="header.jsp" />
 
 <script type="text/javascript">
 
