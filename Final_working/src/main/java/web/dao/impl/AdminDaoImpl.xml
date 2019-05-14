@@ -525,5 +525,59 @@
 		SET sellerName=#{sellerName }, sellerPw=#{sellerPw }, sellerPhone=#{sellerPhone }
 		WHERE sellerId=#{sellerId }
 	</update>
+	
+	
+	
+	<select id="selectCntReview" resultType="int">
+		SELECT COUNT(*) FROM review	
+	</select>
+	
+	<select id="selectReviewPaginglist" resultType="web.dto.Review" parameterType="web.util.Paging">
+		SELECT * FROM (
+			SELECT rownum rnum, B.* FROM (
+				SELECT C.*,
+					(SELECT COUNT(*) FROM ReviewReply
+						WHERE reviewno = C.reviewno) AS replyCnt 
+				FROM review C
+				ORDER BY reviewNo desc
+			) B
+			ORDER BY rnum
+		) R
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+	</select>
+	
+	<select id="selectReviewByReviewno" resultType="web.dto.Review" parameterType="int">
+		SELECT * FROM review
+		WHERE reviewNo = #{reviewno }
+	</select>
+	
+	<select id="selectReplyListByReviewNo" parameterType="int" resultType="web.dto.ReviewReply">
+		SELECT * FROM ReviewReply
+		WHERE reviewNo = #{reviewno }
+		ORDER BY replyNo ASC
+	</select>
+	
+	<delete id="deleteReview" parameterType="int">
+		DELETE review
+		WHERE reviewNo = #{reviewno }
+	</delete>
+	
+	<insert id="insertReply" parameterType="web.dto.ReviewReply">
+		INSERT INTO ReviewReply ( replyNo, replyContent, writer, reviewNo )
+		VALUES ( ReviewReply_seq.nextval, #{replyContent }, #{writer }, #{reviewNo } )
+	</insert>
+	
+	<delete id="deleteReply" parameterType="int">
+		DELETE ReviewReply
+		WHERE replyNo = #{replyNo }
+	</delete>
+	
+	<update id="updateReply" parameterType="web.dto.ReviewReply">
+		UPDATE ReviewReply
+		SET replyContent = #{replyContent }
+		WHERE replyNo = #{replyNo }
+	</update>
+	
+	
 
 </mapper>
