@@ -173,8 +173,8 @@ color: red;
 <div style="padding-top: 10px; padding-left: 11px;" id="noticeListArea">
 
 
-<div class="container" style="width: 1100px; height:400px; margin-top: 100px; ">
-	<div class="container" style="margin-bottom: 100px;">
+<div class="" style="width: 1100px; height:400px; margin-top: 100px; ">
+	<div class="" style="margin-bottom: 100px;">
 		<div id="noticeListArea">
 			<div class="centered">
 			<img class="item"src="/upload/loading.gif" style="width: 180px; height: 180px;">
@@ -183,6 +183,8 @@ color: red;
 		</div>
 	
 	</div>
+
+</div>
 
 </div>
 	

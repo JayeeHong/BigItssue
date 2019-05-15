@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     
+<title>BigItssue 판매자 페이지</title>
+    
 <!-- 모든 페이지에 jQuery 2.2.4.min 추가 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
 
@@ -201,7 +203,7 @@
 	
 </style>
 
-<div class="header" style="height: 100px">
+<div class="header container" style="height: 100px">
 
 	<div id="logo">
 	<a href="/seller/main">

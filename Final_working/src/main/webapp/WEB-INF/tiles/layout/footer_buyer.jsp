@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 
 <!-- 새로운 메시지출력(웹소켓) -->
-<jsp:include page="../../views/buyer/connectWebsocket.jsp" />
+<%-- <jsp:include page="../../tiles/newMessageAlarmWebsocket.jsp" /> --%>
 
 <div class="footer">
 	
