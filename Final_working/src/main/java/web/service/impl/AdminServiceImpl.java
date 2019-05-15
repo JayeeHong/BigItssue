@@ -1,19 +1,15 @@
 package web.service.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import web.dao.face.AdminDao;
 import web.dto.AdminInfo;
@@ -29,12 +25,15 @@ import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
 import web.service.face.AdminService;
+import web.service.face.BuyerService;
 import web.util.Paging;
 
 @Service
 public class AdminServiceImpl implements AdminService{
 
 	@Autowired AdminDao adminDao;
+	@Autowired BuyerService buyerService;
+	private static final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
 	
 	@Override
 	public int getTotalCount(HashMap doubleString) {
@@ -218,7 +217,19 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public void setBuyerInfo(BuyerInfo buyerInfo) {
-		adminDao.updateBuyerInfo(buyerInfo);
+		
+//		logger.info(":::넘어오는 값 확인:::"+buyerInfo.toString());
+		
+		// buyerpw 가 null이 아닐 때
+		if(buyerInfo.getBuyerPw()!= null && !"".equals(buyerInfo.getBuyerPw())) {
+			buyerInfo.setBuyerPw(buyerService.shaPw(buyerInfo.getBuyerPw())); // 비밀번호 암호화
+			
+			adminDao.updateBuyerInfoWithPw(buyerInfo);
+			
+		} else { // buyerpw가 null일 때
+			adminDao.updateBuyerInfo(buyerInfo);
+		}
+		
 	}
 
 	@Override

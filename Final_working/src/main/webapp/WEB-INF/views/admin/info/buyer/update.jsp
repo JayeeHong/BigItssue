@@ -63,15 +63,44 @@ function toList() {
 }
 
 function upBuyer(buyerId) {
-	result = confirm('구매자 정보를 변경하시겠습니까?');
+	
+	if(document.upForm.buyerPw.value) { // 비밀번호 정보가 있는경우
+		pwResult = confirm('사용자의 비밀번호가 변경됩니다.\n진행하시겠습니까?');
+		
+		if(pwResult == true) { // 비밀번호 변경 ok
+			result = confirm('구매자 정보를 변경하시겠습니까?');
 
-	if (result == true) {
-		form = document.upForm;
-		form.action = "/admin/info/buyerUp?buyerId=" + buyerId;
-		form.submit();
-	} else {
-		return false;
+			if (result == true) {
+				form = document.upForm;
+				form.action = "/admin/info/buyerUp?buyerId=" + buyerId;
+				form.submit();
+				
+			} else {
+				return false;
+				
+			}
+			
+		} else { // 비밀번호 변경 취소
+			return false;
+		}
+		
+	} else { // 비밀번호 정보가 없는 경우
+		
+		result = confirm('구매자 정보를 변경하시겠습니까?');
+
+		if (result == true) {
+			form = document.upForm;
+			form.action = "/admin/info/buyerUp?buyerId=" + buyerId;
+			form.submit();
+			
+		} else {
+			return false;
+			
+		}
+			
 	}
+	
+	
 }
 
 function delBuyer(buyerId) {
@@ -111,10 +140,10 @@ function delBuyer(buyerId) {
 	<td>${buyerInfo.buyerId }</td>
 </tr>
 
-<!-- <tr> -->
-<!-- 	<td>비밀번호</td> -->
-<%-- 	<td><input style="width:100px;" type="text" value="${buyerInfo.buyerPw }" name="buyerPw" /></td> --%>
-<!-- </tr> -->
+<tr>
+	<td>비밀번호</td>
+	<td><input style="width:200px;" type="text" value="" name="buyerPw" placeholder="변경할 경우에만 입력하세요." /></td>
+</tr>
 
 <tr>
 	<td>연락처</td>

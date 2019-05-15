@@ -136,12 +136,12 @@
 	
 	// 아이디, 비밀번호 입력 확인
 	function checkValue() {
-		if(!document.sellerInfo.sellerId.value) {
+		if(!document.bigdomInfo.bigdomId.value) {
 			alert("아이디를 입력하세요!");
 			return false;
 		}
 		
-		if(!document.sellerInfo.sellerPw.value) {
+		if(!document.bigdomInfo.bigdomPw.value) {
 			alert("비밀번호를 입력하세요!");
 			return false;
 		}

@@ -114,12 +114,12 @@ a:hover {
 
 	// 아이디, 비밀번호 입력 확인
 	function checkValue() {
-		if(!document.sellerInfo.buyerId.value) {
+		if(!document.buyerInfo.buyerId.value) {
 			alert("아이디를 입력하세요!");
 			return false;
 		}
 		
-		if(!document.sellerInfo.buyerPw.value) {
+		if(!document.buyerInfo.buyerPw.value) {
 			alert("비밀번호를 입력하세요!");
 			return false;
 		}

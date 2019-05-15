@@ -225,6 +225,9 @@ public interface AdminDao {
 	// 판매자 정보 이미지 제외하고 업데이트 쿼리(이미지가 없을 때)
 	public void updateSellerWithoutImg(SellerBigdomInfo sbInfo);
 
+	// 구매자 정보 pw까지 변경시 업데이트 쿼리
+	public void updateBuyerInfoWithPw(BuyerInfo buyerInfo);
+
 
 
 
