@@ -28,6 +28,10 @@
 		<put-attribute name="body" value="/WEB-INF/views/buyer/{1}/{2}/{3}.jsp" />
 	</definition>
 	
+	<definition name="buyer/*/*/*/*" extends="buyer">
+		<put-attribute name="body" value="/WEB-INF/views/buyer/{1}/{2}/{3}/{4}.jsp" />
+	</definition>
+	
 	
 	<definition name="seller" template="/WEB-INF/tiles/layout_seller.jsp">
 		<put-attribute name="header" value="/WEB-INF/tiles/layout/header_seller.jsp"></put-attribute>

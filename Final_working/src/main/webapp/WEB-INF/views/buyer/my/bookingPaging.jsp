@@ -7,9 +7,9 @@
 <ul class="pagination pagination-sm">
 	<li>
 	<%-- 첫페이지가 아니라면 처음 버튼 보이기 --%>
-	<c:if test="${paging.curPage ne 1 }">
-	<li><a href="/buyer/my/booking?curPage=1">&larr;처음</a></li>
-	</c:if>
+<%-- 	<c:if test="${paging.curPage ne 1 }"> --%>
+<!-- 	<li><a href="/buyer/my/booking?curPage=1">&larr;처음</a></li> -->
+<%-- 	</c:if> --%>
 	
 	<%-- 이전 페이지 그룹 --%>
 	<c:if test="${paging.curPage le paging.pageCount }">
@@ -66,9 +66,9 @@
 	
 	
 	<%-- 마지막페이지 --%>
-	<c:if test="${paging.curPage ne paging.endPage }">
-	<li><a href="/buyer/my/booking?curPage=${paging.totalPage}"><span>&rarr;마지막</span></a></li>
-	</c:if>
+<%-- 	<c:if test="${paging.curPage ne paging.endPage }"> --%>
+<%-- 	<li><a href="/buyer/my/booking?curPage=${paging.totalPage}"><span>&rarr;마지막</span></a></li> --%>
+<%-- 	</c:if> --%>
 	
 </ul>
 </div>

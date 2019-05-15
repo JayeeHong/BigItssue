@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<title>BigItssue</title>
+
 <!-- 모든 페이지에 jQuery 2.2.4.min 추가 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
 
@@ -13,24 +15,28 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
 
 
-<jsp:include page="/WEB-INF/tiles/layout/header_buyer.jsp" />
-
 <div class="container">
-<div class="row row-offcanvas row-offcanvas-right">
+<jsp:include page="/WEB-INF/tiles/layout/header_buyer.jsp" />
+<br><br><br><br><br>
 
+
+<!-- <div class="row row-offcanvas row-offcanvas-right"> -->
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_buyer.jsp" />
 
-<div class="col-sm-9">
-<c:if test="${chatRoomNo ne -1}">
-<h3 style="text-align: center;">채팅 ${chatRoomNo }번방</h3>
-</c:if>
+<h4><strong>나의 문의내역</strong></h4>
+<hr>
+
+<div class="" style="width: 900px; float: left;">
+<%-- <c:if test="${chatRoomNo ne -1}"> --%>
+<%-- <h3 style="text-align: center;">채팅 ${chatRoomNo }번방</h3> --%>
+<%-- </c:if> --%>
 
 <!-- 부트스트랩 -->
-<div class="container">
+<!-- <div class="container"> -->
 <!-- <h3 class=" text-center">Messaging</h3> -->
 <div class="messaging">
-      <div class="inbox_msg">
-        <div class="inbox_people">
+      <div class="inbox_msg" style="width: 100%;">
+        <div class="inbox_people" style="width: 30%;"><!-- 대화목록 -->
           <div class="headind_srch">
             <div class="recent_heading">
               <h4>Recent</h4>
@@ -83,7 +89,7 @@
         <!-- 채팅을 할 수 없게 막아 놓았다 -->
         <!-- 옆에 채팅내역을 클릭하면 해당 번호를 다시 받게돼서 채팅을 할 수 있다 -->
         <c:if test="${chatRoomNo ne '-1' }">
-        <div class="mesgs">
+        <div class="mesgs" style="width: 70%;"><!-- 채팅내역 -->
           <div id="msg_history_id" class="msg_history">
   
             <c:forEach var="item" items="${primaryMsgList}" begin="0" end="${primaryMsgList.size()}" step="1">
@@ -120,13 +126,9 @@
         </c:if>
       </div>
       
-      
-      <p class="text-center top_spac"><a target="_blank" href="#">THE BIG ISSUE</a></p>
-      
 </div>
 </div>
-</div>
-</div>
+<!-- </div> -->
 </div>
 
 <!-- 채팅 script -->

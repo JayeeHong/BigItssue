@@ -15,9 +15,9 @@
 <div class="text-center">
 <ul class="pagination pagination-sm">
 	<%-- 첫페이지가 아니라면 처음 버튼 보이기 --%>
-	<c:if test="${paging.curPage ne 1 }">
-	<li><a href="/seller/review/list?curPage=1">&larr;처음</a></li>
-	</c:if>
+<%-- 	<c:if test="${paging.curPage ne 1 }"> --%>
+<!-- 	<li><a href="/seller/review/list?curPage=1">&larr;처음</a></li> -->
+<%-- 	</c:if> --%>
 	
 	<%-- 이전 페이지그룹 --%>
 	<c:if test="${paging.curPage le paging.pageCount }">

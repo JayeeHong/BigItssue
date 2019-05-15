@@ -111,10 +111,10 @@ function delBuyer(buyerId) {
 	<td>${buyerInfo.buyerId }</td>
 </tr>
 
-<tr>
-	<td>비밀번호</td>
-	<td><input style="width:100px;" type="text" value="${buyerInfo.buyerPw }" name="buyerPw" /></td>
-</tr>
+<!-- <tr> -->
+<!-- 	<td>비밀번호</td> -->
+<%-- 	<td><input style="width:100px;" type="text" value="${buyerInfo.buyerPw }" name="buyerPw" /></td> --%>
+<!-- </tr> -->
 
 <tr>
 	<td>연락처</td>

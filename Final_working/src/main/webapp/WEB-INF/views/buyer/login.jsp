@@ -131,8 +131,8 @@ a:hover {
 
 <c:if test="${not buyerLogin }">
 
-<div>
-<h3>BigItssue 로그인</h3>
+<div style="padding-left: 120px; padding-right: 120px; padding-top: 10px;">
+<h4><strong>BigItssue 로그인</strong></h4>
 <hr>
 </div>
 
@@ -154,7 +154,7 @@ a:hover {
 	<!-- <input style="margin: 10px;" type="checkbox" id="autoLogin" /><label for="autoLogin" id="autoLogin">자동 로그인</label> -->
 	</div>
 
-	<button style="width: 300px;" class="btn btn-primary">로그인</button>
+	<button style="width: 270px;" class="btn btn-primary">로그인</button>
 	
 	<br><br>
 	<small>

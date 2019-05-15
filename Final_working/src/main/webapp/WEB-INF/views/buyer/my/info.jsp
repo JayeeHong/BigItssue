@@ -72,7 +72,7 @@ $(document).ready(function() {
 		var spe = pwpw.search(/[`~!@#$%^&*|\\\'\";:/?.,]/gi);
 		
 		if(!/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/.test(pwpw)){            
-			$("#insertPw").html("비밀번호는 영문자, 숫자, 특수문자를 혼합한 이루어진 8~16자리입니다");
+			$("#insertPw").html("비밀번호는 영문자, 숫자, 특수문자를 혼합한 8~16자리입니다");
 			$("#insertPw").css("color", "red");
 			passwordVerify = false; // 유효성 결과 false
 			
@@ -354,12 +354,12 @@ $(document).ready(function() {
 	
 </script>
 
-<div class="container">
 <div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_buyer.jsp" />
 
-<h3>마이페이지-정보수정</h3>
+<h4><strong>회원정보수정</strong></h4>
+<hr>
 
 <!-- 비밀번호 확인 전, 입력한 비밀번호가 다를 경우 -->
 <c:if test="${not confirmpw }">
@@ -462,6 +462,5 @@ $(document).ready(function() {
 </form>
 </c:if>
 
-</div>
 </div>
 </div>

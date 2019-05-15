@@ -66,7 +66,7 @@ function activateSeller(sellerId) {
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>계정관리</h3>
+<h4><strong>계정관리</strong></h4>
 <hr>
 
 <div id="sellerList">
@@ -77,10 +77,10 @@ function activateSeller(sellerId) {
 	</ul>
 </div>
 <br>
-<button id="addSeller" class="btn btn-default">판매자 추가</button>
+<button id="addSeller" class="btn">판매자 추가</button>
 <br>
 <table class="table">
-	<thead>
+	<thead style="background: #cccccc6e">
 		<tr>
 			<td style="width: 10%">번호</td>
 			<td style="width: 20%">판매자</td>

@@ -63,12 +63,12 @@ function delBuyer(buyerId) {
 <div>
 
 	<table class="table">
-		<thead>
+		<thead style="background: #cccccc6e">
 			<tr>
 				<td style="width: 10%">번호</td>
 				<td style="width: 15%">구매자</td>
 				<td style="width: 15%">아이디</td>
-				<td style="width: 15%">비밀번호</td>
+<!-- 				<td style="width: 15%">비밀번호</td> -->
 				<td style="width: 15%">이메일</td>
 				<td style="width: 15%">연락처</td>
 				<td style="width: 15%">수정|삭제</td>
@@ -87,7 +87,7 @@ function delBuyer(buyerId) {
 				
 				<td>${buyerList[i].buyerName }</td>
 				<td>${buyerList[i].buyerId }</td>
-				<td>${buyerList[i].buyerPw }</td>
+<%-- 				<td>${buyerList[i].buyerPw }</td> --%>
 				<td>${buyerList[i].buyerEmail }</td>
 				<td>${buyerList[i].buyerPhone }</td>
 				<td>
