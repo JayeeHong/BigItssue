@@ -123,7 +123,7 @@ function delBuyer(buyerId) {
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>구매자 계정 수정</h3>
+<h4><strong>구매자 계정 수정</strong></h4>
 <hr>
 
 <form name="upForm">

@@ -77,8 +77,8 @@ function activateSeller(sellerId) {
 	</ul>
 </div>
 <br>
-<button id="addSeller" class="btn">판매자 추가</button>
-<br>
+<button id="addSeller" class="btn btn-primary">판매자 추가</button>
+<br><br>
 <table class="table">
 	<thead style="background: #cccccc6e">
 		<tr>

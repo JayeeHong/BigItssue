@@ -49,7 +49,7 @@ function delBuyer(buyerId) {
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>계정관리</h3>
+<h4><strong>계정관리</strong></h4>
 <hr>
 
 <div id="sellerList">

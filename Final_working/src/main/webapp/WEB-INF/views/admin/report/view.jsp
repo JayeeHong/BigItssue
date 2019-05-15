@@ -34,7 +34,7 @@
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>신고내역 상세페이지</h3>
+<h4><strong>신고내역 상세 대화내용</strong></h4>
 <hr>
 
 <table class="table">

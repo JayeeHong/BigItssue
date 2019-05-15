@@ -45,7 +45,7 @@
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>신고내역 관리</h3>
+<h4><strong>문의하기 신고내역</strong></h4>
 <hr>
 
 <table class="table table-bordered">
