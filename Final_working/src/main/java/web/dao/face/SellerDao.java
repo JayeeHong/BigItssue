@@ -1,6 +1,7 @@
 package web.dao.face;
 
 import java.util.List;
+import java.util.Map;
 
 import web.dto.BookListInfo;
 import web.dto.Reservation;
@@ -65,11 +66,18 @@ public interface SellerDao {
 	public User selectSellerInfoUser(SellerInfo sellerInfo);
 	
 	
-	//총 게시글 수 반환
+	//총 후기글 수 반환
 	public int selectCntReview();
+	
+	//검색한 게시글 수 조회
+	public int selecCntSearchByTitle(String search); //제목검색
+	public int selecCntSearchByContent(String search); //내용검색
+	public int selecCntSearchBySellerId(String search); //작성자검색
 
-	//페이징처리 게시글 반환
-	public List<Review> selectPaginglist(Paging paging);
+	//페이징처리 후기글 반환
+	public List<Review> selectPaginglistByTitle(Paging paging); //제목검색
+	public List<Review> selectPaginglistByContent(Paging paging); //내용검색
+	public List<Review> selectPaginglistBySellerId(Paging paging); //작성자검색
 
 	//후기글 삽입
 	public void insert(Review review);
@@ -88,6 +96,9 @@ public interface SellerDao {
 
 	//내 후기글 수 반환
 	public int selectCntMyReview(Review review);
+	
+	//검색한 내 후기글 수 반환
+	public int selectCntMyReviewSearch(Map<String, String> map);
 
 	//내 후기글 페이징처리 반환
 	public List<Review> selectPagingMylist(Paging paging);
@@ -112,5 +123,7 @@ public interface SellerDao {
 
 	// reserveNo로 해당 예약정보 조회 쿼리
 	public Reservation selectReservationInfo(Reservation reservation);
+
+
 
 }

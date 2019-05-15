@@ -17,9 +17,31 @@ public class Paging {
 	
 	private String sellerId; //작성자
 	
+	private String search; //검색어
+	private String searchOpt; //검색옵션
+	
+	
+	
 	public Paging() {
-
+		
 	}
+
+	public String getSearchOpt() {
+		return searchOpt;
+	}
+
+	public void setSearchOpt(String searchOpt) {
+		this.searchOpt = searchOpt;
+	}
+	
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
+	}
+
 
 	public String getSellerId() {
 		return sellerId;
@@ -163,7 +185,8 @@ public class Paging {
 	public String toString() {
 		return "Paging [curPage=" + curPage + ", totalCount=" + totalCount + ", listCount=" + listCount + ", totalPage="
 				+ totalPage + ", pageCount=" + pageCount + ", startPage=" + startPage + ", endPage=" + endPage
-				+ ", startNo=" + startNo + ", endNo=" + endNo + ", sellerId=" + sellerId + "]";
+				+ ", startNo=" + startNo + ", endNo=" + endNo + ", sellerId=" + sellerId + ", search=" + search
+				+ ", searchOpt=" + searchOpt + "]";
 	}	
 
 	

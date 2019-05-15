@@ -11,6 +11,7 @@ function noticeListGo(){
 
 </script>
 
+
 <hr>
 
 <div style="padding-top: 10px; padding-left: 11px;" class="text-left">
@@ -32,3 +33,43 @@ function noticeListGo(){
 	</c:if>
 	<br> <br> <input type="button" class="btn" value="목록" onclick="noticeListGo()">
 </div>
+
+<style>
+p{
+word-break:break-all;
+word-wrap:break-word;
+w
+}</style>
+
+<div class="" >
+
+    
+	<div class="container text-left" style="width:60%;">
+    <h1><label>${notice.noticeTitle }</label></h1>
+	 </div>
+	 <br>
+	<div class="container text-right" style=" width:60%;">
+    <fmt:formatDate value="${notice.noticeDate }" var="i" pattern="YY-MM-dd"/>
+    <label>${i }</label><br>
+    <label>작성자:관리자</label>
+	    <hr>	
+	</div>
+    <div class="container text-center">
+	    <br>
+	    <p style="width: auto;">
+	    ${notice.noticeContent }
+		</p>
+	    <br>
+	    <c:if test="${notice.noticeImg ne null}">
+	    <img style="width: 40%; height: 40%;" src="/img/${notice.noticeImg }">	
+	    </c:if>
+	    <br>
+    	<br>
+		<input type="button" class="btn" value="목록" onclick="noticeListGo()">
+    	</div>
+		<br>
+		<br>
+	
+		
+	</div>
+

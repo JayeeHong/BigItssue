@@ -8,7 +8,7 @@
 $(document).ready(function() {
 	$("#addBanner").click(function() {
 // 		location.href = "/admin/banner/add";
-		window.open("/addBanner","dd", "width=500,height=500");
+		window.open("/addBanner","dd", "width=500,height=300");
 	});
 });
 

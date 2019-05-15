@@ -28,11 +28,18 @@ var timerId =null;
 
 
 $(document).ready(function(){
-	
-	if(${buyerLogin eq true}){
+	/* 단순 세션 chatRoomNo -1로 초기화 해주기위해서 */
+	$.ajax({
+		 type: "post"
+		 , url: "/sessionRoomNoInit"
+		 , data: {}
+		 , dataType: "json"
+		 , success: function(receive){ }
+	});
+	/* 웹소켓 연결 */
+	if(${buyerLogin eq true}||${sellerLogin eq true}){
 		connect();
 	}
-	
 		
 });
 
@@ -161,6 +168,6 @@ function closeSocket(){
 <!-- 새로운 메시지 창 -->
 <div id="messageAram" class="fixed"></div>
 <!-- 자식창이 리로드,닫혔을 때 동작 -->
-<input style ="width:1px; height:1px; float:left;"id="popupFlag" type="text" onFocus="popupFunc()">
+<input style ="width:10px; height:10px; float:left;border:none;"id="popupFlag" type="text" onFocus="popupFunc()">
 
 

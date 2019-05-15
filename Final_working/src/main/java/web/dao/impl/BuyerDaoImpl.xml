@@ -288,4 +288,10 @@
 		WHERE buyerId = #{buyerId }
 	</update>
 	
+	<update id="noticeAddHit" parameterType="web.dto.Notice">
+		UPDATE NOTICE
+		SET noticehit = noticehit + 1
+		where noticeNo = #{noticeNo }
+	</update>
+	
 </mapper>

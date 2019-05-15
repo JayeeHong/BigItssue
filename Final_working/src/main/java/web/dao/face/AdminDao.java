@@ -15,6 +15,8 @@ import web.dto.ChatReport;
 import web.dto.MainBanner;
 import web.dto.Message;
 import web.dto.Notice;
+import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
@@ -225,8 +227,35 @@ public interface AdminDao {
 	// 판매자 정보 이미지 제외하고 업데이트 쿼리(이미지가 없을 때)
 	public void updateSellerWithoutImg(SellerBigdomInfo sbInfo);
 
+
 	// 구매자 정보 pw까지 변경시 업데이트 쿼리
 	public void updateBuyerInfoWithPw(BuyerInfo buyerInfo);
+
+	
+	//총 후기글 수 반환
+	public int selectCntReview();
+
+	//페이징처리 후기글 반환
+	public List<Review> selectReviewPaginglist(Paging paging);
+
+	//후기글 상세 반환
+	public Review selectReviewByReviewno(int reviewno);
+
+	//후기 댓글 조회
+	public List<ReviewReply> selectReplyListByReviewNo(int reviewno);
+
+	//후기글 삭제
+	public void deleteReview(int reviewno);
+
+	//후기 댓글 삽입
+	public void insertReply(ReviewReply reviewReply);
+
+	//후기 댓글 삭제
+	public void deleteReply(int replyNo);
+
+	//후기 댓글 수정
+	public void updateReply(ReviewReply reviewReply);
+
 
 
 

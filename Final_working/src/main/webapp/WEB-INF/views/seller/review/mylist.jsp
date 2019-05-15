@@ -26,8 +26,17 @@ $(document).ready(function() {
 </div>
 
 <div id="reviewList">
+
+	<div style="text-align: right; line-height: 0;">
+		<form action="/seller/review/mylist" method="get" class="form-inline">
+			<input type="text" class="form-control" name="search" style="height: 30px;" placeholder="제목 검색">
+			<button class="btn btn-sm">검색</button>
+		</form>
+	</div>
+
+
 	<ul class="nav nav-tabs">
-	  <li role="presentation"><a href="/seller/review/list">모두</a></li>
+	  <li role="presentation"><a href="/seller/review/list">전체</a></li>
 	  <li role="presentation" class="active"><a href="/seller/review/mylist">내 글</a></li>
 	</ul>
 
@@ -47,7 +56,7 @@ $(document).ready(function() {
 				<c:forEach items="${reviewMylist }" var="r">
 				<tr>
 					<td>${r.reviewNo }</td>
-					<td><a href="/seller/review/view?reviewno=${r.reviewNo }">${r.reviewTitle }</a></td>
+					<td><a href="/seller/review/view?reviewNo=${r.reviewNo }">${r.reviewTitle }<span style="color: red; padding-left: 5px; font-size: small; ">[${r.replyCnt }]</span></a></td>
 					<td>${r.sellerId }</td>
 					<td><fmt:formatDate value="${r.reviewDate }" pattern="yyyy-MM-dd"/></td>
 					<td>${r.reviewHit }</td>

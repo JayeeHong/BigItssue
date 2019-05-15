@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import web.dao.face.ChatDao;
 import web.dto.Chat;
+import web.dto.ChatReport;
 import web.dto.Message;
 import web.dto.MessageChk;
 import web.dto.User;
@@ -194,6 +195,52 @@ public class ChatServiceImpl implements ChatService{
 	@Override
 	public void updateChatFinalDate(Message msg) {
 		chatDao.updateChatFinalDate(msg);	
+	}
+
+	@Override
+	public Message getMessageBychatMessageNo(int chatMessageNo) {
+		return chatDao.selectMessageBychatMessageNo(chatMessageNo);	
+	}
+
+	@Override
+	public List<Message> getMessageBySysdateAndChatRoomNo50Down(Message msg) {
+		return chatDao.selectMessageBySysdateAndChatRoomNo50Down(msg);
+	}
+	
+	@Override
+	public List<Message> getMessageBySysdateAndChatRoomNo50Up(Message msg) {
+		return chatDao.selectMessageBySysdateAndChatRoomNo50Up(msg);
+	}
+
+	@Override
+	public ChatReport getChatReport(Message msg, Message msg2, HttpSession session) {
+		
+		ChatReport chatReport = new ChatReport();
+		
+		// 신고한 내용인지 여부(1,0으로 구별)
+		if(msg.getChatMessageNo()==msg2.getChatMessageNo()) {
+			chatReport.setChkNo(1);
+		}		
+		// 신고자
+		User user = (User)session.getAttribute("LoginInfo");
+		chatReport.setReportId(user.getId());
+		// 구매자
+		chatReport.setBuyerId(msg.getChatSender());
+		// 채팅내용
+		chatReport.setChatContent(msg.getChatContent());
+		// 채팅날짜
+		chatReport.setChatDate(msg.getChatDate());
+		// 채팅방번호
+		chatReport.setChatRoomNo(msg.getChatRoomNo());
+		
+		return chatReport;
+	}
+
+	@Override
+	public void insertChatReport(List<ChatReport> chatReportList) {
+		for(int i=0; i<chatReportList.size(); i++) {
+			chatDao.insertChatReport(chatReportList.get(i));
+		}
 	}
 
 

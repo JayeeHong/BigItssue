@@ -2,22 +2,15 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <title>BigItssue</title>
-
-<!-- 모든 페이지에 jQuery 2.2.4.min 추가 -->
-<script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
-
-<!-- 부트스트랩 3.3.2 -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
 
 
 <div class="container">
-<jsp:include page="/WEB-INF/tiles/layout/header_buyer.jsp" />
+<jsp:include page="../header.jsp" />
 <br><br><br><br><br>
+
+
 
 
 <!-- <div class="row row-offcanvas row-offcanvas-right"> -->
@@ -108,7 +101,8 @@
 		              	<div class="received_msg">
 			                <div class="received_withd_msg">
 			                	<p>${item.chatContent }</p>
-			                	<span class="time_date">${item.stringChatDate }</span>
+			                	<span style="display:inline-block;" class="time_date">${item.stringChatDate }</span>
+			                	<span style="color:orange;cursor:pointer;"class="glyphicon glyphicon-exclamation-sign" onclick="chatReport(${item.chatMessageNo},${item.chatRoomNo },'${item.chatSender }','${item.chatDate }')">신고</span>
 			                </div>
 		              	</div>
 	           		</div>
@@ -133,6 +127,29 @@
 
 <!-- 채팅 script -->
 <script type="text/javascript">
+
+//신고하기
+function chatReport(chatMessageNo,chatRoomNo,chatSender,chatDate){
+	console.log("chatMessageNo:"+chatMessageNo);
+	console.log("chatRoomNo:"+chatRoomNo);
+	console.log("chatSender:"+chatSender);
+	console.log("chatDate:"+chatDate);
+	if (confirm("정말 신고하시겠습니까?") == true){//확인
+		$.ajax({
+	        url : '/chatReport',
+	        type : 'post',
+	        data : {'chatMessageNo':chatMessageNo,'chatRoomNo':chatRoomNo,'chatSender':chatSender,'chatDateString':chatDate},
+	        dataType: 'json',
+	        success : function(receive) {
+			
+	        },
+	        error: function(e) {
+				console.log("실패");
+				console.log(e);
+			}        
+	    });
+	 }
+}
 
 var socket=null;
 
@@ -220,11 +237,17 @@ function connect(){
 		var result = data.msg.chatContent;
 		//시간
 		var presentDate = data.msg.stringChatDate;
+		//메시지 번호
+		var noMsg = data.msg.chatMessageNo;
+		//date시간
+		var chatDate = data.msg.chatDate;
 		
 		console.log("noFlag:"+noFlag);
 		console.log("senderId:"+senderId);
 		console.log("result:"+result);
 		console.log("presentDate:"+presentDate);
+		console.log("noMsg:"+noMsg);
+		console.log("chatDate:"+chatDate);
 		
 		//현재 로그인된 id에 맞는 채팅방들 리스트
 		var refreshList = data.refreshChatRoomList;
@@ -254,7 +277,7 @@ function connect(){
 				var a = "<div class=\"outgoing_msg\"><div class=\"sent_msg\"> <p>"+result+"</p> <span class=\"time_date\"> "+presentDate+"</span> </div></div>"
 				msg_history.append(a);
 			}else{//로그인된id와 메시지보낸id가 다를때,  primary채팅창 왼쪽에 출력
-				var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span class=\"time_date\"> "+presentDate+"</span></div></div></div>"
+				var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span style=\"display:inline-block;\" class=\"time_date\"> "+presentDate+"</span> <span style=\"color:orange;cursor:pointer;\"class=\"glyphicon glyphicon-exclamation-sign\" onclick=\"chatReport("+noMsg+","+noFlag+",\'"+senderId+"\',\'"+chatDate+"\')\">신고</span></div></div></div>"
 				msg_history.append(a);
 			}
 			

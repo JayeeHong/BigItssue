@@ -49,7 +49,6 @@ function getLocList(){
 			var cpp1 = p.curPage + 1
 			var spppc = p.startPage + p.pageCount
 			
-			console.log('${sysdate}');
 			
 			var html =""
 				html ='<div id="tableAndpaging" style="height:400px;">'
@@ -61,17 +60,19 @@ function getLocList(){
 				html += '<td><b>날짜</b></td>'
 				html += '<td><b>조회수</b></td>'
 				html += '</tr>'
+				
+				
 				$.each(list, function(index, value){
 					var date = new Date(value.noticeDate);
 					var now = new Date();
-					
-					console.log(now)
 					
 					html +='<tr style="text-align: center;">'
 					html += '<td>'+value.noticeNo+'</td>'
 					html += '<td class="goDetailView" onclick="goDetailView('+value.noticeNo+')">'
 // 					html += '<a href="/admin/notice/view?noticeNo='+value.noticeNo+'">'
-					
+					if(now.getTime()-value.noticeDate <= 24*60*60*1000){
+						html += '<input type="button" class="btn btn-xs" value="new">&nbsp;'
+						}
 					html += value.noticeTitle
 // 					html += '</a>'
 					html += '</td>'
@@ -81,8 +82,8 @@ function getLocList(){
 					if(date.getMonth()<10){
 					html += 0	
 					}
-					html += date.getMonth()+'-'
-					if(date.getDate()<10){
+					html += date.getMonth()+1+'-'
+					if(date.getDate()+1<10){
 					html += 0
 					}
 					html += date.getDate()+'</td>'
@@ -183,6 +184,12 @@ cursor: pointer;
 a{
 cursor: pointer;
 }
+.btn-xs{
+background: none;
+color: red;
+}
+.centered { display: table; margin-left: auto; margin-right: auto; }
+
 </style>
 
 <div class="row row-offcanvas row-offcanvas-right">
@@ -205,7 +212,9 @@ cursor: pointer;
 <br><br>
 
 <div id="noticeListArea">
-	
+	<div class="centered">
+	<img class="item"src="/upload/loading.gif" style="width: 180px; height: 180px;">
+	</div>
 
 <!-- </div>     -->
 </div>    

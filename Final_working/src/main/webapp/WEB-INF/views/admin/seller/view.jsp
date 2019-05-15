@@ -113,6 +113,52 @@ $(document).ready(function(){
 		
 	})
 	
+	var regexp =  /[^0-9]/g
+	$("#startTime1").keyup(function(){
+		if(!regexp.test($(this).val())){
+			alert('숫자만 입력가능합니다.')
+			$("#startTime1").val(0);
+		}
+		
+			if ($("#startTime1").val() > 23 || $("#startTime1").val() < 0){
+				alert('0~23사이의 숫자(시간)를 써주세요')
+				$("#startTime1").val(0);
+			}
+	})
+	
+	$("#startTime2").keyup(function(){
+		if(!regexp.test($(this).val())){
+			alert('숫자만 입력가능합니다.')
+			$("#startTime2").val(0);
+		}
+			if ($("#startTime2").val() > 59 || $("#startTime2").val() < 0){
+				alert('0~59사이의 숫자(분)를 써주세요')
+				$("#startTime2").val(0);
+			}
+	})
+	
+	$("#endTime1").keyup(function(){
+		if(!regexp.test($(this).val())){
+			alert('숫자만 입력가능합니다.')
+			$("#endTime1").val(0);
+		}
+			if ($("#endTime1").val() > 23 || $("#endTime1").val() < 0){
+				alert('0~23사이의 숫자(시간)를 써주세요')
+				$("#endTime1").val(0);
+			}
+	})
+	
+	$("#endTime2").keyup(function(){
+		if(!regexp.test($(this).val())){
+			alert('숫자만 입력가능합니다.')
+			$("#endTime2").val(0);
+		}
+			if ($("#endTime2").val() > 59 || $("#endTime2").val() < 0){
+				alert('0~59사이의 숫자(분)를 써주세요')
+				$("#endTime2").val(0);
+			}
+	})
+	
 	
 })
 
@@ -129,7 +175,7 @@ function addZone(){
 	add()
 }
 
-//버튼 생성 펑션
+//삭제버튼 생성 펑션
 function add(){
 	var html =""
 	for(var i=0; i< arr.length; i++){
@@ -165,7 +211,10 @@ function subwayList(){
 		,success : function(res){
 			
 			console.log(Object.keys(res.zoneList).length)
-			
+			if(Object.keys(res.zoneList).length == 0){
+				alert('검색어가 올바르지않습니다. 역명을 정확히 입력해주세요')
+				return;
+			}
 			var a = Object.keys(res.zoneList)
 			
 			$("#station").val($("#searchWord").val());
@@ -193,6 +242,9 @@ function subwayList(){
 function btnCc(){
 	window.location.href="/admin/seller/list"
 }
+
+
+
 
 </script>
     
@@ -245,7 +297,7 @@ input[type=number]{
 			<td style="vertical-align: middle;" class="tdLeft">호선</td>
 			<td class="tdRight" colspan="3">
 			<div id="divSearch">
-			<input type="search" name="searchWord" id="searchWord"><input type="button" onclick="subwayList()" value="찾기">
+			<input class="form-control"type="search" name="searchWord" id="searchWord">&nbsp;<input class="btn" type="button" onclick="subwayList()" value="찾기">
 			</div>
 			<div id="stationInfo"><!-- selet타입의 호선선택이 들어오는 영역 -->
 			
@@ -295,10 +347,10 @@ input[type=number]{
 			<td style="vertical-align: middle;" class="tdLeft">판매시간</td>
 			<td class="tdRight" colspan="3">
 				<div class="form-group">
-				<input class="form-control" style="width:75px;" type="number" name="startTime1" id="startTime1"><b> :</b>
-				<input class="form-control" style="width:75px;" type="number" name="startTime2" id="startTime2"><b> ~</b>
-				<input class="form-control" style="width:75px;" type="number" name="endTime1" id="endTime1"><b> :</b>
-				<input class="form-control" style="width:75px;" type="number" name="endTime2" id="endTime2">
+				<input class="form-control" style="width:75px;" type="number" name="startTime1" id="startTime1" min="0" max="24"><b> :</b>
+				<input class="form-control" style="width:75px;" type="number" name="startTime2" id="startTime2" min="0" max="60"><b> ~</b>
+				<input class="form-control" style="width:75px;" type="number" name="endTime1" id="endTime1" min="0" max="24"><b> :</b>
+				<input class="form-control" style="width:75px;" type="number" name="endTime2" id="endTime2" min="0" max="60">
 				</div>
 			</td>
 			

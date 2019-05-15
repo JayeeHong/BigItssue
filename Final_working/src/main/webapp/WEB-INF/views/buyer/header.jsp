@@ -3,6 +3,15 @@
     
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<!-- 모든 페이지에 jQuery 2.2.4.min 추가 -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+
+<!-- 부트스트랩 3.3.2 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
 
 <style type="text/css">
 
@@ -225,23 +234,6 @@ $(document).ready(function() {
 		location.href = "/buyer/my/booking";
 	});
 });
-
-
-// 판매처리스트로 이동
-function fnMove(){
-// 	console.log($("#moveToSellerloc").offset());
-	var offset = $("#moveToSellerloc").offset();
-	console.log(offset);
-	if(typeof offset=='undefined') {
-		$(location).attr('href', '/buyer/main');
-	
-	} else {
-		$('html, body').animate({scrollTop : offset.top}, 400);
-		
-	}
-
-}
-
 </script>
 
 
@@ -251,7 +243,7 @@ function fnMove(){
 
 
 <div class="header">
-<!-- 	<div class="container"> -->
+	<div class="container">
 		<div id="logo">
 			<a href="/buyer/main">
 				<img id="logoImg" src="http://bigissue.kr/wp-content/themes/canvas/images/Bigissue_kr_logo_main.png" alt="Bigissue Logo">
@@ -260,7 +252,7 @@ function fnMove(){
 		
 		<div id="topMenu">
 			<ul>
-				<li><a type="button" onclick="fnMove()">판매처 보기</a></li>
+				<li><a href="/buyer/main">판매처 보기</a></li>
 				<li><a href="/buyer/notice/list">공지사항</a></li>
 			</ul>			
 			
@@ -279,10 +271,6 @@ function fnMove(){
 				</c:if>
 			</div>
 		</div>
-<!-- 	</div> -->
+	</div>
 	
 </div>
-
-<!-- 새로운 메시지출력(웹소켓) -->
-<jsp:include page="../newMessageAlarmWebsocket.jsp" />
-

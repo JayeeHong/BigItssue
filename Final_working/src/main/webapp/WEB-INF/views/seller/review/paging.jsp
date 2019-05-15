@@ -56,7 +56,7 @@
 	<li class="disabled"><span>&gt;</span></li>
 	</c:if>
 	<c:if test="${paging.curPage ne paging.totalPage }">
-	<li><a href="/eller/review/list?curPage=${paging.curPage+1}">&gt;</a></li>
+	<li><a href="/seller/review/list?curPage=${paging.curPage+1}">&gt;</a></li>
 	</c:if>
 	
 	<%-- 다음 페이지그룹 --%>

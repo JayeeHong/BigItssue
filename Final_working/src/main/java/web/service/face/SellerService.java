@@ -64,8 +64,11 @@ public interface SellerService {
 	//요청 파라미터에서 curPage 반환
 	public int getCurPage(HttpServletRequest req);
 
-	//총 게시글 수 얻기
+	//총 후기글 수 얻기
 	public int getTotalCount();
+	
+	//검색 게시글 수 얻기
+	public int getTotalCount(String searchOpt, String search);
 	
 	//페이징 리스트 얻기
 	public List<Review> getPagingList(Paging paging);
@@ -84,6 +87,9 @@ public interface SellerService {
 
 	//내 후기글 수 얻기
 	public int getMyTotalCount(Review review);
+	
+	//검색한 내 후기글 수 얻기
+	public int getMyTotalCount(String sellerId, String search);
 
 	//내 후기글 페이징 리스트 얻기
 	public List<Review> getPagingMyList(Paging paging);
@@ -108,5 +114,7 @@ public interface SellerService {
 
 	// reserveNo로 해당 컬럼 조회
 	public Reservation getReservationInfo(Reservation reservation);
+
+	
 
 }

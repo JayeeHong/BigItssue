@@ -7,33 +7,49 @@
 <mapper namespace="web.dao.face.AdminDao">
 
 	<select resultType="int" parameterType="hashMap" id="getTotalCount"> 
-		SELECT COUNT(*) FROM sellerLoc 
+		
 		<choose>
-			<when test="condition != null">
-			where ${condition} like '%' || #{searchWord} || '%' order by locno desc 
+			<when test="condition == 'sellerId'">
+			SELECT count(*) from sellerLoc c, sellerinfo s
+	        where c.sellerid = s.sellerid
+    	    and s.sellerName like '%'|| #{searchWord} ||'%'
 			</when>
 			<otherwise>
+				SELECT COUNT(*) FROM sellerLoc 
+			<if test="condition != null">
+			where ${condition} like '%' || #{searchWord} || '%' 
+			</if>
 			order by locno desc
 			</otherwise>
 		</choose>
 	</select>
 
 	<select resultType="web.dto.SellerLoc" parameterType="hashMap" id="getPagingList"> 
+		<choose>
+		<when test="condition == 'sellerId'">
+		SELECT c.*, s.sellername from	(SELECT * FROM ( 
+			SELECT rownum rnum, B.* FROM ( 
+				SELECT * FROM sellerLoc 
+				ORDER BY locno desc ) 
+			B ORDER BY rnum ) R 
+		WHERE rnum BETWEEN #{p.startNo } AND #{p.endNo }) c, sellerinfo s
+        where c.sellerid = s.sellerid
+        and s.sellerName like '%'|| #{searchWord } ||'%'
+		</when>
+		<otherwise>
 		SELECT c.*, s.sellername from (SELECT * FROM ( 
 			SELECT rownum rnum, B.* FROM ( 
 				SELECT * FROM sellerLoc 
-				<choose>
-				<when test="condition != null">
-				WHERE ${condition} like '%' || #{searchWord} || '%' ORDER BY locno desc
-				</when>
-				<otherwise>
+				<if test="condition != null">
+				WHERE ${condition} like '%' || #{searchWord} || '%'
+				</if>
 				order by locno desc
-				</otherwise> 
-				</choose>
 				) 
 			B ORDER BY rnum ) R 
 		WHERE rnum BETWEEN #{p.startNo } AND #{p.endNo } ) c
 		left join sellerinfo s on c.sellerid = s.sellerid
+		</otherwise>
+		</choose>
 	</select>
 	
 	<delete parameterType="web.dto.SellerLoc" id="adminSellerListDelete"> 
@@ -87,7 +103,7 @@
   <update id="addHit" parameterType="web.dto.Notice">
 
     UPDATE NOTICE
-    SET noticehit = (SELECT noticehit from notice where noticeNo=#{noticeNo }) + 1
+    SET noticehit = noticehit + 1
     WHERE noticeNo = #{noticeNo }
    </update>
 
@@ -510,10 +526,66 @@
 		WHERE sellerId=#{sellerId }
 	</update>
 	
+
 	<update id="updateBuyerInfoWithPw" parameterType="web.dto.BuyerInfo">
 		UPDATE buyerInfo
 		SET buyerName=#{buyerName }, buyerPw=#{buyerPw }, buyerPhone=#{buyerPhone }, buyerEmail=#{buyerEmail }
 		WHERE buyerId=#{buyerId }
 	</update>
+
+	
+	
+	<select id="selectCntReview" resultType="int">
+		SELECT COUNT(*) FROM review	
+	</select>
+	
+	<select id="selectReviewPaginglist" resultType="web.dto.Review" parameterType="web.util.Paging">
+		SELECT * FROM (
+			SELECT rownum rnum, B.* FROM (
+				SELECT C.*,
+					(SELECT COUNT(*) FROM ReviewReply
+						WHERE reviewno = C.reviewno) AS replyCnt 
+				FROM review C
+				ORDER BY reviewNo desc
+			) B
+			ORDER BY rnum
+		) R
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+	</select>
+	
+	<select id="selectReviewByReviewno" resultType="web.dto.Review" parameterType="int">
+		SELECT * FROM review
+		WHERE reviewNo = #{reviewno }
+	</select>
+	
+	<select id="selectReplyListByReviewNo" parameterType="int" resultType="web.dto.ReviewReply">
+		SELECT * FROM ReviewReply
+		WHERE reviewNo = #{reviewno }
+		ORDER BY replyNo ASC
+	</select>
+	
+	<delete id="deleteReview" parameterType="int">
+		DELETE review
+		WHERE reviewNo = #{reviewno }
+	</delete>
+	
+	<insert id="insertReply" parameterType="web.dto.ReviewReply">
+		INSERT INTO ReviewReply ( replyNo, replyContent, writer, reviewNo )
+		VALUES ( ReviewReply_seq.nextval, #{replyContent }, #{writer }, #{reviewNo } )
+	</insert>
+	
+	<delete id="deleteReply" parameterType="int">
+		DELETE ReviewReply
+		WHERE replyNo = #{replyNo }
+	</delete>
+	
+	<update id="updateReply" parameterType="web.dto.ReviewReply">
+		UPDATE ReviewReply
+		SET replyContent = #{replyContent }
+		WHERE replyNo = #{replyNo }
+	</update>
+	
+	
+
 
 </mapper>

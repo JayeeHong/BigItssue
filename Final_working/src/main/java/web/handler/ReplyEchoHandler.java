@@ -100,6 +100,7 @@ public class ReplyEchoHandler extends TextWebSocketHandler {
 		
 		//아래insert에서 사용한 sysdate값 msg(DTO)로 반환받음.
 		chatService.insertMessage(msg);
+		msg = chatService.getMessageBychatMessageNo(msg.getChatMessageNo());
 		//-------------------------------------------------
 				
 		//---------- Date "09:30 오후" 이런 형식으로 변경  ---------	
@@ -269,6 +270,7 @@ public class ReplyEchoHandler extends TextWebSocketHandler {
 				//---------------------------------------------------------
 							
 				//---------- map에 보낼 메시지 추가 ------------------------------
+				logger.info("msg:"+msg);
 				map.put("msg", msg);
 				//---------------------------------------------------------
 				

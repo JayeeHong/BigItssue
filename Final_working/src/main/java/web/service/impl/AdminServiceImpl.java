@@ -21,6 +21,8 @@ import web.dto.ChatReport;
 import web.dto.MainBanner;
 import web.dto.Message;
 import web.dto.Notice;
+import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
@@ -427,7 +429,7 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 
-  @Override
+	@Override
 	public void insertList(SellerLoc sellerLoc) {
 		adminDao.insertList(sellerLoc);
 	}
@@ -484,7 +486,7 @@ public class AdminServiceImpl implements AdminService{
 
   
   
-  @Override
+	@Override
 	public List<MainBanner> getBanner() {
 		return adminDao.selectBanner();
 	}
@@ -520,10 +522,10 @@ public class AdminServiceImpl implements AdminService{
 		return list;
 	}
 
-  @Override
-  public List<Message> getChatRoomNo(Paging paging) {
+	@Override
+	public List<Message> getChatRoomNo(Paging paging) {
 		return adminDao.getChatRoomNo(paging);
-  }
+	}
 
 
   
@@ -540,30 +542,88 @@ public class AdminServiceImpl implements AdminService{
 
 
 
-  @Override
-  public List<Message> getChatMessage(int chatRoomNo) {
-	  return adminDao.getChatMessage(chatRoomNo);
-  }
+	@Override
+	public List<Message> getChatMessage(int chatRoomNo) {
+		return adminDao.getChatMessage(chatRoomNo);
+	}
 
-@Override
-public int getChatListCurPage(HttpServletRequest req) {
-	//요청파라미터 curPage 받기
-	String param = req.getParameter("curPage");
-
-	//null이나 ""이 아니면 int로 리턴
-	if( param != null && !"".equals(param) ) {
-		int curPage = Integer.parseInt(param);
-		return curPage;
+	@Override
+	public int getChatListCurPage(HttpServletRequest req) {
+		//요청파라미터 curPage 받기
+		String param = req.getParameter("curPage");
+	
+		//null이나 ""이 아니면 int로 리턴
+		if( param != null && !"".equals(param) ) {
+			int curPage = Integer.parseInt(param);
+			return curPage;
+		}
+		
+		//null이나 ""면 0으로 반환하기
+		return 0;
 	}
 	
-	//null이나 ""면 0으로 반환하기
-	return 0;
-}
+	@Override
+	public int getChatListTotalCount() {
+		return adminDao.getChatListTotalCount();
+	}
+	
+	@Override
+	public int getReviewCurPage(HttpServletRequest req) {
+		
+		//요청파라미터 curPage 받기
+		String param = req.getParameter("curPage");
+		
+		//null이나 ""이 아니면 int로 리턴
+		if( param != null && !"".equals(param) ) {
+			int curPage = Integer.parseInt(param);
+			return curPage;
+		}
+		
+		//null이나 ""이면 0으로 반환
+		return 0;
+	}
+	
+	@Override
+	public int getReviewTotalCount() {
+		return adminDao.selectCntReview();
+	}
+	
+	@Override
+	public List<Review> getReviewPagingList(Paging paging) {
+		return adminDao.selectReviewPaginglist(paging);
+	}
 
-@Override
-public int getChatListTotalCount() {
-	return adminDao.getChatListTotalCount();
-}
+	
+	@Override
+	public Review viewReview(int reviewno) {
+		//상세글 반환
+		return adminDao.selectReviewByReviewno(reviewno);
+	}
+
+	@Override
+	public List<ReviewReply> getReplyList(int reviewno) {
+		return adminDao.selectReplyListByReviewNo(reviewno);
+	}
+
+	@Override
+	public void deleteReview(int reviewno) {
+		adminDao.deleteReview(reviewno);		
+	}
+
+	@Override
+	public void replyWrite(ReviewReply reviewReply) {
+		adminDao.insertReply(reviewReply);		
+	}
+
+	@Override
+	public void replyDelete(int replyNo) {
+		adminDao.deleteReply(replyNo);		
+	}
+
+	@Override
+	public void replyUpdate(ReviewReply reviewReply) {
+		adminDao.updateReply(reviewReply);
+	}
 
 
 	
