@@ -11,6 +11,7 @@
 
 <jsp:include page="header.jsp" />
 
+
 <script type="text/javascript">
 
 	// 로그인 정보 저장
@@ -125,6 +126,8 @@
 </c:if>
 </div>
 <!-- 채팅창 -->
+
+<div class="container">
 <c:if test="${sellerLogin }">
 
 <%-- <c:if test="${chatRoomNo ne -1}"> --%>
@@ -233,7 +236,7 @@
 <!--     </div> -->
    
 </c:if>
-
+</div>
 
 <!-- 채팅 script -->
 <script type="text/javascript">
