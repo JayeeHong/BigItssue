@@ -47,18 +47,20 @@ function inquire(id,sort){
 
 </script>
 
-
-
+<hr>
+<br>
 <jsp:include page="mainBanner.jsp" />
 
 
+<!-- 판매처 보기를 누르면 여기로 이동! -->
+<div id="moveToSellerloc">
 
   <!-- 현재시간 받아오기 -->
   <fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />
 
 	<!-- 장소,위치 검색 (select태그이용) -->
 	<form action="/buyer/main" method="POST">
-		<div style="float: right;">
+		<div style="float: right; padding-right: 10px; padding-top: 10px;">
 		<select name="zoneSelect" id="zoneSelect">
 			<option value="">지역을 선택하세요</option>
 			<c:forEach var="item" items="${zoneList}" begin="0" end="${zoneList.size()}" step="1">
@@ -83,7 +85,7 @@ function inquire(id,sort){
 				</c:if>
 			</c:forEach>
 		</select>
-		<button style="margin-bottom:6px;" class="btn btn-primary btn-sm">검색</button>
+		<button style="height: 21px; margin-bottom:6px; padding-top: 0px; padding-bottom: 0px;" class="btn btn-default btn-sm">검색</button>
 		</div><br>
 	</form>
 	
@@ -93,7 +95,7 @@ function inquire(id,sort){
 
 <div style="padding: 10px;">
 	<table class="table table-bordered">
-		<thead>
+		<thead style="background: #cccccc6e;">
 		<tr>
 		<th style="width: 25%;">장소</th>
 		<th style="width: 25%">세부위치(지도)</th>
@@ -161,6 +163,9 @@ function inquire(id,sort){
 
 <!-- 페이징 -->
 <jsp:include page="sellerLocPaging.jsp" />
+
+
+</div> <!-- 판매처보기로 이동을 위한 div -->
 
 </div>
 </div>

@@ -56,7 +56,7 @@ function upBigdom(bigdomId) {
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>빅돔 계정 수정</h3>
+<h4><strong>빅돔 계정 수정</strong></h4>
 <hr>
 
 <form name="upForm">

@@ -254,7 +254,7 @@
 	
 	<update id="updateBuyerInfo" parameterType="web.dto.BuyerInfo">
 		UPDATE buyerInfo
-		SET buyerName=#{buyerName }, buyerPw=#{buyerPw }, buyerPhone=#{buyerPhone }, buyerEmail=#{buyerEmail }
+		SET buyerName=#{buyerName }, buyerPhone=#{buyerPhone }, buyerEmail=#{buyerEmail }
 		WHERE buyerId=#{buyerId }
 	</update>
 	
@@ -526,6 +526,13 @@
 		WHERE sellerId=#{sellerId }
 	</update>
 	
+
+	<update id="updateBuyerInfoWithPw" parameterType="web.dto.BuyerInfo">
+		UPDATE buyerInfo
+		SET buyerName=#{buyerName }, buyerPw=#{buyerPw }, buyerPhone=#{buyerPhone }, buyerEmail=#{buyerEmail }
+		WHERE buyerId=#{buyerId }
+	</update>
+
 	
 	
 	<select id="selectCntReview" resultType="int">
@@ -579,5 +586,6 @@
 	</update>
 	
 	
+
 
 </mapper>

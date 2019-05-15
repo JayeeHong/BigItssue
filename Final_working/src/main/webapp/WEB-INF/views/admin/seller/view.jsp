@@ -89,8 +89,8 @@ $(document).ready(function(){
 	$("#sellerId").click(function(){
 		var openWin;
 		var url= "/admin/seller/select";    //팝업창 페이지 URL
-		var winWidth = 450;
-	   	var winHeight = 400;
+		var winWidth = 550;
+	   	var winHeight = 550;
 
 	    var popupOption= "width="+winWidth+", height="+winHeight;    //팝업창 옵션(optoin)
 		openWin = window.open(url,"사용자선택",popupOption);
@@ -180,7 +180,7 @@ function add(){
 	var html =""
 	for(var i=0; i< arr.length; i++){
 		html += '<input class="form control" style="margin-right:3px; border:none; background:white; width:40px;"type="text" value="'+arr[i]+'" disabled/>'
-		html += '<input class="btn btn-xs" style="background:#ff8a8a; width:30px; padding:0px; border:0px;" "type="button" value="삭제" onclick="arrDelete('+i+')">'
+		html += '<input class="btn btn-xs btn-danger" style="; width:30px; padding:0px; border:0px;" "type="button" value="삭제" onclick="arrDelete('+i+')">'
 		html += '&nbsp;'
 	}
 	
@@ -251,8 +251,9 @@ function btnCc(){
 <style>
 
 .tdLeft{
-	background: #e6e4e4;
+	background: #cccccc6e;
 	text-align: center;
+	font-weight: bold;
 	width : 100px;
 }
 
@@ -270,15 +271,17 @@ input[type=number]{
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
-<div class="" style=" width:1200px;" >
+<!-- <div class="" style=" width:1200px;" > -->
+<div class="col-xs-12 col-sm-9">
 
-<h3>판매자정보 수정</h3>
-	<div class="container-center" style="float:left; width:70%;" >
+<h4><strong>판매자 판매정보 수정</strong></h4>
+<hr>
+<!-- 	<div class="container-center" style="float:left; width:70%;" > -->
 	<form class="form-inline" action="/admin/seller/view" method="post">
 		<input type="hidden" name="locNo" id="locNo" value="">
 		<table class="table table-bordered">
 		<tr>
-			<td class="tdLeft" >지역</td>
+			<td style="vertical-align: middle;" class="tdLeft" >지역</td>
 			<td class="tdRight" colspan="3">
 				<label class="radio-inline" id="sellerArea">
 				<input type="radio" name="bigArea" value="서울">서울/경기
@@ -287,11 +290,11 @@ input[type=number]{
 				<input type="radio" name="bigArea" value="부산">부산
 				</label>
 			</td>
-			<td style="border-bottom: hidden;border-top: hidden;border-right: hidden;">&nbsp;</td>
+<!-- 			<td style="border-bottom: hidden;border-top: hidden;border-right: hidden;">&nbsp;</td> -->
 		</tr>
 		
 		<tr>
-			<td class="tdLeft">호선</td>
+			<td style="vertical-align: middle;" class="tdLeft">호선</td>
 			<td class="tdRight" colspan="3">
 			<div id="divSearch">
 			<input class="form-control"type="search" name="searchWord" id="searchWord">&nbsp;<input class="btn" type="button" onclick="subwayList()" value="찾기">
@@ -307,7 +310,7 @@ input[type=number]{
 		</tr>
 	
 		<tr>
-			<td class="tdLeft">판매장소</td>
+			<td style="vertical-align: middle;" class="tdLeft">판매장소</td>
 			<td class="tdRight" colspan="3">
 			<input class="form-control" type="text" id="station" name="station">
 			</td>
@@ -315,7 +318,7 @@ input[type=number]{
 		</tr>
 	
 		<tr>
-			<td class="tdLeft">출구(위치)</td>
+			<td style="vertical-align: middle;" class="tdLeft">출구(위치)</td>
 			
 			<td class="tdRight"><div id="spotInfo">
 			<input class="form-control" type="text" id="spot" name="spot"placeholder="직접입력">
@@ -328,7 +331,7 @@ input[type=number]{
 		</tr>
 		
 		<tr>
-			<td class="tdLeft">카드결제여부</td>
+			<td style="vertical-align: middle;" class="tdLeft">카드결제여부</td>
 			<td class="tdRight" colspan="3">
 			<label class="radio-inline">
 			<input type="radio" name="sellerCard" value="카드 가능">카드 가능
@@ -341,7 +344,7 @@ input[type=number]{
 		</tr>
 		
 		<tr>
-			<td class="tdLeft">판매시간</td>
+			<td style="vertical-align: middle;" class="tdLeft">판매시간</td>
 			<td class="tdRight" colspan="3">
 				<div class="form-group">
 				<input class="form-control" style="width:75px;" type="number" name="startTime1" id="startTime1" min="0" max="24"><b> :</b>
@@ -354,7 +357,7 @@ input[type=number]{
 		</tr>
 		
 		<tr>
-			<td class="tdLeft">판매자ID</td>
+			<td style="vertical-align: middle;" class="tdLeft">판매자ID</td>
 			<td class="tdRight" colspan="3">
 			<input class="form-control" type="text" id="sellerId" name="sellerId" value="${sellerInfo.sellerId }" >
 			</td>
@@ -366,16 +369,19 @@ input[type=number]{
 		
 		
 		</table>
-		<div class="container container-center">
-		<input class="btn" style="background:#e0effd;" type="submit" value="수정">
-		<button class="btn" style="background:#ff8a8a;" type="button" onclick="btnCc()">취소</button>
+		<div class="" style="text-align: center;">
+<!-- 		<input class="btn" style="background:#e0effd;" type="submit" value="수정"> -->
+<!-- 		<button class="btn" style="background:#ff8a8a;" type="button" onclick="btnCc()">취소</button> -->
+		<button class="btn btn-default" type="button" onclick="btnCc()">취소</button>
+		<input class="btn btn-primary" type="submit" value="수정">
 		</div>
 		
 		<input type="hidden" id="arrZone" name="arrZone"> <!-- 배열로 만들어진 zone을 보내기 위한 input type히든 건들지마시오 -->
 <%-- 		<input type="hidden" id="sellerId" name="sellerId" value="${sellerInfo.sellerId }"> --%>
 	</form>
 	
-	</div>
-
 </div>
+<!-- 	</div> -->
+
+<!-- </div> -->
 

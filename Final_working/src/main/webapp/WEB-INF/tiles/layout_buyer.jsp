@@ -50,7 +50,7 @@
 </div>
 
 <!-- FOOTER -->
-<div style="padding-top: 200px;">
+<div style="padding-top: 250px;">
 	<tiles:insertAttribute name="footer" />
 </div>
 

@@ -211,7 +211,11 @@ function joinConfirm() {
 		alert("이름을 입력하세요")
 		return false
 		
-	} else if($("#buyerPhone").val()=='') {
+	} else if($("#buyerPhone2").val()=='') {
+		alert("핸드폰 번호를 입력해주세요")
+		return false
+		
+	} else if($("#buyerPhone3").val()=='') {
 		alert("핸드폰 번호를 입력해주세요")
 		return false
 		
@@ -243,10 +247,12 @@ function joinConfirm() {
 }
 </script>
 
+<hr>
+
 <div class="join">
 
-<div>
-<h3>BigItssue 회원가입</h3>
+<div style="padding-left: 120px; padding-right: 120px; padding-top: 10px;">
+<h4><strong>BigItssue 회원가입</strong></h4>
 <hr>
 </div>
 
@@ -320,9 +326,9 @@ function joinConfirm() {
 				<option value="031">031</option>
 			</select>
 			&nbsp;-&nbsp;
-			<input class="form-control" style="display: inline; width: 80px; text-align: center;" type="text" maxlength="4" value="" name="buyerPhone2" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
+			<input class="form-control" style="display: inline; width: 80px; text-align: center;" type="text" maxlength="4" value="" id="buyerPhone2" name="buyerPhone2" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
 			&nbsp;-&nbsp;
-			<input class="form-control" style="display: inline; width: 80px; text-align: center;" type="text" maxlength="4" value="" name="buyerPhone3" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
+			<input class="form-control" style="display: inline; width: 80px; text-align: center;" type="text" maxlength="4" value="" id="buyerPhone3" name="buyerPhone3" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
 		
 <!-- 			<input class="form-control" type="text" name="buyerPhone" id="buyerPhone"> -->
 		</div>
@@ -330,7 +336,7 @@ function joinConfirm() {
 	
 	<br><br>
 	
-	<div style="margin-left: 324px; width: 350px;">
+	<div style="margin-left: 326px; width: 350px;">
 		<input class="btn btn-primary btn-block" type="submit" name="join" id="join" value="가입" />
 	</div>
 	

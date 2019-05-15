@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -21,9 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
@@ -191,8 +188,8 @@ public class AdminController {
 	@RequestMapping(value="/admin/info/sellerUp", method=RequestMethod.POST)
 	public String infoSellerUp(SellerBigdomInfo sbInfo, MultipartFile file) { // 계정관리-판매자_정보수정
 		
-		logger.info("넘어오는 값 확인::::"+sbInfo);
-		logger.info("파일명:::::"+file.getOriginalFilename());
+//		logger.info("넘어오는 값 확인::::"+sbInfo);
+//		logger.info("파일명:::::"+file.getOriginalFilename());
 
 		// 연락처 정보
 		sbInfo.setSellerPhone(sbInfo.getSellerPhone1()+"-"+sbInfo.getSellerPhone2()+"-"+sbInfo.getSellerPhone3());
@@ -226,12 +223,12 @@ public class AdminController {
 				e.printStackTrace();
 			}
 			
-			logger.info("ssssss::::::"+sbInfo.toString());
+//			logger.info("ssssss::::::"+sbInfo.toString());
 			sbInfo.setSellerImg(stored_name);
 			
 		}
 		
-		logger.info("ssssss::::::"+sbInfo.toString());
+//		logger.info("ssssss::::::"+sbInfo.toString());
 		// sellerid로 해당 판매자 정보 업데이트
 		
 		if(sbInfo.getSellerImg() != null && !"".equals(sbInfo.getSellerImg())) {

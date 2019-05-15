@@ -136,12 +136,12 @@
 	
 	// 아이디, 비밀번호 입력 확인
 	function checkValue() {
-		if(!document.sellerInfo.sellerId.value) {
+		if(!document.bigdomInfo.bigdomId.value) {
 			alert("아이디를 입력하세요!");
 			return false;
 		}
 		
-		if(!document.sellerInfo.sellerPw.value) {
+		if(!document.bigdomInfo.bigdomPw.value) {
 			alert("비밀번호를 입력하세요!");
 			return false;
 		}
@@ -185,16 +185,16 @@
 <!-- 채팅창 -->
 <c:if test="${bigdomLogin }">
 
-<c:if test="${chatRoomNo ne -1}">
-<h3 style="text-align: center;">채팅 ${chatRoomNo }번방</h3>
-</c:if>
+<%-- <c:if test="${chatRoomNo ne -1}"> --%>
+<%-- <h3 style="text-align: center;">채팅 ${chatRoomNo }번방</h3> --%>
+<%-- </c:if> --%>
 
 <!-- 부트스트랩 -->
-<div class="container">
-<h3 class=" text-center">Messaging</h3>
-<div class="messaging">
-      <div class="inbox_msg">
-        <div class="inbox_people">
+<!-- <div class="container"> -->
+<!-- <h3 class=" text-center">Messaging</h3> -->
+<div class="messaging" style="padding-left: 10px;">
+      <div class="inbox_msg" style="width: 100%">
+        <div class="inbox_people" style="width: 30%;">
           <div class="headind_srch">
             <div class="recent_heading">
               <h4>Recent</h4>
@@ -247,7 +247,7 @@
         <!-- 채팅을 할 수 없게 막아 놓았다 -->
         <!-- 옆에 채팅내역을 클릭하면 해당 번호를 다시 받게돼서 채팅을 할 수 있다 -->
         <c:if test="${chatRoomNo ne '-1' }">
-        <div class="mesgs">
+        <div class="mesgs" style="width: 70%;">
           <div id="msg_history_id" class="msg_history">
  
             <c:forEach var="item" items="${primaryMsgList}" begin="0" end="${primaryMsgList.size()}" step="1">
@@ -286,9 +286,10 @@
       </div>
       
       
-      <p class="text-center top_spac"><a target="_blank" href="#">THE BIG ISSUE</a></p>
+<!--       <p class="text-center top_spac"><a target="_blank" href="#">THE BIG ISSUE</a></p> -->
       
-    </div></div>
+    </div>
+<!--     </div> -->
     
 </c:if>
 

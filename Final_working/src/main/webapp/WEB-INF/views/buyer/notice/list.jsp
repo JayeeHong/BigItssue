@@ -36,9 +36,9 @@ function getNoticeList(){
 			
 			var html =""
 				html ='<div id="tableAndpaging" style="height:400px;">'
-				html += '<div class="row row-offcanvas" style="height:400px; width:1000px;">'
+// 				html += '<div class="row row-offcanvas" style="height:400px; width:1000px;">'
 				html += '<table class="table table-striped">'
-				html += '<tr style="background: gray; text-align: center;">'
+				html += '<tr style="background: #cccccc6e; text-align: center;">'
 				html += '<td><b>No.</b></td>'
 				html += '<td><b>제목</b></td>'
 				html += '<td><b>날짜</b></td>'
@@ -78,10 +78,10 @@ function getNoticeList(){
 					
 					html += '<div class="text-center" style="width:1000px;">'
 					html += '<ul class="pagination pagination-sm">'
-					if(p.curPage != 1){
+// 					if(p.curPage != 1){
 // 					html +=	'<li><a href='+'"/admin/seller/list?curPage=1&condtion='+condition+'&searchWord='+searchWord+'">&larr;처음</a></li>'
-					html += '<li><a onclick="getCurPage('+1+')">&larr;처음</a></li>'
-					}
+// 					html += '<li><a onclick="getCurPage('+1+')">&larr;처음</a></li>'
+// 					}
 					if(p.curPage <= p.pageCount){		
 // 					html +=	'<li class="disabled" id="id"><span>&laquo;</span></li>'
 					html += '<li class="disabled"><a>&laquo;</a></li>'
@@ -135,7 +135,7 @@ function getNoticeList(){
 					
 					
 					html += '</ul>'
-					html += '</div>'
+// 					html += '</div>'
 					html += "</div>"
 			$("#noticeListArea").html(html);
 			
@@ -168,6 +168,9 @@ color: red;
 .centered { display: table; margin-left: auto; margin-right: auto; }
 </style>
 
+<hr>
+
+<div style="padding-top: 10px; padding-left: 11px;" id="noticeListArea">
 
 
 <div class="container" style="width: 1100px; height:400px; margin-top: 100px; ">
@@ -180,5 +183,7 @@ color: red;
 		</div>
 	
 	</div>
+
 </div>
+	
 

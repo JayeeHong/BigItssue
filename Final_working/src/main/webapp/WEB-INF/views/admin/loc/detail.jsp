@@ -3,6 +3,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- jQuery 2.2.4 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+
+
+<style type="text/css">
+
+.table {
+	text-align: center;
+	vertical-align: middle;
+}
+
+</style>
+
+
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#btnAdd").click(function() {
@@ -30,18 +42,23 @@ function mapView(locNo){
 }
 </script>
 
-<h3>${station } DETAIL</h3>
+<div class="row row-offcanvas row-offcanvas-right">
+
+<jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
+
+<div class="col-xs-12 col-sm-9">
+
+<h4><strong>판매장소 정보 [${station }]</strong></h4>
 <hr>
 
-
-<table class="table" style="width: 50%; margin-left: 25%; margin-right: 25%;">
+<table class="table" style="width: 70%; margin-left: 13%;">
   <thead>
     <tr>
-      <th scope="col">출구(위치)</th>
-      <th scope="col">판매자</th>
-      <th scope="col">아이디</th>
-	  <th scope="col">이메일</th>
-	  <th scope="col">삭제</th>
+      <th style="text-align: center;" scope="col">출구(위치)</th>
+      <th style="text-align: center;" scope="col">판매자</th>
+      <th style="text-align: center;" scope="col">아이디</th>
+<!-- 	  <th style="text-align: center;" scope="col">이메일</th> -->
+	  <th style="text-align: center;" scope="col">삭제</th>
     </tr>
   </thead>
   <tbody>
@@ -56,12 +73,16 @@ function mapView(locNo){
   	  <td scope="row">${list.get("SPOT") }</td>
   	  <td scope="row">${list.get("SELLERNAME") }</td>
   	  <td scope="row">${list.get("SELLERID") }</td>
-  	  <td scope="row">이메일</td>
-  	  <td scope="row"><button id="deleteBtn" class="btn btn-sm btn-danger">x</button></td>
+<%--   	  <td scope="row">${list.get("SELLEREMAIL") }</td> --%>
+  	  <td scope="row"><button id="deleteBtn" class="btn btn-xs btn-danger">x</button></td>
   	</tr>
   </c:forEach>
   </c:if>
   </tbody>
 </table>
-<button id="btnAdd">추가</button>
-<button id="returnBtn">돌아가기</button>
+<button class="btn btn-primary" id="btnAdd">추가</button>
+<button class="btn btn-default" id="returnBtn">돌아가기</button>
+
+</div>
+
+</div>

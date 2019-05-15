@@ -227,6 +227,10 @@ public interface AdminDao {
 	// 판매자 정보 이미지 제외하고 업데이트 쿼리(이미지가 없을 때)
 	public void updateSellerWithoutImg(SellerBigdomInfo sbInfo);
 
+
+	// 구매자 정보 pw까지 변경시 업데이트 쿼리
+	public void updateBuyerInfoWithPw(BuyerInfo buyerInfo);
+
 	
 	//총 후기글 수 반환
 	public int selectCntReview();
@@ -251,6 +255,7 @@ public interface AdminDao {
 
 	//후기 댓글 수정
 	public void updateReply(ReviewReply reviewReply);
+
 
 
 
