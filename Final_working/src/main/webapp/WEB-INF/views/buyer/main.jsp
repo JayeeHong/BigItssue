@@ -44,6 +44,7 @@ function inquire(id,sort){
 		$(location).attr("href", "/buyer/login");
 	}
 }
+
 </script>
 
 <%-- <jsp:include page="mainBanner.jsp" /> --%>
@@ -157,6 +158,6 @@ function inquire(id,sort){
 <!-- 페이징 -->
 <jsp:include page="sellerLocPaging.jsp" />
 
+</div>
+</div>
 
-</div>
-</div>
