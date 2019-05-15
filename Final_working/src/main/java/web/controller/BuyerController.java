@@ -516,8 +516,7 @@ public class BuyerController {
 			
 			
 			//예약부수가 0보다 작다면 아래 코드들 실행못하게 continue
-			if(selectBookingNum[i]<=0)
-				continue;
+			if(selectBookingNum[i]<=0) continue;
 			reservationInfo.setSellerId(SellerLocInfo.getSellerId());
 			reservationInfo.setBuyerId((String)session.getAttribute("buyerId"));
 			reservationInfo.setZone(SellerLocInfo.getZone());
@@ -530,12 +529,13 @@ public class BuyerController {
 			reservationInfo.setBookDate(date);
 			reservationInfo.setMagazineNo(magazineNo[i]);
 			
-			//현재시간(년,월,일)+예약한시간(시,분)+오전/오후
+			//-----현재시간(년,월,일)+예약한시간(시,분)+오전/오후-----
 			String bookingTime = bookingTimeHour+":"+bookingTimeMin+" "+AmPm;
 			//현재시간(년,월,일) Date=>String 타입변환
 			String now = transFormat.format(date);
 			String StringTime = now+" "+bookingTime;
 			logger.info("StringTime:"+StringTime);
+			//--------------------------------------------
 			try {
 				//Reservation DTO에 저장하기 위해 String=>Date로 타입변환
 				Date DateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm a").parse(StringTime);
@@ -590,8 +590,14 @@ public class BuyerController {
 
 			} else { 
 //				logger.info("현재시간이 더 큼");	
-				// 3. DB에 저장된 시간이 현재시간보다 클때 취소상태로 변경
-				buyerService.setPickupDate(reservationList.get(i));
+				//status가 예약이고, DB에 저장된 시간이 현재시간보다 클때 취소상태로 변경
+				//예약부수도 반환
+				if("예약".contentEquals(reservationList.get(i).getStatus())) {
+					//예약 => 예약취소(시간초과)로 변경
+					buyerService.setPickupDate(reservationList.get(i));
+					//예약했던 수 만큼 다시 증가시키기 
+					buyerService.increaseCirculation(reservationList.get(i));
+				}
 			}
 		}
 		
