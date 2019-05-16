@@ -716,7 +716,7 @@ public class AdminController {
 			Model model
 			,SellerLoc sellerloc
 			) {
-		
+		System.out.println("dddddddd");
 		SellerLoc locInfo = adminService.getSellerInfo(sellerloc);
 		model.addAttribute("sellerInfo", locInfo);
 
@@ -748,6 +748,15 @@ public class AdminController {
 //		logger.info(zoneString);//확인용
 		String zone = zoneString.substring(0, zoneString.length()-1);// 맨마지막에 붙는 '/'를 지운다.
 		sellerLoc.setZone(zone);//완성된 zone을 sellerLoc객체에 담는다.
+		
+		//startTime2와 endTime2의 자릿수를 맞춰준다
+		//startTime1와 endTime1의 자릿수는 Lpad로 맞춘다
+		if(sellerLoc.getStartTime2().length()<2) {
+			sellerLoc.setStartTime2("0"+sellerLoc.getStartTime2());
+		}
+		if(sellerLoc.getEndTime2().length()<2) {
+			sellerLoc.setEndTime2("0"+sellerLoc.getEndTime2());
+		}
 		
 		String sellerTimeS = sellerLoc.getStartTime1();//sellerTimeS에 값을 저장한다.
 				sellerTimeS += sellerLoc.getStartTime2();	

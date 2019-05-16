@@ -31,4 +31,11 @@ function noticeListGo(){
 </div>
 
 
+<style>
+p{
+word-break:break-all;
+word-wrap:break-word;
+w
+}</style>
+
 
