@@ -158,12 +158,20 @@ function getLocList(){
 					
 					html += '<td>'+value.sellerCard+'</td>'
 					
-					if(value.sellerTimeS == 0 || value.sellerTimeE == 0){
-					html += '<td></td>'	
+					html +='<td>'
+					if(value.sellerTimeS == 0){
+					html += '0000' + '~'	
 					}else{
-					html += '<td>'+value.sellerTimeS+'~'+value.sellerTimeE+'</td>'
+					html += value.sellerTimeS + '~'		
 					}
-
+					
+					if(value.sellerTimeE == 0){
+					html += '0000'
+					}else{
+					html += value.sellerTimeE	
+					}
+					
+					html += '</td>'
 					if(value.sellerId == null){
 					html += '<td>'+'연결된 계정이 없습니다'+'</td>'
 					}else{
