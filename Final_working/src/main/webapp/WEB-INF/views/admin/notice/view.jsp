@@ -31,7 +31,7 @@ function noticeDelete(a){
 p{
 word-break:break-all;
 word-wrap:break-word;
-w
+
 }
 </style>
 
@@ -41,17 +41,17 @@ w
 
 <div class="col-xs-12 col-sm-9">
 
-<div class="" style="" >
+<div>
 <!-- 	<div class="container text-left" style="width:60%; height:70px;"> -->
     <h3><label>${notice.noticeTitle }</label></h3>
 <!-- 	</div> -->
+	
 	<div class="text-right" style="height:70px;">
-	    <fmt:formatDate value="${notice.noticeDate }" var="i" pattern="YY-MM-dd"/>
-	    <label>${i }</label><br>
-	    <label>작성자:관리자</label>
+	    <fmt:formatDate value="${notice.noticeDate }" pattern="YY-MM-dd HH:mm:ss" />
 		<hr>	
 	</div>
- 	<div class="" style="">
+ 	
+ 	<div>
 	    <br>
 		<p style="width: auto;">
 	    ${notice.noticeContent }
