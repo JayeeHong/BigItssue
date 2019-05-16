@@ -28,7 +28,7 @@
 			<exclude-mapping path="/buyer/findid" />
 			<exclude-mapping path="/buyer/findpw" />
 			<exclude-mapping path="/buyer/mailsender" />
-			<exclude-mapping path="/buyer/notice" />
+			<exclude-mapping path="/buyer/notice/list" />
 			<!-- 인터셉터 빈 등록 -->
 			<beans:bean class="web.interceptor.BuyerInterceptor" />
 		</interceptor>
