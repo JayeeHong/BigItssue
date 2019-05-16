@@ -52,9 +52,9 @@ function getLocList(){
 			
 			var html =""
 				html ='<div id="tableAndpaging" style="height:400px;">'
-				html += '<div class="row row-offcanvas" style="height:400px;">'
-				html += '<table class="table table-striped" style="float:left;  width:75%;">'
-				html += '<tr style="background: gray; text-align: center;">'
+				html += '<div class="" style="height:400px;">'
+				html += '<table class="table table-striped" style="width:100%;">'
+				html += '<tr style="background: #cccccc6e; text-align: center;">'
 				html += '<td><b>No.</b></td>'
 				html += '<td><b>제목</b></td>'
 				html += '<td><b>날짜</b></td>'
@@ -192,27 +192,36 @@ color: red;
 
 </style>
 
-
+<div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
 
-<div class="" style="width: 1000px;">
-<div style="width:auto; position:static;  left:20%;">
-<h3>공지사항 게시판 관리</h3>
+<!-- <div class="" style="width: 1000px;"> -->
+<!-- <div style="width:auto; position:static;  left:20%;"> -->
+
+<div class="col-xs-12 col-sm-9">
+
+<h4><strong>공지사항 게시판 관리</strong></h4>
 <hr>
-</div>
+<!-- </div> -->
     
-<div class="text-right">
-<input type="button" class="btn btn info" value="글쓰기" onclick="noticeWrite()" style="maging-right:300px;">
+<!-- <div class=""> -->
+<!-- <div> -->
+<input type="button" class="btn btn-primary" value="글쓰기" onclick="noticeWrite()" style="float: right;">
+<!-- </div> -->
+<br><br>
+
 <div id="noticeListArea">
 	<div class="centered">
 	<img class="item"src="/upload/loading.gif" style="width: 180px; height: 180px;">
 	</div>
 
-</div>    
+<!-- </div>     -->
 </div>    
 </div>
     
+<!-- </div> -->
+<!-- </div> -->
 
-
+</div>
 

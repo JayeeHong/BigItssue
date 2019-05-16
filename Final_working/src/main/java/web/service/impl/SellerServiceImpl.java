@@ -1,6 +1,8 @@
 package web.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -138,10 +140,33 @@ public class SellerServiceImpl implements SellerService {
 	public int getTotalCount() {
 		return sellerDao.selectCntReview();
 	}
-
+	
+	@Override
+	public int getTotalCount(String searchOpt, String search) {
+		
+		if( searchOpt.equals("reviewTitle") ) {
+			return sellerDao.selecCntSearchByTitle(search);
+			
+		} else if( searchOpt.equals("reviewContent") ) {
+			return sellerDao.selecCntSearchByContent(search);
+			
+		} else {
+			return sellerDao.selecCntSearchBySellerId(search);	
+		}
+	}
+	
 	@Override
 	public List<Review> getPagingList(Paging paging) {
-		return sellerDao.selectPaginglist(paging);
+		
+		if( "reviewTitle".equals(paging.getSearchOpt()) ) {
+			return sellerDao.selectPaginglistByTitle(paging);
+			
+		} else if( "reviewContent".equals(paging.getSearchOpt()) ) {
+			return sellerDao.selectPaginglistByContent(paging);
+			
+		} else {
+			return sellerDao.selectPaginglistBySellerId(paging);
+		}	
 	}
 
 	@Override
@@ -174,6 +199,17 @@ public class SellerServiceImpl implements SellerService {
 	public int getMyTotalCount(Review review) {
 		return sellerDao.selectCntMyReview(review);
 	}
+	
+	@Override
+	public int getMyTotalCount(String sellerId, String search) {
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("sellerId", sellerId);
+		map.put("search", search);
+		
+		return sellerDao.selectCntMyReviewSearch(map);
+	}
+
 
 	@Override
 	public List<Review> getPagingMyList(Paging paging) {
@@ -219,5 +255,6 @@ public class SellerServiceImpl implements SellerService {
 	public ReviewReply getReply(int replyNo) {
 		return sellerDao.selectReply(replyNo);
 	}
+
 
 }

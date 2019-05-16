@@ -225,6 +225,23 @@ $(document).ready(function() {
 		location.href = "/buyer/my/booking";
 	});
 });
+
+
+// 판매처리스트로 이동
+function fnMove(){
+// 	console.log($("#moveToSellerloc").offset());
+	var offset = $("#moveToSellerloc").offset();
+	console.log(offset);
+	if(typeof offset=='undefined') {
+		$(location).attr('href', '/buyer/main');
+	
+	} else {
+		$('html, body').animate({scrollTop : offset.top}, 400);
+		
+	}
+
+}
+
 </script>
 
 
@@ -234,7 +251,7 @@ $(document).ready(function() {
 
 
 <div class="header">
-	<div class="container">
+<!-- 	<div class="container"> -->
 		<div id="logo">
 			<a href="/buyer/main">
 				<img id="logoImg" src="http://bigissue.kr/wp-content/themes/canvas/images/Bigissue_kr_logo_main.png" alt="Bigissue Logo">
@@ -243,7 +260,7 @@ $(document).ready(function() {
 		
 		<div id="topMenu">
 			<ul>
-				<li><a href="/buyer/main">판매처 보기</a></li>
+				<li><a type="button" onclick="fnMove()">판매처 보기</a></li>
 				<li><a href="/buyer/notice/list">공지사항</a></li>
 			</ul>			
 			
@@ -262,7 +279,7 @@ $(document).ready(function() {
 				</c:if>
 			</div>
 		</div>
-	</div>
+<!-- 	</div> -->
 	
 </div>
 

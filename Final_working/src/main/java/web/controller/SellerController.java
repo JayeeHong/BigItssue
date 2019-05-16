@@ -457,7 +457,7 @@ public class SellerController {
 	
 	
 	@RequestMapping(value="/seller/review/list", method=RequestMethod.GET)
-	public void review(Review review, Model model, HttpServletRequest req) {
+	public void review(Review review, Model model, HttpServletRequest req, String searchOpt, String search) {
 		
 		logger.info("후기 게시판 리스트");
 		
@@ -465,16 +465,24 @@ public class SellerController {
 		int curPage = sellerService.getCurPage(req);
 		
 		//게시글 수 얻기
-		int totalCount = sellerService.getTotalCount();
+		int totalCount = 0;
+		
+		if( search != null && !"".equals(search) ) {
+			totalCount = sellerService.getTotalCount(searchOpt, search);
+		} else {
+			totalCount = sellerService.getTotalCount();			
+		}
 		
 		//페이지 객체 생성
 		Paging paging = new Paging(totalCount, curPage);
+		paging.setSearch(search);
+		paging.setSearchOpt(searchOpt);
 		
 		//페이징객체 MODEL로 추가
 		model.addAttribute("paging", paging);
 		
 		//게시글 목록 MODEL로 추가
-		List<Review> reviewList = sellerService.getPagingList(paging);
+		List<Review> reviewList = sellerService.getPagingList(paging);				
 		model.addAttribute("reviewList", reviewList);
 		
 	}
@@ -546,7 +554,7 @@ public class SellerController {
 		
 		sellerService.update(review);
 		
-		return "redirect:/seller/review/view?reviewo=" + review.getReviewNo();
+		return "redirect:/seller/review/view?reviewNo=" + review.getReviewNo();
 	}
 	
 	@RequestMapping(value="/seller/review/delete", method=RequestMethod.GET)
@@ -566,16 +574,28 @@ public class SellerController {
 		
 		logger.info("내가 쓴 후기 리스트");
 		
+		String sellerId = (String)session.getAttribute("sellerId");
+		String search = req.getParameter("search");
+		
 		//현재 페이지 번호 얻기
 		int curPage = sellerService.getCurPage(req);
 		
 		//내 후기글 수 얻기
-		review.setSellerId( (String)session.getAttribute("sellerId") );
-		int myTotalCount = sellerService.getMyTotalCount(review);
+		review.setSellerId( sellerId );
+//		int myTotalCount = sellerService.getMyTotalCount(review);
+		
+		int myTotalCount = 0;
+		
+		if(search != null && !"".equals(search) ) { //검색했을 떄
+			myTotalCount = sellerService.getMyTotalCount(sellerId, search);
+		} else {
+			myTotalCount = sellerService.getMyTotalCount(review);			
+		}
 		
 		//페이지 객체 생성
 		Paging paging = new Paging(myTotalCount, curPage);
-		paging.setSellerId( (String)session.getAttribute("sellerId") );
+		paging.setSellerId( sellerId );
+		paging.setSearch(search);
 		
 		//페이징객체 MODEL로 추가
 		model.addAttribute("paging", paging);

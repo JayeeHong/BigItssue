@@ -39,7 +39,7 @@ function upBigdom(bigdomId) {
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>계정관리</h3>
+<h4><strong>계정관리</strong></h4>
 <hr>
 
 <div id="sellerList">
@@ -53,7 +53,7 @@ function upBigdom(bigdomId) {
 <div>
 
 	<table class="table">
-		<thead>
+		<thead style="background: #cccccc6e">
 			<tr>
 				<td style="width: 10%">번호</td>
 				<td style="width: 25%">빅돔 아이디</td>

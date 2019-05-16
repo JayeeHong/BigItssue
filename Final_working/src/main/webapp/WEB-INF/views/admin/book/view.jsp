@@ -26,9 +26,9 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-	$("#toList").click(function() {
-		location.href="/admin/book/list";
-	});
+// 	$("#toList").click(function() {
+// 		location.href="/admin/book/list";
+// 	});
 });
 
 function addBookInfo(sellerId) {
@@ -95,10 +95,10 @@ function mDelete(magazineNo, sellerId) {
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>판매자 빅이슈 수정</h3>
+<h4><strong>판매자 빅이슈 수정</strong></h4>
 <hr>
 
-<button class="btn btn-default" id="toList">목록</button><br><br>
+<button class="btn btn-default" id="toList" onclick="history.go(-1)">목록</button><br><br>
 <table class="table table-bordered">
 <thead>
 <tr>

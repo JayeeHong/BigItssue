@@ -39,7 +39,7 @@ function sellerlocActivate() {
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>판매자 빅이슈 관리</h3>
+<h4><strong>판매자 빅이슈 관리 [비활성화]</strong></h4>
 <hr>
 
 <button class="btn btn-default" onclick="sellerlocAll();">전체</button>
@@ -53,11 +53,11 @@ function sellerlocActivate() {
 
 <thead style="background: #cccccc6e;">
 <tr>
-	<th style="width: 10%">번호</th>
-	<th style="width: 15%">지역(호선)</th>
-	<th style="width: 30%">판매장소</th>
-	<th style="width: 30%">출구(위치)</th>
-	<th style="width: 15%">판매자</th>
+	<th style="text-align:center; width: 10%">번호</th>
+	<th style="text-align:center; width: 15%">지역(호선)</th>
+	<th style="text-align:center; width: 30%">판매장소</th>
+	<th style="text-align:center; width: 30%">출구(위치)</th>
+	<th style="text-align:center; width: 15%">판매자</th>
 </tr>
 </thead>
 

@@ -29,7 +29,7 @@
 		<when test="condition == 'sellerId'">
 		SELECT c.*, s.sellername from	(SELECT * FROM ( 
 			SELECT rownum rnum, B.* FROM ( 
-				SELECT * FROM sellerLoc 
+				SELECT LOCNO, ZONE, STATION, SPOT, lpad(SELLERTIMES, 4, 0) SELLERTIMES, lpad(sellertimee, 4, 0) sellertimee, sellercard, sellerid, bigdomid, lat, lng FROM sellerLoc 
 				ORDER BY locno desc ) 
 			B ORDER BY rnum ) R 
 		WHERE rnum BETWEEN #{p.startNo } AND #{p.endNo }) c, sellerinfo s
@@ -39,7 +39,7 @@
 		<otherwise>
 		SELECT c.*, s.sellername from (SELECT * FROM ( 
 			SELECT rownum rnum, B.* FROM ( 
-				SELECT * FROM sellerLoc 
+				SELECT LOCNO, ZONE, STATION, SPOT, lpad(SELLERTIMES, 4, 0) SELLERTIMES, lpad(sellertimee, 4, 0) sellertimee, sellercard, sellerid, bigdomid, lat, lng FROM sellerLoc 
 				<if test="condition != null">
 				WHERE ${condition} like '%' || #{searchWord} || '%'
 				</if>
@@ -57,7 +57,7 @@
 	</delete>
 	
 	<select resultType="web.dto.SellerLoc" parameterType="web.dto.SellerLoc" id="getSellerInfo"> 
-		SELECT * FROM sellerLoc
+		SELECT LOCNO, ZONE, STATION, SPOT, lpad(SELLERTIMES, 4, 0) SELLERTIMES, lpad(sellertimee, 4, 0) sellertimee, sellercard, sellerid, bigdomid, lat, lng FROM sellerLoc
 		<choose>
 			<when test="locNo != 0">
 			WHERE locNo = #{locNo } 
@@ -254,7 +254,7 @@
 	
 	<update id="updateBuyerInfo" parameterType="web.dto.BuyerInfo">
 		UPDATE buyerInfo
-		SET buyerName=#{buyerName }, buyerPw=#{buyerPw }, buyerPhone=#{buyerPhone }, buyerEmail=#{buyerEmail }
+		SET buyerName=#{buyerName }, buyerPhone=#{buyerPhone }, buyerEmail=#{buyerEmail }
 		WHERE buyerId=#{buyerId }
 	</update>
 	
@@ -526,6 +526,13 @@
 		WHERE sellerId=#{sellerId }
 	</update>
 	
+
+	<update id="updateBuyerInfoWithPw" parameterType="web.dto.BuyerInfo">
+		UPDATE buyerInfo
+		SET buyerName=#{buyerName }, buyerPw=#{buyerPw }, buyerPhone=#{buyerPhone }, buyerEmail=#{buyerEmail }
+		WHERE buyerId=#{buyerId }
+	</update>
+
 	
 	
 	<select id="selectCntReview" resultType="int">
@@ -579,5 +586,6 @@
 	</update>
 	
 	
+
 
 </mapper>

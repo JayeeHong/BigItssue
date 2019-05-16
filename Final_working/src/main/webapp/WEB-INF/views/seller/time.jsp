@@ -59,6 +59,12 @@ function cardUpdate(sellerId) {
 
 </script>
 
+<hr>
+<div style="padding-top: 10px;">
+<h4><strong>판매관리</strong></h4>
+<hr>
+</div>
+
 <c:if test="${sellerTimeS eq null }">
 현재 활성화된 판매자가 아닙니다.
 </c:if>

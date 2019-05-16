@@ -113,6 +113,7 @@ public class BuyerController {
 		model.addAttribute("mainBannerList", mainBannerList);
 		
 	}
+	
 	@RequestMapping(value="/buyer/main", method=RequestMethod.POST)
 	public void buyerMainPost(
 			String zoneSelect, 
@@ -181,6 +182,14 @@ public class BuyerController {
 		// 배너목록 MODEL로 추가
 		List<MainBanner> mainBannerList = buyerService.getBannerList();
 		model.addAttribute("mainBannerList", mainBannerList);
+		
+		//------------------------------------------------------
+		//메인 배너
+		// 배너목록 MODEL로 추가
+
+		List<MainBanner> mainBannerList = buyerService.getBannerList();
+		model.addAttribute("mainBannerList", mainBannerList);
+		
 		
 	}
 	
@@ -800,7 +809,6 @@ public class BuyerController {
 		return "jsonView";
 	}
 	
-	// ------------------------------------진행중
 	@RequestMapping(value="/buyer/my/info/changePw", method=RequestMethod.POST)
 	public String myInfoChangePw(BuyerInfo buyerInfo, HttpSession session) {
 		
@@ -808,6 +816,9 @@ public class BuyerController {
 		buyerInfo.setBuyerId((String) session.getAttribute("buyerId"));
 
 //		logger.info(":::비밀번호 변경::::"+buyerInfo.toString());
+		// 비밀번호 암호화
+		String codedPw = buyerService.shaPw(buyerInfo.getBuyerPw());
+		buyerInfo.setBuyerPw(codedPw);
 		
 		// 비밀번호 변경
 		buyerService.setBuyerInfoAtMypage(buyerInfo);
@@ -817,7 +828,6 @@ public class BuyerController {
 		
 		return "jsonView";
 	}
-	// ------------------------------------진행중
 	
 	@RequestMapping(value="/buyer/my/confirmpw", method=RequestMethod.POST)
 	public void myPwConfirm(BuyerInfo buyerInfo, HttpSession session, HttpServletResponse res) throws IOException { // 마이페이지-정보수정 -> 비밀번호확인
@@ -825,6 +835,10 @@ public class BuyerController {
 		PrintWriter out = null;
 		res.setContentType("text/html; charset=UTF-8");
 		out = res.getWriter();
+		
+		// 입력한 비밀번호 암호화
+		String codedpw = buyerService.shaPw(buyerInfo.getBuyerPw());
+		buyerInfo.setBuyerPw(codedpw);
 		
 //		logger.info(buyerInfo.toString());
 		buyerInfo.setBuyerId((String) session.getAttribute("buyerId"));

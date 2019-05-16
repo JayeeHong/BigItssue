@@ -126,7 +126,7 @@ function replyUpdateCancel(replyNo, replyContent) {
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>후기게시판 관리</h3>
+<h4><strong>후기게시판 관리</strong></h4>
 <hr>
 
 
@@ -218,3 +218,6 @@ function replyUpdateCancel(replyNo, replyContent) {
 </div>
 </div>
 </div>
+
+
+<br><br><br><br><br>

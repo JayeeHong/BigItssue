@@ -16,22 +16,43 @@ $(document).ready(function() {
 
 <style type="text/css">
 #btnBox { text-align: right; }
-#reviewList { padding-top: 50px; }
+#reviewList { padding-top: 10px; }
+
 </style>
 
-
+<div style="padding-top: 10px;">
+<h4><strong>빅돔 후기</strong></h4>
+<hr>
+</div>
 
 
 <div id="reviewList">
+
+	<div style="text-align: right; line-height: 0;">
+		<form action="/seller/review/list" method="get" class="form-inline">
+
+				<select name="searchOpt" class="form-control" style="height: 30px; padding: 3px 12px;">
+					<option value="reviewTitle">제목</option>
+					<option value="reviewContent">내용</option>
+	    			<option value="sellerId">작성자</option>
+				</select>
+		
+		
+				<input type="text" class="form-control" name="search" style="height: 30px;">
+				<button class="btn btn-sm">검색</button>
+		
+		</form>
+	</div>	
+
 	<ul class="nav nav-tabs">
-	  <li role="presentation" class="active"><a href="/seller/review/list">모두</a></li>
+	  <li role="presentation" class="active"><a href="/seller/review/list">전체</a></li>
 	  <li role="presentation"><a href="/seller/review/mylist">내 글</a></li>
 	</ul>
 
 	<div>
 		<table class="table table-hover">
 			<thead>
-				<tr>
+				<tr style="background: #cccccc6e;">
 					<th style="width: 10%">글번호</th>
 					<th style="width: 50%">제목</th>
 					<th style="width: 15%">작성자</th>

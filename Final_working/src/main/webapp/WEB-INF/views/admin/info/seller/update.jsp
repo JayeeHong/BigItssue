@@ -402,7 +402,7 @@ function activateBigdom(bigdomId) {
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>판매자 계정 수정</h3>
+<h4><strong>판매자 계정 수정</strong></h4>
 <hr>
 
 <c:if test="${not sellerStatus }">

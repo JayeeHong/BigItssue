@@ -125,19 +125,77 @@
 		SELECT COUNT(*) FROM review	
 	</select>
 	
-	<select id="selectPaginglist" resultType="web.dto.Review" parameterType="web.util.Paging">
+	
+	<select id="selecCntSearchByTitle" resultType="int" parameterType="String">
+		SELECT COUNT(*) FROM review
+		WHERE reviewTitle LIKE '%' || #{search } || '%'
+	</select>
+	
+	<select id="selecCntSearchByContent" resultType="int" parameterType="String">
+		SELECT COUNT(*) FROM review
+		WHERE reviewContent LIKE '%' || #{search } || '%'
+	</select>
+	
+	<select id="selecCntSearchBySellerId" resultType="int" parameterType="String">
+		SELECT COUNT(*) FROM review
+		WHERE sellerId LIKE '%' || #{search } || '%'
+	</select>
+
+	
+	<select id="selectPaginglistByTitle" resultType="web.dto.Review" parameterType="web.util.Paging">
 		SELECT * FROM (
 			SELECT rownum rnum, B.* FROM (
 				SELECT C.*,
 					(SELECT COUNT(*) FROM ReviewReply
 						WHERE reviewno = C.reviewno) AS replyCnt 
 				FROM review C
+				WHERE 1=1
+				<if test="search != '' and search != null">
+					AND reviewTitle LIKE '%' || #{search } || '%'
+				</if>
 				ORDER BY reviewNo desc
 			) B
 			ORDER BY rnum
 		) R
 		WHERE rnum BETWEEN #{startNo } AND #{endNo }
 	</select>
+	
+	<select id="selectPaginglistByContent" resultType="web.dto.Review" parameterType="web.util.Paging">
+		SELECT * FROM (
+			SELECT rownum rnum, B.* FROM (
+				SELECT C.*,
+					(SELECT COUNT(*) FROM ReviewReply
+						WHERE reviewno = C.reviewno) AS replyCnt 
+				FROM review C
+				WHERE 1=1
+				<if test="search != '' and search != null">
+					AND reviewContent LIKE '%' || #{search } || '%'
+				</if>
+				ORDER BY reviewNo desc
+			) B
+			ORDER BY rnum
+		) R
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+	</select>
+	
+	<select id="selectPaginglistBySellerId" resultType="web.dto.Review" parameterType="web.util.Paging">
+		SELECT * FROM (
+			SELECT rownum rnum, B.* FROM (
+				SELECT C.*,
+					(SELECT COUNT(*) FROM ReviewReply
+						WHERE reviewno = C.reviewno) AS replyCnt 
+				FROM review C
+				WHERE 1=1
+				<if test="search != '' and search != null">
+					AND sellerId LIKE '%' || #{search } || '%'
+				</if>
+				ORDER BY reviewNo desc
+			) B
+			ORDER BY rnum
+		) R
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+	</select>
+	
 	
 	<insert id="insert" parameterType="web.dto.Review">
 		INSERT INTO review ( reviewNo, reviewTitle, reviewContent, sellerId )
@@ -172,6 +230,12 @@
 		WHERE sellerId = #{sellerId }
 	</select>
 	
+	<select id="selectCntMyReviewSearch" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM review
+		WHERE sellerId = #{sellerId }
+		AND reviewTitle LIKE '%' || #{search } || '%'
+	</select>
+	
 	<select id="selectPagingMylist" resultType="web.dto.Review" parameterType="web.util.Paging">
 		SELECT * FROM (
 			SELECT rownum rnum, B.* FROM (
@@ -180,6 +244,9 @@
 					 WHERE reviewno = C.reviewno) AS replyCnt
 				FROM review C
 				WHERE sellerId = #{sellerId }
+				<if test="search != '' and search != null">
+					AND reviewTitle LIKE '%' || #{search } || '%'
+				</if>
 				ORDER BY reviewNo desc
 			) B
 			ORDER BY rnum
