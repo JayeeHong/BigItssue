@@ -37,7 +37,17 @@ $(document).ready(function() {
 			return;
 		}
 	});
+	
+	/* 댓글input창에서 enter누르면 동작 */
+	/* 웹소켓 핸들러로 보내줌 */
+	$('input[type="text"]').keydown(function() {
+	    if (event.keyCode === 13) {
+	    	submitComment();
+	    }
+	});
+	
 });
+
 </script>
 
 
@@ -116,10 +126,38 @@ function replyUpdateProc(replyNo) {
 
 
 //댓글 수정 취소
-function replyUpdateCancel(replyNo, replyContent) {
-	$("#"+replyNo).find("p").html(replyContent);
+function replyUpdateCancel(replyNo, sellerId) {
+	var a = $("#"+replyNo).find("p .form-control").val();
+	$("#"+replyNo).find("p").html(a);
 }
 
+//댓글 등록 ( 여기서 웹소켓핸들러로 보내줌 )
+function submitComment(){
+	
+	var reviewNo =${reviewView.reviewNo };
+	var writer= '${sellerId }';
+	var replyContent = $("#text").val();
+	var reviewViewSellerId = '${reviewView.sellerId }';
+	
+	console.log("reviewNo:"+reviewNo);
+	console.log("writer:"+writer);
+	console.log("replyContent:"+replyContent);
+	
+	/* JSON.parse()는 String =>json  */
+	/* JSON.stringify()는 json => String */
+	var msg = JSON.stringify({"replyContent":replyContent,"writer":writer,"reviewNo":reviewNo,"reviewViewSellerId":reviewViewSellerId});
+	
+	socketCommnet.send(msg);
+	
+	$("#text").val("");
+}
+//form태그 속에 input태그 1개일때, enter누르면 
+// 저절로 submit되는걸 막기위한 event
+document.addEventListener('keydown', function(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+    }
+}, true);
 </script>
 
 
@@ -166,6 +204,10 @@ function replyUpdateCancel(replyNo, replyContent) {
 	
 	<!-- 댓글 입력 -->
 	<div class="replyInsert">
+		<!-- form으로 submit하지 않고 -->
+		<!-- ReplyEchoCommentHandler에서 DB에 댓글저장, 추가된 댓글을 처리해줌.
+		           댓글을 직접 받아오는 곳은 newCommentAlarmWebsocket.jsp임.
+		     seller와 관련된 모든곳에 newCommentAlarmWebsocket.jsp를 include해놨음.-->
 		<form id="replyInsertForm" action="/seller/review/reply/insert" method="post">
 			<input type="hidden" name="reviewNo" value="${reviewView.reviewNo }" />
 			<input type="hidden" name="writer" value="${sellerId }" />
@@ -174,8 +216,9 @@ function replyUpdateCancel(replyNo, replyContent) {
 				<tr><td colspan="3"><strong>댓글달기</strong></td></tr>
 				<tr>
 					<td style="width: 15%">${sellerId }</td>
-					<td style="width: 75%"><input class="form-control" type="text" name="replyContent" style="width: 100%"></td>
-					<td style="width: 10%; text-align: center;"><button name="replyInsertBtn" class="btn btn-sm">입력</button></td>
+					<td style="width: 75%"><input class="form-control" type="text" id="text" name="replyContent" style="width: 100%"></td>
+					<td style="width: 10%; text-align: center;"><button type="button" onclick="submitComment()" name="replyInsertBtn" class="btn btn-sm">입력</button></td>
+					
 				</tr>
 			</table>
 		</form>
@@ -185,6 +228,7 @@ function replyUpdateCancel(replyNo, replyContent) {
 	
 	
 	<!-- 댓글 리스트 -->
+	<div id="replyDiv${reviewView.reviewNo }">
 	<c:forEach items="${replyList }" var="r">
 		<div id="${r.replyNo }" class="replyList" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">
 			
@@ -194,8 +238,8 @@ function replyUpdateCancel(replyNo, replyContent) {
 				<span style="padding-left: 10px;"><small><fmt:formatDate value="${r.replyDate }" pattern="yyyy-MM-dd HH:mm"/></small></span>
 				<span style="padding-left: 10px;">
 					<c:if test="${r.writer == sellerId }">
-						<a onclick="replyUpdate('${r.replyNo }', '${r.replyContent }')">[수정]</a>
-						<a onclick="replyDelete(${r.replyNo }, ${r.reviewNo })">[삭제]</a> 
+						<a style="cursor:pointer;" onclick="replyUpdate('${r.replyNo }', '${r.replyContent }')">[수정]</a>
+						<a style="cursor:pointer;" onclick="replyDelete(${r.replyNo }, ${r.reviewNo })">[삭제]</a> 
 					</c:if>
 				</span>	
 			</div>
@@ -207,6 +251,7 @@ function replyUpdateCancel(replyNo, replyContent) {
 			
 		</div>
 	</c:forEach>
+	</div>
 	
 
 </div>

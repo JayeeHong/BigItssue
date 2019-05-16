@@ -114,6 +114,9 @@ public interface SellerService {
 
 	// reserveNo로 해당 컬럼 조회
 	public Reservation getReservationInfo(Reservation reservation);
+	
+	//replyno으로 reviewReply조회
+	public ReviewReply getReply(int replyNo);
 
 	
 

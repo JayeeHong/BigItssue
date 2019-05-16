@@ -251,5 +251,10 @@ public class SellerServiceImpl implements SellerService {
 		return sellerDao.selectReservationInfo(reservation);
 	}
 
+	@Override
+	public ReviewReply getReply(int replyNo) {
+		return sellerDao.selectReply(replyNo);
+	}
+
 
 }

@@ -260,9 +260,15 @@
 		ORDER BY replyNo ASC
 	</select>
 	
+	
+	<!-- sysdate를 반환 받고싶어서 selectKey추가 -->
 	<insert id="insertReply" parameterType="web.dto.ReviewReply">
-		INSERT INTO ReviewReply ( replyNo, replyContent, writer, reviewNo )
-		VALUES ( ReviewReply_seq.nextval, #{replyContent }, #{writer }, #{reviewNo } )
+		<selectKey keyProperty="replyNo"
+			resultType="int" order="BEFORE">
+			SELECT ReviewReply_seq.nextval FROM dual		
+		</selectKey>
+		INSERT INTO ReviewReply ( replyNo, replyContent, writer, reviewNo, replyDate )
+		VALUES ( #{replyNo}, #{replyContent }, #{writer }, #{reviewNo } ,sysdate )
 	</insert>
 	
 	<delete id="deleteReply" parameterType="int">
@@ -291,6 +297,11 @@
 	<select id="selectReservationInfo" parameterType="web.dto.Reservation" resultType="web.dto.Reservation">
 		SELECT * FROM reservation
 		WHERE reserveNo = #{reserveNo }
+	</select>
+	
+	<select id="selectReply" parameterType="int" resultType="web.dto.ReviewReply">
+		SELECT * FROM ReviewReply
+		WHERE replyNo = #{replyNo }
 	</select>
 
 </mapper>

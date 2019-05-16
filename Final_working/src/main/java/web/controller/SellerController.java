@@ -224,7 +224,7 @@ public class SellerController {
 		if(sellerLoc != null && !"".equals(sellerLoc)) {
 			startTime = sellerLoc.getSellerTimeS();
 			startTime1 = startTime.substring(0, 2);
-			startTime2 = startTime.substring(2, 4);
+			//startTime2 = startTime.substring(2, 4);
 			
 			endTime = sellerLoc.getSellerTimeE();
 			endTime1 = endTime.substring(0, 2);

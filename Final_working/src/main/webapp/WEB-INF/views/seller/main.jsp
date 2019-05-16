@@ -466,3 +466,6 @@ if(msg_history_id != null){
 }
 
 </script>
+
+<!-- 새로운 댓글출력(웹소켓) -->
+<jsp:include page="../../tiles/newCommentAlarmWebsocket.jsp" />

@@ -1,18 +1,25 @@
 package web.handler;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.google.gson.Gson;
+
+import web.dto.ReviewReply;
 import web.dto.User;
+import web.service.face.SellerService;
 
 public class ReplyEchoCommentHandler  extends TextWebSocketHandler {
 	
@@ -22,6 +29,8 @@ public class ReplyEchoCommentHandler  extends TextWebSocketHandler {
 	public Map<String, WebSocketSession> userSessionsComnnet = new HashMap<>(); 
 	
 	private static final Logger logger = LoggerFactory.getLogger(ReplyEchoCommentHandler.class);
+	
+	@Autowired SellerService sellerService;
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception{
@@ -50,18 +59,62 @@ public class ReplyEchoCommentHandler  extends TextWebSocketHandler {
 		logger.info("///////////////////////////////////////////////////////////////////////////");
 		logger.info("message:"+message.getPayload());
 		
+		Gson gson = new Gson();			
+		
+		ReviewReply reviewReply = gson.fromJson(message.getPayload(), ReviewReply.class);
+		logger.info("reviewReply:"+reviewReply);
+		
+		//댓글 입력
+		sellerService.replyWrite(reviewReply);
+		
+		//
+		reviewReply = sellerService.getReply(reviewReply.getReplyNo());
+		
+		//----- reviewReply의 날짜형식 바꿔주기 -----
+		// append로 댓글 넣으려했는데 <fmt>태그를 인식못해서 여기서 바꿔주었음.
+		SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String presentTime=time.format(reviewReply.getReplyDate());
+		
+		reviewReply.setStringDate(presentTime);
+
+		//------------------------------------
+
+		
+		//map형태로 보내주기 위해 map생성
+		Map map = new HashMap<>();
+
+		map.put("reviewReply", reviewReply);
+		
+		//댓글방 주인
+		String reviewViewSellerId = reviewReply.getReviewViewSellerId();
+		
+		//-------------------------------------------------
+		
 		//----------웹소켓으로 접속된 사람들만 반복 -----------------
 		for(WebSocketSession sess: userSessionsComnnet.values()) {
 			
 			//---------- 메시지 전송 ------------------------------
-			sess.sendMessage(new TextMessage(message.getPayload()));
+			//Gson이용해서 map을 json형태로 보내주기
+			sess.sendMessage(new TextMessage(gson.toJson(map)));
 			//-------------------------------------------------
+
 		}
 	}
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception{
 		logger.info("댓글용 웹소켓 끊김");
+		//---------- 현재 웹소켓을 sessions에서 제거 --------------
+		sessionsComnnet.remove(session);
+		System.out.println("[TEST]sessions에서 session정보 지웠는지 확인:"+sessionsComnnet);
+		//------------------------------------------------
+		
+		//------------------------------------------------
+		
+		//---------- 현재 웹소켓을 userSessions에서 제거 ----------
+		userSessionsComnnet.remove(getLoginInfo(session).getId());
+		System.out.println("[TEST]userSessions에서 session정보 지웠는지 확인:"+userSessionsComnnet);
+		//------------------------------------------------
 	}
 	
 	//웹소켓 session과 연동된 httpSession의LoginInfo 불러오기
