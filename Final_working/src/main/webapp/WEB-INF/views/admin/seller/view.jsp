@@ -113,12 +113,7 @@ $(document).ready(function(){
 		
 	})
 	
-	var regexp =  /[^0-9]/g
 	$("#startTime1").keyup(function(){
-		if(!regexp.test($(this).val())){
-			alert('숫자만 입력가능합니다.')
-			$("#startTime1").val(0);
-		}
 		
 			if ($("#startTime1").val() > 23 || $("#startTime1").val() < 0){
 				alert('0~23사이의 숫자(시간)를 써주세요')
@@ -127,10 +122,7 @@ $(document).ready(function(){
 	})
 	
 	$("#startTime2").keyup(function(){
-		if(!regexp.test($(this).val())){
-			alert('숫자만 입력가능합니다.')
-			$("#startTime2").val(0);
-		}
+		
 			if ($("#startTime2").val() > 59 || $("#startTime2").val() < 0){
 				alert('0~59사이의 숫자(분)를 써주세요')
 				$("#startTime2").val(0);
@@ -138,10 +130,7 @@ $(document).ready(function(){
 	})
 	
 	$("#endTime1").keyup(function(){
-		if(!regexp.test($(this).val())){
-			alert('숫자만 입력가능합니다.')
-			$("#endTime1").val(0);
-		}
+		
 			if ($("#endTime1").val() > 23 || $("#endTime1").val() < 0){
 				alert('0~23사이의 숫자(시간)를 써주세요')
 				$("#endTime1").val(0);
@@ -149,10 +138,7 @@ $(document).ready(function(){
 	})
 	
 	$("#endTime2").keyup(function(){
-		if(!regexp.test($(this).val())){
-			alert('숫자만 입력가능합니다.')
-			$("#endTime2").val(0);
-		}
+		
 			if ($("#endTime2").val() > 59 || $("#endTime2").val() < 0){
 				alert('0~59사이의 숫자(분)를 써주세요')
 				$("#endTime2").val(0);
