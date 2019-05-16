@@ -8,6 +8,7 @@ import web.dto.Chat;
 import web.dto.ChatReport;
 import web.dto.Message;
 import web.dto.MessageChk;
+import web.dto.ReviewReply;
 import web.dto.User;
 
 public interface ChatDao {
@@ -63,5 +64,6 @@ public interface ChatDao {
 	
 	//신고한 내용 DB에 저장하기
 	public void insertChatReportList(ChatReport chatReport);
+	
 		
 }

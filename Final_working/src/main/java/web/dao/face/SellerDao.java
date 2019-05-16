@@ -112,5 +112,8 @@ public interface SellerDao {
 
 	// reserveNo로 해당 예약정보 조회 쿼리
 	public Reservation selectReservationInfo(Reservation reservation);
+	
+	//replyno으로 reviewReply조회
+	public ReviewReply selectReply(int replyNo);
 
 }

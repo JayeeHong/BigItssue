@@ -47,11 +47,7 @@ function inquire(id,sort){
 
 </script>
 
-
-
 <jsp:include page="mainBanner.jsp" />
-
-
 
   <!-- 현재시간 받아오기 -->
   <fmt:formatDate value="${now}" pattern="HHmm" var="sysTime" />

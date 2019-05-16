@@ -176,6 +176,11 @@ public class BuyerController {
 		
 		//main에선 방번호 -1을가지고 있게하자.
 		
+		//------------------------------------------------------
+		//메인 배너
+		// 배너목록 MODEL로 추가
+		List<MainBanner> mainBannerList = buyerService.getBannerList();
+		model.addAttribute("mainBannerList", mainBannerList);
 		
 	}
 	
