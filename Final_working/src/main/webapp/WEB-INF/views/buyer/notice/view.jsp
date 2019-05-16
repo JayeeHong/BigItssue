@@ -2,30 +2,26 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+ 
+ 
     
 <script type="text/javascript">
-
 function noticeListGo(){
 	window.location.href="/buyer/notice/list"
 }
-
 </script>
 
 
-<hr>
 
-<div style="padding-top: 10px; padding-left: 11px;" class="text-left">
-	<h2>
-		<label>${notice.noticeTitle }</label>
-	</h2>
-</div>
-<br>
-<div class="text-right">
-	<fmt:formatDate value="${notice.noticeDate }" var="i"
-		pattern="YY-MM-dd" />
-	<label>${i }</label><br> <label>작성자:관리자</label>
+<div style="padding-top: 10px; padding-left: 11px;">
+	
+	<h3>${notice.noticeTitle }</h3>
+	<span style="float: right;"><fmt:formatDate value="${notice.noticeDate }" pattern="YY-MM-dd HH:mm:ss" /></span>
+	<br>
 	<hr>
 </div>
+<br>
+
 <div class="text-center">
 	<br> ${notice.noticeContent } <br>
 	<c:if test="${notice.noticeImg ne null}">
@@ -34,10 +30,12 @@ function noticeListGo(){
 	<br> <br> <input type="button" class="btn" value="목록" onclick="noticeListGo()">
 </div>
 
+
 <style>
 p{
 word-break:break-all;
 word-wrap:break-word;
 w
 }</style>
+
 

@@ -13,7 +13,7 @@
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>후기게시판 관리</h3>
+<h4><strong>후기게시판 관리</strong></h4>
 <hr>
 
 
@@ -21,24 +21,24 @@
 	
 	<div>
 		<table class="table table-hover">
-			<thead>
+			<thead style="text-align: center;">
 				<tr>
-					<th style="width: 10%">글번호</th>
-					<th style="width: 50%">제목</th>
-					<th style="width: 15%">작성자</th>
-					<th style="width: 15%">작성일</th>
-					<th style="width: 10%">조회수</th>
+					<th style="text-align:center; width: 10%">글번호</th>
+					<th style="text-align:center; width: 50%">제목</th>
+					<th style="text-align:center; width: 15%">작성자</th>
+					<th style="text-align:center; width: 15%">작성일</th>
+					<th style="text-align:center; width: 10%">조회수</th>
 				</tr>
 			</thead>
 			
 			<tbody>
 				<c:forEach items="${reviewList }" var="r">
 				<tr>
-					<td>${r.reviewNo }</td>
+					<td style="text-align:center;">${r.reviewNo }</td>
 					<td><a href="/admin/review/view?reviewNo=${r.reviewNo }">${r.reviewTitle }<span style="color: red; padding-left: 5px; font-size: small; ">[${r.replyCnt }]</span></a></td>
-					<td>${r.sellerId }</td>
-					<td><fmt:formatDate value="${r.reviewDate }" pattern="yyyy-MM-dd"/></td>
-					<td>${r.reviewHit }</td>
+					<td style="text-align:center;">${r.sellerId }</td>
+					<td style="text-align:center;"><fmt:formatDate value="${r.reviewDate }" pattern="yyyy-MM-dd"/></td>
+					<td style="text-align:center;">${r.reviewHit }</td>
 				</tr>
 				</c:forEach>
 			</tbody>

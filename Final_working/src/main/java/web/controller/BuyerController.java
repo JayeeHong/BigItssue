@@ -113,6 +113,7 @@ public class BuyerController {
 		model.addAttribute("mainBannerList", mainBannerList);
 		
 	}
+	
 	@RequestMapping(value="/buyer/main", method=RequestMethod.POST)
 	public void buyerMainPost(
 			String zoneSelect, 
@@ -175,6 +176,14 @@ public class BuyerController {
 		model.addAttribute("stationList", stationList);
 		
 		//main에선 방번호 -1을가지고 있게하자.
+		
+		
+		//------------------------------------------------------
+		//메인 배너
+		// 배너목록 MODEL로 추가
+
+		List<MainBanner> mainBannerList = buyerService.getBannerList();
+		model.addAttribute("mainBannerList", mainBannerList);
 		
 		
 	}
