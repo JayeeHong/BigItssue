@@ -3,9 +3,6 @@ package web.dao.face;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import org.apache.ibatis.annotations.Param;
-
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
@@ -20,6 +17,7 @@ import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
+import web.dto.User;
 import web.util.Paging;
 
 public interface AdminDao {
@@ -256,10 +254,8 @@ public interface AdminDao {
 	//후기 댓글 수정
 	public void updateReply(ReviewReply reviewReply);
 
-
-
-
-
+	//admin도 User DTO로 가져오기 위해서
+	public User selectAdminInfoUser(AdminInfo adminInfo);
 
 }
 

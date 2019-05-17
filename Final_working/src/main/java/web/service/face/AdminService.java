@@ -5,9 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
@@ -22,6 +19,7 @@ import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
+import web.dto.User;
 import web.util.Paging;
 
 public interface AdminService {
@@ -276,6 +274,9 @@ public interface AdminService {
 
 	//후기 댓글 수정
 	public void replyUpdate(ReviewReply reviewReply);
+	
+	//admin도 User DTO로 가져오기 위해서
+	public User getAdminInfoUser(AdminInfo adminInfo);
 
 }
 

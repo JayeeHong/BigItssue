@@ -26,6 +26,7 @@ import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
+import web.dto.User;
 import web.service.face.AdminService;
 import web.service.face.BuyerService;
 import web.util.Paging;
@@ -623,6 +624,11 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public void replyUpdate(ReviewReply reviewReply) {
 		adminDao.updateReply(reviewReply);
+	}
+
+	@Override
+	public User getAdminInfoUser(AdminInfo adminInfo) {
+		return adminDao.selectAdminInfoUser(adminInfo);
 	}
 
 

@@ -323,7 +323,7 @@ public class ChattingController {
 	}
 	
 	@RequestMapping(value="/chatReport", method=RequestMethod.POST)
-	public String chatReport(Message msg, HttpSession session, String chatDateString) {	
+	public String chatReport(Message msg, HttpSession session, String chatDateString,Model model) {	
 		
 		logger.info("chatMessageNo:"+msg.getChatMessageNo());
 		logger.info("chatRoomNo:"+msg.getChatRoomNo());
@@ -339,32 +339,45 @@ public class ChattingController {
 		logger.info("chatDate:"+chatDate);
 		msg.setChatDate(chatDate);
 		
-		// 신고한 번호 기준으로 아래로50
-		List<Message> msgList50Down = chatService.getMessageBySysdateAndChatRoomNo50Down(msg);
-		logger.info("msgList50Down:"+msgList50Down);
+		//이미 신고됬는지 안됬는지 검사
+		boolean reportChk = chatService.getReportChk(msg);
+		logger.info("reportChk:"+reportChk);
 		
-		// 신고한 번호 기준으로 위로50
-		List<Message> msgList50Up = chatService.getMessageBySysdateAndChatRoomNo50Up(msg);
-		logger.info("msgList50Up:"+msgList50Up);
-		
-		
-		List<ChatReport> chatReportList50Down = new ArrayList<ChatReport>();
-		List<ChatReport> chatReportList50Up = new ArrayList<ChatReport>();
-		
-		//신고한 메시지 기준 아래로50개
-		for(int i=0; i<msgList50Down.size(); i++) {
-			ChatReport chatReport = chatService.getChatReport(msgList50Down.get(i),msg,session);
-			chatReportList50Down.add(chatReport);
+		//이미 신고되지 않은 내용
+		if(reportChk==true) {
+			// 신고한 번호 기준으로 아래로50
+			List<Message> msgList50Down = chatService.getMessageBySysdateAndChatRoomNo50Down(msg);
+			logger.info("msgList50Down:"+msgList50Down);
+			
+			// 신고한 번호 기준으로 위로50
+			List<Message> msgList50Up = chatService.getMessageBySysdateAndChatRoomNo50Up(msg);
+			logger.info("msgList50Up:"+msgList50Up);
+			
+			
+			List<ChatReport> chatReportList50Down = new ArrayList<ChatReport>();
+			List<ChatReport> chatReportList50Up = new ArrayList<ChatReport>();
+			
+			//신고한 메시지 기준 아래로50개
+			for(int i=0; i<msgList50Down.size(); i++) {
+				ChatReport chatReport = chatService.getChatReport(msgList50Down.get(i),msg,session);
+				chatReportList50Down.add(chatReport);
+			}
+			chatService.insertChatReport(chatReportList50Down);
+			
+			//신고한 메시지 기준 위로50개
+			for(int i=0; i<msgList50Up.size(); i++) {
+				ChatReport chatReport = chatService.getChatReport(msgList50Up.get(i),msg,session);
+				chatReportList50Up.add(chatReport);
+			}
+			
+			chatService.insertChatReport(chatReportList50Up);
+			
+			model.addAttribute("reportChk", true);
+			
+		}else {
+			model.addAttribute("reportChk", false);
 		}
-		chatService.insertChatReport(chatReportList50Down);
 		
-		//신고한 메시지 기준 위로50개
-		for(int i=0; i<msgList50Up.size(); i++) {
-			ChatReport chatReport = chatService.getChatReport(msgList50Up.get(i),msg,session);
-			chatReportList50Up.add(chatReport);
-		}
-		
-		chatService.insertChatReport(chatReportList50Up);
 		
 		return "jsonView";
 	}

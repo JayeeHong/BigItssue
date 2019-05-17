@@ -71,7 +71,8 @@ public interface ChatService {
 	//신고한 내용 DB에 저장하기
 	public void insertChatReport(List<ChatReport> chatReportList);
 	
-	
+	//이미 신고됬는지 안됬는지 검사
+	public boolean getReportChk(Message msg);
 	
 	
 }

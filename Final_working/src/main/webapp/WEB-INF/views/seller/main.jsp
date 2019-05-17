@@ -254,7 +254,11 @@ function chatReport(chatMessageNo,chatRoomNo,chatSender,chatDate){
 	        data : {'chatMessageNo':chatMessageNo,'chatRoomNo':chatRoomNo,'chatSender':chatSender,'chatDateString':chatDate},
 	        dataType: 'json',
 	        success : function(receive) {
-			
+	        	if(receive.reportChk==false){
+					alert("이미 신고된 날짜의 메시지입니다.");
+				}else if(receive.reportChk==true){
+					alert("신고가 완료됐습니다.");
+				}
 	        },
 	        error: function(e) {
 				console.log("실패");

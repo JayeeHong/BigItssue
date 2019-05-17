@@ -174,4 +174,9 @@
 			VALUES(ChatReport_seq.nextval, #{chkNo}, #{reportId}, #{buyerId}, #{chatContent}, #{chatDate}, #{chatRoomNo})
 	</insert>
 	
+	<select id="selectCntReport" parameterType="web.dto.Message" resultType="int">
+		SELECT count(*) FROM chatReport
+		WHERE chatRoomNo=#{chatRoomNo} and to_char(#{chatDate},'YYYY"년" MM"월" DD"일"') = to_char(chatDate,'YYYY"년" MM"월" DD"일"')
+	</select>
+	
 </mapper>
