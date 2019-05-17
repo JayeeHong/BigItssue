@@ -36,6 +36,7 @@ import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
+import web.dto.User;
 import web.service.face.AdminService;
 import web.util.Paging;
 
@@ -55,10 +56,14 @@ public class AdminController {
 		
 //		logger.info("adminInfo::"+adminInfo.toString());
 		
+		User LoginInfo = null;
 		// 관리자 로그인
 		if(adminService.login(adminInfo)) { // 로그인 성공 시
 			session.setAttribute("adminLogin", true);
 			session.setAttribute("adminId", adminInfo.getAdminId());
+			
+			LoginInfo = adminService.getAdminInfoUser(adminInfo);
+			session.setAttribute("LoginInfo", LoginInfo);
 			
 		}
 		

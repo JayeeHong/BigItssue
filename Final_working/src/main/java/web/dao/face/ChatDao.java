@@ -65,5 +65,7 @@ public interface ChatDao {
 	//신고한 내용 DB에 저장하기
 	public void insertChatReportList(ChatReport chatReport);
 	
+	//이미 신고됬는지 안됬는지 검사
+	public int selectCntReport(Message msg);
 		
 }

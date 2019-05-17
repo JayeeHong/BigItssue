@@ -126,9 +126,8 @@ function replyUpdateProc(replyNo) {
 
 
 //댓글 수정 취소
-function replyUpdateCancel(replyNo, sellerId) {
-	var a = $("#"+replyNo).find("p .form-control").val();
-	$("#"+replyNo).find("p").html(a);
+function replyUpdateCancel(replyNo, replyContent){
+	$("#"+replyNo).find("p").html(replyContent);
 }
 
 //댓글 등록 ( 여기서 웹소켓핸들러로 보내줌 )
@@ -204,24 +203,20 @@ document.addEventListener('keydown', function(event) {
 	
 	<!-- 댓글 입력 -->
 	<div class="replyInsert">
+		<!-- form으로 submit하면 websocket이 끊김 -->
 		<!-- form으로 submit하지 않고 -->
 		<!-- ReplyEchoCommentHandler에서 DB에 댓글저장, 추가된 댓글을 처리해줌.
 		           댓글을 직접 받아오는 곳은 newCommentAlarmWebsocket.jsp임.
-		     seller와 관련된 모든곳에 newCommentAlarmWebsocket.jsp를 include해놨음.-->
-		<form id="replyInsertForm" action="/seller/review/reply/insert" method="post">
-			<input type="hidden" name="reviewNo" value="${reviewView.reviewNo }" />
-			<input type="hidden" name="writer" value="${sellerId }" />
-			
-			<table class="table table-bordered">
-				<tr><td colspan="3"><strong>댓글달기</strong></td></tr>
-				<tr>
-					<td style="width: 15%">${sellerId }</td>
-					<td style="width: 75%"><input class="form-control" type="text" id="text" name="replyContent" style="width: 100%"></td>
-					<td style="width: 10%; text-align: center;"><button type="button" onclick="submitComment()" name="replyInsertBtn" class="btn btn-sm">입력</button></td>
-					
-				</tr>
-			</table>
-		</form>
+		     seller와 관련된 모든곳에 newCommentAlarmWebsocket.jsp를 include해놨음.-->		
+		<table class="table table-bordered">
+			<tr><td colspan="3"><strong>댓글달기</strong></td></tr>
+			<tr>
+				<td style="width: 15%">${sellerId }</td>
+				<td style="width: 75%"><input class="form-control" type="text" id="text" name="replyContent" style="width: 100%"></td>
+				<td style="width: 10%; text-align: center;"><button type="button" onclick="submitComment()" name="replyInsertBtn" class="btn btn-sm">입력</button></td>
+				
+			</tr>
+		</table>
 	</div>
 	
 	

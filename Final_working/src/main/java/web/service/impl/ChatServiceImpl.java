@@ -243,6 +243,20 @@ public class ChatServiceImpl implements ChatService{
 		}
 	}
 
+	@Override
+	public boolean getReportChk(Message msg) {
+		//ChatReport에서 msg의 방과 msg날짜의 개수 세기
+		int cnt = chatDao.selectCntReport(msg);
+		
+		logger.info("cnt:"+cnt);
+		
+		if( cnt == 0 ) {
+			return true; //신고내역 없음. db에 넣어주자
+		} else {
+			return false; //이미 신고내역 있음. db에 넣지말자
+		}
+	}
+
 
 	
 	

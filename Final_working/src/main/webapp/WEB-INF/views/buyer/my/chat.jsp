@@ -102,7 +102,9 @@
 			                <div class="received_withd_msg">
 			                	<p>${item.chatContent }</p>
 			                	<span style="display:inline-block;" class="time_date">${item.stringChatDate }</span>
-			                	<span style="color:orange;cursor:pointer;"class="glyphicon glyphicon-exclamation-sign" onclick="chatReport(${item.chatMessageNo},${item.chatRoomNo },'${item.chatSender }','${item.chatDate }')">신고</span>
+			                	<c:if test="${LoginInfo.sort ne '구매자'}">
+			                		<span style="color:orange;cursor:pointer;"class="glyphicon glyphicon-exclamation-sign" onclick="chatReport(${item.chatMessageNo},${item.chatRoomNo },'${item.chatSender }','${item.chatDate }')">신고</span>
+			                	</c:if>	
 			                </div>
 		              	</div>
 	           		</div>
@@ -141,7 +143,11 @@ function chatReport(chatMessageNo,chatRoomNo,chatSender,chatDate){
 	        data : {'chatMessageNo':chatMessageNo,'chatRoomNo':chatRoomNo,'chatSender':chatSender,'chatDateString':chatDate},
 	        dataType: 'json',
 	        success : function(receive) {
-			
+	        	if(receive.reportChk==false){
+					alert("이미 신고된 날짜의 메시지입니다.");
+				}else if(receive.reportChk==true){
+					alert("신고가 완료됐습니다.");
+				}
 	        },
 	        error: function(e) {
 				console.log("실패");
@@ -277,7 +283,11 @@ function connect(){
 				var a = "<div class=\"outgoing_msg\"><div class=\"sent_msg\"> <p>"+result+"</p> <span class=\"time_date\"> "+presentDate+"</span> </div></div>"
 				msg_history.append(a);
 			}else{//로그인된id와 메시지보낸id가 다를때,  primary채팅창 왼쪽에 출력
-				var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span style=\"display:inline-block;\" class=\"time_date\"> "+presentDate+"</span> <span style=\"color:orange;cursor:pointer;\"class=\"glyphicon glyphicon-exclamation-sign\" onclick=\"chatReport("+noMsg+","+noFlag+",\'"+senderId+"\',\'"+chatDate+"\')\">신고</span></div></div></div>"
+				if(${LoginInfo.sort ne '구매자'}){
+					var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span style=\"display:inline-block;\" class=\"time_date\"> "+presentDate+"</span> <span style=\"color:orange;cursor:pointer;\"class=\"glyphicon glyphicon-exclamation-sign\" onclick=\"chatReport("+noMsg+","+noFlag+",\'"+senderId+"\',\'"+chatDate+"\')\">신고</span></div></div></div>"	
+				}else{
+					var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span style=\"display:inline-block;\" class=\"time_date\"> "+presentDate+"</span></div></div></div>"	
+				}
 				msg_history.append(a);
 			}
 			

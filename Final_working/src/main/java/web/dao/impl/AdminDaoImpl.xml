@@ -585,6 +585,15 @@
 		WHERE replyNo = #{replyNo }
 	</update>
 	
+	<resultMap type="web.dto.User" id="UserAdmin">
+			<result column="adminId" property="id" />
+			<result column="adminPw" property="pw" />
+	</resultMap>
+	<select id="selectAdminInfoUser" parameterType="web.dto.AdminInfo" resultMap="UserAdmin">
+		SELECT * FROM AdminInfo	
+		WHERE adminId = #{adminId}
+	</select>
+
 	
 
 
