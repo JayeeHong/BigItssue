@@ -75,12 +75,12 @@
 	
 	
 	<insert id="insertMessage" parameterType="web.dto.Message">
-		<selectKey keyProperty="chatDate"
-			resultType="java.util.Date" order="BEFORE">
-			SELECT sysdate FROM dual		
+		<selectKey keyProperty="chatMessageNo"
+			resultType="int" order="BEFORE">
+			SELECT message_seq.nextval FROM dual		
 		</selectKey>
 		INSERT INTO message (chatMessageNo, chatContent, chatSender, chatRoomNo, chatDate)
-		VALUES (message_seq.nextval, #{chatContent}, #{chatSender}, #{chatRoomNo}, #{chatDate})
+		VALUES (#{chatMessageNo}, #{chatContent}, #{chatSender}, #{chatRoomNo}, sysdate)
 	</insert>
 	
 	<select id="selectMessage" parameterType="int" resultType="web.dto.Message">
@@ -134,4 +134,49 @@
 		SET chatFinalDate=#{chatDate }
 		WHERE chatRoomNo=#{chatRoomNo }
 	</update>
+	
+	<select id="selectMessageBychatMessageNo" parameterType="int" resultType="web.dto.Message">
+		SELECT * FROM MESSAGE
+		WHERE chatMessageNo=#{chatMessageNo}
+	</select>
+	
+	<select id="selectMessageBySysdateAndChatRoomNo50Down" parameterType="web.dto.Message" resultType="web.dto.Message">
+		select * from(
+		    select rownum rnum,E.* from(
+		        select * from message
+		        where chatroomno=#{chatRoomNo} and to_char(#{chatDate},'YYYY"년" MM"월" DD"일"') = to_char(chatDate,'YYYY"년" MM"월" DD"일"')
+		        ORDER BY chatDate desc)E
+		    where chatmessageno <![CDATA[ <= ]]> #{chatMessageNo}
+		)R
+		where rnum<![CDATA[ <= ]]>50
+		order by rnum desc
+	</select>
+	
+	<select id="selectMessageBySysdateAndChatRoomNo50Up" parameterType="web.dto.Message" resultType="web.dto.Message">
+		select * from(
+		    select rownum rnum,E.* from(
+		        select * from message
+		        where chatroomno=#{chatRoomNo} and to_char(#{chatDate},'YYYY"년" MM"월" DD"일"') = to_char(chatDate,'YYYY"년" MM"월" DD"일"')
+		        ORDER BY chatDate)E
+		    where chatmessageno <![CDATA[ > ]]> #{chatMessageNo}
+		)R
+		where rnum<![CDATA[ <= ]]>50
+		order by rnum
+	</select>
+	
+	<insert id="insertChatReport" parameterType="web.dto.ChatReport">
+			INSERT INTO ChatReport (reportNo, chkNo, reportId, buyerId, chatContent, chatDate, chatRoomNo)
+			VALUES(ChatReport_seq.nextval, #{chkNo}, #{reportId}, #{buyerId}, #{chatContent}, #{chatDate}, #{chatRoomNo})
+	</insert>
+	
+	<insert id="insertChatReportList" parameterType="web.dto.ChatReport">
+			INSERT INTO ChatReport (reportNo, chkNo, reportId, buyerId, chatContent, chatDate, chatRoomNo)
+			VALUES(ChatReport_seq.nextval, #{chkNo}, #{reportId}, #{buyerId}, #{chatContent}, #{chatDate}, #{chatRoomNo})
+	</insert>
+	
+	<select id="selectCntReport" parameterType="web.dto.Message" resultType="int">
+		SELECT count(*) FROM chatReport
+		WHERE chatRoomNo=#{chatRoomNo} and to_char(#{chatDate},'YYYY"년" MM"월" DD"일"') = to_char(chatDate,'YYYY"년" MM"월" DD"일"')
+	</select>
+	
 </mapper>

@@ -28,40 +28,57 @@ function noticeDelete(a){
 </script>
 
 <style>
+p{
+word-break:break-all;
+word-wrap:break-word;
 
+}
 </style>
 
+<div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
-<br>
-<div class="" style="width: 1200px;" >
-	<div class="container text-left" style="width:60%; height:70px;">
-    <h1><label>${notice.noticeTitle }</label></h1>
+
+<div class="col-xs-12 col-sm-9">
+
+<div>
+<!-- 	<div class="container text-left" style="width:60%; height:70px;"> -->
+    <h3><label>${notice.noticeTitle }</label></h3>
+<!-- 	</div> -->
+	
+	<div class="text-right" style="height:70px;">
+	    <fmt:formatDate value="${notice.noticeDate }" pattern="YY-MM-dd HH:mm:ss" />
+		<hr>	
 	</div>
-	<div class="container text-right" style="width:60%; height:70px;">
-    <fmt:formatDate value="${notice.noticeDate }" var="i" pattern="YY-MM-dd"/>
-    <label>${i }</label><br>
-    <label>작성자:관리자</label>
-	<hr>	
-	</div>
-   		<div class="container" style="text-align: center; width:auto; padding-right: 200px;">
+ 	
+ 	<div>
 	    <br>
+		<p style="width: auto;">
 	    ${notice.noticeContent }
+		</p>
 	    <br>
 	    <c:if test="${notice.noticeImg ne null}">
 	    <img style="width: 40%; height: 40%;" src="/img/${notice.noticeImg }">	
 	    </c:if>
 	    <br>
     	<br>
-		<input type="button" class="btn" value="목록" onclick="noticeListGo()">
-		<input type="button" class="btn" value="수정" style="background:#e0effd;" onclick="noticeUpdate(${notice.noticeNo})">
+		
+    </div>
+    
+    <div style="text-align: center;">
+    	<input type="button" class="btn btn-default" value="목록" onclick="noticeListGo()">
+<%-- 		<input type="button" class="btn" value="수정" style="background:#e0effd;" onclick="noticeUpdate(${notice.noticeNo})"> --%>
+		<input type="button" class="btn btn-primary" value="수정" onclick="noticeUpdate(${notice.noticeNo})">
 		<input type="hidden" value="${notice.noticeNo }" name="noticeNo">
-		<input type="button" class="btn" style="background:#ff8a8a;" value="삭제" onclick="noticeDelete(${notice.noticeNo})">
-    	</div>
+<%-- 		<input type="button" class="btn" style="background:#ff8a8a;" value="삭제" onclick="noticeDelete(${notice.noticeNo})"> --%>
+		<input type="button" class="btn btn-danger" value="삭제" onclick="noticeDelete(${notice.noticeNo})">
+    </div>
 		<br>
 		<br>
 	
 		
 </div>
 	
-		
+</div>
+
+</div>

@@ -5,6 +5,19 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <style type="text/css">
+
+.table {
+	vertical-align: middle;
+}
+
+.table>tbody>tr>td {
+	vertical-align: middle;
+}
+
+.table>thead>tr>td {
+	vertical-align: middle;
+}
+
 .fr{
 	float:right;
 }
@@ -52,13 +65,13 @@ function inquire(id,sort){
 <%-- ${sysHour }<br> --%>
 <%-- ${sysMin }<br> --%>
 <%-- ${AmPm }<br> --%>
-
+<hr>
 <div style="text-align: center; margin-bottom:50px;">
-<div class="wrap container">
+<!-- <div class="wrap container"> -->
 <div style="padding: 10px;">
 <!-- 판매자,빅돔 테이블 -->
 <table class="table table-bordered">
-	<thead>
+	<thead style="background: #cccccc6e;">
 	<tr>
 	<th style="width: 25%">장소</th>
 	<th style="width: 25%">세부위치(지도)</th>
@@ -114,14 +127,21 @@ function inquire(id,sort){
 			${sellerLoc.sellerTimeS.substring( 0, 1 ) }:${sellerLoc.sellerTimeS.substring( 1, 3 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 1 )}:${sellerLoc.sellerTimeE.substring( 1, 3 )} 
 			</c:if>	
 		</td>
-		<td>${sellerLoc.bigdomId } (빅돔)<button class="btn btn-info btn-sm fr" onclick="inquire('${sellerLoc.bigdomId}','빅돔')">문의하기</button></td>
+		<td>
+		<c:if test="${sellerLoc.bigdomId eq null }">
+			해당 위치에는 빅돔이 없습니다.
+		</c:if>
+		<c:if test="${sellerLoc.bigdomId ne null }">
+			${sellerLoc.bigdomId } (빅돔)<button class="btn btn-info btn-sm fr" onclick="inquire('${sellerLoc.bigdomId}','빅돔')">문의하기</button>
+		</c:if>
+		</td>
 		</tr>
 	</tbody>
 </table>
 
 <!-- 예약테이블 -->
 <table class="table table-bordered">
-	<thead>
+	<thead style="background: #cccccc6e;">
 	<tr>
 	<th style="width: 25%">호수</th>
 	<th style="width: 25%">보유부수</th>
@@ -156,7 +176,7 @@ function inquire(id,sort){
 				</td>
 				<c:if test="${index.first && cntReservation le 0}">
 					<td rowspan="${bookListInfo.size()}" style="border-bottom:hidden;border-right:hidden;border-top:hidden;">
-						<br>
+						
 						<c:if test="${AmPm eq '오전'}">
 							<input type="radio" name="AmPm" value="오전" checked="checked">오전
 							<input type="radio" name="AmPm" value="오후">오후<br>
@@ -199,7 +219,7 @@ function inquire(id,sort){
 				</c:if>
 				<c:if test="${index.first && cntReservation ge 1}">
 					<td rowspan="${bookListInfo.size()}" style="border-bottom:hidden;border-right:hidden;border-top:hidden;">
-					<div>*이미 예약을 하셨습니다. 예약취소를  하고싶으면 마이페이지로 가십시오.</div>
+					<div>* 이미 예약을 하셨습니다. 예약취소를  하고 싶다면, 마이페이지로 가십시오.</div>
 					</td>
 				</c:if>
 				</tr>
@@ -209,9 +229,9 @@ function inquire(id,sort){
 
 	</tbody>
 </table>
-<div style="text-align:right;">*예약할 수 있는 부수의 개수는 최대 2권입니다.</div>
+<div style="text-align:right;">* 예약할 수 있는 부수의 개수는 최대 2권입니다.</div>
 </div>
-</div>
+<!-- </div> -->
 </div>
 
 

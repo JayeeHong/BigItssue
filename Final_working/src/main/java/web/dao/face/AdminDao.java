@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import org.apache.ibatis.annotations.Param;
-
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
 import web.dto.BigdomSellerInfo;
@@ -16,9 +13,12 @@ import web.dto.ChatReport;
 import web.dto.MainBanner;
 import web.dto.Message;
 import web.dto.Notice;
+import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
+import web.dto.User;
 import web.util.Paging;
 
 public interface AdminDao {
@@ -228,8 +228,42 @@ public interface AdminDao {
 
 	public int getRnum(Map map);
 
+
 	public List<Message> getChatMessagePaging(Map map);
 
 	public int getRnumMax(int chatRoomNo);
+
+	// 구매자 정보 pw까지 변경시 업데이트 쿼리
+	public void updateBuyerInfoWithPw(BuyerInfo buyerInfo);
+
+	
+	//총 후기글 수 반환
+	public int selectCntReview();
+
+	//페이징처리 후기글 반환
+	public List<Review> selectReviewPaginglist(Paging paging);
+
+	//후기글 상세 반환
+	public Review selectReviewByReviewno(int reviewno);
+
+	//후기 댓글 조회
+	public List<ReviewReply> selectReplyListByReviewNo(int reviewno);
+
+	//후기글 삭제
+	public void deleteReview(int reviewno);
+
+	//후기 댓글 삽입
+	public void insertReply(ReviewReply reviewReply);
+
+	//후기 댓글 삭제
+	public void deleteReply(int replyNo);
+
+	//후기 댓글 수정
+	public void updateReply(ReviewReply reviewReply);
+
+	//admin도 User DTO로 가져오기 위해서
+	public User selectAdminInfoUser(AdminInfo adminInfo);
+
+
 }
 

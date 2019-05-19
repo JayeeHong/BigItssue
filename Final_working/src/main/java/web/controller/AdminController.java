@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -21,13 +20,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
@@ -38,9 +38,12 @@ import web.dto.ChatReport;
 import web.dto.MainBanner;
 import web.dto.Message;
 import web.dto.Notice;
+import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
+import web.dto.User;
 import web.service.face.AdminService;
 import web.util.Paging;
 
@@ -60,10 +63,14 @@ public class AdminController {
 		
 //		logger.info("adminInfo::"+adminInfo.toString());
 		
+		User LoginInfo = null;
 		// 관리자 로그인
 		if(adminService.login(adminInfo)) { // 로그인 성공 시
 			session.setAttribute("adminLogin", true);
 			session.setAttribute("adminId", adminInfo.getAdminId());
+			
+			LoginInfo = adminService.getAdminInfoUser(adminInfo);
+			session.setAttribute("LoginInfo", LoginInfo);
 			
 		}
 		
@@ -193,8 +200,8 @@ public class AdminController {
 	@RequestMapping(value="/admin/info/sellerUp", method=RequestMethod.POST)
 	public String infoSellerUp(SellerBigdomInfo sbInfo, MultipartFile file) { // 계정관리-판매자_정보수정
 		
-		logger.info("넘어오는 값 확인::::"+sbInfo);
-		logger.info("파일명:::::"+file.getOriginalFilename());
+//		logger.info("넘어오는 값 확인::::"+sbInfo);
+//		logger.info("파일명:::::"+file.getOriginalFilename());
 
 		// 연락처 정보
 		sbInfo.setSellerPhone(sbInfo.getSellerPhone1()+"-"+sbInfo.getSellerPhone2()+"-"+sbInfo.getSellerPhone3());
@@ -228,12 +235,12 @@ public class AdminController {
 				e.printStackTrace();
 			}
 			
-			logger.info("ssssss::::::"+sbInfo.toString());
+//			logger.info("ssssss::::::"+sbInfo.toString());
 			sbInfo.setSellerImg(stored_name);
 			
 		}
 		
-		logger.info("ssssss::::::"+sbInfo.toString());
+//		logger.info("ssssss::::::"+sbInfo.toString());
 		// sellerid로 해당 판매자 정보 업데이트
 		
 		if(sbInfo.getSellerImg() != null && !"".equals(sbInfo.getSellerImg())) {
@@ -758,7 +765,7 @@ public class AdminController {
 			Model model
 			,SellerLoc sellerloc
 			) {
-		
+		System.out.println("dddddddd");
 		SellerLoc locInfo = adminService.getSellerInfo(sellerloc);
 		model.addAttribute("sellerInfo", locInfo);
 
@@ -790,6 +797,15 @@ public class AdminController {
 //		logger.info(zoneString);//확인용
 		String zone = zoneString.substring(0, zoneString.length()-1);// 맨마지막에 붙는 '/'를 지운다.
 		sellerLoc.setZone(zone);//완성된 zone을 sellerLoc객체에 담는다.
+		
+		//startTime2와 endTime2의 자릿수를 맞춰준다
+		//startTime1와 endTime1의 자릿수는 Lpad로 맞춘다
+		if(sellerLoc.getStartTime2().length()<2) {
+			sellerLoc.setStartTime2("0"+sellerLoc.getStartTime2());
+		}
+		if(sellerLoc.getEndTime2().length()<2) {
+			sellerLoc.setEndTime2("0"+sellerLoc.getEndTime2());
+		}
 		
 		String sellerTimeS = sellerLoc.getStartTime1();//sellerTimeS에 값을 저장한다.
 				sellerTimeS += sellerLoc.getStartTime2();	
@@ -1039,9 +1055,103 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/review/list", method=RequestMethod.GET)
-	public void adminReviewlist() { // 후기게시판 관리
+	public void adminReviewlist(Review review, Model model, HttpServletRequest req) { // 후기게시판 관리
+		
+		logger.info("후기게시판 관리");
+		
+		//현재 페이지 번호 얻기
+		int curPage = adminService.getReviewCurPage(req);
+		
+		//게시글 수 얻기
+		int totalCount = adminService.getReviewTotalCount();
+		
+		//페이지 객체 생성
+		Paging paging = new Paging(totalCount, curPage);
+		
+		//페이징객체 MODEL로 추가
+		model.addAttribute("paging", paging);
+		
+		//게시글 목록 MODEL로 추가
+		List<Review> reviewList = adminService.getReviewPagingList(paging);
+		model.addAttribute("reviewList", reviewList);
 		
 	}
+
+	@RequestMapping(value="/admin/review/view", method=RequestMethod.GET)
+	public void reviewView(Review review, Model model, HttpServletRequest req) {
+		
+		logger.info("관리자 후기 상세페이지");
+		
+		int reviewno = Integer.parseInt(req.getParameter("reviewNo"));
+		review.setReviewNo(reviewno);
+		
+		//게시글 조회 수행
+		Review reviewView = adminService.viewReview(reviewno);
+		
+		//MODEL 전달
+		model.addAttribute("reviewView", reviewView);
+		
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = adminService.getReplyList(reviewno);
+		
+		model.addAttribute("replyList", replyList);
+				
+	}
+	
+	@RequestMapping(value="/admin/review/delete", method=RequestMethod.GET)
+	public String reviewDelete(Review review, HttpServletRequest req) {
+		
+		logger.info("후기 글 삭제");
+		
+		int reviewno = Integer.parseInt(req.getParameter("reviewno"));
+		
+		adminService.deleteReview(reviewno);
+		
+		return "redirect:/admin/review/list";
+	}
+	
+	@RequestMapping(value="/admin/review/reply/insert", method=RequestMethod.POST)
+	public String replyWrite(ReviewReply reviewReply, Model model) {
+		
+		logger.info("댓글 달기");
+		
+		//댓글 입력
+		adminService.replyWrite(reviewReply);
+		
+		//댓글 리스트 MODEL 추가
+		List<ReviewReply> replyList = adminService.getReplyList(reviewReply.getReviewNo());
+
+		model.addAttribute("replyList", replyList);
+		
+		return "redirect:/admin/review/view?reviewNo=" + reviewReply.getReviewNo();
+		
+	}
+	
+	@RequestMapping(value="/admin/review/reply/delete", method=RequestMethod.POST)
+	public String replyDelete(int replyNo, int reviewNo) {
+		
+		logger.info("댓글 삭제");
+
+		adminService.replyDelete(replyNo);
+
+		return "jsonView";
+	}
+	
+	@RequestMapping(value="/admin/review/reply/update", method=RequestMethod.POST)
+	public String replyUpdate(int replyNo, String updateContent, ReviewReply reviewReply, Model model) {
+		
+		logger.info("댓글 수정");
+		
+		reviewReply.setReplyNo(replyNo);
+		reviewReply.setReplyContent(updateContent);
+		
+		adminService.replyUpdate(reviewReply);
+		
+		return "jsonView";
+		
+	}	
+	
 	
 	@RequestMapping(value="/admin/report/list", method=RequestMethod.GET)
 	public void adminReportlist(

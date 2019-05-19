@@ -40,7 +40,7 @@ style="padding-top: 10px; padding-bottom: 300px; padding-left:15px; margin-right
 		<a href="/admin/chat/list" class="list-group-item">채팅 내역 관리</a>
 		<a href="/admin/notice/list" class="list-group-item">공지사항 게시판<br>관리</a>
 		<a href="/admin/review/list" class="list-group-item">후기게시판 관리</a>
-		<a href="/admin/report/list" class="list-group-item">신고내역 관리</a>
+		<a href="/admin/report/list" class="list-group-item">문의하기<br>신고내역</a>
 		<a href="/admin/banner/list" class="list-group-item">배너관리</a>
 	</div>
 </div>

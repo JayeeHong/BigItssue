@@ -1,20 +1,19 @@
 package web.service.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.ServletContext;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import web.dao.face.AdminDao;
 import web.dto.AdminInfo;
@@ -26,16 +25,22 @@ import web.dto.ChatReport;
 import web.dto.MainBanner;
 import web.dto.Message;
 import web.dto.Notice;
+import web.dto.Review;
+import web.dto.ReviewReply;
 import web.dto.SellerBigdomInfo;
 import web.dto.SellerInfo;
 import web.dto.SellerLoc;
+import web.dto.User;
 import web.service.face.AdminService;
+import web.service.face.BuyerService;
 import web.util.Paging;
 
 @Service
 public class AdminServiceImpl implements AdminService{
 
 	@Autowired AdminDao adminDao;
+	@Autowired BuyerService buyerService;
+	private static final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
 	
 	@Override
 	public int getTotalCount(HashMap doubleString) {
@@ -219,7 +224,19 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public void setBuyerInfo(BuyerInfo buyerInfo) {
-		adminDao.updateBuyerInfo(buyerInfo);
+		
+//		logger.info(":::넘어오는 값 확인:::"+buyerInfo.toString());
+		
+		// buyerpw 가 null이 아닐 때
+		if(buyerInfo.getBuyerPw()!= null && !"".equals(buyerInfo.getBuyerPw())) {
+			buyerInfo.setBuyerPw(buyerService.shaPw(buyerInfo.getBuyerPw())); // 비밀번호 암호화
+			
+			adminDao.updateBuyerInfoWithPw(buyerInfo);
+			
+		} else { // buyerpw가 null일 때
+			adminDao.updateBuyerInfo(buyerInfo);
+		}
+		
 	}
 
 	@Override
@@ -417,7 +434,7 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 
-  @Override
+	@Override
 	public void insertList(SellerLoc sellerLoc) {
 		adminDao.insertList(sellerLoc);
 	}
@@ -474,7 +491,7 @@ public class AdminServiceImpl implements AdminService{
 
   
   
-  @Override
+	@Override
 	public List<MainBanner> getBanner() {
 		return adminDao.selectBanner();
 	}
@@ -510,10 +527,10 @@ public class AdminServiceImpl implements AdminService{
 		return list;
 	}
 
-  @Override
-  public List<Message> getChatRoomNo(Paging paging) {
+	@Override
+	public List<Message> getChatRoomNo(Paging paging) {
 		return adminDao.getChatRoomNo(paging);
-  }
+	}
 
 
   
@@ -530,30 +547,93 @@ public class AdminServiceImpl implements AdminService{
 
 
 
-  @Override
-  public List<Message> getChatMessage(int chatRoomNo) {
-	  return adminDao.getChatMessage(chatRoomNo);
-  }
+	@Override
+	public List<Message> getChatMessage(int chatRoomNo) {
+		return adminDao.getChatMessage(chatRoomNo);
+	}
 
-@Override
-public int getChatListCurPage(HttpServletRequest req) {
-	//요청파라미터 curPage 받기
-	String param = req.getParameter("curPage");
-
-	//null이나 ""이 아니면 int로 리턴
-	if( param != null && !"".equals(param) ) {
-		int curPage = Integer.parseInt(param);
-		return curPage;
+	@Override
+	public int getChatListCurPage(HttpServletRequest req) {
+		//요청파라미터 curPage 받기
+		String param = req.getParameter("curPage");
+	
+		//null이나 ""이 아니면 int로 리턴
+		if( param != null && !"".equals(param) ) {
+			int curPage = Integer.parseInt(param);
+			return curPage;
+		}
+		
+		//null이나 ""면 0으로 반환하기
+		return 0;
 	}
 	
-	//null이나 ""면 0으로 반환하기
-	return 0;
-}
+	@Override
+	public int getChatListTotalCount() {
+		return adminDao.getChatListTotalCount();
+	}
+	
+	@Override
+	public int getReviewCurPage(HttpServletRequest req) {
+		
+		//요청파라미터 curPage 받기
+		String param = req.getParameter("curPage");
+		
+		//null이나 ""이 아니면 int로 리턴
+		if( param != null && !"".equals(param) ) {
+			int curPage = Integer.parseInt(param);
+			return curPage;
+		}
+		
+		//null이나 ""이면 0으로 반환
+		return 0;
+	}
+	
+	@Override
+	public int getReviewTotalCount() {
+		return adminDao.selectCntReview();
+	}
+	
+	@Override
+	public List<Review> getReviewPagingList(Paging paging) {
+		return adminDao.selectReviewPaginglist(paging);
+	}
 
-@Override
-public int getChatListTotalCount() {
-	return adminDao.getChatListTotalCount();
-}
+	
+	@Override
+	public Review viewReview(int reviewno) {
+		//상세글 반환
+		return adminDao.selectReviewByReviewno(reviewno);
+	}
+
+	@Override
+	public List<ReviewReply> getReplyList(int reviewno) {
+		return adminDao.selectReplyListByReviewNo(reviewno);
+	}
+
+	@Override
+	public void deleteReview(int reviewno) {
+		adminDao.deleteReview(reviewno);		
+	}
+
+	@Override
+	public void replyWrite(ReviewReply reviewReply) {
+		adminDao.insertReply(reviewReply);		
+	}
+
+	@Override
+	public void replyDelete(int replyNo) {
+		adminDao.deleteReply(replyNo);		
+	}
+
+	@Override
+	public void replyUpdate(ReviewReply reviewReply) {
+		adminDao.updateReply(reviewReply);
+	}
+
+	@Override
+	public User getAdminInfoUser(AdminInfo adminInfo) {
+		return adminDao.selectAdminInfoUser(adminInfo);
+	}
 
 
 @Override

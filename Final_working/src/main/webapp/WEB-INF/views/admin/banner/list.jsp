@@ -8,7 +8,7 @@
 $(document).ready(function() {
 	$("#addBanner").click(function() {
 // 		location.href = "/admin/banner/add";
-		window.open("/addBanner","dd", "width=500,height=500");
+		window.open("/addBanner","dd", "width=500,height=300");
 	});
 });
 
@@ -57,7 +57,7 @@ function checkDelete() {
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>배너관리</h3>
+<h4><strong>배너관리</strong></h4>
 <hr>
 
 	<div id="bannerList">
@@ -65,7 +65,7 @@ function checkDelete() {
 			<thead>
 				<tr>
 					<th style="width: 20%"><input type="checkbox" name="checkAll" id="checkAll" onclick="checkAll();" /></th>
-					<th style="width: 60%">배너 이미지</th>
+					<th style="width: 80%">배너 이미지</th>
 				</tr>
 			</thead>
 			
@@ -90,3 +90,5 @@ function checkDelete() {
 </div>
 
 </div>
+
+<br><br><br>

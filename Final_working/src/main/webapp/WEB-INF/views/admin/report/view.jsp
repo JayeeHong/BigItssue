@@ -34,7 +34,7 @@
 
 <div class="col-xs-12 col-sm-9">
 
-<h3>신고내역 상세페이지</h3>
+<h4><strong>신고내역 상세 대화내용</strong></h4>
 <hr>
 
 <table class="table">
@@ -61,26 +61,30 @@
 
 <c:forEach var="i" begin="0" end="${chatReport.size()-1 }" step="1">
 
-<c:choose>
-	<c:when test="${chatReport[i].buyerId eq null }">
-		<span style="font-weight: bold;">${chatReport[i].reportId }</span><br>
-		${chatReport[i].chatContent }&nbsp;&nbsp;
-		<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small>
-		<br><br>
-	</c:when>
-	<c:when test="${chatReport[i].reportId eq null }">
-		<span style="font-weight: bold;">${chatReport[i].buyerId }</span><br>
-		${chatReport[i].chatContent }&nbsp;&nbsp;
-		<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small>
-		<br><br>
-	</c:when>
-	<c:otherwise>
-		<span style="font-weight: bold; color: red;">${chatReport[i].buyerId }</span><br>
-		<span style="color: red;">${chatReport[i].chatContent }</span>&nbsp;&nbsp;
-		<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small>
-		<br><br>
-	</c:otherwise>
-</c:choose>
+${chatReport[i].chatContent }&nbsp;&nbsp;
+<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small>
+<br><br>
+
+<%-- <c:choose> --%>
+<%-- 	<c:when test="${chatReport[i].buyerId eq null }"> --%>
+<%-- 		<span style="font-weight: bold;">${chatReport[i].reportId }</span><br> --%>
+<%-- 		${chatReport[i].chatContent }&nbsp;&nbsp; --%>
+<%-- 		<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small> --%>
+<!-- 		<br><br> -->
+<%-- 	</c:when> --%>
+<%-- 	<c:when test="${chatReport[i].reportId eq null }"> --%>
+<%-- 		<span style="font-weight: bold;">${chatReport[i].buyerId }</span><br> --%>
+<%-- 		${chatReport[i].chatContent }&nbsp;&nbsp; --%>
+<%-- 		<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small> --%>
+<!-- 		<br><br> -->
+<%-- 	</c:when> --%>
+<%-- 	<c:otherwise> --%>
+<%-- 		<span style="font-weight: bold; color: red;">${chatReport[i].buyerId }</span><br> --%>
+<%-- 		<span style="color: red;">${chatReport[i].chatContent }</span>&nbsp;&nbsp; --%>
+<%-- 		<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small> --%>
+<!-- 		<br><br> -->
+<%-- 	</c:otherwise> --%>
+<%-- </c:choose> --%>
 
 </c:forEach>
 

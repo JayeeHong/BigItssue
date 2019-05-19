@@ -2,35 +2,34 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!-- 모든 페이지에 jQuery 2.2.4.min 추가 -->
-<script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
 
-<!-- 부트스트랩 3.3.2 -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<title>BigItssue</title>
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
-
-
-<jsp:include page="/WEB-INF/tiles/layout/header_buyer.jsp" />
 
 <div class="container">
-<div class="row row-offcanvas row-offcanvas-right">
+<jsp:include page="../header.jsp" />
+<br><br><br><br><br>
 
+
+
+
+<!-- <div class="row row-offcanvas row-offcanvas-right"> -->
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_buyer.jsp" />
 
-<div class="col-sm-9">
-<c:if test="${chatRoomNo ne -1}">
-<h3 style="text-align: center;">채팅 ${chatRoomNo }번방</h3>
-</c:if>
+<h4><strong>나의 문의내역</strong></h4>
+<hr>
+
+<div class="" style="width: 900px; float: left;">
+<%-- <c:if test="${chatRoomNo ne -1}"> --%>
+<%-- <h3 style="text-align: center;">채팅 ${chatRoomNo }번방</h3> --%>
+<%-- </c:if> --%>
 
 <!-- 부트스트랩 -->
-<div class="container">
+<!-- <div class="container"> -->
 <!-- <h3 class=" text-center">Messaging</h3> -->
 <div class="messaging">
-      <div class="inbox_msg">
-        <div class="inbox_people">
+      <div class="inbox_msg" style="width: 100%;">
+        <div class="inbox_people" style="width: 30%;"><!-- 대화목록 -->
           <div class="headind_srch">
             <div class="recent_heading">
               <h4>Recent</h4>
@@ -83,7 +82,7 @@
         <!-- 채팅을 할 수 없게 막아 놓았다 -->
         <!-- 옆에 채팅내역을 클릭하면 해당 번호를 다시 받게돼서 채팅을 할 수 있다 -->
         <c:if test="${chatRoomNo ne '-1' }">
-        <div class="mesgs">
+        <div class="mesgs" style="width: 70%;"><!-- 채팅내역 -->
           <div id="msg_history_id" class="msg_history">
   
             <c:forEach var="item" items="${primaryMsgList}" begin="0" end="${primaryMsgList.size()}" step="1">
@@ -102,7 +101,10 @@
 		              	<div class="received_msg">
 			                <div class="received_withd_msg">
 			                	<p>${item.chatContent }</p>
-			                	<span class="time_date">${item.stringChatDate }</span>
+			                	<span style="display:inline-block;" class="time_date">${item.stringChatDate }</span>
+			                	<c:if test="${LoginInfo.sort ne '구매자'}">
+			                		<span style="color:orange;cursor:pointer;"class="glyphicon glyphicon-exclamation-sign" onclick="chatReport(${item.chatMessageNo},${item.chatRoomNo },'${item.chatSender }','${item.chatDate }')">신고</span>
+			                	</c:if>	
 			                </div>
 		              	</div>
 	           		</div>
@@ -120,17 +122,40 @@
         </c:if>
       </div>
       
-      
-      <p class="text-center top_spac"><a target="_blank" href="#">THE BIG ISSUE</a></p>
-      
 </div>
 </div>
-</div>
-</div>
+<!-- </div> -->
 </div>
 
 <!-- 채팅 script -->
 <script type="text/javascript">
+
+//신고하기
+function chatReport(chatMessageNo,chatRoomNo,chatSender,chatDate){
+	console.log("chatMessageNo:"+chatMessageNo);
+	console.log("chatRoomNo:"+chatRoomNo);
+	console.log("chatSender:"+chatSender);
+	console.log("chatDate:"+chatDate);
+	if (confirm("정말 신고하시겠습니까?") == true){//확인
+		$.ajax({
+	        url : '/chatReport',
+	        type : 'post',
+	        data : {'chatMessageNo':chatMessageNo,'chatRoomNo':chatRoomNo,'chatSender':chatSender,'chatDateString':chatDate},
+	        dataType: 'json',
+	        success : function(receive) {
+	        	if(receive.reportChk==false){
+					alert("이미 신고된 날짜의 메시지입니다.");
+				}else if(receive.reportChk==true){
+					alert("신고가 완료됐습니다.");
+				}
+	        },
+	        error: function(e) {
+				console.log("실패");
+				console.log(e);
+			}        
+	    });
+	 }
+}
 
 var socket=null;
 
@@ -218,11 +243,17 @@ function connect(){
 		var result = data.msg.chatContent;
 		//시간
 		var presentDate = data.msg.stringChatDate;
+		//메시지 번호
+		var noMsg = data.msg.chatMessageNo;
+		//date시간
+		var chatDate = data.msg.chatDate;
 		
 		console.log("noFlag:"+noFlag);
 		console.log("senderId:"+senderId);
 		console.log("result:"+result);
 		console.log("presentDate:"+presentDate);
+		console.log("noMsg:"+noMsg);
+		console.log("chatDate:"+chatDate);
 		
 		//현재 로그인된 id에 맞는 채팅방들 리스트
 		var refreshList = data.refreshChatRoomList;
@@ -252,7 +283,11 @@ function connect(){
 				var a = "<div class=\"outgoing_msg\"><div class=\"sent_msg\"> <p>"+result+"</p> <span class=\"time_date\"> "+presentDate+"</span> </div></div>"
 				msg_history.append(a);
 			}else{//로그인된id와 메시지보낸id가 다를때,  primary채팅창 왼쪽에 출력
-				var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span class=\"time_date\"> "+presentDate+"</span></div></div></div>"
+				if(${LoginInfo.sort ne '구매자'}){
+					var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span style=\"display:inline-block;\" class=\"time_date\"> "+presentDate+"</span> <span style=\"color:orange;cursor:pointer;\"class=\"glyphicon glyphicon-exclamation-sign\" onclick=\"chatReport("+noMsg+","+noFlag+",\'"+senderId+"\',\'"+chatDate+"\')\">신고</span></div></div></div>"	
+				}else{
+					var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span style=\"display:inline-block;\" class=\"time_date\"> "+presentDate+"</span></div></div></div>"	
+				}
 				msg_history.append(a);
 			}
 			

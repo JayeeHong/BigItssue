@@ -8,7 +8,7 @@ var curPage = 0;
 $(document).ready(function(){
 	getNoticeList();
 	
-	
+	$(".btn-xs").toggle(250);
 })
 
 function getCurPage(a){
@@ -36,31 +36,35 @@ function getNoticeList(){
 			
 			var html =""
 				html ='<div id="tableAndpaging" style="height:400px;">'
-				html += '<div class="row row-offcanvas" style="height:400px; width:1000px;">'
+// 				html += '<div class="row row-offcanvas" style="height:400px; width:1000px;">'
 				html += '<table class="table table-striped">'
-				html += '<tr style="background: gray; text-align: center;">'
+				html += '<tr style="background: #cccccc6e; text-align: center;">'
 				html += '<td><b>No.</b></td>'
 				html += '<td><b>제목</b></td>'
 				html += '<td><b>날짜</b></td>'
 				html += '<td><b>조회수</b></td>'
 				html += '</tr>'
 				$.each(list, function(index, value){
+					var date = new Date(value.noticeDate);
+					var now = new Date();
 					
 					html +='<tr style="text-align: center;">'
 					html += '<td>'+value.noticeNo+'</td>'
 					html += '<td class="goDetailView" onclick="goDetailView('+value.noticeNo+')">'
+					if(now.getTime()-value.noticeDate <= 24*60*60*1000){
+					html += '<input type="button" class="btn btn-xs" value="new">&nbsp;'
+					}
 					html += value.noticeTitle
 					html += '</td>'
 					
-					var date = new Date(value.noticeDate);
 				
 					
 					html += '<td>'+date.getFullYear(2)+'-'
 					if(date.getMonth()<10){
 					html += 0	
 					}
-					html += date.getMonth()+'-'
-					if(date.getDate()<10){
+					html += date.getMonth()+1+'-'
+					if(date.getDate()+1<10){
 					html += 0
 					}
 					html += date.getDate()+'</td>'
@@ -74,10 +78,10 @@ function getNoticeList(){
 					
 					html += '<div class="text-center" style="width:1000px;">'
 					html += '<ul class="pagination pagination-sm">'
-					if(p.curPage != 1){
+// 					if(p.curPage != 1){
 // 					html +=	'<li><a href='+'"/admin/seller/list?curPage=1&condtion='+condition+'&searchWord='+searchWord+'">&larr;처음</a></li>'
-					html += '<li><a onclick="getCurPage('+1+')">&larr;처음</a></li>'
-					}
+// 					html += '<li><a onclick="getCurPage('+1+')">&larr;처음</a></li>'
+// 					}
 					if(p.curPage <= p.pageCount){		
 // 					html +=	'<li class="disabled" id="id"><span>&laquo;</span></li>'
 					html += '<li class="disabled"><a>&laquo;</a></li>'
@@ -131,7 +135,7 @@ function getNoticeList(){
 					
 					
 					html += '</ul>'
-					html += '</div>'
+// 					html += '</div>'
 					html += "</div>"
 			$("#noticeListArea").html(html);
 			
@@ -157,17 +161,31 @@ cursor: pointer;
 a{
 cursor: pointer;
 }
-
+.btn-xs{
+background: none;
+color: red;
+}
+.centered { display: table; margin-left: auto; margin-right: auto; }
 </style>
 
+<hr>
+
+<div style="padding-top: 10px; padding-left: 11px;" id="noticeListArea">
 
 
-<div class="container" style="width: 1100px;">
-	<div class="container" style="margin-bottom: 100px;">
+<div class="" style="width: 1100px; height:400px; margin-top: 100px; ">
+	<div class="" style="margin-bottom: 100px;">
 		<div id="noticeListArea">
-		
+			<div class="centered">
+			<img class="item"src="/upload/loading.gif" style="width: 180px; height: 180px;">
+			</div>
+
 		</div>
 	
 	</div>
+
 </div>
+
+</div>
+	
 

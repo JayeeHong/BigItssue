@@ -7,19 +7,21 @@
 //예약페이지 열기
 function bookingCancel(magazineNo){
 	
-	console.log("magazineNo:"+magazineNo);
+// 	console.log("magazineNo:"+magazineNo);
 	//현재창에서 페이지 이동
 	$(location).attr("href", "/buyer/bookingCancel?magazineNo="+magazineNo);
 }
 
 </script>
 
-<div class="container">
 <div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_buyer.jsp" />
 
-<div style="text-align: center;" class="col-sm-9">
+<h4><strong>나의 예약내역</strong></h4>
+<hr>
+
+<div style="text-align: center; float:left; width: 950px;">
 
 <table class="table table-bordered table-striped">
 
@@ -56,6 +58,5 @@ function bookingCancel(magazineNo){
 </table>
 <jsp:include page="bookingPaging.jsp" />
 
-</div>
 </div>
 </div>

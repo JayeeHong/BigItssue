@@ -43,13 +43,18 @@ function readImg(input){//미리보기를 한다
 
 </script>
 
+<div class="row row-offcanvas row-offcanvas-right">
 
 <jsp:include page="/WEB-INF/tiles/layout/sidebar_admin.jsp" />
-<br>
+
+<div class="col-xs-12 col-sm-9">
+
+<h4><strong>공지사항 수정</strong></h4>
+<hr>
     
-<div class="" style=" width:1200px;" >
+<!-- <div class="" style=" width:1200px;" > -->
     
-<div class="container text-left" style=" width:600px;" >
+<div class="text-left">
 <form action="/admin/notice/update" method="post" enctype="multipart/form-data">
 <table class="table table-bordered">
 <tr>
@@ -62,10 +67,11 @@ function readImg(input){//미리보기를 한다
 <input type="hidden" name="noticeNo" value="${notice.noticeNo }">
 <input type="hidden" name="noticeImg" id="noticeImg" value="${notice.noticeImg }">
 <label>첨부파일 : <input type="file" name="file" id="uploadReviewImg"/></label>
-<div>
+<br>
+<div style="vertical-align: top;">
 <img style="width:30%; height: 30%;" id="miriview" src="/img/${notice.noticeImg }"/>
 </div>
-<input type="button" value="이미지삭제" id="imgDelete">
+<input type="button" class="btn btn-sm btn-default" style="height: 30px;" value="이미지삭제" id="imgDelete">
 
 <div class="text-center">	
 	<button type="submit" id="btnWrite" class="btn btn-primary">수정</button>
@@ -73,6 +79,11 @@ function readImg(input){//미리보기를 한다
 </div>
 </form>
 
-</div>   
 </div>
+</div>
+</div>   
+<!-- </div> -->
+
+<br><br><br>
+
     

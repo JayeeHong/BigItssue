@@ -11,15 +11,18 @@ function selectId(a){
 
 </script>
 
-<div class="container text-center" style="width:400px; height:400px;">
-<h4>연결한 계정을 선택하세요</h4>
+<div class="container text-center" style="width:500px; height:400px;">
+<h4>연결할 계정을 선택하세요</h4>
+<hr>
 <table class="table table-striped table-bordered table-hover">
+<thead style="background: #cccccc6e">
 <tr>
-<th class="container text-center">판매자 이름</th>
-<th class="container text-center">판매자 아이디</th>
-<th class="container text-center">핸드폰번호</th>
-<th class="container text-center">빅돔계정</th>
+<th style="width: 25%" class="container text-center">판매자 이름</th>
+<th style="width: 25%" class="container text-center">판매자 아이디</th>
+<th style="width: 25%" class="container text-center">핸드폰번호</th>
+<th style="width: 25%" class="container text-center">빅돔계정</th>
 </tr>
+</thead>
 <c:forEach items="${sellerInfo }" var="i">
 <tr onclick="selectId('${i.sellerId}')">
 	<td>${i.sellerName }</td>

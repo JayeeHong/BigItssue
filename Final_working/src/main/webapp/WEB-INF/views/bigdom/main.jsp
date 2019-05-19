@@ -136,12 +136,12 @@
 	
 	// 아이디, 비밀번호 입력 확인
 	function checkValue() {
-		if(!document.sellerInfo.sellerId.value) {
+		if(!document.bigdomInfo.bigdomId.value) {
 			alert("아이디를 입력하세요!");
 			return false;
 		}
 		
-		if(!document.sellerInfo.sellerPw.value) {
+		if(!document.bigdomInfo.bigdomPw.value) {
 			alert("비밀번호를 입력하세요!");
 			return false;
 		}
@@ -185,16 +185,16 @@
 <!-- 채팅창 -->
 <c:if test="${bigdomLogin }">
 
-<c:if test="${chatRoomNo ne -1}">
-<h3 style="text-align: center;">채팅 ${chatRoomNo }번방</h3>
-</c:if>
+<%-- <c:if test="${chatRoomNo ne -1}"> --%>
+<%-- <h3 style="text-align: center;">채팅 ${chatRoomNo }번방</h3> --%>
+<%-- </c:if> --%>
 
 <!-- 부트스트랩 -->
-<div class="container">
-<h3 class=" text-center">Messaging</h3>
-<div class="messaging">
-      <div class="inbox_msg">
-        <div class="inbox_people">
+<!-- <div class="container"> -->
+<!-- <h3 class=" text-center">Messaging</h3> -->
+<div class="messaging" style="padding-left: 10px;">
+      <div class="inbox_msg" style="width: 100%">
+        <div class="inbox_people" style="width: 30%;">
           <div class="headind_srch">
             <div class="recent_heading">
               <h4>Recent</h4>
@@ -247,7 +247,7 @@
         <!-- 채팅을 할 수 없게 막아 놓았다 -->
         <!-- 옆에 채팅내역을 클릭하면 해당 번호를 다시 받게돼서 채팅을 할 수 있다 -->
         <c:if test="${chatRoomNo ne '-1' }">
-        <div class="mesgs">
+        <div class="mesgs" style="width: 70%;">
           <div id="msg_history_id" class="msg_history">
  
             <c:forEach var="item" items="${primaryMsgList}" begin="0" end="${primaryMsgList.size()}" step="1">
@@ -266,7 +266,8 @@
 		              	<div class="received_msg">
 			                <div class="received_withd_msg">
 			                	<p>${item.chatContent }</p>
-			                	<span class="time_date">${item.stringChatDate }</span>
+			                	<span style="display:inline-block;" class="time_date">${item.stringChatDate }</span>
+			                	<span style="color:orange;cursor:pointer;"class="glyphicon glyphicon-exclamation-sign" onclick="chatReport(${item.chatMessageNo},${item.chatRoomNo },'${item.chatSender }','${item.chatDate }')">신고</span>
 			                </div>
 		              	</div>
 	           		</div>
@@ -285,14 +286,42 @@
       </div>
       
       
-      <p class="text-center top_spac"><a target="_blank" href="#">THE BIG ISSUE</a></p>
+<!--       <p class="text-center top_spac"><a target="_blank" href="#">THE BIG ISSUE</a></p> -->
       
-    </div></div>
+    </div>
+<!--     </div> -->
     
 </c:if>
 
 <!-- 채팅 script -->
 <script type="text/javascript">
+
+//신고하기
+function chatReport(chatMessageNo,chatRoomNo,chatSender,chatDate){
+	console.log("chatMessageNo:"+chatMessageNo);
+	console.log("chatRoomNo:"+chatRoomNo);
+	console.log("chatSender:"+chatSender);
+	console.log("chatDate:"+chatDate);
+	if (confirm("정말 신고하시겠습니까?") == true){//확인
+		$.ajax({
+	        url : '/chatReport',
+	        type : 'post',
+	        data : {'chatMessageNo':chatMessageNo,'chatRoomNo':chatRoomNo,'chatSender':chatSender,'chatDateString':chatDate},
+	        dataType: 'json',
+	        success : function(receive) {
+	        	if(receive.reportChk==false){
+					alert("이미 신고된 날짜의 메시지입니다.");
+				}else if(receive.reportChk==true){
+					alert("신고가 완료됐습니다.");
+				}
+	        },
+	        error: function(e) {
+				console.log("실패");
+				console.log(e);
+			}        
+	    });
+	 }
+}
 
 var socket=null;
 
@@ -380,11 +409,17 @@ function connect(){
 		var result = data.msg.chatContent;
 		//시간
 		var presentDate = data.msg.stringChatDate;
+		//메시지 번호
+		var noMsg = data.msg.chatMessageNo;
+		//date시간
+		var chatDate = data.msg.chatDate;
 		
 		console.log("noFlag:"+noFlag);
 		console.log("senderId:"+senderId);
 		console.log("result:"+result);
 		console.log("presentDate:"+presentDate);
+		console.log("noMsg:"+noMsg);
+		console.log("chatDate:"+chatDate);
 		
 		//현재 로그인된 id에 맞는 채팅방들 리스트
 		var refreshList = data.refreshChatRoomList;
@@ -415,7 +450,7 @@ function connect(){
 				var a = "<div class=\"outgoing_msg\"><div class=\"sent_msg\"> <p>"+result+"</p> <span class=\"time_date\"> "+presentDate+"</span> </div></div>"
 				msg_history.append(a);
 			}else{//로그인된id와 메시지보낸id가 다를때,  primary채팅창 왼쪽에 출력
-				var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span class=\"time_date\"> "+presentDate+"</span></div></div></div>"
+				var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span style=\"display:inline-block;\" class=\"time_date\"> "+presentDate+"</span> <span style=\"color:orange;cursor:pointer;\"class=\"glyphicon glyphicon-exclamation-sign\" onclick=\"chatReport("+noMsg+","+noFlag+",\'"+senderId+"\',\'"+chatDate+"\')\">신고</span></div></div></div>"
 				msg_history.append(a);
 			}
 			

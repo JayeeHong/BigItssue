@@ -1,12 +1,14 @@
 package web.dao.face;
 
 
-import java.util.Date;
+
 import java.util.List;
 
 import web.dto.Chat;
+import web.dto.ChatReport;
 import web.dto.Message;
 import web.dto.MessageChk;
+import web.dto.ReviewReply;
 import web.dto.User;
 
 public interface ChatDao {
@@ -48,6 +50,22 @@ public interface ChatDao {
 	// 방에서 메시지가 오갈때마다  방에 최신날짜 저장.
 	public void updateChatFinalDate(Message msg);
 	
+	//메시지 번호에 대한 정보 가져오기.
+	public Message selectMessageBychatMessageNo(int chatMessageNo);
 	
+	//방번호와 현재날짜로 message리스트 조회. 신고한 번호 기준으로 아래로50
+	public List<Message> selectMessageBySysdateAndChatRoomNo50Down(Message msg);
+	
+	//방번호와 현재날짜로 message리스트 조회. 신고한 번호 기준으로 위로50
+	public List<Message> selectMessageBySysdateAndChatRoomNo50Up(Message msg);
+	
+	//신고한 내용 DB에 저장하기
+	public void insertChatReport(ChatReport chatReport);
+	
+	//신고한 내용 DB에 저장하기
+	public void insertChatReportList(ChatReport chatReport);
+	
+	//이미 신고됬는지 안됬는지 검사
+	public int selectCntReport(Message msg);
 		
 }

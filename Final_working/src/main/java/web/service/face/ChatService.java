@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import web.dto.Chat;
+import web.dto.ChatReport;
 import web.dto.Message;
 import web.dto.MessageChk;
 import web.dto.User;
@@ -55,7 +56,23 @@ public interface ChatService {
 	// 방에서 메시지가 오갈때마다  방에 최신날짜 저장.
 	public void updateChatFinalDate(Message msg);
 	
+	//메시지 번호에 대한 정보 가져오기.
+	public Message getMessageBychatMessageNo(int chatMessageNo);
 	
+	//방번호와 현재날짜로 message리스트 조회. 신고한 번호 기준으로 아래로50
+	public List<Message> getMessageBySysdateAndChatRoomNo50Down(Message msg);
+	
+	//방번호와 현재날짜로 message리스트 조회. 신고한 번호 기준으로 위로50
+	public List<Message> getMessageBySysdateAndChatRoomNo50Up(Message msg);
+	
+	//ChatReport로 얻어오기
+	public ChatReport getChatReport(Message msg,Message msg2,HttpSession session);
+	
+	//신고한 내용 DB에 저장하기
+	public void insertChatReport(List<ChatReport> chatReportList);
+	
+	//이미 신고됬는지 안됬는지 검사
+	public boolean getReportChk(Message msg);
 	
 	
 }

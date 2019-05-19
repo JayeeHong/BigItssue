@@ -75,7 +75,7 @@
 					<div class="outgoing_msg">
              			<div class="sent_msg">
                 			<p>${item.chatContent }</p>
-              		 		<span class="time_date">${item.stringChatDate }</span>
+              		 		<span style="display:inline-block;" class="time_date">${item.stringChatDate }</span>
               			</div>
             		</div>
 				</c:if>
@@ -86,7 +86,10 @@
 		              	<div class="received_msg">
 			                <div class="received_withd_msg">
 			                	<p>${item.chatContent }</p>
-			                	<span class="time_date">${item.stringChatDate }</span>
+			                	<span style="display:inline-block;" class="time_date">${item.stringChatDate }</span>
+			                	<c:if test="${LoginInfo.sort ne '구매자'}">
+			                		<span style="color:orange;cursor:pointer;"class="glyphicon glyphicon-exclamation-sign" onclick="chatReport(${item.chatMessageNo},${item.chatRoomNo },'${item.chatSender }','${item.chatDate }')">신고</span>
+			                	</c:if>		                	
 			                </div>
 		              	</div>
 	           		</div>
@@ -121,6 +124,33 @@ $( window ).unload(function() {//새로고침,창끌때,url이동
 		opener.document.getElementById("popupFlag").focus();
 	}
 });
+
+//신고하기
+function chatReport(chatMessageNo,chatRoomNo,chatSender,chatDate){
+	console.log("chatMessageNo:"+chatMessageNo);
+	console.log("chatRoomNo:"+chatRoomNo);
+	console.log("chatSender:"+chatSender);
+	console.log("chatDate:"+chatDate);
+	if (confirm("정말 신고하시겠습니까?") == true){//확인
+		$.ajax({
+	        url : '/chatReport',
+	        type : 'post',
+	        data : {'chatMessageNo':chatMessageNo,'chatRoomNo':chatRoomNo,'chatSender':chatSender,'chatDateString':chatDate},
+	        dataType: 'json',
+	        success : function(receive) {
+	        	if(receive.reportChk==false){
+					alert("이미 신고된 날짜의 메시지입니다.");
+				}else if(receive.reportChk==true){
+					alert("신고가 완료됐습니다.");
+				}
+	        },
+	        error: function(e) {
+				console.log("실패");
+				console.log(e);
+			}        
+	    });
+	 }
+}
 
 //url이동시 checkUnload=false로해서 부모창 리로드 안시키게 한다.
 function reloadChk(noFlag){
@@ -220,11 +250,17 @@ function connect(){
 		var result = data.msg.chatContent;
 		//시간
 		var presentDate = data.msg.stringChatDate;
+		//메시지 번호
+		var noMsg = data.msg.chatMessageNo;
+		//date시간
+		var chatDate = data.msg.chatDate;
 		
 		console.log("noFlag:"+noFlag);
 		console.log("senderId:"+senderId);
 		console.log("result:"+result);
 		console.log("presentDate:"+presentDate);
+		console.log("noMsg:"+noMsg);
+		console.log("chatDate:"+chatDate);
 		
 		//현재 로그인된 id에 맞는 채팅방들 리스트
 		var refreshList = data.refreshChatRoomList;
@@ -251,10 +287,15 @@ function connect(){
 			
 			//로그인된id와 메시지보낸id가 같을때, primary채팅창 오른쪽에 출력
 			if('${LoginInfo.id}' == senderId){
-				var a = "<div class=\"outgoing_msg\"><div class=\"sent_msg\"> <p>"+result+"</p> <span class=\"time_date\"> "+presentDate+"</span> </div></div>"
+				var a = "<div class=\"outgoing_msg\"><div class=\"sent_msg\"> <p>"+result+"</p> <span style=\"display:inline-block;\" class=\"time_date\"> "+presentDate+"</span> </div></div>"
 				msg_history.append(a);
 			}else{//로그인된id와 메시지보낸id가 다를때,  primary채팅창 왼쪽에 출력
-				var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span class=\"time_date\"> "+presentDate+"</span></div></div></div>"
+				if(${LoginInfo.sort ne '구매자'}){
+					var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span style=\"display:inline-block;\" class=\"time_date\"> "+presentDate+"</span> <span style=\"color:orange;cursor:pointer;\"class=\"glyphicon glyphicon-exclamation-sign\" onclick=\"chatReport("+noMsg+","+noFlag+",\'"+senderId+"\',\'"+chatDate+"\')\">신고</span></div></div></div>"	
+				}else{
+					var a = "<div class=\"incoming_msg\"><div>"+senderId+"</div><div class=\"incoming_msg_img\"> <img src=\"https://ptetutorials.com/images/user-profile.png\" alt=\"sunil\"> </div><div class=\"received_msg\"><div class=\"received_withd_msg\"><p>"+result+"</p><span style=\"display:inline-block;\" class=\"time_date\"> "+presentDate+"</span></div></div></div>"	
+				}
+				
 				msg_history.append(a);
 			}
 			
