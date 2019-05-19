@@ -673,7 +673,7 @@ public class AdminController {
 		int rnumMax = adminService.getRnumMax(chatRoomNo);
 		
 		logger.info("TESTchk getRnumMax : " + String.valueOf(rnumMax));
-		
+		//주석
 		Map map = new HashMap();
 		map.put("chatMessageNo", chatMessageNo);
 		map.put("chatRoomNo", chatRoomNo);
