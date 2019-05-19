@@ -25,7 +25,7 @@ function detailChatView(chatRoomNo){
 </script>
 <div class="col-xs-12 col-sm-9">
 
-<h3>채팅 내역 관리</h3>
+<h4><strong>채팅 내역 관리</strong></h4>
 <hr>
 <table class="table table-bordered">
 	<thead>

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -672,7 +673,7 @@ public class AdminController {
 		int rnumMax = adminService.getRnumMax(chatRoomNo);
 		
 		logger.info("TESTchk getRnumMax : " + String.valueOf(rnumMax));
-		
+		//주석
 		Map map = new HashMap();
 		map.put("chatMessageNo", chatMessageNo);
 		map.put("chatRoomNo", chatRoomNo);
@@ -684,7 +685,6 @@ public class AdminController {
 		map.put("rnum2", rnum2);
 		map.put("rnumMax", rnumMax);
 		
-		ObjectMapper mapper = new ObjectMapper();
 		List<Message> list = adminService.getChatMessagePaging(map);
 		logger.info("rnum1 : "+rnum1+", rnum2 : "+rnum2+", rnumMax : "+rnumMax);
 		logger.info("CHK Rnum : "+list);
