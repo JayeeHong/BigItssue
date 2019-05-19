@@ -30,7 +30,7 @@ console.log(chkRoomNo);
 var isEnd = false;
 
 $(window).scroll(function() {
-		console.log($(window).scrollTop()+", "+$(document).height()+", "+$(window).height());
+//		console.log($(window).scrollTop()+", "+$(document).height()+", "+$(window).height());
 	if (Math.ceil($(window).scrollTop()) >= $(document).height() - $(window).height()) {
 		fetchMessage();
 	}
@@ -85,10 +85,10 @@ var fetchMessage = function() {
 <ul id="chk">
 <c:forEach var="item" items="${message}">
 	<c:if test="${fn:contains(item.chatSender, 'buyer') }">
-		<li data-chatMessageNo="${item.chatMessageNo }"><pre id="chatMessage" class="buyer" >${item.chatSender } : ${item.chatContent }		<p style="float: right; margin: 0;" align="right"><fmt:formatDate value="${item.chatDate }" pattern="yyyy-MM-dd HH:mm"/></p></pre></li>
+		<li data-chatMessageNo="${item.chatMessageNo }"><pre id="chatMessage" class="buyer" >${item.chatSender } : ${item.chatContent }		<p style="float: right; margin: 0;" align="right"><fmt:formatDate value="${item.chatDate }" pattern="yyyy-MM-dd HH:mm:ss"/></p></pre></li>
 	</c:if>
 	<c:if test="${fn:contains(item.chatSender, 'seller') || fn:contains(item.chatSender, 'bigdom') }">
-		<li data-chatMessageNo="${item.chatMessageNo }"><pre id="chatMessage" >${item.chatSender } : ${item.chatContent }		<p style="float: right; margin: 0;" align="right"><fmt:formatDate value="${item.chatDate }" pattern="yyyy-MM-dd HH:mm"/></p></pre></li>
+		<li data-chatMessageNo="${item.chatMessageNo }"><pre id="chatMessage" >${item.chatSender } : ${item.chatContent }		<p style="float: right; margin: 0;" align="right"><fmt:formatDate value="${item.chatDate }" pattern="yyyy-MM-dd HH:mm:ss"/></p></pre></li>
 	</c:if>
 </c:forEach>
 </ul>
