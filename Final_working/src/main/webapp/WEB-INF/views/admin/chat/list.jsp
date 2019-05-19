@@ -39,17 +39,17 @@ function detailChatView(chatRoomNo){
 	<tbody>
 	<c:forEach var="item" items="${message}" begin="0" end="${message.size()}" step="1">
 		<tr class="detailChatView" onclick="detailChatView(${item.chatRoomNo})">
-		<th style="width: 25%">${item.chatRoomNo }</th>
-		<th style="width: 25%"><fmt:formatDate value="${item.chatFinalDate }" pattern="yyyy-MM-dd"/></th>
-		<th style="width: 25%">
+		<td style="width: 25%">${item.chatRoomNo }</td>
+		<td style="width: 25%"><fmt:formatDate value="${item.chatFinalDate }" pattern="yyyy-MM-dd"/></td>
+		<td style="width: 25%">
 			<c:if test="${item.bigdomId ne null }">
 				${item.bigdomId }
 			</c:if>
 			<c:if test="${item.bigdomId eq null }">
 				${item.sellerId }
 			</c:if>
-		</th>
-		<th style="width: 25%">${item.buyerId }</th>
+		</td>
+		<td style="width: 25%">${item.buyerId }</td>
 		</tr>
 	</c:forEach>
 	</tbody>

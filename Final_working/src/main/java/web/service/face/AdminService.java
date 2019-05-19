@@ -2,6 +2,7 @@ package web.service.face;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -278,5 +279,10 @@ public interface AdminService {
 	//admin도 User DTO로 가져오기 위해서
 	public User getAdminInfoUser(AdminInfo adminInfo);
 
+	public int getRnum(Map map);
+
+	public List<Message> getChatMessagePaging(Map map);
+
+	public int getRnumMax(int chatRoomNo);
 }
 

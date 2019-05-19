@@ -2,6 +2,7 @@ package web.dao.face;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
@@ -225,6 +226,12 @@ public interface AdminDao {
 	// 판매자 정보 이미지 제외하고 업데이트 쿼리(이미지가 없을 때)
 	public void updateSellerWithoutImg(SellerBigdomInfo sbInfo);
 
+	public int getRnum(Map map);
+
+
+	public List<Message> getChatMessagePaging(Map map);
+
+	public int getRnumMax(int chatRoomNo);
 
 	// 구매자 정보 pw까지 변경시 업데이트 쿼리
 	public void updateBuyerInfoWithPw(BuyerInfo buyerInfo);
@@ -256,6 +263,7 @@ public interface AdminDao {
 
 	//admin도 User DTO로 가져오기 위해서
 	public User selectAdminInfoUser(AdminInfo adminInfo);
+
 
 }
 

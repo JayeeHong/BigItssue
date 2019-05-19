@@ -21,7 +21,6 @@
 <style type="text/css">
 	/* 모든 페이지에 적용되는 스타일 */
 pre {
-	margin: 0px 0 -15px;
 	white-space: pre-wrap; /* CSS3*/
 	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
 	white-space: -pre-wrap; /* Opera 4-6 */

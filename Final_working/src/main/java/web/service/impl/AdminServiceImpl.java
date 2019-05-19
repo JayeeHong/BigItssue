@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import java.util.Map;
+import java.util.UUID;
+
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -632,6 +636,19 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 
-	
+@Override
+public int getRnum(Map map) {
+	return adminDao.getRnum(map);
+}
+
+@Override
+public List<Message> getChatMessagePaging(Map map) {
+	return adminDao.getChatMessagePaging(map);
+}
+
+@Override
+public int getRnumMax(int chatRoomNo) {
+	return adminDao.getRnumMax(chatRoomNo);
+}
 }
 
