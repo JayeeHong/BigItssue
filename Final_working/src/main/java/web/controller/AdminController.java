@@ -24,6 +24,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import web.dto.AdminInfo;
 import web.dto.BigdomInfo;
@@ -638,12 +642,49 @@ public class AdminController {
 	public void adminChatDetail(
 			int chatRoomNo,
 			Message message,
-			Model model) {
+			Model model,
+			HttpServletRequest req) {
 		
 		List<Message> list = adminService.getChatMessage(chatRoomNo);
+		
 		logger.info(String.valueOf(list));
 		model.addAttribute("message", list);
+		model.addAttribute("chatRoomNo", chatRoomNo);
+	}
+	
+	@RequestMapping(value="/admin/chat/view", method=RequestMethod.POST)
+	public String chatInfiRolling(
+			int chatRoomNo,
+			int chatMessageNo,
+			Model model,
+			HttpServletResponse resp) {
 		
+		logger.info(String.valueOf(chatMessageNo));
+		logger.info(String.valueOf(chatRoomNo));
+		
+		int rnumMax = adminService.getRnumMax(chatRoomNo);
+		
+		logger.info("TESTchk getRnumMax : " + String.valueOf(rnumMax));
+		
+		Map map = new HashMap();
+		map.put("chatMessageNo", chatMessageNo);
+		map.put("chatRoomNo", chatRoomNo);
+		int rnum = adminService.getRnum(map);
+		int rnum1 = rnum+1;
+		int rnum2 = rnum+25;
+		
+		map.put("rnum1", rnum1);
+		map.put("rnum2", rnum2);
+		map.put("rnumMax", rnumMax);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		List<Message> list = adminService.getChatMessagePaging(map);
+		logger.info("rnum1 : "+rnum1+", rnum2 : "+rnum2+", rnumMax : "+rnumMax);
+		logger.info("CHK Rnum : "+list);
+		
+		model.addAttribute("list", list);
+		
+		return "jsonView";
 	}
 	
 	@RequestMapping(value="/admin/seller/getSellerInfolist", method=RequestMethod.GET)
@@ -1208,8 +1249,7 @@ public class AdminController {
 		sellerLoc.setStation(station);
 		sellerLoc.setSpot(spot);
 		
-		SellerLoc selLoc = adminService.getSellerInfo(sellerLoc);
-		logger.info("TEST : "+String.valueOf(selLoc));
-		model.addAttribute("sellerLoc", selLoc);
+		logger.info("TEST : "+String.valueOf(sellerLoc));
+		model.addAttribute("sellerLoc", sellerLoc);
 	}
 }

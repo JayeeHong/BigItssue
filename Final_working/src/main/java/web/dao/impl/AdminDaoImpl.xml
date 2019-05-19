@@ -495,7 +495,41 @@
 		SELECT count(*) FROM chat
 	</select>
 	
+	<select id="getRnum" parameterType="hashmap" resultType="int">
+		SELECT rnum FROM (
+			SELECT rownum rnum, B.* FROM (
+				SELECT * FROM message
+				WHERE chatRoomNo = #{chatRoomNo }
+				ORDER BY chatMessageNo DESC
+			) B
+		) WHERE chatMessageNo = #{chatMessageNo }
+	</select>
 	
+	<select id="getRnumMax" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM (
+			SELECT * FROM message
+			WHERE chatRoomNo = #{chatRoomNo } )
+	</select>
+	
+	
+	<select id="getChatMessagePaging" parameterType="hashmap" resultType="web.dto.Message">
+		SELECT * FROM (
+		    SELECT rownum rnum, B.* FROM (
+		        SELECT * FROM message
+		        where chatRoomNo = #{chatRoomNo }
+		        ORDER BY chatMessageNo DESC
+		        ) B
+		    ORDER BY rnum
+		    )
+		<choose>
+			<when test='rnum2 lte rnumMax'>
+			WHERE rnum BETWEEN #{rnum1 } and #{rnum2 }
+			</when>
+			<when test='rnum2 gt rnumMax'>
+			WHERE rnum BETWEEN #{rnum1 } and #{rnumMax }
+			</when>
+		</choose>
+	</select>
 	
 	
 	<update id="deleteSellerImg" parameterType="web.dto.SellerBigdomInfo">

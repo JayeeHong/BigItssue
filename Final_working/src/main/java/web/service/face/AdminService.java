@@ -2,6 +2,7 @@ package web.service.face;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -246,5 +247,10 @@ public interface AdminService {
 
 	public int getChatListTotalCount();
 
+	public int getRnum(Map map);
+
+	public List<Message> getChatMessagePaging(Map map);
+
+	public int getRnumMax(int chatRoomNo);
 }
 

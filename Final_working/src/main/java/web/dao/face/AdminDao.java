@@ -2,6 +2,7 @@ package web.dao.face;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Param;
@@ -225,9 +226,10 @@ public interface AdminDao {
 	// 판매자 정보 이미지 제외하고 업데이트 쿼리(이미지가 없을 때)
 	public void updateSellerWithoutImg(SellerBigdomInfo sbInfo);
 
+	public int getRnum(Map map);
 
+	public List<Message> getChatMessagePaging(Map map);
 
-
-
+	public int getRnumMax(int chatRoomNo);
 }
 
