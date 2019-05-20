@@ -222,13 +222,32 @@ public class SellerController {
 		String endTime2="";
 		
 		if(sellerLoc != null && !"".equals(sellerLoc)) {
+			// 시작시간
 			startTime = sellerLoc.getSellerTimeS();
-			startTime1 = startTime.substring(0, 2);
-			//startTime2 = startTime.substring(2, 4);
 			
+			if(startTime.length() == 3) {
+				startTime1 = startTime.substring(0, 1);
+				startTime2 = startTime.substring(1, 3);
+				
+			} else {
+				startTime1 = startTime.substring(0, 2);
+				startTime2 = startTime.substring(2, 4);
+				
+			}
+			
+			// 종료시간
 			endTime = sellerLoc.getSellerTimeE();
-			endTime1 = endTime.substring(0, 2);
-			endTime2 = endTime.substring(2, 4);
+
+			if(endTime.length() ==3) {
+				endTime1 = endTime.substring(0, 1);
+				endTime2 = endTime.substring(1, 3);
+				
+			} else {
+				endTime1 = endTime.substring(0, 2);
+				endTime2 = endTime.substring(2, 4);
+			}
+			
+			
 		}
 		
 //		logger.info(startTime1 + ":" + startTime2);
@@ -266,27 +285,35 @@ public class SellerController {
 		// 변경할 시간 세팅
 		String startTime1 = sellerLoc.getStartTime1();
 		String startTime2 = sellerLoc.getStartTime2();
-		String sellerTimeS = "";
+//		String sellerTimeS = "";
 		String endTime1 = sellerLoc.getEndTime1();
 		String endTime2 = sellerLoc.getEndTime2();
-		String sellerTimeE = "";
+//		String sellerTimeE = "";
 		
-		if(Integer.parseInt(startTime2)>0 && Integer.parseInt(startTime2)<10) {
-			sellerTimeS = startTime1 + "0" + startTime2;
-		} else {
-			sellerTimeS = startTime1 + startTime2;
+		if(Integer.parseInt(startTime1)>0 && Integer.parseInt(startTime1)<10) {
+			startTime1 = "0" + startTime1;
 		}
+
+//		if(Integer.parseInt(startTime2)>0 && Integer.parseInt(startTime2)<10) {
+//			startTime2 = "0" + startTime2;
+//		}
+		logger.info("::::::::::::::"+startTime1+startTime2);
+		
 //		logger.info("sellerTimeS:"+sellerTimeS);
 		
-		if(Integer.parseInt(endTime2)>0 && Integer.parseInt(endTime2)<10) {
-			sellerTimeE = endTime1 + "0" + endTime2;
-		} else {
-			sellerTimeE = endTime1 + endTime2;
+		if(Integer.parseInt(endTime1)>0 && Integer.parseInt(endTime1)<10) {
+			endTime1 = "0" + endTime1;
 		}
+		
+//		if(Integer.parseInt(endTime2)>0 && Integer.parseInt(endTime2)<10) {
+//			endTime2 = "0" + endTime2;
+//		}
+		logger.info("::::::::::::::"+endTime1+endTime2);
+		
 //		logger.info("sellerTimeE:"+sellerTimeE);
 		
-		sellerLoc.setSellerTimeS(sellerTimeS);
-		sellerLoc.setSellerTimeE(sellerTimeE);
+		sellerLoc.setSellerTimeS(startTime1+startTime2);
+		sellerLoc.setSellerTimeE(endTime1+endTime2);
 		
 		// 시간 변경
 		sellerService.setSellerTime(sellerLoc);
