@@ -558,7 +558,7 @@ public class BuyerController {
 			logger.info("reservationInfo:"+reservationInfo);
 		}
 				
-		return "redirect:/buyer/main";
+		return "redirect:/buyer/locview?locNo="+locNo;
 	}
 	
 	@RequestMapping(value="/buyer/my/booking", method=RequestMethod.GET)

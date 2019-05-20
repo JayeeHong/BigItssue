@@ -32,7 +32,7 @@ th{
 <script type="text/javascript">
 
 $(document).ready(function() {
-	
+
 });
 
 //판매처 지도 열기
@@ -50,6 +50,49 @@ function inquire(id,sort){
 	//현재창에서 페이지 이동
 // 	$(location).attr("href", "/createRoom?id="+id+"&sort="+sort);
 	window.open("/createRoom?id="+id+"&sort="+sort, "문의하기", "width=800, height=750, left=100, top=50");
+	
+}
+//예약하기
+function reserve(){
+
+	
+	var sellerTimeS = Number(${sellerLoc.sellerTimeS});
+	var sellerTimeE = Number(${sellerLoc.sellerTimeE});
+	var bookingTimeHour = Number($("select[name=bookingTimeHour]").val());
+	var bookingTimeMin = Number($("select[name=bookingTimeMin]").val());
+	var reserveTime = bookingTimeHour*100+bookingTimeMin;
+	var AmPm = $('input[name="AmPm"]:checked').val();
+	//예약한 총 호수
+	var BookingNumSum = 0;
+	
+	//예약한 총 호수
+	for(i=0;i<$("select[name=selectBookingNum]").size();i++){
+		BookingNumSum+=Number($("select[name=selectBookingNum]").eq(i).val());
+    }
+	
+	if(AmPm=="오후"){
+		reserveTime+=1200;
+	}
+	
+	console.log(sellerTimeS);
+	console.log(sellerTimeE);
+	console.log(bookingTimeHour);
+	console.log(bookingTimeMin);
+	console.log(reserveTime);
+	console.log(AmPm);	
+	console.log("BookingNumSum:"+BookingNumSum);	
+	
+	if(reserveTime<sellerTimeS){
+		alert("오픈전 시간에는 예약할 수 없습니다.");
+	}else if(reserveTime>sellerTimeE){
+		alert("마감이후 시간에는 예약할 수 없습니다.");
+	}else if(BookingNumSum==0){
+		alert("보수를 선택해 주세요.");
+	}else{	
+		alert("예약완료");
+		$("form").submit();
+	}
+	
 	
 }
 
@@ -214,7 +257,7 @@ function inquire(id,sort){
 							</c:forEach>
 						</select>
   						
-						<button class="btn btn-info btn-sm">예약하기</button>
+						<button type="button" onclick="reserve()" class="btn btn-info btn-sm">예약하기</button>
 					</td>
 				</c:if>
 				<c:if test="${index.first && cntReservation ge 1}">
