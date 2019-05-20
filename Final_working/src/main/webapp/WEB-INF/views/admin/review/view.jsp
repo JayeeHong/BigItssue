@@ -26,7 +26,7 @@ $(document).ready(function() {
 	
 	$("#btnDelete").click(function() {
 		if( confirm("후기를 삭제하시겠습니까?") == true ) {
-			$(location).attr("href", "/seller/review/delete?reviewno=${reviewView.reviewNo }");
+			$(location).attr("href", "/admin/review/delete?reviewno=${reviewView.reviewNo }");
 		} else {
 			return;
 		}
