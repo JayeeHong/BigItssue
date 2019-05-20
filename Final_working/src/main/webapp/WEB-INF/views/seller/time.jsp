@@ -132,12 +132,17 @@ function cardUpdate(sellerId) {
 	<td>시간</td>
 	<td>
 		<select name="startTime1">
-			<c:forEach var="i" begin="1" end="24" step="1">
+			<c:forEach var="i" begin="01" end="24" step="01">
 				<c:if test="${startTime1 eq i }">
 				<option value="${startTime1 }" selected>${startTime1 }</option>
 				</c:if>
 				<c:if test="${startTime1 ne i }">
-				<option value="${i }">${i }</option>
+					<c:if test="${i lt 10 }">
+					<option value="${i }">${i }</option>
+					</c:if>
+					<c:if test="${i ge 10 }">
+					<option value="${i }">${i }</option>
+					</c:if>
 				</c:if>
 			</c:forEach>
 		</select>
@@ -149,7 +154,7 @@ function cardUpdate(sellerId) {
 				</c:if>
 				<c:if test="${startTime2 ne i }">
 					<c:if test="${i lt 10 }">
-					<option value="${i }">0${i }</option>
+					<option value="${i }">${i }</option>
 					</c:if>
 					<c:if test="${i ge 10 }">
 					<option value="${i }">${i }</option>
@@ -160,12 +165,17 @@ function cardUpdate(sellerId) {
 	</td>
 	<td>
 		<select name="endTime1">
-			<c:forEach var="i" begin="1" end="24" step="1">
+			<c:forEach var="i" begin="01" end="24" step="01">
 				<c:if test="${endTime1 eq i }">
 				<option value="${endTime1 }" selected>${endTime1 }</option>
 				</c:if>
 				<c:if test="${endTime1 ne i }">
-				<option value="${i }">${i }</option>
+					<c:if test="${i lt 10 }">
+					<option value="${i }">${i }</option>
+					</c:if>
+					<c:if test="${i ge 10 }">
+					<option value="${i }">${i }</option>
+					</c:if>
 				</c:if>
 			</c:forEach>
 		</select>

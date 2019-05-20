@@ -250,6 +250,54 @@ $(document).ready(function() {
 		}
 		
 	});
+	
+	// -------------------------------------------
+	
+	var fileTarget = $('.filebox .upload-hidden2'); 
+	fileTarget.on('change', function() { // 값이 변경되면 
+		
+		if(window.FileReader){ // modern browser 
+			var filename = $(this)[0].files[0].name; 
+		
+		} else { // old IE 
+			var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출 
+		
+		} // 추출한 파일명 삽입 
+		
+		$(this).siblings('.upload-name').val(filename); 
+		
+	});
+
+	var imgTarget = $('.preview-image .upload-hidden2'); 
+	
+	imgTarget.on('change', function() {
+		var parent = $(this).parent(); 
+		parent.children('.upload-display').remove(); 
+		
+		if(window.FileReader){ //image 파일만 
+			if (!$(this)[0].files[0].type.match(/image\//)) return; 
+		
+			var reader = new FileReader(); 
+			reader.onload = function(e){ 
+				var src = e.target.result; 
+// 				parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img src="'+src+'" class="upload-thumb" name="sellerImg"></div></div>'); 
+				$("#imgUp_area2").html('<img src="'+src+'" class="upload-thumb" name="sellerImg">');
+			}
+			
+			reader.readAsDataURL($(this)[0].files[0]); 
+		
+		} else {
+			$(this)[0].select(); 
+			$(this)[0].blur(); 
+			var imgSrc = document.selection.createRange().text; 
+			parent.html('<img class="upload-thumb" name="sellerImg">'); 
+			
+			var img = $(this).siblings('.upload-display').find('img'); 
+			img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")"; 
+			
+		}
+		
+	});
 
 	//출처: https://webdir.tistory.com/435 [WEBDIR]
 	
