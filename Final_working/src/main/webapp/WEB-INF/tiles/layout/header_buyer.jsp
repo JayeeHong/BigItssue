@@ -260,7 +260,7 @@ function fnMove(){
 		
 		<div id="topMenu">
 			<ul>
-				<li><a type="button" onclick="fnMove()">판매처 보기</a></li>
+				<li><a type="button" onclick="fnMove()" style="cursor:pointer;">판매처 보기</a></li>
 				<li><a href="/buyer/notice/list">공지사항</a></li>
 			</ul>			
 			
