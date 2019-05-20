@@ -981,6 +981,10 @@ public class AdminController {
 		if(notice.getNoticeImg()=="") {
 			notice.setNoticeImg(null);
 		}
+		//이미지가 수정이되지 않았을경우
+		else if(file.getOriginalFilename().equals("") && notice.getNoticeImg() != null) {
+		notice.setNoticeImg(notice.getNoticeImg());
+		}
 		
 		//이미지를 수정했을 경우
 		else if(!file.getOriginalFilename().equals(notice.getNoticeImg())) {
