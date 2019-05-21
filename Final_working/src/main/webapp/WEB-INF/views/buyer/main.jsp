@@ -75,8 +75,12 @@ function locInfo(){
 function pagingFunc(curpage){
 
 	var zone = $("select[name=zoneSelect]").val()+"#";
-	var station = $("select[name=stationSelect]").val()+"#";
-	
+	if($("select[name=stationSelect]").val()==undefined){
+		var station = "#";
+	}else{
+		var station = $("select[name=stationSelect]").val()+"#";
+	}
+
 	$.ajax({
         url : '/buyer/pagingAjax',
         type : 'post',

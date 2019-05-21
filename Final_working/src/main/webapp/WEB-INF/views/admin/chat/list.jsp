@@ -38,7 +38,7 @@ function detailChatView(chatRoomNo){
 	</thead>
 	<tbody>
 	<c:forEach var="item" items="${message}" begin="0" end="${message.size()}" step="1">
-		<tr class="detailChatView" onclick="detailChatView(${item.chatRoomNo})">
+		<tr style="cursor:pointer;" class="detailChatView" onclick="detailChatView(${item.chatRoomNo})">
 		<td style="width: 25%">${item.chatRoomNo }</td>
 		<td style="width: 25%"><fmt:formatDate value="${item.chatFinalDate }" pattern="yyyy-MM-dd"/></td>
 		<td style="width: 25%">
