@@ -63,7 +63,7 @@ function connectCommnet(){
 		var stringDate = reviewReply.stringDate;
 		//댓글방 주인
 		var reviewViewSellerId = reviewReply.reviewViewSellerId;
-		
+
 			
 		/* replyDiv태그가 존재할때만 동작 */
 		/* 댓글창 있을때  댓글 등록 */
@@ -127,7 +127,7 @@ function connectCommnet(){
  		    a+="<span><strong>"+writer+"</strong></span>";
  		    a+="<span style=\"padding-left: 10px;\"><small>"+stringDate+"</small></span>";
  		  	a+="<span style=\"padding-left: 10px;\">";
- 		  	if(writer == '${sellerId }'){
+ 		  	if(writer == '관리자'){
  		  	 	a+="<a style=\"cursor:pointer;\" onclick=\"replyUpdate('"+replyNo+"', '"+replyContent+"')\">[수정]</a>";
  		    	a+="<a style=\"cursor:pointer;\" onclick=\"replyDelete("+replyNo+", "+reviewNo+")\">[삭제]</a> ";
  		  	}

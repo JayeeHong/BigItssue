@@ -169,6 +169,17 @@ public class SellerController {
 			SellerInfo sellerInfo,
 			HttpSession session, Model model) {
 		
+		//로그아웃 안하고 로그인 했을때 전에있던 정보 초기화
+		session.removeAttribute("LoginInfo");
+		session.removeAttribute("buyerId");
+		session.removeAttribute("sellerId");
+		session.removeAttribute("bigdomId");
+		session.removeAttribute("adminId");
+		session.removeAttribute("buyerLogin");
+		session.removeAttribute("sellerLogin");
+		session.removeAttribute("bigdomLogin");
+		session.removeAttribute("adminLogin");
+		
 		//chat에서 session정보를 가져올때
 		//User라는(판매자,빅돔,구매자)정보 모두를 포함하는 dto의 정보를  불러와야해서 만듦.
 		User LoginInfo = null;
@@ -654,8 +665,9 @@ public class SellerController {
 //		List<ReviewReply> replyList = sellerService.getReplyList(reviewNo);
 //		
 //		model.addAttribute("replyList", replyList);
-		
-		return "jsonView";
+				return "jsonView";
 		
 	}
+	
+
 }

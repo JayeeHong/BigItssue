@@ -62,6 +62,25 @@ function reserve(){
 	var bookingTimeMin = Number($("select[name=bookingTimeMin]").val());
 	var reserveTime = bookingTimeHour*100+bookingTimeMin;
 	var AmPm = $('input[name="AmPm"]:checked').val();
+	
+	//현재시간
+	var time = new Date();
+	var hour = time.getHours();
+	var min = time.getMinutes();
+	
+	if(min<50){
+		min+=min+10;
+	}else if(min>=50){
+		console.log(min)
+		min-=50;
+		hour+=1;
+	}
+	if(hour>=25){
+		hour-=24;
+	}
+	
+	var presentTime=hour*100+min;
+	
 	//예약한 총 호수
 	var BookingNumSum = 0;
 	
@@ -80,11 +99,14 @@ function reserve(){
 	console.log(bookingTimeMin);
 	console.log(reserveTime);
 	console.log(AmPm);	
-	console.log("BookingNumSum:"+BookingNumSum);	
+	console.log("BookingNumSum:"+BookingNumSum);
+	console.log("presentTime:"+presentTime);
 	
 	if(reserveTime<sellerTimeS){
 		alert("오픈전 시간에는 예약할 수 없습니다.");
-	}else if(reserveTime>sellerTimeE){
+	}else if(reserveTime<presentTime){
+		alert("현재시간보다 10분이상의 시간으로 예약해주세요");
+	}else if(reserveTime>sellerTimeE){	
 		alert("마감이후 시간에는 예약할 수 없습니다.");
 	}else if(BookingNumSum==0){
 		alert("보수를 선택해 주세요.");

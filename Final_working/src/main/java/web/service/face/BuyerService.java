@@ -126,6 +126,8 @@ public interface BuyerService {
 
 	//비밀번호 암호화
 	public String shaPw(String buyerPw);
+	
+	public List<SellerLoc> viewLoc(String zone);
 
 	
 	

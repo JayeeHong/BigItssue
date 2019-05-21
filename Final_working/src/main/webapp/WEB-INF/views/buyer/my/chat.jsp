@@ -8,9 +8,6 @@
 
 <div class="container">
 <jsp:include page="../header.jsp" />
-<br><br><br><br><br>
-
-
 
 
 <!-- <div class="row row-offcanvas row-offcanvas-right"> -->
