@@ -188,7 +188,7 @@ public interface AdminDao {
 	public ChatReport selectReportByReportNo(int reportNo);
 
 	// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회 쿼리
-	public List<ChatReport> selectReportByChatReport(ChatReport reportByReportNo);
+	public List<Message> selectReportByChatReport(ChatReport reportByReportNo);
 
 
 

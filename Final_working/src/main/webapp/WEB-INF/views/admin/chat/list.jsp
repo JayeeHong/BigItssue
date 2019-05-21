@@ -28,7 +28,7 @@ function detailChatView(chatRoomNo){
 <h4><strong>채팅 내역 관리</strong></h4>
 <hr>
 <table class="table table-bordered">
-	<thead>
+	<thead style="background: #cccccc6e;">
 	<tr>
 	<th style="width: 25%;">번호</th>
 	<th style="width: 25%">날짜</th>

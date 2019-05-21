@@ -2,11 +2,13 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<title>BigItssue</title>
+
 <jsp:include page="header.jsp" />
 
 <body>
-<h3 style="text-align:center;">채팅 ${chatRoomNo }번방</h3>
-
+<%-- <h3 style="text-align:center;">채팅 ${chatRoomNo }번방</h3> --%>
+<br>
 
 <!-- 부트스트랩 -->
 <div class="container">
@@ -229,6 +231,7 @@ var msg_history_id = null;
 
 function connect(){
 	var ws = new WebSocket("ws://localhost:8088/replyEcho");
+// 	var ws = new WebSocket("ws://localhost:8088/replyEcho");
 	socket = ws;
 
 	ws.onopen = function(){

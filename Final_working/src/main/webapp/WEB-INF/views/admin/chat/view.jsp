@@ -52,50 +52,51 @@ var fetchMessage = function() {
 			for(var i=0; i<result.list.length; i++) {
 				if(result.list[i].chatSender.indexOf("buyer") == 0) {
 					var d = result.list[i].chatDate;
-		               var date = new Date(d);
-		               date.setTime(d);
-		               //년, 월, 일
-		               var dateArr = date.toString().split(" ");
-		               
-		               //월 변경 switch
-		               switch(dateArr[1]) {
-		                  case 'Jan':
-		                     var dateYMD = dateArr[3]+'-01-'+dateArr[2];
-		                     break;
-		                  case 'Feb':
-		                     var dateYMD = dateArr[3]+'-02-'+dateArr[2];
-		                     break;
-		                  case 'Mar':
-		                     var dateYMD = dateArr[3]+'-03-'+dateArr[2];
-		                     break;
-		                  case 'Apr':
-		                     var dateYMD = dateArr[3]+'-04-'+dateArr[2];
-		                     break;
-		                  case 'May':
-		                     var dateYMD = dateArr[3]+'-05-'+dateArr[2];
-		                     break;
-		                  case 'Jun':
-		                     var dateYMD = dateArr[3]+'-06-'+dateArr[2];
-		                     break;
-		                  case 'Jul':
-		                     var dateYMD = dateArr[3]+'-07-'+dateArr[2];
-		                     break;
-		                  case 'Aug':
-		                     var dateYMD = dateArr[3]+'-08-'+dateArr[2];
-		                     break;
-		                  case 'Sep':
-		                     var dateYMD = dateArr[3]+'-09-'+dateArr[2];
-		                     break;
-		                  case 'Oct':
-		                     var dateYMD = dateArr[3]+'-10-'+dateArr[2];
-		                     break;
-		                  case 'Nov':
-		                     var dateYMD = dateArr[3]+'-11-'+dateArr[2];
-		                     break;
-		                  case 'Dec':
-		                     var dateYMD = dateArr[3]+'-12-'+dateArr[2];
-		                     break;
-		               }
+					var date = new Date(d);
+					date.setTime(d);
+
+					//년, 월, 일
+					var dateArr = date.toString().split(" ");
+					
+					//월 변경 switch
+					switch(dateArr[1]) {
+						case 'Jan':
+							var dateYMD = dateArr[3]+'-01-'+dateArr[2];
+							break;
+						case 'Feb':
+							var dateYMD = dateArr[3]+'-02-'+dateArr[2];
+							break;
+						case 'Mar':
+							var dateYMD = dateArr[3]+'-03-'+dateArr[2];
+							break;
+						case 'Apr':
+							var dateYMD = dateArr[3]+'-04-'+dateArr[2];
+							break;
+						case 'May':
+							var dateYMD = dateArr[3]+'-05-'+dateArr[2];
+							break;
+						case 'Jun':
+							var dateYMD = dateArr[3]+'-06-'+dateArr[2];
+							break;
+						case 'Jul':
+							var dateYMD = dateArr[3]+'-07-'+dateArr[2];
+							break;
+						case 'Aug':
+							var dateYMD = dateArr[3]+'-08-'+dateArr[2];
+							break;
+						case 'Sep':
+							var dateYMD = dateArr[3]+'-09-'+dateArr[2];
+							break;
+						case 'Oct':
+							var dateYMD = dateArr[3]+'-10-'+dateArr[2];
+							break;
+						case 'Nov':
+							var dateYMD = dateArr[3]+'-11-'+dateArr[2];
+							break;
+						case 'Dec':
+							var dateYMD = dateArr[3]+'-12-'+dateArr[2];
+							break;
+					}
 					//console.log(dateArr[0]);
 					
 					var dateTimeArr = date.toString().split(" ");
@@ -105,57 +106,58 @@ var fetchMessage = function() {
 					
 				} else if(result.list[i].chatSender.indexOf("seller") == 0 || result.list[i].chatSender.indexOf("bigdom") == 0) {
 					var d = result.list[i].chatDate;
-					var date = new Date(d);
-		               date.setTime(d);
-		               //년, 월, 일
-		               var dateArr = date.toString().split(" ");
-		               
-		               //월 변경 switch
-		               switch(dateArr[1]) {
-		                  case 'Jan':
-		                     var dateYMD = dateArr[3]+'-01-'+dateArr[2];
-		                     break;
-		                  case 'Feb':
-		                     var dateYMD = dateArr[3]+'-02-'+dateArr[2];
-		                     break;
-		                  case 'Mar':
-		                     var dateYMD = dateArr[3]+'-03-'+dateArr[2];
-		                     break;
-		                  case 'Apr':
-		                     var dateYMD = dateArr[3]+'-04-'+dateArr[2];
-		                     break;
-		                  case 'May':
-		                     var dateYMD = dateArr[3]+'-05-'+dateArr[2];
-		                     break;
-		                  case 'Jun':
-		                     var dateYMD = dateArr[3]+'-06-'+dateArr[2];
-		                     break;
-		                  case 'Jul':
-		                     var dateYMD = dateArr[3]+'-07-'+dateArr[2];
-		                     break;
-		                  case 'Aug':
-		                     var dateYMD = dateArr[3]+'-08-'+dateArr[2];
-		                     break;
-		                  case 'Sep':
-		                     var dateYMD = dateArr[3]+'-09-'+dateArr[2];
-		                     break;
-		                  case 'Oct':
-		                     var dateYMD = dateArr[3]+'-10-'+dateArr[2];
-		                     break;
-		                  case 'Nov':
-		                     var dateYMD = dateArr[3]+'-11-'+dateArr[2];
-		                     break;
-		                  case 'Dec':
-		                     var dateYMD = dateArr[3]+'-12-'+dateArr[2];
-		                     break;
-		               }
+
+          var date = new Date(d);
+          date.setTime(d);
+
+					//년, 월, 일
+					var dateArr = date.toString().split(" ");
+					
+					//월 변경 switch
+					switch(dateArr[1]) {
+						case 'Jan':
+							var dateYMD = dateArr[3]+'-01-'+dateArr[2];
+							break;
+						case 'Feb':
+							var dateYMD = dateArr[3]+'-02-'+dateArr[2];
+							break;
+						case 'Mar':
+							var dateYMD = dateArr[3]+'-03-'+dateArr[2];
+							break;
+						case 'Apr':
+							var dateYMD = dateArr[3]+'-04-'+dateArr[2];
+							break;
+						case 'May':
+							var dateYMD = dateArr[3]+'-05-'+dateArr[2];
+							break;
+						case 'Jun':
+							var dateYMD = dateArr[3]+'-06-'+dateArr[2];
+							break;
+						case 'Jul':
+							var dateYMD = dateArr[3]+'-07-'+dateArr[2];
+							break;
+						case 'Aug':
+							var dateYMD = dateArr[3]+'-08-'+dateArr[2];
+							break;
+						case 'Sep':
+							var dateYMD = dateArr[3]+'-09-'+dateArr[2];
+							break;
+						case 'Oct':
+							var dateYMD = dateArr[3]+'-10-'+dateArr[2];
+							break;
+						case 'Nov':
+							var dateYMD = dateArr[3]+'-11-'+dateArr[2];
+							break;
+						case 'Dec':
+							var dateYMD = dateArr[3]+'-12-'+dateArr[2];
+							break;
+					}
 					//console.log(dateArr[0]);
 					
 					var dateTimeArr = date.toString().split(" ");
 					//console.log(dateTimeArr[4]);
 					
 					$("#chk li:last").append("<li data-chatMessageNo='"+result.list[i].chatMessageNo+"'><pre id='chatMessage'>"+result.list[i].chatSender+" : "+result.list[i].chatContent+"	"+"<p style='float: right; margin: 0;' align='right'>"+dateYMD+" "+dateTimeArr[4]+"</p></pre></li>");
-					
 				}
 			}
 			//$("#enter").append("<h3>하이요!<h3><br>");

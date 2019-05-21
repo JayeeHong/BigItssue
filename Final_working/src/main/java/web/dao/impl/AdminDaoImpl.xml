@@ -75,8 +75,8 @@
 
 	<!--  -->
 	<select id="viewDetail" parameterType="String" resultType="hashmap">
-			SELECT * FROM sellerInfo, (select sellerId, spot from SellerLoc WHERE station LIKE '%' || #{station } || '%') S
-			WHERE sellerInfo.sellerId = S.sellerId
+		SELECT * FROM sellerInfo, (SELECT sellerId, spot FROM SellerLoc WHERE station = #{station }) S
+		WHERE sellerInfo.sellerId = S.sellerId
 
 	</select>
 <!-- 	<insert id="buyerJoin" parameterType="web.dto.BuyerInfo"> -->
@@ -442,11 +442,11 @@
 		WHERE reportNo=#{reportNo }
 	</select>
 	
-	<select id="selectReportByChatReport" resultType="web.dto.ChatReport" parameterType="web.dto.ChatReport">
-		SELECT * FROM chatReport
+	<select id="selectReportByChatReport" resultType="web.dto.Message" parameterType="web.dto.ChatReport">
+		SELECT * FROM Message
 		WHERE chatRoomNo=#{chatRoomNo } 
 			AND to_char(chatDate, 'yy/mm/dd')=to_char(#{chatDate },'yy/mm/dd')
-		ORDER BY reportNo
+		ORDER BY chatMessageNo
 	</select>
     
   <select id="selectBanner" resultType="web.dto.MainBanner">

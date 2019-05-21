@@ -82,12 +82,15 @@ function activateSeller(sellerId) {
 <table class="table">
 	<thead style="background: #cccccc6e">
 		<tr>
-			<td style="width: 10%">번호</td>
+			<td rowspan="2" style="width: 10%">번호</td>
 			<td style="width: 20%">판매자</td>
 			<td style="width: 20%">아이디</td>
 			<td style="width: 20%">비밀번호</td>
 			<td style="width: 15%">연락처</td>
-			<td style="width: 15%">수정</td>
+			<td rowspan="2" style="width: 15%">수정&nbsp;|<br>(비)활성화</td>
+		</tr>
+		<tr>
+			<td colspan="4">빅돔 아이디</td>
 		</tr>
 	</thead>
 	
@@ -95,10 +98,10 @@ function activateSeller(sellerId) {
 		<c:forEach varStatus="status" var="i" begin="0" end="${sellerbigdomList.size()-1 }" step="1">
 		<tr>
 			<c:if test="${curPage eq 0 }">
-			<td rowspan="3">${(totalCount-status.index)-((1-1)*10) }</td>
+			<td rowspan="2">${(totalCount-status.index)-((1-1)*10) }</td>
 			</c:if>
 			<c:if test="${curPage ne 0 }">
-			<td rowspan="3">${(totalCount-status.index)-((curPage-1)*10) }</td>
+			<td rowspan="2">${(totalCount-status.index)-((curPage-1)*10) }</td>
 			</c:if>
 		
 			<td>
@@ -113,7 +116,7 @@ function activateSeller(sellerId) {
 			<td>${sellerbigdomList[i].sellerId }</td>
 			<td>${sellerbigdomList[i].sellerPw }</td>
 			<td>${sellerbigdomList[i].sellerPhone }</td>
-			<td rowspan="3">
+			<td rowspan="2">
 				<button class="btn btn-xs btn-primary" onclick="upSeller('${sellerbigdomList[i].sellerId}');">수정</button>
 				
 				<c:if test="${not sellerStatusList[i] }">
@@ -125,9 +128,9 @@ function activateSeller(sellerId) {
 			</td>
 		</tr>
 		
-		<tr>
-			<td colspan="4" style="background: #cccccc6e">빅돔 아이디</td>
-		</tr>
+<!-- 		<tr> -->
+<!-- 			<td colspan="4" style="background: #cccccc6e">빅돔 아이디</td> -->
+<!-- 		</tr> -->
 		<tr>
 			<td colspan="4">
 				${sellerbigdomList[i].bigdomId }

@@ -61,9 +61,9 @@
 
 <c:forEach var="i" begin="0" end="${chatReport.size()-1 }" step="1">
 
-${chatReport[i].chatContent }&nbsp;&nbsp;
-<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small>
-<br><br>
+<%-- ${chatReport[i].chatContent }&nbsp;&nbsp; --%>
+<%-- <small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small> --%>
+<!-- <br><br> -->
 
 <%-- <c:choose> --%>
 <%-- 	<c:when test="${chatReport[i].buyerId eq null }"> --%>
@@ -86,6 +86,38 @@ ${chatReport[i].chatContent }&nbsp;&nbsp;
 <%-- 	</c:otherwise> --%>
 <%-- </c:choose> --%>
 
+<c:choose>
+	<%-- 신고당한 사람과 메세지 정보가 같지 않을 때 --%>
+	<c:when test="${chatReport[i].chatSender ne reportByReportNo.buyerId }">
+		<c:if test="${chatReport[i].chatContent ne reportByReportNo.chatContent }">
+			<span style="font-weight: bold;">${chatReport[i].chatSender }</span><br>
+			${chatReport[i].chatContent }&nbsp;&nbsp;
+			<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small>
+			<br><br>
+		</c:if>
+	</c:when>
+	
+	<%-- 신고당한 사람과 메세지 정보가 같을때 --%>
+	<c:when test="${chatReport[i].chatSender eq reportByReportNo.buyerId }">
+		<c:if test="${chatReport[i].chatContent eq reportByReportNo.chatContent }">
+<%-- 			신고당한사람: ${chatReport[i].chatSender }<br> --%>
+<%-- 			신고당한메세지: ${reportByReportNo.chatContent }<br> --%>
+			<span style="font-weight: bold; color: red;">${chatReport[i].chatSender }</span><br>
+			${chatReport[i].chatContent }&nbsp;&nbsp;
+			<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small>
+			<br><br>
+		</c:if>
+		<c:if test="${chatReport[i].chatContent ne reportByReportNo.chatContent }">
+<%-- 			신고당한사람: ${chatReport[i].chatSender }<br> --%>
+<%-- 			신고당한메세지: ${reportByReportNo.chatContent }<br> --%>
+			<span style="font-weight: bold;">${chatReport[i].chatSender }</span><br>
+			${chatReport[i].chatContent }&nbsp;&nbsp;
+			<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small>
+			<br><br>
+		</c:if>
+	</c:when>
+</c:choose>
+
 </c:forEach>
 
 </div>
@@ -97,3 +129,5 @@ ${chatReport[i].chatContent }&nbsp;&nbsp;
 </div>
 
 </div>
+
+<br><br><br>
