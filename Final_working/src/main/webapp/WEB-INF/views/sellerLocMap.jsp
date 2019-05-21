@@ -6,6 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+.label {margin-bottom: 96px;}
+.label * {display: inline-block;vertical-align: top;}
+.label .left {background: url("http://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_l.png") no-repeat;display: inline-block;height: 24px;overflow: hidden;vertical-align: top;width: 7px;}
+.label .center {background: url(http://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_bg.png) repeat-x;display: inline-block;height: 24px;font-size: 12px;line-height: 24px;}
+.label .right {background: url("http://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png") -1px 0  no-repeat;display: inline-block;height: 24px;overflow: hidden;width: 6px;}
+</style>
+
 <!-- jQuery 2.2.4 -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9ee94ce212eca2864c7acbe36e0325d7&libraries=services,clusterer,drawing"></script>
@@ -18,9 +26,6 @@
 	var w = (screen.availWidth)/3;
 	var h = (screen.availHeight)/2.5;
 	
-	// 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
-	var infowindow = new daum.maps.InfoWindow({zIndex:1});
-
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	    mapOption = {
 	        center: new daum.maps.LatLng(${sellerLoc.lat }, ${sellerLoc.lng }), // 지도의 중심좌표
@@ -49,14 +54,30 @@
         map: map,
         position: new daum.maps.LatLng(${sellerLoc.lat }, ${sellerLoc.lng }) 
     });
-
-    // 마커에 클릭이벤트를 등록합니다
-    daum.maps.event.addListener(marker, 'click', function() {
-        // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + "${sellerLoc.station}" +'역 '+ "${sellerLoc.spot}" + '</div>');
-        infowindow.open(map, marker);
+    // 마커에 z-Index 부여
+    marker.setZIndex(3);
+    
+    
+    var content = '<div class ="label"><span class="left"></span><span class="center">'+ "${sellerLoc.station}" +'역 '+ "${sellerLoc.spot}" + '출구' + '</span><span class="right"></span></div>';
+    
+    var customOverlay = new daum.maps.CustomOverlay({
+        position: new daum.maps.LatLng(${sellerLoc.lat }, ${sellerLoc.lng }),
+        content: content   
     });
-	
+    
+    var cnt = 0;
+    // 마커에 클릭이벤트를 등록합니다
+	daum.maps.event.addListener(marker, 'click', function() {
+		if(cnt == 0) {
+		   cnt += 1;
+	       customOverlay.setMap(map);
+		   console.log(cnt);
+		} else {
+		   cnt -= 1;
+		   customOverlay.setMap(null);
+	 	   console.log(cnt);
+		}    	
+	});
 	</script>
 
 </body>
