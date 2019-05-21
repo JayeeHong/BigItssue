@@ -219,6 +219,7 @@ var msg_history_id = null;
 function connect(){
 	//ws://localhost:8088/replyEcho
 	var ws = new WebSocket("ws://localhost:8088/replyEcho");
+// 	var ws = new WebSocket("ws://localhost:8088/replyEcho");
 	socket = ws;
 
 	ws.onopen = function(){
