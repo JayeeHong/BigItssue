@@ -13,7 +13,7 @@ $(document).ready(function(){
 
 <div class="text-center">
 
-<ul class="pagination pagination-sm">
+<ul class="pagination pagination-sm" style="cursor:pointer;">
 	<li>
 	<%-- 이전 페이지 그룹 --%>
 	<c:if test="${paging.curPage le paging.pageCount }">

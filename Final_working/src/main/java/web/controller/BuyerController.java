@@ -58,7 +58,9 @@ public class BuyerController {
 		
 		//현재 페이지 번호 얻기
 		logger.info("curPage:"+curPage);
-		
+		if(stationSelect == null) {
+			stationSelect="";
+		}
 		//총 게시글 수 얻기(map을 통해 파라미터 전달) 검색되고 다시 페이지번호 누르면 GET방식으로 오기때문에 map을통해서 zone,station조건으로 조회
 		Map<String, Object> map = new HashMap<String, Object>(); // MAP을 이용해 담기
         map.put("zoneSelect", zoneSelect);

@@ -65,11 +65,13 @@ function reserve(){
 	
 	//현재시간
 	var time = new Date();
+
 	var hour = time.getHours();
 	var min = time.getMinutes();
-	
+
 	if(min<50){
-		min+=min+10;
+		min+=10;
+
 	}else if(min>=50){
 		console.log(min)
 		min-=50;
@@ -78,7 +80,6 @@ function reserve(){
 	if(hour>=25){
 		hour-=24;
 	}
-	
 	var presentTime=hour*100+min;
 	
 	//예약한 총 호수
@@ -150,7 +151,7 @@ function reserve(){
 		<!-- 판매자 -->
 		<tr>
 		<td>${sellerLoc.zone }</td>
-		<td class="mapHover" onclick="mapView(${sellerLoc.locNo})">${sellerLoc.station } ${sellerLoc.spot }</td>
+		<td style="cursor:pointer;" class="mapHover" onclick="mapView(${sellerLoc.locNo})">${sellerLoc.station } ${sellerLoc.spot }</td>
 		<td>
 			<c:if test="${sellerLoc.sellerTimeS.length() eq 4 && sellerLoc.sellerTimeE.length() eq 4}">
 			${sellerLoc.sellerTimeS.substring( 0, 2 ) }:${sellerLoc.sellerTimeS.substring( 2, 4 ) } ~ ${sellerLoc.sellerTimeE.substring( 0, 2 )}:${sellerLoc.sellerTimeE.substring( 2, 4 )} 
