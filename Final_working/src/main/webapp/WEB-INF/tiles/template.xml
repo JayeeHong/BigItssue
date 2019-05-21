@@ -15,6 +15,10 @@
     <definition name="buyer/my/chat" template="/WEB-INF/views/buyer/my/chat.jsp" />
     <!-- 따로 헤더를 만들어서 다시 주었음 (/seller/header.jsp) -->
     <definition name="seller/main" template="/WEB-INF/views/seller/main.jsp" />
+    
+    <!-- 검색,paging에서 타일즈 제외 -->
+    <definition name="buyer/sellerLocPagingResult" template="/WEB-INF/views/buyer/sellerLocPagingResult.jsp" />
+    <definition name="buyer/locInfoResult" template="/WEB-INF/views/buyer/locInfoResult.jsp" />
 
 	<definition name="buyer" template="/WEB-INF/tiles/layout_buyer.jsp">
 		<put-attribute name="header" value="/WEB-INF/tiles/layout/header_buyer.jsp"></put-attribute>

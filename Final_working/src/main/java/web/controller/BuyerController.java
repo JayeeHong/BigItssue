@@ -32,6 +32,7 @@ import web.dto.Message;
 import web.dto.Notice;
 import web.dto.MessageChk;
 import web.dto.Reservation;
+import web.dto.ReviewReply;
 import web.dto.SellerLoc;
 import web.dto.User;
 import web.service.face.BuyerService;
@@ -343,6 +344,17 @@ public class BuyerController {
 	
 	@RequestMapping(value="/buyer/login", method=RequestMethod.POST)
 	public String buyerLogin(BuyerInfo buyerInfo, HttpSession session) {
+		
+		//로그아웃 안하고 로그인 했을때 전에있던 정보 초기화
+		session.removeAttribute("LoginInfo");
+		session.removeAttribute("buyerId");
+		session.removeAttribute("sellerId");
+		session.removeAttribute("bigdomId");
+		session.removeAttribute("adminId");
+		session.removeAttribute("buyerLogin");
+		session.removeAttribute("sellerLogin");
+		session.removeAttribute("bigdomLogin");
+		session.removeAttribute("adminLogin");
 		
 		//비밀번호를 암호화하여여 buyerInfo에 다시 세팅하기
 		buyerInfo.setBuyerPw(buyerService.shaPw(buyerInfo.getBuyerPw()));
@@ -920,4 +932,86 @@ public class BuyerController {
 	@RequestMapping(value="/buyer/practice", method=RequestMethod.GET)
 	public void pratice() {}
 	
+	@RequestMapping(value="/buyer/pagingAjax", method=RequestMethod.POST)
+	public String pagingAjax(int curPage,String zone,String station, Model model) {
+		
+		//-------------curpage,zone,station 받기 ----------------
+		logger.info("curPage:"+curPage);
+		
+		if(zone.split("#").length>0) {
+			zone=zone.split("#")[0].split("호선")[0];
+		}else {
+			zone="";
+		}
+		logger.info("zone:"+zone);
+		
+		if(station.split("#").length>0) {
+			station=station.split("#")[0];
+		}else {
+			station="";
+		}
+		logger.info("station:"+station);
+		//-------------------------------------------------------
+		//총 게시글 수 얻기(map을 통해 파라미터 전달) 검색되고 다시 페이지번호 누르면 GET방식으로 오기때문에 map을통해서 zone,station조건으로 조회
+		Map<String, Object> map = new HashMap<String, Object>(); // MAP을 이용해 담기
+        map.put("zoneSelect", zone);
+        map.put("stationSelect", station);
+		int totalCount = buyerService.getTotalCountOfSellerLocByZoneAndStation(map);
+		
+		logger.info("totalCount:"+totalCount);
+		
+		//페이지 객체 생성
+		SellerLocPaging paging = new SellerLocPaging(totalCount, curPage);
+		//paging에 zoneSelect,stationSelect추가
+		paging.setZone(zone);
+		paging.setStation(station);
+		
+		logger.info("paging:"+paging);
+		
+		List<SellerLoc> sellerLocList = buyerService.getPagingListOfSellerLocByZoneAndStation(paging);
+		
+		logger.info("sellerLocList:"+sellerLocList);
+			
+		//조회 결과를 VIEW에 전달하기
+		model.addAttribute("sellerLocList", sellerLocList);
+
+		//페이징 객체 MODEL로 추가
+		model.addAttribute("paging", paging);
+		
+		//현재시간, int형으로 바꿔서 보내주기
+		Date date = new Date();
+		
+		SimpleDateFormat transFormat = new SimpleDateFormat("HHmm");
+				
+		String stringNow = transFormat.format(date);
+		
+		int intNow = Integer.parseInt(stringNow);
+				
+		//현재시간 MODEL로 추가
+		model.addAttribute("intNow", intNow);
+		
+		
+		return "buyer/sellerLocPagingResult";
+	}
+	
+	@RequestMapping(value="/buyer/locInfo", method=RequestMethod.POST)
+	public String locInfo(String zone, Model model) {
+		
+		logger.info("zone : " + zone);
+		
+		//현재 DB에 입력된 판매지역
+		if(zone != null) {
+			//검색어 split
+			String[] zon = zone.split("호선");
+			
+			//zon[0]을 통한 역 조회
+			List<SellerLoc> list = buyerService.viewLoc(zon[0]);
+			
+			logger.info(String.valueOf(list));
+			model.addAttribute("locList", list);
+
+		}
+		
+		return "buyer/locInfoResult";
+	}
 }

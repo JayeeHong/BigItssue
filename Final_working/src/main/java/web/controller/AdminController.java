@@ -64,6 +64,17 @@ public class AdminController {
 		
 //		logger.info("adminInfo::"+adminInfo.toString());
 		
+		//로그아웃 안하고 로그인 했을때 전에있던 정보 초기화
+		session.removeAttribute("LoginInfo");
+		session.removeAttribute("buyerId");
+		session.removeAttribute("sellerId");
+		session.removeAttribute("bigdomId");
+		session.removeAttribute("adminId");
+		session.removeAttribute("buyerLogin");
+		session.removeAttribute("sellerLogin");
+		session.removeAttribute("bigdomLogin");
+		session.removeAttribute("adminLogin");
+
 		User LoginInfo = null;
 		// 관리자 로그인
 		if(adminService.login(adminInfo)) { // 로그인 성공 시

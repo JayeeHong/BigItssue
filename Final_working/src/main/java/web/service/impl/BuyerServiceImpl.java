@@ -352,6 +352,11 @@ public class BuyerServiceImpl implements BuyerService {
 		
 
 	}
+
+	@Override
+	public List<SellerLoc> viewLoc(String zone) {
+		return buyerDao.viewLoc(zone);
+	}
   
 
 }

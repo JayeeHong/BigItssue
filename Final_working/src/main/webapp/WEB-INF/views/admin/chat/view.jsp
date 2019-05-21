@@ -66,6 +66,19 @@ var fetchMessage = function() {
 					$("#chk li:last").append("<li data-chatMessageNo='"+result.list[i].chatMessageNo+"'><pre id='chatMessage' class='buyer'>"+result.list[i].chatSender+" : "+result.list[i].chatContent+"	"+"<p style='float: right; margin: 0;' align='right'>"+dateArr[0]+" "+dateTimeArr[4]+"</p></pre></li>");
 					
 				} else if(result.list[i].chatSender.indexOf("seller") == 0 || result.list[i].chatSender.indexOf("bigdom") == 0) {
+					var d = result.list[i].chatDate;
+					
+					var date = new Date();
+					
+					//년, 월, 일
+					date.setTime(d);
+					var dateArr = date.toISOString().split("T");
+					//console.log(dateArr[0]);
+					
+					var dateTimeArr = date.toString().split(" ");
+					//console.log(dateTimeArr[4]);
+					
+					$("#chk li:last").append("<li data-chatMessageNo='"+result.list[i].chatMessageNo+"'><pre id='chatMessage'>"+result.list[i].chatSender+" : "+result.list[i].chatContent+"	"+"<p style='float: right; margin: 0;' align='right'>"+dateArr[0]+" "+dateTimeArr[4]+"</p></pre></li>");
 					
 				}
 			}

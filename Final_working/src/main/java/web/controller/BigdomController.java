@@ -156,6 +156,17 @@ public class BigdomController {
 	@RequestMapping(value="/bigdom/login", method=RequestMethod.POST)
 	public String bigdomLogin(BigdomInfo bigdomInfo, HttpSession session) {
 		
+		//로그아웃 안하고 로그인 했을때 전에있던 정보 초기화
+		session.removeAttribute("LoginInfo");
+		session.removeAttribute("buyerId");
+		session.removeAttribute("sellerId");
+		session.removeAttribute("bigdomId");
+		session.removeAttribute("adminId");
+		session.removeAttribute("buyerLogin");
+		session.removeAttribute("sellerLogin");
+		session.removeAttribute("bigdomLogin");
+		session.removeAttribute("adminLogin");
+		
 		User LoginInfo = null;
 		
 		// 로그인
