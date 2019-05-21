@@ -64,7 +64,8 @@ function mapView(locNo){
   <tbody>
   <c:if test="${empty detailList }">
   <script type="text/javascript">
-  	window.history.back();
+  	alert("판매자가 등록되지 않았습니다! 판매 정보 관리 페이지로 이동합니다!!");
+  	document.location.href = "/admin/seller/list";
   </script>
   </c:if>
   <c:if test="${!empty detailList}">

@@ -690,7 +690,6 @@ public class AdminController {
 		logger.info("CHK Rnum : "+list);
 		
 		model.addAttribute("list", list);
-		
 		return "jsonView";
 	}
 	
@@ -1043,14 +1042,18 @@ public class AdminController {
 		
 		if(station != null) {
 			List<HashMap> list = adminService.viewDetail(station);
-			logger.info((String)list.get(0).get("SELLERID"));
+			if(list.listIterator().hasNext()) {
+				logger.info((String)list.get(0).get("SELLERID"));
 //				logger.info(String.valueOf(list));
-			logger.info(""+list);
-			logger.info(String.valueOf(list.isEmpty()));
-			logger.info("TEST");
-			model.addAttribute("detailList", list);
-			model.addAttribute("zone", zone);
-			model.addAttribute("station", station);
+				logger.info(""+list);
+				logger.info(String.valueOf(list.isEmpty()));
+				logger.info("TEST");
+				model.addAttribute("detailList", list);
+				model.addAttribute("zone", zone);
+				model.addAttribute("station", station);
+			} else {
+				model.addAttribute("error", "판매자가 등록되지 않은 장소입니다!!");
+			}
 		}
 	}
 	
@@ -1301,9 +1304,34 @@ public class AdminController {
 			SellerLoc sellerLoc
 			) {
 		logger.info("TEST : "+station+", "+zone+", "+spot+", "+lat+", "+lng);
-		sellerLoc.setStation(station);
-		sellerLoc.setZone(zone);
-		sellerLoc.setSpot(spot);
+		
+		if(station.contains("역")) {
+			String[] stationArr = station.split("역");
+			station = stationArr[0];
+			sellerLoc.setStation(station);
+		} else {
+			sellerLoc.setStation(station);
+		}
+		
+		if(zone.contains("호선")) {
+			String[] zoneArr = zone.split("호선");
+			zone = zoneArr[0];
+			sellerLoc.setZone(zone);
+		} else if(zone.contains("선")){
+			String[] zoneArr = zone.split("선");
+			zone = zoneArr[0];
+			sellerLoc.setZone(zone);
+		} else {
+			sellerLoc.setZone(zone);
+		}
+		
+		if(spot.contains("번")) {
+			sellerLoc.setSpot(spot);
+		} else {
+			spot = spot.concat("번");
+			sellerLoc.setSpot(spot);
+		}
+		
 		sellerLoc.setLat(Double.valueOf(lat));
 		sellerLoc.setLng(Double.valueOf(lng));
 		logger.info(String.valueOf(sellerLoc));
