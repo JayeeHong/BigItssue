@@ -50,7 +50,9 @@ function detailView(a){
 
 
 function listDelete(a){
-	console.log(a);
+	var msg = confirm("삭제하시겠습니까?")
+	if(msg==true){
+		
 	
 	$.ajax({
 		url :"/admin/seller/sellerInfoDelete"
@@ -70,6 +72,9 @@ function listDelete(a){
 			console.log(e)
 		}
 	})
+	}else{
+		alert('취소되었습니다.')
+	}
 	
 }
 
@@ -126,7 +131,7 @@ function getLocList(){
 				html += '<table class="table table-striped" style="table-layout: fixed; left: 240px; top: 230px; width:80%;">'
 				html += '<tr style="background: #cccccc6e; text-align: center;">'
 				html += '<td><b>No.</b></td>'
-				html += '<td><b>호선</b></td>'
+				html += '<td><b>역명</b></td>'
 				html += '<td><b>판매장소</b></td>'
 				html += '<td><b>출구(위치)</b></td>'
 				html += '<td><b>카드결제여부</b></td>'
@@ -181,7 +186,7 @@ function getLocList(){
 // 					html += '<input class="btn btn-sm" style="background:#ff8a8a;" type="button" value="삭제" onclick="listDelete('+value.locNo+')"></label> </td>'
 					html += '<td><label><input class="btn btn-xs btn-primary" type="button" value="수정" onclick="detailView('+value.locNo+')">'
 					html += ' │ ';
-					html += '<input class="btn btn-xs btn-danger" type="button" value="삭제" onclick="listDelete('+value.locNo+')"></label> </td>'
+					html += '<input class="btn btn-xs btn-danger" type="button" value="삭제" onclick="return listDelete('+value.locNo+')"></label> </td>'
 					html +='</tr>'
 					
 				})

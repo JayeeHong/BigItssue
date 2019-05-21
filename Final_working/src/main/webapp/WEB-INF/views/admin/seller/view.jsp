@@ -280,7 +280,7 @@ input[type=number]{
 		</tr>
 		
 		<tr>
-			<td style="vertical-align: middle;" class="tdLeft">호선</td>
+			<td style="vertical-align: middle;" class="tdLeft">역명<br></td>
 			<td class="tdRight" colspan="3">
 			<div id="divSearch">
 			<input class="form-control"type="search" name="searchWord" id="searchWord">&nbsp;<input class="btn" type="button" onclick="subwayList()" value="찾기">
