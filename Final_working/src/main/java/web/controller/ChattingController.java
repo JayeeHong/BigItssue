@@ -329,7 +329,8 @@ public class ChattingController {
 		logger.info("chatRoomNo:"+msg.getChatRoomNo());
 		logger.info("chatSender:"+msg.getChatSender());
 		logger.info("chatDateString:"+chatDateString);
-		SimpleDateFormat time = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+//		SimpleDateFormat time = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+		SimpleDateFormat time = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a", Locale.ENGLISH);
 		Date chatDate = null;
 		try {
 			chatDate = time.parse(chatDateString);

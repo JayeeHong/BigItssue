@@ -107,6 +107,14 @@
 			<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small>
 			<br><br>
 		</c:if>
+		<c:if test="${chatReport[i].chatContent ne reportByReportNo.chatContent }">
+<%-- 			신고당한사람: ${chatReport[i].chatSender }<br> --%>
+<%-- 			신고당한메세지: ${reportByReportNo.chatContent }<br> --%>
+			<span style="font-weight: bold;">${chatReport[i].chatSender }</span><br>
+			${chatReport[i].chatContent }&nbsp;&nbsp;
+			<small><fmt:formatDate value="${chatReport[i].chatDate }" pattern="yyyy-MM-dd hh:mm" /></small>
+			<br><br>
+		</c:if>
 	</c:when>
 </c:choose>
 
@@ -121,3 +129,5 @@
 </div>
 
 </div>
+
+<br><br><br>
