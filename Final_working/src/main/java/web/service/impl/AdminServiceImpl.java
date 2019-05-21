@@ -485,7 +485,7 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public List<ChatReport> getReportByChatReport(ChatReport reportByReportNo) {
+	public List<Message> getReportByChatReport(ChatReport reportByReportNo) {
 		return adminDao.selectReportByChatReport(reportByReportNo);
 	}
 

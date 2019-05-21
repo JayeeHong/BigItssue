@@ -206,7 +206,7 @@ public interface AdminService {
 	public ChatReport getReportByReportNo(int reportNo);
 
 	// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회
-	public List<ChatReport> getReportByChatReport(ChatReport reportByReportNo);
+	public List<Message> getReportByChatReport(ChatReport reportByReportNo);
 
 	
 	//배너 리스트 얻기

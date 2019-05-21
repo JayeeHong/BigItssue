@@ -1198,7 +1198,7 @@ public class AdminController {
 //		logger.info(":::해당하는 신고내역:::"+reportByReportNo);
 		
 		// reportByReportNo의 채팅방번호와 날짜가 일치하는 경우 조회
-		List<ChatReport> chatReport = adminService.getReportByChatReport(reportByReportNo);
+		List<Message> chatReport = adminService.getReportByChatReport(reportByReportNo);
 //		logger.info(":::::해당 신고내역 전체조회:::::"+chatReport.toString());
 		
 		model.addAttribute("reportByReportNo", reportByReportNo);
