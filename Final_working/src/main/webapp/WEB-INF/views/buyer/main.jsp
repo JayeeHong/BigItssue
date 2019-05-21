@@ -16,6 +16,12 @@ th{
 
 
 <script type="text/javascript">
+var height=0;
+$(document).ready(function(){
+
+
+});
+
 
 //예약페이지 열기
 function booking(locNo){
@@ -45,6 +51,50 @@ function inquire(id,sort){
 	}
 }
 
+//호선으로 검색
+function locInfo(){
+	
+	var zone = $('select[name=zoneSelect]').val();
+	console.log("zone:"+zone);
+	$.ajax({
+        url : '/buyer/locInfo',
+        type : 'post',
+        data : {'zone':zone},
+        dataType: 'html',
+        success : function(receive) {
+        	$("#locInfo").html(receive);
+        },
+        error: function(e) {
+			console.log("실패");
+			console.log(e);
+		}        
+    });
+}
+
+
+function pagingFunc(curpage){
+
+	var zone = $("select[name=zoneSelect]").val()+"#";
+	if($("select[name=stationSelect]").val()==undefined){
+		var station = "#";
+	}else{
+		var station = $("select[name=stationSelect]").val()+"#";
+	}
+
+	$.ajax({
+        url : '/buyer/pagingAjax',
+        type : 'post',
+        data : {'curPage':curpage, 'zone':zone, 'station':station},
+        dataType: 'html',
+        success : function(receive) {
+        	$("#sellerLocTable").html(receive);
+        },
+        error: function(e) {
+			console.log("실패");
+			console.log(e);
+		}        
+    });
+}
 </script>
 
 <hr>
@@ -56,47 +106,62 @@ function inquire(id,sort){
 <!-- 판매처 보기를 누르면 여기로 이동! -->
 <div id="moveToSellerloc">
 
-  <!-- 현재시간 받아오기 -->
-  <fmt:formatDate value="${now }" pattern="HHmm" var="sysTime" />
+	<!-- 현재시간 받아오기 -->
+	<fmt:formatDate value="${now }" pattern="HHmm" var="sysTime" />
 
-	<!-- 장소,위치 검색 (select태그이용) -->
-	<form action="/buyer/main" method="POST" class="form-inline">
-		<div style="float: right; padding-right: 10px; padding-top: 10px;">
-			
-			<select name="zoneSelect" id="zoneSelect" class="form-control" style="height: 25px; margin-bottom: 6px; padding-top: 0px; padding-bottom: 0px;">
-				<option value="">지역을 선택하세요</option>
-				<c:forEach var="item" items="${zoneList }" begin="0" end="${zoneList.size() }" step="1">
-					<!-- 한번 검색한 것은 새로고침해도 유지되도록 -->
-					<c:if test="${paging.zone eq item.zone }">
-						<option value="${item.zone }" selected>${item.zone }</option>
-					</c:if>
-					<c:if test="${paging.zone ne item.zone }">
-						<option value="${item.zone }">${item.zone }</option>
-					</c:if>
-				</c:forEach>
-			</select>
-			
-			<select name="stationSelect" class="form-control" style="height: 25px; margin-bottom: 6px; padding-top: 0px; padding-bottom: 0px;">
-				<option value="">판매위치</option>
-				<c:forEach var="item" items="${stationList }" begin="0" end="${stationList.size() }" step="1">
-					<!-- 한번 검색한 것은 새로고침해도 유지되도록 -->
-					<c:if test="${paging.station eq item.station }">
-						<option value="${item.station }" selected>${item.station }</option>
-					</c:if>
-					<c:if test="${paging.station ne item.station }">
-						<option value="${item.station }">${item.station }</option>
-					</c:if>
-				</c:forEach>
-			</select>
+ 		<!-- 장소,위치 검색 (select태그이용) --> 
+	<div style="float: right; padding-right: 10px; padding-top: 10px;">
 		
-			<button style="height: 25px; margin-bottom: 6px; padding-top: 0px; padding-bottom: 0px;" class="btn btn-default btn-sm">검색</button>
+<!-- 		<select name="zoneSelect" id="zoneSelect" class="form-control" style="height: 25px; margin-bottom: 6px; padding-top: 0px; padding-bottom: 0px;"> -->
+<!-- 			<option value="">지역을 선택하세요</option> -->
+<%-- 			<c:forEach var="item" items="${zoneList }" begin="0" end="${zoneList.size() }" step="1"> --%>
+<!-- 				한번 검색한 것은 새로고침해도 유지되도록 -->
+<%-- 				<c:if test="${paging.zone eq item.zone }"> --%>
+<%-- 					<option value="${item.zone }" selected>${item.zone }</option> --%>
+<%-- 				</c:if> --%>
+<%-- 				<c:if test="${paging.zone ne item.zone }"> --%>
+<%-- 					<option value="${item.zone }">${item.zone }</option> --%>
+<%-- 				</c:if> --%>
+<%-- 			</c:forEach> --%>
+<!-- 		</select> -->
 		
-		</div><br>
-	</form>
+<!-- 		<select name="stationSelect" class="form-control" style="height: 25px; margin-bottom: 6px; padding-top: 0px; padding-bottom: 0px;"> -->
+<!-- 			<option value="">판매위치</option> -->
+<%-- 			<c:forEach var="item" items="${stationList }" begin="0" end="${stationList.size() }" step="1"> --%>
+<!-- 				한번 검색한 것은 새로고침해도 유지되도록 -->
+<%-- 				<c:if test="${paging.station eq item.station }"> --%>
+<%-- 					<option value="${item.station }" selected>${item.station }</option> --%>
+<%-- 				</c:if> --%>
+<%-- 				<c:if test="${paging.station ne item.station }"> --%>
+<%-- 					<option value="${item.station }">${item.station }</option> --%>
+<%-- 				</c:if> --%>
+<%-- 			</c:forEach> --%>
+<!-- 		</select> -->
 	
+<!-- 		<button onclick="pagingFunc(0)" style="height: 25px;margin-bottom: 6px; padding-top: 0px; padding-bottom: 0px;" class="btn btn-default btn-sm">검색</button> -->
 	
+	</div><br>
+	<h4>호선/장소선택</h4>
+	<!-- 호선검색  -->		
+	<select onchange="locInfo()" name="zoneSelect" id="zoneSelect" class="form-control" style="height: 30px; width:180px; margin-bottom: 6px; padding-top: 0px; padding-bottom: 0px;">
+		<option value="">호선을 선택하세요</option>
+		<option value="1호선">1호선</option>
+		<option value="2호선">2호선</option>
+		<option value="3호선">3호선</option>
+		<option value="4호선">4호선</option>
+		<option value="5호선">5호선</option>
+		<option value="6호선">6호선</option>
+		<option value="7호선">7호선</option>
+		<option value="8호선">8호선</option>
+		<option value="9호선">9호선</option>
+		<option value="부산">부산</option>
+	</select>
+
+<!-- 호선검색 결과 -->
+<div id="locInfo"></div>	
 	
-<div style="text-align: center; margin-bottom:50px;">
+<!-- sellecrLoc테이블 -->
+<div id="sellerLocTable" style="text-align: center; margin-bottom:50px;">
 
 <div style="padding: 10px;">
 	<table class="table table-bordered">
@@ -168,7 +233,7 @@ function inquire(id,sort){
 
 <!-- 페이징 -->
 <jsp:include page="sellerLocPaging.jsp" />
-
+<div id="pagingResult"></div>
 
 </div> <!-- 판매처보기로 이동을 위한 div -->
 

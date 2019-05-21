@@ -57,7 +57,8 @@ function popupFunc(){
 			 /* receive(이름은 내가 정하는것 )로 결과값 html을 받아옴 */
 			 , success: function(receive){
 				//부모창 리로드
-				window.location.reload();
+				 connect();
+				 $(':focus').blur();  
 			 }
 		});
 	}else{
@@ -72,7 +73,8 @@ function popupFunc(){
 				 /* receive(이름은 내가 정하는것 )로 결과값 html을 받아옴 */
 				 , success: function(receive){
 					//부모창 리로드
-					window.location.reload();
+					 connect();
+					 $(':focus').blur();  
 				 }
 			});
 		}else{

@@ -124,4 +124,6 @@ public interface BuyerDao {
 	public void updateBuyerInfoAtMypage(BuyerInfo buyerInfo);
 	//공지사항 조회수 추가
 	public void noticeAddHit(int noticeNo);
+	
+	public List<SellerLoc> viewLoc(String zone);
 }

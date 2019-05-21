@@ -199,7 +199,7 @@
 		SELECT COUNT(*) FROM sellerLoc
 		WHERE 1=1
 		<if test="zoneSelect != null and zoneSelect != ''">
-			AND zone=#{zoneSelect}
+			AND zone LIKE #{zoneSelect} || '%'
 		</if>
 		<if test="stationSelect != null and stationSelect != ''">
 			AND station=#{stationSelect}
@@ -212,7 +212,7 @@
 					SELECT * FROM SellerLoc
 					WHERE 1=1
 					<if test="zone != null and zone != ''">
-						AND zone=#{zone}
+						AND zone LIKE #{zone} || '%'
 					</if>
 					<if test="station != null and station != ''">
 						AND station=#{station}
@@ -293,5 +293,10 @@
 		SET noticehit = noticehit + 1
 		where noticeNo = #{noticeNo }
 	</update>
+	
+	<select id="viewLoc" parameterType="String" resultType="web.dto.SellerLoc">
+		SELECT DISTINCT station FROM SellerLoc
+		WHERE zone LIKE '%' || #{zone } || '%'
+	</select>
 	
 </mapper>

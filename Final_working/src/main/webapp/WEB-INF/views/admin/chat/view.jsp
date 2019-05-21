@@ -106,8 +106,9 @@ var fetchMessage = function() {
 					
 				} else if(result.list[i].chatSender.indexOf("seller") == 0 || result.list[i].chatSender.indexOf("bigdom") == 0) {
 					var d = result.list[i].chatDate;
-					var date = new Date(d);
-					date.setTime(d);
+
+          var date = new Date(d);
+          date.setTime(d);
 
 					//년, 월, 일
 					var dateArr = date.toString().split(" ");

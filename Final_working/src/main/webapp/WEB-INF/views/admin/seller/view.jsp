@@ -333,10 +333,10 @@ input[type=number]{
 			<td style="vertical-align: middle;" class="tdLeft">판매시간</td>
 			<td class="tdRight" colspan="3">
 				<div class="form-group">
-				<input class="form-control" style="width:75px;" type="number" name="startTime1" id="startTime1" min="0" max="24"><b> :</b>
-				<input class="form-control" style="width:75px;" type="number" name="startTime2" id="startTime2" min="0" max="60"><b> ~</b>
-				<input class="form-control" style="width:75px;" type="number" name="endTime1" id="endTime1" min="0" max="24"><b> :</b>
-				<input class="form-control" style="width:75px;" type="number" name="endTime2" id="endTime2" min="0" max="60">
+				<input class="form-control" style="width:75px;" type="number" name="startTime1" id="startTime1" min="0" max="23"><b> :</b>
+				<input class="form-control" style="width:75px;" type="number" name="startTime2" id="startTime2" min="0" max="59"><b> ~</b>
+				<input class="form-control" style="width:75px;" type="number" name="endTime1" id="endTime1" min="0" max="23"><b> :</b>
+				<input class="form-control" style="width:75px;" type="number" name="endTime2" id="endTime2" min="0" max="59">
 				</div>
 			</td>
 			
